@@ -1,0 +1,53 @@
+<%
+layout("/include/_dialog.html"){
+%>
+<script>
+    function save() {
+        var isValidate = jp.validateForm('#inputForm');//校验表单
+        if(!isValidate){
+            return false;
+        }else{
+            var index = jp.loading();
+            jp.post("${ctx}/widget/save",$('#inputForm').serialize(),function(data){
+                if(data.success){
+                    data.body.id = "${containerId!}";//设置容器id
+                    if(data.body.widget.url.startsWith("/")){
+                        data.body.widget.url = "/a"+data.body.widget.url;
+                    }
+                    jp.getParent().refresh(data.body);
+                    var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                    parent.layer.close(dialogIndex);
+                    jp.success(data.msg)
+
+                }else{
+                    jp.error(data.msg);
+                }
+            })
+        }
+
+    }
+</script>
+<form id="inputForm"  action="${ctx}/widget/save" method="post" class="form-horizontal p-10">
+    <input type="hidden" name="id" value="${widget.id!}">
+    <input type="hidden" name="type" value="1">
+    <div class="form-group row">
+        <label class="col-xs-3 col-sm-2"><div class="pull-right"><font color="red">*</font> 组件名称：</div> </label>
+        <div class="col-xs-9 col-sm-10">
+            <input class="form-control required" name="name" value="${widget.name!}">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-xs-3 col-sm-2"><div class="pull-right"><font color="red">*</font> 组件地址：</div> </label>
+        <div class="col-xs-9 col-sm-10">
+            <input class="form-control required" name="url" value="${widget.url!}">
+            <span class="text-muted"><small>外部地址请使用http://或者https://开头，本系统地址请使用相对路径/开头</small></span>
+            </label>
+        </div>
+    </div>
+
+
+
+</form>
+
+
+<% } %>

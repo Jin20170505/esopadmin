@@ -1,0 +1,53 @@
+<%
+layout("/include/_dialog.html"){
+%>
+<script type="text/javascript">
+    function save() {
+        var isValidate = jp.validateForm('#inputForm');//校验表单
+        if (!isValidate) {
+            return false;
+        } else {
+            jp.loading();
+            jp.post("${ctx}/sys/menu/save", $('#inputForm').serialize(), function (data) {
+                if (data.success) {
+                    jp.getParent().refresh();
+                    var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                    parent.layer.close(dialogIndex);
+                    jp.success(data.msg)
+
+                } else {
+                    jp.error(data.msg);
+                }
+            })
+        }
+    };
+
+</script>
+<form id="inputForm" class="form-horizontal p-15">
+        <input type="hidden" name="href" value="/echarts/preview?id=${id!}">
+        <table class="table table-bordered">
+            <tbody>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">上级菜单:</label></td>
+                <td class="width-35">
+                    <#treeselect id="menu" name="parent.id" labelName="parent.name"
+
+                    title="菜单" url="/sys/menu/treeData"  allowClear="true" class="form-control required"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font> 名称:</label></td>
+                <td class="width-35">
+                    <input name="name" maxlength="50" class="required form-control "/>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="width-15 active"><label class="pull-right">图标:</label></td>
+                <td class="width-35"><#iconselect id="icon" name="icon" /></td>
+            </tr>
+
+            </tbody>
+        </table>
+    </form>
+<% } %>

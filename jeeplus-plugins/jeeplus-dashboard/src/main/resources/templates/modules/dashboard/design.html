@@ -1,0 +1,155 @@
+<%
+layout("/include/_container.html", {title:"设计", parent:"仪表盘"}){
+%>
+
+
+<link rel="stylesheet" href="${ctxStatic}/plugins/gridlayout/dist/gridlayout.css"/>
+<script src="${ctxStatic}/plugins/gridlayout/dist/gridlayout.js"></script>
+
+<div id="dashboard">
+
+<div class="toolbar">
+    <a class="btn btn-custom btn-trans waves-effect w-xs waves-inverse w-xs btn-xs" id="save-grid"><i class=" fa fa-save"></i> 保存</a>
+    <a class="btn btn-custom btn-trans waves-effect w-xs waves-inverse w-xs btn-xs" id="load-grid" href="#"><i class="fa fa-reply-all"></i> 还原</a>
+    <a class="btn btn-custom btn-trans waves-effect w-xs waves-inverse w-xs btn-xs" id="clear-grid" href="#"><i class="fa fa-trash-o"></i> 清空画布</a>
+    <!--<input type="text" id="bg-grid" /><i class="fa fa-trash-o"></i> 背景色设置-->
+    <!--<a class="btn btn-custom btn-xs  waves-effect waves-light w-xs" id="bg-grid" href="#"><i class="fa fa-trash-o"></i> 背景色设置</a>-->
+    <!--<a class="btn btn-custom btn-xs  waves-effect waves-light w-xs" id="bg-img" href="#"><i class="fa fa-trash-o"></i> 上传背景图片</a>-->
+    <a class="btn btn-custom btn-trans waves-effect w-xs waves-inverse w-xs btn-xs grid-layout-item" onclick="open1()"><i class="fa fa-plus"></i> 添加页面组件</a>
+    <a class="btn btn-custom btn-trans waves-effect w-xs waves-inverse w-xs btn-xs grid-layout-item" onclick="open2()"><i class="fa fa-plus"></i> 添加统计组件</a>
+    <a class="btn btn-custom btn-trans waves-effect w-xs waves-inverse w-xs btn-xs grid-layout-item" onclick="open3()"><i class="fa fa-plus"></i> 添加图表组件</a>
+    <a class="btn btn-custom btn-trans waves-effect w-xs waves-inverse w-xs btn-xs grid-layout-item" onclick="open4()"><i class="fa fa-plus"></i> 添加表格组件</a>
+</div>
+
+<div class="grid-layout" style="margin-left: -10px;">
+</div>
+</div>
+
+
+<script id="echarts" type="text/html">
+            <div class="operator-region" style="right: 2px; top: 2px; position: absolute;z-index: 1000">
+                <button  class="btn btn-icon btn-xs waves-effect waves-light btn-danger del"><i class="fa fa-remove"></i></button>&nbsp;
+                <button  class="btn btn-icon btn-xs waves-effect waves-light btn-custom set"><i class="fa fa-cog"></i></button>
+            </div>
+            <div class="cover"></div>
+
+            <div  class="widget echart"  name="widget.id" data-type="{{d.widget.type}}" style="width: 100%;height:100%;" id="{{d.widget.id}}">
+            </div>
+</script>
+
+
+
+<script id="network" type="text/html">
+            <div class="operator-region" style="right: 2px; top: 2px; position: absolute;z-index: 1000">
+                <button  class="btn btn-icon btn-xs waves-effect waves-light btn-danger del"><i class="fa fa-remove"></i></button>&nbsp;
+                <button  class="btn btn-icon btn-xs waves-effect waves-light btn-custom set"><i class="fa fa-cog"></i></button>
+            </div>
+            <div class="cover"></div>
+            <div  class="widget"  name="widget.id" data-type="{{d.widget.type}}" style="width: 100%;height:100%;" id="{{d.widget.id}}">
+                <iframe frameborder="0" width="100%" height="100%" src="{{d.widget.url}}" />
+            </div>
+</script>
+
+
+
+<script id="widget" type="text/html">
+            <div class="operator-region" style="right: 2px; top: 2px; position: absolute;z-index: 1000">
+                <button  class="btn btn-icon btn-xs waves-effect waves-light btn-danger del"><i class="fa fa-remove"></i></button>&nbsp;
+                <button  class="btn btn-icon btn-xs waves-effect waves-light btn-custom set"><i class="fa fa-cog"></i></button>
+            </div>
+            <div class="cover"></div>
+            <div  class="widget"  name="widget.id" data-type="{{d.widget.type}}" style="width: 100%;height:100%;" id="{{d.widget.id}}">
+                <div class="task-stat">
+                    <div style="text-align:left;margin-bottom: 20px; padding: 20px; border-radius: 4px; color: rgb(255, 255, 255); height: 100%;">
+                        <div style="position: relative;">
+                            <p style="margin: 0px; font-size: 14px;">{{d.widget.name}}</p>
+                            <a style="position: absolute; color: white; right: 0px; top: 0px; padding: 2px 4px; border-radius: 4px; font-size: 12px; background: rgba(255, 255, 255, 0.3);" href="{{d.widget.url}}"  target="{{d.widget.target}}">
+                                <i class="{{d.widget.icon}}"></i> 查看更多
+                            </a>
+                        </div>
+                        <div>
+                            <h2 style="color:white;margin: 16px 0px;font-size: 32px;">{{d.widget.result}}</h2>
+                            <div>
+                                <p style="margin: 0px; font-size: 12px;">
+                                    {{d.widget.result}}
+                                </p>
+                                <p style="margin: 0px; font-size: 12px;">{{d.widget.remarks}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+</script>
+
+
+
+
+<script id="table" type="text/html">
+
+            <div class="operator-region" style="right: 2px; top: 2px; position: absolute;z-index: 1000">
+                <button  class="btn btn-icon btn-xs waves-effect waves-light btn-danger del"><i class="fa fa-remove"></i></button>&nbsp;
+                <button  class="btn btn-icon btn-xs waves-effect waves-light btn-custom set"><i class="fa fa-cog"></i></button>
+            </div>
+            <div class="cover"></div>
+            <div  class="widget"  name="widget.id" data-type="{{d.widget.type}}" style="width: 100%;height:100%;" id="{{d.widget.id}}">
+
+
+                {{# if(d.widget.result == 'sql配置错误'){ }}
+
+                    <label>sql配置错误</label>
+
+                {{# }else{ }}
+
+
+                <div class="portlet border-0">
+                    <div class="portlet-heading portlet-default">
+                        <h3 class="portlet-title">
+                            <i class="fa {{d.widget.icon}}"></i>{{d.widget.name}}
+                        </h3>
+                        <div class="portlet-widgets">
+                            <a class="antd-pro-pages-dashboard-analysis-iconGroup" href="{{d.widget.url}}">
+                                <i class="fa fa-globe"></i>
+                            </a>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div id="bg-primary" class="panel-collapse collapse show">
+                        <div class="portlet-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+
+                                    <tbody>
+
+                                    {{# for(var i=0;i<d.widget.result.length;i++){ }}
+
+                                    {{# var obj=d.widget.result[i]; }}
+
+                                    <tr>
+
+                                        {{# for(var col in obj){ }}
+
+                                        <td>{{ obj[col] }}</td>
+
+                                        {{# } }}
+
+                                    </tr>
+
+                                    {{# } }}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{# } }}
+            </div>
+
+</script>
+<script type="text/javascript">
+    var dashboardId = "${dashBoard.id!}";
+    <% include("design.js"){} %>
+</script>
+<% } %>
+
+

@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.jeeplus.database.datasource.spring.boot.autoconfigure.DynamicDataSourceAutoConfiguration

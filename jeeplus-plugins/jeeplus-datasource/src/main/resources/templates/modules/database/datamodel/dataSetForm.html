@@ -1,0 +1,541 @@
+<%
+layout("/include/_container.html", {title:"表单", parent:"数据源"}){
+%>
+
+<link href="${ctxStatic}/plugins/jsonTree/jsonTree.css" rel="stylesheet" />
+<script src="${ctxStatic}/plugins/jsonTree/jsonTree.js"></script>
+<script type="text/javascript">
+
+    var htmlEditor, jsonEditor, xmlEditor, sqlEditor;
+    $(document).ready(function () {
+        htmlEditor = ace.edit('html');
+        jsonEditor = ace.edit('json');
+        xmlEditor = ace.edit('xml');
+        sqlEditor = ace.edit('sql');
+        jsonEditor.setTheme("ace/theme/monokai");
+        xmlEditor.setTheme("ace/theme/twilight");
+
+        sqlEditor.getSession().setMode("ace/mode/sql");
+        htmlEditor.getSession().setMode("ace/mode/html");
+        jsonEditor.getSession().setMode("ace/mode/html");
+        xmlEditor.getSession().setMode("ace/mode/xml");
+
+
+        sqlEditor.getSession().on('change', function (e) {
+            $("#sqlcmd").val(sqlEditor.getValue().trim());
+        });
+        jp.ajaxForm("#inputForm", function (data) {
+            if (data.success) {
+                jp.toastr_success(data.msg);
+                jp.go("${ctx}/database/datamodel/dataSet");
+            } else {
+                jp.toastr_error(data.msg);
+
+            }
+        }, function () {
+            if (sqlEditor.getValue().trim() == "") {
+                sqlEditor.focus();
+                jp.info("sql不能为空!")
+                return false;
+            }
+
+            return true;
+        })
+
+        $("#isNeedAll").change(function () {
+            if ($("#isNeedAll").is(':checked')) {
+                $("input[name*=isNeed]").prop("checked", true);
+            } else {
+                $("input[name*=isNeed]").prop("checked", false);
+            }
+        })
+
+
+
+        jp.get("${ctx}/database/datalink/dataSource/treeData2",function (data) {
+            var dataSource=new TreeSelect({
+                element:'#db',
+                name:"db",
+                initValue:"${dataSet.db.id!'master'}",
+                initText:"${dataSet.db.name!'本地数据库'}",
+                data:data,
+                valueKey:'value'
+            });
+
+        })
+
+
+
+    });
+
+
+    function addColumn(column) {
+        var column1 = $("#template1").clone();
+        column1.removeAttr("style");
+        column1.removeAttr("id");
+        $("#contentTable1 tbody").append(column1);
+        if (column) {
+            column1.find("label[name*=name]").html(column.name);
+            column1.find("input[name*=label]").val(column.label);
+            column1.find("label[name*=type]").html(column.type);
+            column1.find("input[name*=name]").val(column.name);
+            column1.find("input[name*=label]").val(column.label);
+            column1.find("input[name*=type]").val(column.type);
+        }
+
+        return false;
+    }
+
+    function delColumn() {
+        $("input[name='ck']:checked").closest("tr").each(function () {
+
+            var name = $(this).find("input[name*=name]").attr("name");
+            $(this).remove();
+        })
+        return false;
+    }
+
+    //预览表
+    function doPreviewTable() {
+
+        var isValidate = jp.validateForm("#inputForm");//校验表单
+        if (!isValidate) {
+            return false;
+        }
+
+        var fields = [], defaultValues = [];
+        $("#resolveTable tbody>tr:not(.hide)").each(function (i, tr) {
+            tr = $(tr);
+            var field = tr.find("input[name*='field']").val();
+            var def = tr.find("input[name*='defaultValue']").val();
+            fields.push(field);
+            defaultValues.push(def);
+        });
+        defaultValues.push('')
+        var index = jp.loading();
+        jp.post("${ctx}/database/datamodel/dataSet/getMeta", {
+            db: $("input[name='db']").val(),
+            sql: sqlEditor.getValue(),
+            field: fields,
+            defaultValue: defaultValues
+        }, function (data) {
+            jp.close(index);
+            $("#contentTable1 tbody").html("");
+            for (i = 0; i < data.length; i++) {
+                addColumn(data[i]);
+            }
+            resetColumnNo();
+        });
+
+
+    }
+
+
+    //预览数据
+    function doPreviewData() {
+
+        var isValidate = jp.validateForm("#inputForm");//校验表单
+        if (sqlEditor.getValue().trim() == "") {
+            sqlEditor.focus();
+            jp.info("sql不能为空!")
+            return false;
+        }
+        if (!isValidate) {
+            return false;
+        }
+
+        var fields = [], defaultValues = [];
+        $("#resolveTable tbody>tr:not(.hide)").each(function (i, tr) {
+            tr = $(tr);
+            var field = tr.find("input[name*='field']").val();
+            var def = tr.find("input[name*='defaultValue']").val();
+            fields.push(field);
+            defaultValues.push(def);
+        });
+        defaultValues.push('')
+        var index = jp.loading();
+        jp.post("${ctx}/database/datamodel/dataSet/exec", {
+            db: $("input[name='db']").val(),
+            sql: sqlEditor.getValue(),
+            field: fields,
+            defaultValue: defaultValues
+        }, function (data) {
+            jp.close(index);
+            if (data.success) {
+                $("#html").html(data.body.html);
+                $("#tree").html("");
+                var wrapper = document.getElementById("tree");
+                var tree = jsonTree.create(data.body.json, wrapper);
+                tree.expand(function (node) {
+                    return node.childNodes.length < 2 || node.label === 'phoneNumbers';
+                });
+
+                jsonEditor.setValue(JSON.stringify(data.body.json));
+                var val = jsonEditor.session.getValue()
+                var o = JSON.parse(val) // may throw if json is malformed
+                val = JSON.stringify(o, null, 4) // 4 is the indent size,该方法来自https://github.com/beautify-web/js-beautify/blob/master/js/lib/beautify.js
+                jsonEditor.session.setValue(val)
+
+
+                xmlEditor.setValue(data.body.xml);
+
+            } else {
+                jp.error(data.msg);
+            }
+        });
+    }
+
+
+    function resetColumnNo() {
+        $("#contentTable1 tbody tr").each(function (index, element) {
+            $(this).find("span[name*=columnList],select[name*=columnList],input[name*=columnList]").each(function () {
+                var name = $(this).attr("name");
+                var attr_name = name.split(".")[1];
+                var newName = "columnList[" + index + "]." + attr_name;
+                $(this).attr("name", newName);//重新对name排序
+
+            });
+
+            $(this).find("input[id*=columnList]").each(function () {
+                var name = $(this).attr("id");
+                var attr_name = name.split(".")[1];
+                var newName = "columnList[" + index + "]." + attr_name;
+                $(this).attr("id", newName);//重新对name排序
+
+            });
+            $(this).find("label[for*=columnList]").each(function () {
+                var name = $(this).attr("for");
+                var attr_name = name.split(".")[1];
+                var newName = "columnList[" + index + "]." + attr_name;
+                $(this).attr("for", newName);//重新对name排序
+
+            });
+
+            $(this).find("td:first").html(index + 1);
+            $(this).find("input[name*=sort]").val(index + 1);
+
+        });
+
+    }
+
+
+    function resetParamNo() {
+        $("#resolveTable tbody tr").each(function (index, element) {
+            $(this).find("input[name*=params]").each(function () {
+                var name = $(this).attr("name");
+                var attr_name = name.split(".")[1];
+                var newName = "params[" + index + "]." + attr_name;
+                $(this).attr("name", newName);//重新对name排序
+
+            });
+            $(this).find("td:first").html(index + 1);
+            $(this).find("input[name*=sort]").val(index + 1);
+
+        });
+
+    }
+
+    //增加行
+    function addParamRow() {
+        var tr = $("#paramTemplate").clone();
+
+        tr.removeClass("hide");
+        tr.find("input").attr("data-parsley-required", true).attr("data-parsley-placement", "bottom");
+        $(tr).find("input").val("");
+        $("#resolveTable tbody").append(tr);
+        resetParamNo();
+    }
+
+    //删除行
+    function removeParamRow(obj) {
+        $(obj).parents("tr").remove();
+        resetParamNo();
+    }
+
+
+
+</script>
+<style>
+    td {
+        word-break: break-word;
+    }
+</style>
+<div class="panel white-box">
+    <div class="panel-body">
+        <form id="inputForm" action="${ctx}/database/datamodel/dataSet/save" method="post" class="form-horizontal">
+            <h3>数据模型配置
+                <div class="pull-right">
+                    <% if(mode == "add" || mode == "edit"){ %>
+                    <button id="ok" type="submit" class="btn btn-custom waves-effect waves-light w-xs">
+                        <i class="fa fa-save"></i> 保存数据源
+                    </button>
+                    <% } %>
+                    <a class="btn btn-secondary waves-effect w-xs" href="${ctx}/database/datamodel/dataSet">
+                        <i class="fa fa-arrow-left"></i> 返回
+                    </a>
+                </div>
+
+            </h3>
+            <hr>
+            <div class="row">
+                <div class="col-sm-6">
+                    <input type="hidden" name="id" value="${dataSet.id!}"/>
+                    <div class="form-group row">
+                        <label class="col-sm-3 control-label"><font color="red">*</font>目标数据库：</label>
+                        <div class="col-sm-9">
+
+                            <div id="db"></div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 control-label"><font color="red">*</font>数据源名称：</label>
+                        <div class="col-sm-9">
+                            <input name="name" value="${dataSet.name!}" class="form-control required"/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 control-label"><font color="red">*</font>sql语句：</label>
+                        <div class="col-sm-9">
+                            <div name="sqlcmd" id="sql" rows="4" style="height: 200px;border: 1px solid #d9d9d9;"
+                                 class="required">${dataSet.sqlcmd!}
+                            </div>
+                            <input type="hidden" id="sqlcmd" name="sqlcmd" value="${dataSet.sqlcmd!}">
+                        </div>
+                    </div>
+                    <!--<div class="form-group row">-->
+                    <!--<label class="col-sm-2 control-label"><font color="red">*</font>是否是虚拟数据源：</label>-->
+                    <!--<div class="col-sm-10">-->
+                    <!--<input name="virtuald" value="${dataSet.virtuald!}"    class="form-control required"/>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="form-group row">-->
+                    <!--<label class="col-sm-2 control-label">关联数据源id，多个用逗号隔开：</label>-->
+                    <!--<div class="col-sm-10">-->
+                    <!--<input name="virtuallinkids" value="${dataSet.virtuallinkids!}"    class="form-control "/>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                </div>
+                <div class="col-sm-6">
+                    <h5>参数列表：</h5>
+                    <table id="resolveTable"
+                           class="table table-condensed bg-white">
+                        <thead>
+                        <tr>
+                            <th style="width: 70px">序号</th>
+                            <th>参数名</th>
+                            <th>默认值</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <%
+                        for(param in dataSet.params!){
+                        %>
+                        <tr>
+                            <td class="sort">
+                                ${paramLP.index}
+                            </td>
+                            <td>
+                                <input type="hidden" name="params[${paramLP.index-1}].sort" value="${paramLP.index}">
+                                <input type="text" name="params[${paramLP.index-1}].field" value="${param.field}"
+                                       class="form-control">
+                            </td>
+                            <td>
+                                <input type="text" name="params[${paramLP.index-1}].defaultValue"
+                                       value="${param.defaultValue}" class="form-control">
+                            </td>
+                            <td style="vertical-align: middle">
+                                <a class="btn btn-danger btn-icon btn-xs waves-effect waves-light"
+                                   onclick="removeParamRow(this)">
+                                    <i class="fa fa-close"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        <% } %>
+
+                        </tbody>
+                    </table>
+                    <button class="btn btn-custom btn-sm w-xs waves-effect waves-light" onclick="addParamRow()" type="button">
+                        增加参数
+                    </button>
+                    <div class="alert alert-info m-b-10 m-t-10">
+                        SQL中添加参数的方式：格式：<strong>{#参数名#}</strong>，示例：select * from table where id = '{#ID#}'
+                    </div>
+                    <button class="btn btn-custom btn-sm w-xs waves-effect waves-light" onclick="doPreviewTable()" type="button">
+                        <i class="fa fa-eye"></i> 解析
+                    </button>
+                    <button class="btn btn-custom btn-sm w-xs waves-effect waves-light" data-animation="fadein" data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a" data-toggle="modal" data-target="#exampleModal" onclick="doPreviewData()"
+                            type="button">
+                        <i class="fa fa-eye"></i> 预览数据
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="card border-0">
+                <div class="card-body">
+                    <h4 class="header-title m-b-30">数据源列配置</h4>
+                    <table id="contentTable1" class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th style="width: 70px">序号</th>
+                            <th title="数据库字段名">原字段名</th>
+                            <th title="默认读取数据库字段类型">类型</th>
+                            <th title="默认读取数据库字段标签">标签</th>
+                            <th title="是否显示图表" width="15%">
+
+                                <div class="checkbox checkbox-custom ">
+                                    <input type="checkbox" id="isNeedAll"
+                                           checked/>
+                                    <label for="isNeedAll">
+                                        参与分析
+                                    </label>
+                                </div>
+
+
+                            </th>
+
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <%
+                        for(column in dataSet.columnList!){
+                        %>
+                        <tr>
+                            <td class="sort">
+                                ${columnLP.index}
+                            </td>
+                            <td>
+                                <label name="columnList[${columnLP.index-1}].name">${column.name}</label>
+                                <input type="hidden" name="columnList[${columnLP.index-1}].name"
+                                       value="${column.name}"/>
+                                <input type="hidden" name="columnList[${columnLP.index-1}].sort"
+                                       value="${columnLP.index}">
+                            </td>
+                            <td>
+                                <label name="columnList[${columnLP.index-1}].type">${column.type}</label>
+                                <input type="hidden" name="columnList[${columnLP.index-1}].type"
+                                       value="${column.type}"/>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control required"
+                                       name="columnList[${columnLP.index-1}].label" value="${column.label}"
+                                       maxlength="200" class="required"/>
+                            </td>
+                            <td>
+                                <div class="checkbox checkbox-custom ">
+                                    <input type="checkbox" id="${columnLP.index}" name="columnList[${columnLP.index-1}].isNeed"
+                                            <%if(column.isNeed == 'on'){%> checked <%}%>/>
+                                    <label for="${columnLP.index}">
+                                    </label>
+                                </div>
+                            </td>
+
+                        </tr>
+                        <% } %>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
+    <div class="modal-dialog modal-lg" style="width: 80%;height:600px" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title mt-0" id="exampleModalLabel1">数据预览</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body ">
+                <div class="card card-tabs">
+                    <div class="card-body">
+                        <ul class="nav nav-pills m-b-30" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active show" id="cardpills-tab-1" data-toggle="pill"  href="#html" role="tab" aria-controls="cardpills-1" aria-expanded="true" aria-selected="false">HTML</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link " id="cardpills-tab-2" data-toggle="pill" href="#tree" role="tab" aria-controls="cardpills-2" aria-expanded="false" aria-selected="true">Tree</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="cardpills-tab-3" data-toggle="pill" href="#json" role="tab" aria-controls="cardpills-3" aria-expanded="false">JSON</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="cardpills-tab-4" data-toggle="pill" href="#xml" role="tab" aria-controls="cardpills-3" aria-expanded="false">XML</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade active show" style="height: 400px;overflow: auto" id="html"></div>
+                            <div class="tab-pane fade" id="tree" style="height: 400px;overflow: auto"></div>
+                            <div class="tab-pane fade" id="json" style="height: 400px;overflow: auto"></div>
+                            <div class="tab-pane fade" id="xml" style="height: 400px;overflow: auto"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+<table style="display:none">
+    <tr id="paramTemplate" class="hide">
+        <td class="sort">
+            1
+        </td>
+        <td>
+            <input type="text" name="params[0].field" class="form-control"/>
+            <input type="hidden" name="params[0].sort"/>
+        </td>
+        <td>
+            <input type="text" name="params[0].defaultValue" class="form-control"/>
+        </td>
+        <td style="vertical-align: middle">
+            <a class="jp-btn jp-btn-sm"
+               onclick="removeParamRow(this)">
+                <i class="fa fa-close"></i>
+            </a>
+        </td>
+    </tr>
+    <tr id="template1" style="display:none">
+        <td class="sort">
+            1
+        </td>
+        <td>
+            <label name="columnList[0].name"></label>
+            <input type="hidden" name="columnList[0].name"/>
+            <input type="hidden" name="columnList[0].sort"/>
+        </td>
+        <td>
+            <label name="columnList[0].type"></label>
+            <input type="hidden" name="columnList[0].type"/>
+        </td>
+        <td>
+            <input type="text" class="form-control required" name="columnList[0].label" value="" maxlength="200"
+                   class="required"/>
+        </td>
+        <td>
+            <div class="checkbox checkbox-custom ">
+                <input type="checkbox" id="columnList[0].isNeed" name="columnList[0].isNeed" checked/>
+                <label for="columnList[0].isNeed"> </label>
+            </div>
+        </td>
+
+    </tr>
+
+
+</table>
+<!--模板-->
+<% } %>

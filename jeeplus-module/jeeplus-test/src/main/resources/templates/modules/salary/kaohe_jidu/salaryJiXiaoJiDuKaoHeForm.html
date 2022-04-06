@@ -1,0 +1,177 @@
+<%
+layout("/include/_dialog.html"){
+%>
+	<script type="text/javascript">
+
+		$(document).ready(function() {
+						});
+
+		function save() {
+            var isValidate = jp.validateForm('#inputForm');//校验表单
+            if(!isValidate){
+                return false;
+			}else{
+                var index = jp.loading();
+                jp.post("${ctx}/salary/kaohe_jidu/salaryJiXiaoJiDuKaoHe/save",$('#inputForm').serialize(),function(data){
+                    if(data.success){
+                        jp.getParent().refresh();
+                        var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                        parent.layer.close(dialogIndex);
+                        jp.toastr_success(data.msg)
+
+                    }else{
+                        jp.toastr_error(data.msg);
+                    }
+                    jp.close(index);
+                })
+			}
+
+        }
+
+		function addRow(list, idx, tpl, row){
+			$(list).append(Mustache.render(tpl, {
+				idx: idx, delBtn: true, row: row
+			}));
+			$(list+idx).find("select").each(function(){
+				$(this).val($(this).attr("data-value"));
+			});
+			$(list+idx).find("input[type='checkbox'], input[type='radio']").each(function(){
+				var ss = $(this).attr("data-value").split(',');
+				for (var i=0; i<ss.length; i++){
+					if($(this).val() == ss[i]){
+						$(this).attr("checked","checked");
+					}
+				}
+			});
+			$(list+idx).find(".jp-calendar-picker-input").each(function(){
+				 $(this).datetimepicker({
+					 format:'Y-m-d H:i'
+			    });
+			});
+		}
+		function delRow(obj, prefix){
+			var id = $(prefix+"_id");
+			var delFlag = $(prefix+"_delFlag");
+			if (id.val() == ""){
+				$(obj).parent().parent().remove();
+			}else if(delFlag.val() == "0"){
+				delFlag.val("1");
+				$(obj).html("&divide;").attr("title", "撤销删除");
+				$(obj).parent().parent().addClass("error");
+			}else if(delFlag.val() == "1"){
+				delFlag.val("0");
+				$(obj).html("&times;").attr("title", "删除");
+				$(obj).parent().parent().removeClass("error");
+			}
+		}
+	</script>
+<form id="inputForm"  method="post"  class="form-horizontal p-15">
+		<input type="hidden" name="id" value="${salaryJiXiaoJiDuKaoHe.id!}"/>
+		<table class="table table-bordered">
+		   <tbody>
+				<tr>
+					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>员工：</label></td>
+					<td class="width-35">
+						<#gridselect url="${ctx}/qiyewx/base/qiYeWxEmployee/data" id="employee" name="employee.id" value="${salaryJiXiaoJiDuKaoHe.employee.id!}" labelName="employee.name" labelValue="${salaryJiXiaoJiDuKaoHe.employee.name!}"
+							 title="选择员工" class="form-control required" fieldLabels="编号|姓名" fieldKeys="userid|name" searchLabels="编号|姓名" searchKeys="userid|name" />
+				</td>
+					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>季度：</label></td>
+					<td class="width-35">
+						<#select path="jiduName" value="${salaryJiXiaoJiDuKaoHe.jiduName!}" items="${fn.getDictList('salary_jixiao_jidu')}" itemLabel="label" itemValue="value" class="required"/>
+				</td>
+				</tr>
+				<tr>
+					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>年份：</label></td>
+					<td class="width-35">
+						<input name="eyear" value="${salaryJiXiaoJiDuKaoHe.eyear!}"    class="form-control required"/>
+				</td>
+					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>本季度包含的月份：</label></td>
+					<td class="width-35">
+						<input name="emonth" value="${salaryJiXiaoJiDuKaoHe.emonth!}"    class="form-control required"/>
+				</td>
+				</tr>
+				<tr>
+					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>季度考核分数：</label></td>
+					<td class="width-35">
+						<input name="score" value="${salaryJiXiaoJiDuKaoHe.score!}"    class="form-control required isFloatGteZero"/>
+				</td>
+					<td class="width-15 active"><label class="pull-right">本季度绩效系数：</label></td>
+					<td class="width-35">
+						<input name="xishu" value="${salaryJiXiaoJiDuKaoHe.xishu!}" readonly placeholder="系统自动计算"   class="form-control isFloatGteZero"/>
+				</td>
+				</tr>
+		 	</tbody>
+		</table>
+			<div class="card card-tabs">
+            <div class="card-heading  pb-0">
+                <ul class="nav nav-pills float-left" role="tablist">
+				<li class="nav-item">
+					<a data-toggle="tab" class="nav-link show active" role="tab" href="#tab-1" aria-expanded="true">考核工资：</a>
+                </li>
+            </ul>
+            </div>
+            <div class="card-body">
+		    <div class="tab-content">
+			<div id="tab-1" class="tab-pane fade active show">
+			<a class="btn btn-white btn-sm m-b-5" onclick="addRow('#salaryJixiaoJiduKaoheSubList', salaryJixiaoJiduKaoheSubRowIdx, salaryJixiaoJiduKaoheSubTpl);salaryJixiaoJiduKaoheSubRowIdx = salaryJixiaoJiduKaoheSubRowIdx + 1;" title="新增"><i class="fa fa-plus"></i> 新增</a>
+			<table class="table table-striped table-bordered table-condensed">
+				<thead>
+					<tr>
+						<th class="hide"></th>
+						<th>年月</th>
+						<th>绩效标准</th>
+						<th>系数</th>
+						<th>绩效工资</th>
+						<th width="10">&nbsp;</th>
+					</tr>
+				</thead>
+				<tbody id="salaryJixiaoJiduKaoheSubList">
+				</tbody>
+			</table>
+			<script type="text/template" id="salaryJixiaoJiduKaoheSubTpl">//<!--
+				<tr id="salaryJixiaoJiduKaoheSubList{{idx}}">
+					<td class="hide">
+						<input id="salaryJixiaoJiduKaoheSubList{{idx}}_id" name="salaryJixiaoJiduKaoheSubList[{{idx}}].id" type="hidden" value="{{row.id}}"/>
+						<input id="salaryJixiaoJiduKaoheSubList{{idx}}_delFlag" name="salaryJixiaoJiduKaoheSubList[{{idx}}].delFlag" type="hidden" value="0"/>
+					</td>
+					
+					<td>
+						<input id="salaryJixiaoJiduKaoheSubList{{idx}}_ym" name="salaryJixiaoJiduKaoheSubList[{{idx}}].ym" type="text" value="{{row.ym}}"    class="form-control "/>
+					</td>
+					
+					
+					<td>
+						<input id="salaryJixiaoJiduKaoheSubList{{idx}}_jixiaobiaozhui" name="salaryJixiaoJiduKaoheSubList[{{idx}}].jixiaobiaozhui" type="text" value="{{row.jixiaobiaozhui}}"    class="form-control  isFloatGteZero"/>
+					</td>
+					
+					
+					<td>
+						<input id="salaryJixiaoJiduKaoheSubList{{idx}}_xishu" name="salaryJixiaoJiduKaoheSubList[{{idx}}].xishu" type="text" value="{{row.xishu}}"    class="form-control  isFloatGteZero"/>
+					</td>
+					
+					
+					<td>
+						<input id="salaryJixiaoJiduKaoheSubList{{idx}}_salary" name="salaryJixiaoJiduKaoheSubList[{{idx}}].salary" type="text" value="{{row.salary}}"    class="form-control  isFloatGteZero"/>
+					</td>
+					
+					<td class="text-center" width="10">
+						{{#delBtn}}<span class="close" onclick="delRow(this, '#salaryJixiaoJiduKaoheSubList{{idx}}')" title="删除">&times;</span>{{/delBtn}}
+					</td>
+				</tr>//-->
+			</script>
+			<script type="text/javascript">
+				var salaryJixiaoJiduKaoheSubRowIdx = 0, salaryJixiaoJiduKaoheSubTpl = $("#salaryJixiaoJiduKaoheSubTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
+				$(document).ready(function() {
+					var data = ${fn.toJson(salaryJiXiaoJiDuKaoHe.salaryJixiaoJiduKaoheSubList)};
+					for (var i=0; i<data.length; i++){
+						addRow('#salaryJixiaoJiduKaoheSubList', salaryJixiaoJiduKaoheSubRowIdx, salaryJixiaoJiduKaoheSubTpl, data[i]);
+						salaryJixiaoJiduKaoheSubRowIdx = salaryJixiaoJiduKaoheSubRowIdx + 1;
+					}
+				});
+			</script>
+			</div>
+		</div>
+		</div>
+		</div>
+		</form>
+<% } %>

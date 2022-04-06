@@ -1,0 +1,66 @@
+<%
+layout("/include/_dialog.html"){
+%>
+	<script type="text/javascript">
+
+		$(document).ready(function() {
+				        $('#ymd').datetimepicker({
+				 format:'Y-m-d H:i'
+		    });
+		});
+
+		function save() {
+            var isValidate = jp.validateForm('#inputForm');//校验表单
+            if(!isValidate){
+                return false;
+			}else{
+                var index = jp.loading();
+                jp.post("${ctx}/view/qingjia/viewQingJia/save",$('#inputForm').serialize(),function(data){
+                    if(data.success){
+                        jp.getParent().refresh();
+                        var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                        parent.layer.close(dialogIndex);
+                        jp.toastr_success(data.msg)
+
+                    }else{
+                        jp.toastr_error(data.msg);
+                    }
+                    jp.close(index);
+                })
+			}
+
+        }
+	</script>
+<form id="inputForm"  method="post"  class="form-horizontal p-15">
+    <input type="hidden" name="id" value="${viewQingJia.id!}"/>
+    <table class="table table-bordered">
+       <tbody>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">年月日：</label></td>
+                <td class="width-35">
+                    <div class="input-group">
+                        <input readonly="" id="ymd"  name="ymd"  placeholder="请选择日期" class="form-control   "   value="${fn.formatDate(viewQingJia.ymd!, 'yyyy-MM-dd HH:mm:ss')}">
+                        <div class="input-group-append">
+                            <span class="input-group-text btn-custom border text-white"><i class="ti-calendar"></i></span>
+                        </div>
+                    </div>
+            </td>
+                <td class="width-15 active"><label class="pull-right">姓名：</label></td>
+                <td class="width-35">
+                    <input name="userid" value="${viewQingJia.userid!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">请假类型：</label></td>
+                <td class="width-35">
+                    <input name="type" value="${viewQingJia.type!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">时长：</label></td>
+                <td class="width-35">
+                    <input name="len" value="${viewQingJia.len!}"    class="form-control "/>
+            </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<% } %>

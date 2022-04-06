@@ -1,0 +1,59 @@
+<%
+layout("/include/_dialog.html"){
+%>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+    });
+
+    function save() {
+        var isValidate = jp.validateForm('#inputForm');//校验表单
+        if (!isValidate) {
+            return false;
+        } else {
+            var index = jp.loading();
+            jp.post("${ctx}/database/datamodel/dataParam/save", $('#inputForm').serialize(), function (data) {
+                if (data.success) {
+                    jp.getParent().refresh();
+                    var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                    parent.layer.close(dialogIndex);
+                    jp.toastr_success(data.msg)
+
+                } else {
+                    jp.toastr_error(data.msg);
+                }
+                jp.close(index);
+            })
+        }
+
+    }
+</script>
+<div class="white-box">
+    <form id="inputForm" method="post" class="form-horizontal">
+        <input type="hidden" name="id" value="${dataParam.id!}"/>
+        <table class="table table-bordered">
+            <tbody>
+            <tr>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>数据源：</label></td>
+                <td class="width-35">
+                    <input name="dataSet.id" value="${dataParam.dataSet.id!}" class="form-control required"/>
+                </td>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>字段：</label></td>
+                <td class="width-35">
+                    <input name="field" value="${dataParam.field!}" class="form-control required"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">映射关系：</label></td>
+                <td class="width-35">
+                    <input name="defaultValue" value="${dataParam.defaultValue!}" class="form-control "/>
+                </td>
+                <td class="width-15 active"></td>
+                <td class="width-35"></td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+<% } %>

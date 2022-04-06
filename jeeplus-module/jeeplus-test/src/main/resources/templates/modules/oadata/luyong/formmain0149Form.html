@@ -1,0 +1,292 @@
+<%
+layout("/include/_dialog.html"){
+%>
+	<script type="text/javascript">
+
+		$(document).ready(function() {
+				        $('#field0004').datetimepicker({
+				 format:'Y-m-d H:i'
+		    });
+	        $('#field0012').datetimepicker({
+				 format:'Y-m-d H:i'
+		    });
+	        $('#field0014').datetimepicker({
+				 format:'Y-m-d H:i'
+		    });
+	        $('#field0020').datetimepicker({
+				 format:'Y-m-d H:i'
+		    });
+	        $('#field0033').datetimepicker({
+				 format:'Y-m-d H:i'
+		    });
+	        $('#field0034').datetimepicker({
+				 format:'Y-m-d H:i'
+		    });
+	        $('#field0035').datetimepicker({
+				 format:'Y-m-d H:i'
+		    });
+		});
+
+		function save() {
+            var isValidate = jp.validateForm('#inputForm');//校验表单
+            if(!isValidate){
+                return false;
+			}else{
+                var index = jp.loading();
+                jp.post("${ctx}/oadata/luyong/formmain0149/save",$('#inputForm').serialize(),function(data){
+                    if(data.success){
+                        jp.getParent().refresh();
+                        var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                        parent.layer.close(dialogIndex);
+                        jp.toastr_success(data.msg)
+
+                    }else{
+                        jp.toastr_error(data.msg);
+                    }
+                    jp.close(index);
+                })
+			}
+
+        }
+	</script>
+<form id="inputForm"  method="post"  class="form-horizontal p-15">
+    <input type="hidden" name="id" value="${formmain0149.id!}"/>
+    <table class="table table-bordered">
+       <tbody>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">编号：</label></td>
+                <td class="width-35">
+                    <input name="field0005" value="${formmain0149.field0005!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">申请人：</label></td>
+                <td class="width-35">
+                    <input name="field0002" value="${formmain0149.field0002!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">申请日期：</label></td>
+                <td class="width-35">
+                    <div class="input-group">
+                        <input readonly="" id="field0004"  name="field0004"  placeholder="请选择日期" class="form-control   "   value="${fn.formatDate(formmain0149.field0004!, 'yyyy-MM-dd HH:mm:ss')}">
+                        <div class="input-group-append">
+                            <span class="input-group-text btn-custom border text-white"><i class="ti-calendar"></i></span>
+                        </div>
+                    </div>
+            </td>
+                <td class="width-15 active"><label class="pull-right">所属部门：</label></td>
+                <td class="width-35">
+                    <input name="field0003" value="${formmain0149.field0003!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">所属单位：</label></td>
+                <td class="width-35">
+                    <input name="field0009" value="${formmain0149.field0009!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">审批意见：</label></td>
+                <td class="width-35">
+                    <input name="field0008" value="${formmain0149.field0008!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">姓名：</label></td>
+                <td class="width-35">
+                    <input name="field0010" value="${formmain0149.field0010!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">性别：</label></td>
+                <td class="width-35">
+                    <input name="field0011" value="${formmain0149.field0011!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">出生日期：</label></td>
+                <td class="width-35">
+                    <div class="input-group">
+                        <input readonly="" id="field0012"  name="field0012"  placeholder="请选择日期" class="form-control   "   value="${fn.formatDate(formmain0149.field0012!, 'yyyy-MM-dd HH:mm:ss')}">
+                        <div class="input-group-append">
+                            <span class="input-group-text btn-custom border text-white"><i class="ti-calendar"></i></span>
+                        </div>
+                    </div>
+            </td>
+                <td class="width-15 active"><label class="pull-right">录用岗位：</label></td>
+                <td class="width-35">
+                    <input name="field0013" value="${formmain0149.field0013!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">实习试用期限：</label></td>
+                <td class="width-35">
+                    <div class="input-group">
+                        <input readonly="" id="field0014"  name="field0014"  placeholder="请选择日期" class="form-control   "   value="${fn.formatDate(formmain0149.field0014!, 'yyyy-MM-dd HH:mm:ss')}">
+                        <div class="input-group-append">
+                            <span class="input-group-text btn-custom border text-white"><i class="ti-calendar"></i></span>
+                        </div>
+                    </div>
+            </td>
+                <td class="width-15 active"><label class="pull-right">T实习工资：</label></td>
+                <td class="width-35">
+                    <input name="field0015" value="${formmain0149.field0015!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">T试用工资：</label></td>
+                <td class="width-35">
+                    <input name="field0016" value="${formmain0149.field0016!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">T标准薪资：</label></td>
+                <td class="width-35">
+                    <input name="field0017" value="${formmain0149.field0017!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">人员状态：</label></td>
+                <td class="width-35">
+                    <input name="field0018" value="${formmain0149.field0018!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">录用部门：</label></td>
+                <td class="width-35">
+                    <input name="field0019" value="${formmain0149.field0019!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">结束日期：</label></td>
+                <td class="width-35">
+                    <div class="input-group">
+                        <input readonly="" id="field0020"  name="field0020"  placeholder="请选择日期" class="form-control   "   value="${fn.formatDate(formmain0149.field0020!, 'yyyy-MM-dd HH:mm:ss')}">
+                        <div class="input-group-append">
+                            <span class="input-group-text btn-custom border text-white"><i class="ti-calendar"></i></span>
+                        </div>
+                    </div>
+            </td>
+                <td class="width-15 active"><label class="pull-right">实习基本工资：</label></td>
+                <td class="width-35">
+                    <input name="field0021" value="${formmain0149.field0021!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">试用基本工资：</label></td>
+                <td class="width-35">
+                    <input name="field0022" value="${formmain0149.field0022!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">标准基本工资：</label></td>
+                <td class="width-35">
+                    <input name="field0023" value="${formmain0149.field0023!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">实习岗位工资：</label></td>
+                <td class="width-35">
+                    <input name="field0024" value="${formmain0149.field0024!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">试用岗位工资：</label></td>
+                <td class="width-35">
+                    <input name="field0025" value="${formmain0149.field0025!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">标准岗位工资：</label></td>
+                <td class="width-35">
+                    <input name="field0026" value="${formmain0149.field0026!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">实习绩效工资：</label></td>
+                <td class="width-35">
+                    <input name="field0027" value="${formmain0149.field0027!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">试用绩效工资：</label></td>
+                <td class="width-35">
+                    <input name="field0028" value="${formmain0149.field0028!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">标准绩效工资：</label></td>
+                <td class="width-35">
+                    <input name="field0029" value="${formmain0149.field0029!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">实习保密费：</label></td>
+                <td class="width-35">
+                    <input name="field0030" value="${formmain0149.field0030!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">试用保密费：</label></td>
+                <td class="width-35">
+                    <input name="field0031" value="${formmain0149.field0031!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">标准保密费：</label></td>
+                <td class="width-35">
+                    <input name="field0032" value="${formmain0149.field0032!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">实习生效日期：</label></td>
+                <td class="width-35">
+                    <div class="input-group">
+                        <input readonly="" id="field0033"  name="field0033"  placeholder="请选择日期" class="form-control   "   value="${fn.formatDate(formmain0149.field0033!, 'yyyy-MM-dd HH:mm:ss')}">
+                        <div class="input-group-append">
+                            <span class="input-group-text btn-custom border text-white"><i class="ti-calendar"></i></span>
+                        </div>
+                    </div>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">试用生效日期：</label></td>
+                <td class="width-35">
+                    <div class="input-group">
+                        <input readonly="" id="field0034"  name="field0034"  placeholder="请选择日期" class="form-control   "   value="${fn.formatDate(formmain0149.field0034!, 'yyyy-MM-dd HH:mm:ss')}">
+                        <div class="input-group-append">
+                            <span class="input-group-text btn-custom border text-white"><i class="ti-calendar"></i></span>
+                        </div>
+                    </div>
+            </td>
+                <td class="width-15 active"><label class="pull-right">标准生效日期：</label></td>
+                <td class="width-35">
+                    <div class="input-group">
+                        <input readonly="" id="field0035"  name="field0035"  placeholder="请选择日期" class="form-control   "   value="${fn.formatDate(formmain0149.field0035!, 'yyyy-MM-dd HH:mm:ss')}">
+                        <div class="input-group-append">
+                            <span class="input-group-text btn-custom border text-white"><i class="ti-calendar"></i></span>
+                        </div>
+                    </div>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right"> 实习工资通讯费：</label></td>
+                <td class="width-35">
+                    <input name="field0036" value="${formmain0149.field0036!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">试用工资通讯费：</label></td>
+                <td class="width-35">
+                    <input name="field0037" value="${formmain0149.field0037!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">标准薪资通讯费：</label></td>
+                <td class="width-35">
+                    <input name="field0038" value="${formmain0149.field0038!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">录用单位：</label></td>
+                <td class="width-35">
+                    <input name="field0039" value="${formmain0149.field0039!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">实习总工资：</label></td>
+                <td class="width-35">
+                    <input name="field0040" value="${formmain0149.field0040!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">试用总工资：</label></td>
+                <td class="width-35">
+                    <input name="field0041" value="${formmain0149.field0041!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">标准总工资：</label></td>
+                <td class="width-35">
+                    <input name="field0042" value="${formmain0149.field0042!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"></td>
+                <td class="width-35" ></td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<% } %>

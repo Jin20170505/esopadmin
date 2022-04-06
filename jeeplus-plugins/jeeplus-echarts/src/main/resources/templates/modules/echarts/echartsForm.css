@@ -1,0 +1,217 @@
+.bg-white {
+    background: #edf1f5 !important;
+}
+
+.jp-bi-border {
+    border: 1px solid #d4dadd;
+}
+
+.jp-bi-border-hide {
+    border: 0px;
+}
+
+.jp-bi-background {
+    background-color: #e3f2f8;
+    color: #666;
+}
+
+.jp-bi-background a img {
+    height: 100px;
+}
+
+.jp-bi-background a font {
+    font-size: 16px;
+    font-weight: bold;
+    color: #1890ff;
+}
+
+.jp-tab > li {
+    left: calc(50% - 120px);
+}
+
+.control-label {
+    /*text-align: left !important;*/
+    /*padding-top: 0px !important;*/
+    /*margin-bottom: 0;*/
+}
+
+.full-height {
+    height: 100%;
+}
+
+.theme-plan-color {
+    width: 10px;
+    height: 10px;
+    margin-bottom: 2px;
+    margin-left: 2px;
+    margin-right: 2px;
+    display: inline-block;
+    border-radius: 3px;
+}
+
+.theme-plan-group {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-justify-content: space-between;
+    /* justify-content: space-between; */
+    /* width: auto; */
+     height: 43px;
+    overflow: hidden;
+    border: 1px solid #eee;
+    padding: 5px;
+    margin-right: 5px;
+    border-radius: 4px;
+    /* margin-bottom: 8px; */
+    width: 55px;
+}
+
+.theme-plan-group .jp-icon {
+    position: absolute;
+    margin-top: 3px;
+    margin-left: 15px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #1f9eff;
+    background: #ffffff8a;
+}
+
+.jp-field-component {
+    position: relative;
+    width: 140px;
+    height: 30px;
+    line-height: 28px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 2px 1px 1px 1px rgba(0, 0, 0, .05);
+    z-index: 2;
+    margin: 12px 0 0 15px;
+    float: left;
+    cursor: move;
+}
+
+.jp-field-component:hover {
+    color: #333;
+    background-color: #e6e6e6;
+}
+
+.jp-field-component i {
+    padding-left: 10px;
+    width: 28px;
+    color: #2c3849;
+    opacity: .9;
+}
+
+.droppable-active {
+    background-color: #ffe !important
+}
+
+.tools a {
+    cursor: pointer;
+    font-size: 80%
+}
+
+.form-body .col-md-6, .form-body .col-md-12 {
+    min-height: 400px
+}
+
+.draggable {
+    cursor: move
+}
+
+.jp-field-echarts .fieldpanel li a {
+    float: none;
+    display: inline-block;
+}
+
+.fieldpanel li a {
+    padding: 5px;
+    float: left;
+    width: 100%;
+    background: #e3f2f8;
+}
+
+.jp-field-echarts .fieldpanel li:hover .field-button {
+    display: block;
+}
+
+.jp-field-echarts .fieldpanel li .field-button {
+    position: absolute;
+    right: 0;
+    display: none;
+    top: 5px;
+}
+
+.jp-field-echarts .fieldpanel {
+    padding: 4px;
+    border: 2px solid;
+    border-color: #a0d4e6;
+    height: 200px;
+    overflow: auto;
+}
+
+.jp-field-echarts label {
+    /* font-weight: 500; */
+    width: 100%;
+    background: #e3f2f8;
+    border: 2px solid #a0d4e6;
+    bottom: -10px;
+    margin-bottom: -10px;
+    padding-left: 6px;
+    color: #3f8ce8;
+}
+
+.jp-field-echarts .fieldpanel li {
+    list-style: none;
+    padding: 5px 0;
+    position: relative;
+}
+
+.border1 {
+    left: 3px;
+    right: 3px;
+    top: 3px;
+    bottom: 3px;
+    position: unset !important;
+    background: url("${ctxStatic}/plugins/container/img/line1.png") 0% 0% / 100% 100% no-repeat;
+}
+
+.border2 {
+    left: 3px;
+    right: 3px;
+    top: 3px;
+    bottom: 3px;
+    position: unset !important;
+    background: url("${ctxStatic}/plugins/container/img/line2.png") 0% 0% / 100% 100% no-repeat;
+}
+
+.border3 {
+    left: 3px;
+    right: 3px;
+    top: 3px;
+    bottom: 3px;
+    position: unset !important;
+    background: url("${ctxStatic}/plugins/container/img/line3.png") 0% 0% / 100% 100% no-repeat;
+}
+
+.border4 {
+    left: 3px;
+    right: 3px;
+    top: 3px;
+    bottom: 3px;
+    position: unset !important;
+    background: url("${ctxStatic}/plugins/container/img/line4.png") 0% 0% / 100% 100% no-repeat;
+}
+
+.border-plat {
+    margin-right: 10px;
+}
+
+.border-font {
+    position: absolute;
+    margin-top: -20px;
+    margin-left: 8px;
+}
+

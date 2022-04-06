@@ -1,0 +1,151 @@
+{
+  "title": {
+    "text": "某地区蒸发量和降水量",
+    "subtext": "双Y轴 折线图柱状图混搭",
+    "textStyle": {
+    },
+    "subtextStyle": {
+    }
+  },
+  "tooltip": {
+    "trigger": "axis"
+  },
+  "legend": {
+    "data": [
+      "蒸发量",
+      "降水量"
+    ]
+  },
+  "toolbox": {
+    "show": true,
+    "feature": {
+      "mark": {
+        "show": true
+      },
+      "dataView": {
+        "show": true,
+        "readOnly": false
+      },
+      "restore": {
+        "show": true
+      },
+      "saveAsImage": {
+        "show": true
+      }
+    }
+  },
+  "calculable": true,
+  "xAxis": [
+    {
+      "type": "category",
+      "axisLine": {
+        "onZero": false
+      },
+      "data": [
+        "1月",
+        "2月",
+        "3月",
+        "4月",
+        "5月",
+        "6月",
+        "7月",
+        "8月",
+        "9月",
+        "10月",
+        "11月",
+        "12月"
+      ]
+    }
+  ],
+  "grid": {
+    "y": 70
+  },
+  "yAxis": [
+    {
+      "type": "value",
+      "name": "绝对值"
+    },
+    {
+      "type": "value",
+      "name": "增量",
+      "min": -300,
+      "max": 150
+    }
+  ],
+  "series": [
+    {
+      "name": "蒸发量",
+      "type": "bar",
+      "data": [
+        2,
+        4.9,
+        7,
+        23.2,
+        25.6,
+        76.7,
+        135.6,
+        162.2,
+        32.6,
+        20,
+        6.4,
+        3.3
+      ]
+    },
+    {
+      "name": "降水量",
+      "type": "bar",
+      "data": [
+        2.6,
+        5.9,
+        9,
+        26.4,
+        28.7,
+        70.7,
+        175.6,
+        182.2,
+        48.7,
+        18.8,
+        6,
+        2.3
+      ]
+    },
+    {
+      "name": "蒸发量增量",
+      "type": "line",
+      "yAxisIndex": 1,
+      "data": [
+        0,
+        2.9,
+        2.1,
+        16.2,
+        2.4,
+        51.1,
+        58.9,
+        26.6,
+        -129.6,
+        -12.6,
+        -13.6,
+        -3.1
+      ]
+    },
+    {
+      "name": "降水量增量",
+      "type": "line",
+      "yAxisIndex": 1,
+      "data": [
+        0,
+        3.3,
+        3.1,
+        17.4,
+        2.3,
+        42,
+        104.9,
+        6.6,
+        -133.5,
+        -29.9,
+        -12.8,
+        -3.7
+      ]
+    }
+  ]
+}

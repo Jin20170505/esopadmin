@@ -1,0 +1,80 @@
+<%
+layout("/include/_dialog.html"){
+%>
+	<script type="text/javascript">
+
+		$(document).ready(function() {
+				        $('#yearmonth').datetimepicker({
+                            format:'Y-m',
+                            formatDate:'y-m',
+                            timepicker: true,
+                            validateOnBlur: false
+		    });
+		});
+
+		function save() {
+            var isValidate = jp.validateForm('#inputForm');//校验表单
+            if(!isValidate){
+                return false;
+			}else{
+                var index = jp.loading();
+                jp.post("${ctx}/salary/qitakoukuan/salaryOtherKouKuan/save",$('#inputForm').serialize(),function(data){
+                    if(data.success){
+                        jp.getParent().refresh();
+                        var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                        parent.layer.close(dialogIndex);
+                        jp.toastr_success(data.msg)
+
+                    }else{
+                        jp.toastr_error(data.msg);
+                    }
+                    jp.close(index);
+                })
+			}
+
+        }
+	</script>
+<form id="inputForm"  method="post"  class="form-horizontal p-15">
+    <input type="hidden" name="id" value="${salaryOtherKouKuan.id!}"/>
+    <table class="table table-bordered">
+       <tbody>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">年月：</label></td>
+                <td class="width-35">
+                    <div class="input-group">
+                        <input readonly="" id="yearmonth"  name="yearmonth"  placeholder="请选择日期" class="form-control   "   value="${fn.formatDate(salaryOtherKouKuan.yearmonth!, 'yyyy-MM-dd HH:mm:ss')}">
+                        <div class="input-group-append">
+                            <span class="input-group-text btn-custom border text-white"><i class="ti-calendar"></i></span>
+                        </div>
+                    </div>
+            </td>
+                <td class="width-15 active"><label class="pull-right">员工：</label></td>
+                <td class="width-35">
+                    <#gridselect url="${ctx}/qiyewx/base/qiYeWxEmployee/data" id="employee" name="employee.id" value="${salaryOtherKouKuan.employee.id!}" labelName="employee.name" labelValue="${salaryOtherKouKuan.employee.name!}"
+                         title="选择员工" class="form-control " fieldLabels="编号|姓名" fieldKeys="userid|name" searchLabels="编号|姓名" searchKeys="userid|name" />
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">安全扣罚：</label></td>
+                <td class="width-35">
+                    <input name="anquanKoukuan" value="${salaryOtherKouKuan.anquanKoukuan!}"    class="form-control  isFloatGteZero"/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">离职按培训服务期协议的扣款：</label></td>
+                <td class="width-35">
+                    <input name="lizhipeixunfuwuqixieyiKoukuan" value="${salaryOtherKouKuan.lizhipeixunfuwuqixieyiKoukuan!}"    class="form-control  isFloatGteZero"/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">其他扣款：</label></td>
+                <td class="width-35">
+                    <input name="otherKoukuan" value="${salaryOtherKouKuan.otherKoukuan!}"    class="form-control  isFloatGteZero"/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">扣款总额：</label></td>
+                <td class="width-35">
+                    <input name="sumKoukuan" value="${salaryOtherKouKuan.sumKoukuan!}" readonly placeholder="系统自动计算"   class="form-control "/>
+            </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<% } %>

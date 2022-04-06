@@ -1,0 +1,40 @@
+<%
+layout("/include/_container.html", {title:"统计报表", parent:"人口统计"}){
+%>
+<div class="white-box">
+    <h3 class="box-title">${table.name!}</h3>
+    <p class="text-muted">${table.comments!}</code></p>
+    <table class="table">
+        <thead>
+        <%
+        for(column in table.columnList){
+        if(column.isShowCharts == '1'){
+        %>
+
+        <th>${column.comments}</th>
+
+        <% }}%>
+        </thead>
+
+        <tbody>
+
+
+        <% for(map in dataList){ %>
+        <tr>
+            <%
+            for(column in table.columnList){
+            if(column.isShowCharts == '1'){
+            %>
+
+            <td>${@map.get(column.name)}</td>
+
+            <% }} %>
+
+        </tr>
+        <% }%>
+
+        </tbody>
+    </table>
+</div>
+
+<% } %>

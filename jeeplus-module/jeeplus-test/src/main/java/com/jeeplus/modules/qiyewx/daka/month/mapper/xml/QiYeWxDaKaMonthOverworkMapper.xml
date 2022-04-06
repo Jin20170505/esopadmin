@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.qiyewx.daka.month.mapper.QiYeWxDaKaMonthOverworkMapper">
+    
+	<sql id="qiYeWxDaKaMonthOverworkColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.month_id AS "month.id",
+		a.workday_over_sec AS "workdayOverSec",
+		a.holidays_over_sec AS "holidaysOverSec",
+		a.restdays_over_sec AS "restdaysOverSec"
+	</sql>
+	
+	<sql id="qiYeWxDaKaMonthOverworkJoins">
+			LEFT JOIN qiyewx_daka_month b ON b.id = a.month_id
+	</sql>
+	
+    <select id="getDaysOfOverWork" resultType="QiYeWxDaKaMonthOverwork">
+		SELECT
+		a.workday_over_sec AS "workdayOverSec",
+		a.holidays_over_sec AS "holidaysOverSec",
+		a.restdays_over_sec AS "restdaysOverSec"
+		FROM qiyewx_daka_month_overwork a
+		WHERE a.month_id = #{mid} limit 0;
+	</select>
+	<select id="get" resultType="QiYeWxDaKaMonthOverwork" >
+		SELECT 
+			<include refid="qiYeWxDaKaMonthOverworkColumns"/>
+		FROM qiyewx_daka_month_overwork a
+		<include refid="qiYeWxDaKaMonthOverworkJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="QiYeWxDaKaMonthOverwork" >
+		SELECT 
+			<include refid="qiYeWxDaKaMonthOverworkColumns"/>
+		FROM qiyewx_daka_month_overwork a
+		<include refid="qiYeWxDaKaMonthOverworkJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="month != null and month.id != null and month.id != ''">
+				AND a.month_id = #{month.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="QiYeWxDaKaMonthOverwork" >
+		SELECT 
+			<include refid="qiYeWxDaKaMonthOverworkColumns"/>
+		FROM qiyewx_daka_month_overwork a
+		<include refid="qiYeWxDaKaMonthOverworkJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO qiyewx_daka_month_overwork(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			month_id,
+			workday_over_sec,
+			holidays_over_sec,
+			restdays_over_sec
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{month.id},
+			#{workdayOverSec},
+			#{holidaysOverSec},
+			#{restdaysOverSec}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE qiyewx_daka_month_overwork SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			month_id = #{month.id},
+			workday_over_sec = #{workdayOverSec},
+			holidays_over_sec = #{holidaysOverSec},
+			restdays_over_sec = #{restdaysOverSec}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM qiyewx_daka_month_overwork
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE month_id = #{month.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE qiyewx_daka_month_overwork SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE month_id = #{month.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="QiYeWxDaKaMonthOverwork" statementType="STATEMENT">
+		select * FROM qiyewx_daka_month_overwork  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

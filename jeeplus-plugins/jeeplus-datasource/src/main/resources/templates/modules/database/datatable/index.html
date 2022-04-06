@@ -1,0 +1,190 @@
+<%
+layout("/include/_container.html", {title:"数据表管理", parent:"数据管理"}){
+%>
+<script>
+    var nodeId;
+    $(document).ready(function () {
+        //jsTree初始化
+        var to = false;
+        $('#search_q').keyup(function () {
+            if (to) {
+                clearTimeout(to);
+            }
+            to = setTimeout(function () {
+                var v = $('#search_q').val();
+                $('#jstree').jstree(true).search(v);
+            }, 250);
+        });
+        $('#jstree').jstree({
+            'core': {
+                "multiple": false,
+                "animation": 0,
+                "themes": {"icons": true, "stripes": false, "responsive": false},
+                'data': {
+                    "url": "${ctx}/database/datalink/dataSource/treeData2",
+                    "dataType": "json"
+                }
+            },
+            "conditionalselect": function (node, event) {
+                return false;
+            },
+            'plugins': ['types', "wholerow", "search"],
+            "types": {
+                "default": {
+                    "icon": "fa fa-folder text-custom"
+                },
+                "file": {
+                    "icon": "fa fa-file text-success"
+                }
+            }
+
+        }).bind("activate_node.jstree", function (obj, e) {
+            var node = $('#jstree').jstree(true).get_selected(true)[0];
+
+            if (node.original.type == "db") {
+                nodeId = node.id;
+                jp.post("${ctx}/database/table/data", {"dataSourceId": node.id}, function (data) {
+                    if(data.success){
+                        $('#userTable').bootstrapTable('load', data.body.data.rows);
+                    }else {
+                        jp.info(data.msg);
+                        $('#userTable').bootstrapTable('load', []);
+                    }
+
+                })
+            }
+
+
+        }).on('loaded.jstree', function () {
+            $("#jstree").jstree('open_all');
+        });
+
+
+        $('#userTable').bootstrapTable({
+
+            //移动端自适应
+            mobileResponsive: true,
+            //显示切换手机试图按钮
+            showToggle: false,
+            //显示 内容列下拉框
+            showColumns: true,
+            //显示到处按钮
+           showExport: false,
+            //显示切换分页按钮
+           showPaginationSwitch: false,
+            //最低显示2行
+            minimumCountColumns: 2,
+            //是否显示行间隔色
+            striped: false,
+            //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性(*)
+            cache: false,
+            //是否显示分页(*)
+            pagination: true,
+            //分页方式: client客户端分页，server服务端分页(*)
+            sidePagination: "client",
+            //排序方式
+            sortOrder: "asc",
+            //初始化加载第一页，默认第一页
+            pageNumber: 1,
+            //每页的记录行数(*)
+            pageSize: 10,
+            //可供选择的每页的行数(*)
+            pageList: [10, 25, 50, 100],
+            rightFixedColumns: true, //右侧冻结列
+            rightFixedNumber: 1,
+            data: [],
+            columns: [{
+                checkbox: true
+
+            }
+                , {
+                    field: 'name',
+                    title: '表名',
+                    sortable: true
+
+                }
+                , {
+                    field: 'schema',
+                    title: '模式',
+                    sortable: true
+
+                }
+                , {
+                    field: 'catalog',
+                    title: '数据库',
+                    sortable: true
+
+                }
+                , {
+                    field: 'Description',
+                    title: '说明',
+                    sortable: true
+
+                }
+                , {
+                    field: 'operate',
+                    title: '操作',
+                    align: 'center',
+                    class: 'text-nowrap',
+                    events: {
+                        'click .edit': function (e, value, row, index) {
+                            jp.go('${ctx}/database/table/alter/' + row.name + '?dataSourceId=' + nodeId);
+                        },
+                        'click .view': function (e, value, row, index) {
+                            jp.openViewDialog("查看数据", '${ctx}/database/table/preview/' + row.name + '?dataSourceId=' + nodeId, "80%", "80%");
+                        }
+                    },
+                    formatter: function operateFormatter(value, row, index) {
+                        return [
+                            '<a class="edit btn btn-custom waves-effect waves-light btn-xs m-r-5"> 修改 </a>',
+                            '<a  class="view btn btn-success waves-effect waves-light btn-xs"> 查看数据</a>'
+                        ].join('');
+                    }
+                }
+            ]
+
+        });
+
+
+    });
+
+    function createTable() {
+        var node = $('#jstree').jstree(true).get_selected(true)[0];
+        if (node && node.original.type == "db") {
+            jp.go("${ctx}/database/table/create?dataSourceId=" + node.id);
+        } else {
+            jp.info("请选择一个数据库");
+        }
+    }
+</script>
+
+<div class="row">
+    <div class="col-sm-3 col-md-2 p-r-5">
+        <div class="white-box">
+            <div class="input-group">
+					<span class="input-group-prepend">
+						<button type="button" class="btn btn-sm waves-effect waves-light btn-custom"><i class="fa fa-search"></i></button>
+					</span>
+                <input type="text" class="form-control input-sm"  id="search_q" placeholder="查找..." >
+            </div>
+            <div id="jstree" class="overflow-auto; border-0"></div>
+        </div>
+    </div>
+    <div class="col-sm-9 col-md-10" style="padding-left: 0px">
+
+        <div class="white-box">
+            <!-- 工具栏 -->
+            <div id="toolbar">
+                <a href="javascript:createTable()"class="btn btn-custom waves-effect waves-light w-xs">
+                    <i class="fa fa-plus"></i> 创建表</a>
+            </div>
+
+            <!-- 表格 -->
+            <table id="userTable" data-toolbar="#toolbar"></table>
+
+        </div>
+    </div>
+</div>
+
+
+<% } %>

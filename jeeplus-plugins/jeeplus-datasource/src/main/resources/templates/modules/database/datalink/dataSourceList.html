@@ -1,0 +1,58 @@
+<%
+layout("/include/_container.html", {title:"数据库连接", parent:"数据管理"}){
+%>
+
+<!-- 搜索 -->
+<div id="search-collapse" class="collapse white-box" style="position:relative;margin-bottom: 5px">
+    <a class="jp-ti-close close"
+       onclick="$('#search-collapse').fadeToggle()">
+        <i class="fa fa-times"></i>
+    </a>
+    <form id="searchForm" class="form-inline">
+        <div class="form-group m-b-10 m-r-10">
+            <label class="m-r-10" title="数据库名称：">数据库名称：</label>
+            <input name="name" maxlength="50" class=" form-control"/>
+        </div>
+        <div class="form-group m-b-10 m-r-10">
+            <label class="m-r-10" title="数据库类型：">数据库类型：</label>
+            <#select path="type" items="${fn.getDictList('db_type')}" itemLabel="label" itemValue="value"
+            class="form-control m-b w-lg"/>
+        </div>
+        <div class="form-group m-b-10 m-r-10">
+            <label class="m-r-10" title="数据库名：">数据库名：</label>
+            <input name="dbname" maxlength="50" class=" form-control"/>
+        </div>
+        <div class="form-group m-b-10 m-r-10">
+            <a  id="search" class="btn btn-custom waves-effect waves-light m-l-10 btn-md btn-rounded"><i class="fa fa-search"></i> 查询</a>
+            <a  id="reset" class="btn btn-custom waves-effect waves-light m-l-10 btn-md btn-rounded" ><i class="fa fa-refresh"></i> 重置</a>
+        </div>
+    </form>
+</div>
+
+
+<div class="white-box">
+    <!-- 工具栏 -->
+    <div id="toolbar">
+        <% if(shiro.hasPermission("database:datalink:dataSource:add") ){ %>
+        <button id="add" class="btn btn-custom waves-effect w-xs waves-light" onclick="add()">
+            <i class="fa fa-plus"></i> 新建
+        </button>
+        <% } %>
+        <% if(shiro.hasPermission("database:datalink:dataSource:edit") ){ %>
+        <button id="edit" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="edit()">
+            <i class="fa fa-edit"></i> 修改
+        </button>
+        <% } %>
+        <% if(shiro.hasPermission("database:datalink:dataSource:del") ){ %>
+        <button id="remove" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="del()">
+            <i class="fa fa-remove"></i> 删除
+        </button>
+        <% } %>
+    </div>
+
+    <!-- 表格 -->
+    <table id="dataSourceTable" class="table-bordered" data-toolbar="#toolbar"></table>
+</div>
+
+<% include("dataSourceList.js"){} %>
+<% } %>

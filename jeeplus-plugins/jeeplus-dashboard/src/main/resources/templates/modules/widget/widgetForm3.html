@@ -1,0 +1,103 @@
+<%
+layout("/include/_dialog.html"){
+%>
+<script>
+    function save() {
+        var isValidate = jp.validateForm('#inputForm');//校验表单
+        if(!isValidate){
+            return false;
+        }else{
+            var index = jp.loading();
+            jp.post("${ctx}/widget/save",$('#inputForm').serialize(),function(data){
+                if(data.success){
+                    data.body.id = "${containerId!}";//设置容器id
+                    jp.getParent().refresh3(data.body);
+                    var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                    parent.layer.close(dialogIndex);
+                    jp.success(data.msg)
+
+                }else{
+                    jp.error(data.msg);
+                }
+            })
+        }
+
+    }
+</script>
+<form id="inputForm"  action="${ctx}/widget/save" method="post" style="padding: 10px" class="form-horizontal">
+    <input type="hidden" name="id" value="${widget.id!}">
+    <input type="hidden" name="type" value="3">
+    <div class="row form-group">
+        <label class="col-xs-3 col-sm-2"><div class="pull-right"><font color="red">*</font> 组件名称：</div> </label>
+        <div class="col-xs-9 col-sm-10">
+            <input class="form-control required" name="name" value="${widget.name!}">
+        </div>
+    </div>
+    <div class="row form-group">
+        <label class="col-xs-3 col-sm-2"><div class="pull-right"><font color="red">*</font> 选择图表：</div> </label>
+        <div class="col-xs-9 col-sm-10">
+            <input id="echartsId" name="url" type="hidden" value="${widget.url!}">
+            <div class="input-group">
+                <input id="echartsName" name="icon" readonly="readonly" type="text" value="${widget.icon!}" data-msg-required="" class="form-control " style="">
+                <span class="input-group-append">
+                    <button type="button"  id="echartsButton" class="btn waves-effect waves-light btn-custom"><i class="fa fa-search"></i></button>
+                </span>
+            </div>
+            <script type="text/javascript">
+                $(document).ready(function(){
+                    $("#echartsButton, #echartsName").click(function(){
+                        if ($("#echartsButton").hasClass("disabled")){
+                            return true;
+                        }
+
+                        top.layer.open({
+                            type: 2,
+                            area: ['80%', '70%'],
+                            title:"选择图表",
+                            auto:true,
+                            name:'friend',
+                            content: "${ctx}/tag/gridselect?url="+encodeURIComponent("${ctx}/echarts/data")+"&fieldLabels="+encodeURIComponent("图表名")+"&fieldKeys="+encodeURIComponent("name")+"&searchLabels="+encodeURIComponent("图表名")+"&searchKeys="+encodeURIComponent("name")+"&isMultiSelected=false",
+                            btn: ['确定', '关闭'],
+                            yes: function(index, layero){
+                                var iframeWin = layero.find('iframe')[0].contentWindow; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                                var items = iframeWin.getSelections();
+                                if(items == ""){
+                                    jp.warning("必须选择一条数据!");
+                                    return;
+                                }
+                                var ids = [];
+                                var names = [];
+                                for(var i=0; i<items.length; i++){
+                                    var item = items[i];
+                                    ids.push(item.id);
+                                    names.push(item.name)
+                                }
+                                $("#echartsId").val(ids.join(","));
+                                $("#echartsName").val(names.join(","));
+                                top.layer.close(index);//关闭对话框。
+                            },
+                            cancel: function(index){
+                            }
+                        });
+                    })
+                    $("#echartsDelButton").click(function(){
+                        // 是否限制选择，如果限制，设置为disabled
+                        if ($("#echartsButton").hasClass("disabled")){
+                            return true;
+                        }
+                        // 清除
+                        $("#echartsId").val("");
+                        $("#echartsName").val("");
+                        $("#echartsName").focus();
+
+                    });
+                })
+            </script>
+        </div>
+    </div>
+
+
+</form>
+
+
+<% } %>

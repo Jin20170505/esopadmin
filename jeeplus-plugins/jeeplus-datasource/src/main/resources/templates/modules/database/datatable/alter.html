@@ -1,0 +1,194 @@
+<%
+layout("/include/_container.html", {title:"修改表", parent:"数据表管理"}){
+%>
+
+
+<div class="white-box">
+    <form id="tableAlterForm" role="form" class="form-horizontal" action="${ctx}/database/table/alter/do" method="post">
+        <input type="hidden" name="tableName" value="${table.name!}"/>
+        <input type="hidden" name="dataSourceId" value="${dataSourceId!}"/>
+        <input type="hidden" name="columns"/>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="form-group row">
+                    <label class="col-sm-3 control-label">表名</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" name="name"
+                               data-parsley-required="true" value="${table.name!}"
+                               readonly="readonly">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="form-group row">
+                    <label class="col-sm-2 control-label">模式</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" name="schema"
+                               readonly="readonly" value="${table.schema!}">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="form-group row">
+                    <label class="col-sm-2 control-label">数据库</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" name="catalog"
+                               readonly="readonly" value="${table.catalog!}">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-group row">
+                    <label class="col-sm-1 control-label">描述</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="description"
+                               value="${table.description!}">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <b>列</b>
+                <div class="pull-right m-b-5">
+                    <button type="button" class="btn btn-custom waves-effect waves-light w-xs" onclick="addColumn()"><i
+                            class="fa fa-plus"></i> 增加一列
+                    </button>
+                </div>
+                <table id="columns" class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>列名</th>
+                        <th>数据类型</th>
+                        <th>长度</th>
+                        <th>默认值</th>
+                        <th>主键</th>
+                        <th>非空</th>
+                        <th>自增</th>
+                        <th>说明</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% for(col in table.columns){ %>
+                    <tr>
+                        <td>
+                            <input type="text" class="form-control" name="column.name" value="${col.name!}"/>
+                        </td>
+                        <td>
+                            <select class="form-control" name="columnType"
+                                    onchange="changeType(this)">
+                                <% for(obj in columnTypes){ %>
+                                <% if(!strutil.startWith(obj.name,"_")){ %>
+                                <option value="${obj.name!}" ${col.type! == obj.name! ?'selected="selected"':''} >
+                                ${obj.name!}
+                                </option>
+                                <% } %>
+                                <% } %>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" name="columnSize" value="${col.size!}"/>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" name="columnDefault"
+                                   value="${col.defaultValue!}"/>
+                        </td>
+                        <td class="text-center" style="vertical-align: middle;">
+                                <input type="checkbox" name="columnPk"
+                                       ${col.primaryKey!false== true ? 'checked="checked"':''}/>
+                        </td>
+                        <td class="text-center" style="vertical-align: middle;">
+                                <input type="checkbox" name="columnNotNull"
+                                       ${col.required!false== true ? 'checked="checked"':''} />
+                        </td>
+                        <td class="text-center" style="vertical-align: middle;">
+                                <input type="checkbox" name="columnAutoIncr"
+                                       ${col.autoIncrement!false== true ? 'checked="checked"' :'disabled="disabled"'}/>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" name="columnComment"/>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger btn-xs" type="button"
+                                    onclick="removeColumn(this)"><i class="fa fa-close"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="form-group text-center">
+            <button class="btn btn-custom waves-effect waves-light w-xs" type="button"
+                    onclick="getColumns()" data-loading-text="Submit...">
+                <i class="fa fa-save"></i> 提交
+            </button>
+            <a href="${ctx}/database/table/" class="btn btn-danger waves-effect waves-light w-xs" >
+                <i class="fa fa fa-arrow-left"></i> 返回
+            </a>
+        </div>
+    </form>
+
+</div>
+
+
+<script type="text/javascript">
+    var template;
+
+    function addColumn() {
+        $("#columns>tbody").append(template.clone());
+    }
+
+    function removeColumn(obj) {
+        $(obj).parents("tr").remove();
+    }
+
+    function getColumns() {
+        var trs = $("#columns>tbody>tr");
+        var data = [];
+        trs.each(function (i, tr) {
+            tr = $(tr);
+            var obj = {};
+            obj.name = tr.find("td:eq(0)>input").val();
+            obj.type = tr.find("td:eq(1)>select").val();
+            obj.size = tr.find("td:eq(2)>input").val();
+            obj.def = tr.find("td:eq(3)>input").val();
+            obj.pk = tr.find("td:eq(4)>input").is(":checked");
+            obj.notNull = tr.find("td:eq(5)>input").is(":checked");
+            obj.autoIncr = tr.find("td:eq(6)>input").is(":checked");
+            obj.comment = tr.find("td:eq(7)>input").val();
+
+            data.push(JSON.stringify(obj));
+        });
+        $("#tableAlterForm>input[name='columns']").val(data.toString());
+        $("#tableAlterForm").submit();
+    }
+
+    function changeType(obj) {
+        if (obj.value == "BIGINT" || obj.value == "DOUBLE" || obj.value == "FLOAT" || obj.value == "INTEGER" || obj.value == "NUMERIC" || obj.value == "DECIMAL") {
+            $(obj).parents("tr").find("input[name='columnAutoIncr']").removeAttr("disabled");
+        } else {
+            $(obj).parents("tr").find("input[name='columnAutoIncr']").attr("disabled", "disabled");
+            $(obj).parents("tr").find("input[name='columnAutoIncr']").prop("checked", false);
+        }
+    }
+
+    $(function () {
+        jp.ajaxForm("#tableAlterForm", function (data) {
+            if (data.success) {
+                jp.toastr_success("修改成功!");
+                jp.go("${ctx}/database/table")
+            } else {
+                jp.toastr_error(data.msg);
+            }
+        });
+        template = $("#columns>tbody>tr:first").clone();
+        template.find("input").val("");
+    });
+
+</script>
+<% } %>

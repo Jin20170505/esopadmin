@@ -1,0 +1,109 @@
+<%
+layout("/include/_dialog.html"){
+%>
+<script type="text/javascript">
+    function testDbLink() {
+        var isValidate = jp.validateForm('#inputForm');//校验表单
+        if (!isValidate) {
+            return false;
+        } else {
+            var index = jp.loading('正在测试数据库连接...');
+            jp.post("${ctx}/database/datalink/dataSource/test", $('#inputForm').serialize(), function (data) {
+                jp.info(data.msg);
+            })
+        }
+
+    }
+
+    function save() {
+        var isValidate = jp.validateForm('#inputForm');//校验表单
+        if (!isValidate) {
+            return false;
+        } else {
+            var index = jp.loading();
+            jp.post("${ctx}/database/datalink/dataSource/save", $('#inputForm').serialize(), function (data) {
+                if (data.success) {
+                    jp.getParent().refresh();
+                    var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                    parent.layer.close(dialogIndex);
+                    jp.toastr_success(data.msg)
+
+                } else {
+                    jp.toastr_error(data.msg);
+                }
+                jp.close(index);
+            })
+        }
+
+    }
+
+    $(document).ready(function() {
+        jQuery.validator.addMethod("isMaster", function(value, element) {
+            if(value == "master"){
+                return false;
+            }else{
+                return true;
+            }
+        }, "master是系统默认主数据源名，请换一个名字!");
+
+        $("#inputForm").validate({
+            rules: {
+                enName: {remote: "${ctx}/database/datalink/dataSource/checkEnName?oldEnName=${dataSource.enName!}"}
+            },
+            messages: {
+                enName: {remote: "连接英文名已存在!"}
+            }
+        });
+
+    });
+</script>
+    <form id="inputForm" method="post" class="form-horizontal p-15">
+        <input type="hidden" name="id" value="${dataSource.id!}"/>
+        <table class="table table-bordered">
+            <tbody>
+            <tr>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>连接名称：</label></td>
+                <td class="width-35">
+                    <input name="name" value="${dataSource.name!}" class="form-control required isMaster"/>
+                </td>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>连接英文名：</label></td>
+                <td class="width-35">
+                    <input name="enName" id="enName" value="${dataSource.enName!}" class="form-control isMaster required isRightfulString"/>
+                </td>
+
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>数据库类型：</label></td>
+                <td class="width-35">
+                    <#select path="type" value="${dataSource.type!}" items="${fn.getDictList('db_type')}"
+                    itemLabel="label" itemValue="value" class="form-control required"/>
+                </td>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>主机地址：</label></td>
+                <td class="width-35">
+                    <input name="host" value="${dataSource.host!}" class="form-control required"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>端口：</label></td>
+                <td class="width-35">
+                    <input name="port" value="${dataSource.port!}" class="form-control required"/>
+                </td>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>数据库名：</label></td>
+                <td class="width-35">
+                    <input name="dbname" value="${dataSource.dbname!}" class="form-control required"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>数据库用户名：</label></td>
+                <td class="width-35">
+                    <input name="username" value="${dataSource.username!}" class="form-control required"/>
+                </td>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>数据库密码：</label></td>
+                <td class="width-35">
+                    <input name="password" value="${dataSource.password!}" class="form-control required"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+<% } %>

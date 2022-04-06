@@ -1,0 +1,112 @@
+<%
+layout("/include/_dialog.html"){
+%>
+	<script type="text/javascript">
+
+		$(document).ready(function() {
+				        $('#sqsj').datetimepicker({
+				 format:'Y-m-d H:i'
+		    });
+	        $('#starttime').datetimepicker({
+				 format:'Y-m-d H:i'
+		    });
+	        $('#endtime').datetimepicker({
+				 format:'Y-m-d H:i'
+		    });
+		});
+
+		function save() {
+            var isValidate = jp.validateForm('#inputForm');//校验表单
+            if(!isValidate){
+                return false;
+			}else{
+                var index = jp.loading();
+                jp.post("${ctx}/view/waichu/viewSpWaiChu/save",$('#inputForm').serialize(),function(data){
+                    if(data.success){
+                        jp.getParent().refresh();
+                        var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                        parent.layer.close(dialogIndex);
+                        jp.toastr_success(data.msg)
+
+                    }else{
+                        jp.toastr_error(data.msg);
+                    }
+                    jp.close(index);
+                })
+			}
+
+        }
+	</script>
+<form id="inputForm"  method="post"  class="form-horizontal p-15">
+    <input type="hidden" name="id" value="${viewSpWaiChu.id!}"/>
+    <table class="table table-bordered">
+       <tbody>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">审批编号：</label></td>
+                <td class="width-35">
+                    <input name="code" value="${viewSpWaiChu.code!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">申请人：</label></td>
+                <td class="width-35">
+                    <input name="name" value="${viewSpWaiChu.name!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">申请时间：</label></td>
+                <td class="width-35">
+                    <div class="input-group">
+                        <input readonly="" id="sqsj"  name="sqsj"  placeholder="请选择日期" class="form-control   "   value="${fn.formatDate(viewSpWaiChu.sqsj!, 'yyyy-MM-dd HH:mm:ss')}">
+                        <div class="input-group-append">
+                            <span class="input-group-text btn-custom border text-white"><i class="ti-calendar"></i></span>
+                        </div>
+                    </div>
+            </td>
+                <td class="width-15 active"><label class="pull-right">开始时间：</label></td>
+                <td class="width-35">
+                    <div class="input-group">
+                        <input readonly="" id="starttime"  name="starttime"  placeholder="请选择日期" class="form-control   "   value="${fn.formatDate(viewSpWaiChu.starttime!, 'yyyy-MM-dd HH:mm:ss')}">
+                        <div class="input-group-append">
+                            <span class="input-group-text btn-custom border text-white"><i class="ti-calendar"></i></span>
+                        </div>
+                    </div>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">结束时间：</label></td>
+                <td class="width-35">
+                    <div class="input-group">
+                        <input readonly="" id="endtime"  name="endtime"  placeholder="请选择日期" class="form-control   "   value="${fn.formatDate(viewSpWaiChu.endtime!, 'yyyy-MM-dd HH:mm:ss')}">
+                        <div class="input-group-append">
+                            <span class="input-group-text btn-custom border text-white"><i class="ti-calendar"></i></span>
+                        </div>
+                    </div>
+            </td>
+                <td class="width-15 active"><label class="pull-right">外出地点：</label></td>
+                <td class="width-35">
+                    <input name="adress" value="${viewSpWaiChu.adress!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">外出事由：</label></td>
+                <td class="width-35">
+                    <input name="reason" value="${viewSpWaiChu.reason!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">外出时长：</label></td>
+                <td class="width-35">
+                    <input name="hours" value="${viewSpWaiChu.hours!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">状态：</label></td>
+                <td class="width-35">
+                    <input name="status" value="${viewSpWaiChu.status!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">标识：</label></td>
+                <td class="width-35">
+                    <input name="bs" value="${viewSpWaiChu.bs!}"    class="form-control "/>
+            </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<% } %>

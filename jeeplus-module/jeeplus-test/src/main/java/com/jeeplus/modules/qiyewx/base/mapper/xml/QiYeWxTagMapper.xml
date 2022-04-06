@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.qiyewx.base.mapper.QiYeWxTagMapper">
+    
+	<sql id="qiYeWxTagColumns">
+		a.id AS "id",
+		a.name AS "name"
+	</sql>
+	
+	<sql id="qiYeWxTagJoins">
+		
+	</sql>
+
+	<select id="findTagUser" resultType="QiYeWxTag" >
+		SELECT  a.userid as id,GROUP_CONCAT(c.`name` SEPARATOR  ',') AS name	FROM qiyewx_tag_userid a
+		 LEFT JOIN qiyewx_employee b on a.userid = b.id
+		 LEFT JOIN qiyewx_tag c on a.tagid = c.id
+		GROUP BY a.userid
+	</select>
+
+	<!-- 更新微信用户标签 -->
+
+	<update id="updateUserTagBatch" parameterType="java.util.List">
+		insert into qiyewx_employee (id,tag)  values
+		<foreach collection="list" separator="," item="item">
+			(
+			#{item.id},
+			#{item.name}
+			)
+		</foreach>
+		ON DUPLICATE KEY UPDATE tag = VALUES(tag);
+	</update>
+	<select id="get" resultType="QiYeWxTag" >
+		SELECT 
+			<include refid="qiYeWxTagColumns"/>
+		FROM qiyewx_tag a
+		<include refid="qiYeWxTagJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="QiYeWxTag" >
+		SELECT 
+			<include refid="qiYeWxTagColumns"/>
+		FROM qiyewx_tag a
+		<include refid="qiYeWxTagJoins"/>
+		<where>
+			
+			${dataScope}
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+				    <if test="_databaseId == 'postgre'">'%'||#{name}||'%'</if>
+					<if test="_databaseId == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="_databaseId == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="_databaseId == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="QiYeWxTag" >
+		SELECT 
+			<include refid="qiYeWxTagColumns"/>
+		FROM qiyewx_tag a
+		<include refid="qiYeWxTagJoins"/>
+		<where>
+			
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="batchInsertTagUser" parameterType="java.util.List">
+		INSERT INTO qiyewx_tag_userid(
+		userid,
+		tagid
+		) VALUES
+		<foreach collection="list" item="item" separator=",">
+			(
+			#{item.userid},
+			#{item.tagid}
+			)
+		</foreach>
+	</insert>
+
+	<insert id="batchInsert" parameterType="java.util.List">
+		INSERT INTO qiyewx_tag(
+			id,
+			name
+		) VALUES
+		 <foreach collection="list" item="item" separator=",">
+			 (
+			 #{item.id},
+			 #{item.name}
+			 )
+		 </foreach>
+	</insert>
+
+	<insert id="insert">
+		INSERT INTO qiyewx_tag(
+			id,
+			name
+		) VALUES (
+			#{id},
+			#{name}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE qiyewx_tag SET 	
+			name = #{name}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM qiyewx_tag
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE qiyewx_tag SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="QiYeWxTag" statementType="STATEMENT">
+		select * FROM qiyewx_tag  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

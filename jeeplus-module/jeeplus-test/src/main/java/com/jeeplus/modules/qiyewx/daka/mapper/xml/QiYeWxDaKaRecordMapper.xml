@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.qiyewx.daka.mapper.QiYeWxDaKaRecordMapper">
+    
+	<sql id="qiYeWxDaKaRecordColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.userid AS "emplyee.id",
+		a.groupname AS "groupname",
+		a.checkin_type AS "checkinType",
+		a.exception_type AS "exceptionType",
+		a.checkin_time AS "checkinTime",
+		a.location_title AS "locationTitle",
+		a.location_detail AS "locationDetail",
+		a.wifiname AS "wifiname",
+		a.notes AS "notes",
+		a.wifimac AS "wifimac",
+		a.mediaids AS "mediaids",
+		a.lat AS "lat",
+		a.lng AS "lng",
+		a.deviceid AS "deviceid",
+		a.sch_checkin_time AS "schCheckinTime",
+		a.groupid AS "groupid",
+		a.schedule_id AS "scheduleid",
+		a.timeline_id AS "timelineid",
+		emplyee.name AS "emplyee.name"
+	</sql>
+	
+	<sql id="qiYeWxDaKaRecordJoins">
+		LEFT JOIN qiyewx_employee emplyee ON emplyee.id = a.userid
+	</sql>
+	<select id="findDaKaAdress" resultType="java.lang.String">
+		select distinct location_detail from qiyewx_daka_record where userid = #{userid} and DATE_FORMAT(checkin_time,'%Y-%m-%d') = #{ymd} and location_detail !='';
+	</select>
+    <select id="getLastDaKaTime" resultType="java.util.Date">
+		select checkin_time from qiyewx_daka_record where userid = #{userid} and DATE_FORMAT(checkin_time,'%Y-%m-%d') = #{ymd} order by checkin_time desc limit 1;
+	</select>
+	<select id="get" resultType="QiYeWxDaKaRecord" >
+		SELECT 
+			<include refid="qiYeWxDaKaRecordColumns"/>
+		FROM qiyewx_daka_record a
+		<include refid="qiYeWxDaKaRecordJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	<delete id="deleteFromTo">
+		DELETE FROM qiyewx_daka_record
+		WHERE checkin_time BETWEEN #{beginCheckinTime} AND #{endCheckinTime}
+	</delete>
+	<select id="findList" resultType="QiYeWxDaKaRecord" >
+		SELECT 
+			<include refid="qiYeWxDaKaRecordColumns"/>
+		FROM qiyewx_daka_record a
+		<include refid="qiYeWxDaKaRecordJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="emplyee != null and emplyee.id != null and emplyee.id != ''">
+				AND a.userid = #{emplyee.id}
+			</if>
+			<if test="checkinType != null and checkinType != ''">
+				AND a.checkin_type = #{checkinType}
+			</if>
+			<if test="exceptionType != null and exceptionType != ''">
+				AND a.exception_type like concat('%',#{exceptionType},'%')
+			</if>
+			<if test="beginCheckinTime != null and endCheckinTime != null ">
+				AND a.checkin_time BETWEEN #{beginCheckinTime} AND #{endCheckinTime}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.checkin_time DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="QiYeWxDaKaRecord" >
+		SELECT 
+			<include refid="qiYeWxDaKaRecordColumns"/>
+		FROM qiyewx_daka_record a
+		<include refid="qiYeWxDaKaRecordJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.checkin_time DESC
+			</otherwise>
+		</choose>
+	</select>
+	<insert id="batchInsert" parameterType="java.util.List">
+		INSERT INTO qiyewx_daka_record(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			userid,
+			groupname,
+			checkin_type,
+			exception_type,
+			checkin_time,
+			location_title,
+			location_detail,
+			wifiname,
+			notes,
+			wifimac,
+			mediaids,
+			lat,
+			lng,
+			deviceid,
+			sch_checkin_time,
+			groupid,
+			schedule_id,
+			timeline_id
+		) VALUES
+		<foreach collection="list" separator="," item="item">
+			(
+			#{item.id},
+			#{item.createBy.id},
+			#{item.createDate},
+			#{item.updateBy.id},
+			#{item.updateDate},
+			#{item.remarks},
+			#{item.delFlag},
+			#{item.emplyee.id},
+			#{item.groupname},
+			#{item.checkinType},
+			#{item.exceptionType},
+			#{item.checkinTime},
+			#{item.locationTitle},
+			#{item.locationDetail},
+			#{item.wifiname},
+			#{item.notes},
+			#{item.wifimac},
+			#{item.mediaids},
+			#{item.lat},
+			#{item.lng},
+			#{item.deviceid},
+			#{item.schCheckinTime},
+			#{item.groupid},
+			#{item.scheduleid},
+			#{item.timelineid}
+			)
+		</foreach>
+	</insert>
+	<insert id="insert">
+		INSERT INTO qiyewx_daka_record(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			userid,
+			groupname,
+			checkin_type,
+			exception_type,
+			checkin_time,
+			location_title,
+			location_detail,
+			wifiname,
+			notes,
+			wifimac,
+			mediaids,
+			lat,
+			lng,
+			deviceid,
+			sch_checkin_time,
+			groupid,
+			schedule_id,
+			timeline_id
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{emplyee.id},
+			#{groupname},
+			#{checkinType},
+			#{exceptionType},
+			#{checkinTime},
+			#{locationTitle},
+			#{locationDetail},
+			#{wifiname},
+			#{notes},
+			#{wifimac},
+			#{mediaids},
+			#{lat},
+			#{lng},
+			#{deviceid},
+			#{schCheckinTime},
+			#{groupid},
+			#{scheduleid},
+			#{timelineid}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE qiyewx_daka_record SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			userid = #{emplyee.id},
+			groupname = #{groupname},
+			checkin_type = #{checkinType},
+			exception_type = #{exceptionType},
+			checkin_time = #{checkinTime},
+			location_title = #{locationTitle},
+			location_detail = #{locationDetail},
+			wifiname = #{wifiname},
+			notes = #{notes},
+			wifimac = #{wifimac},
+			mediaids = #{mediaids},
+			lat = #{lat},
+			lng = #{lng},
+			deviceid = #{deviceid},
+			sch_checkin_time = #{schCheckinTime},
+			groupid = #{groupid},
+			schedule_id = #{scheduleid},
+			timeline_id = #{timelineid}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM qiyewx_daka_record
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE qiyewx_daka_record SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="QiYeWxDaKaRecord" statementType="STATEMENT">
+		select * FROM qiyewx_daka_record  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

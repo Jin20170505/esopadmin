@@ -1,0 +1,162 @@
+<%
+layout("/include/_dialog.html"){
+%>
+	<script type="text/javascript">
+
+		$(document).ready(function() {
+				        $('#field0004').datetimepicker({
+				 format:'Y-m-d H:i'
+		    });
+	        $('#field0018').datetimepicker({
+				 format:'Y-m-d H:i'
+		    });
+		});
+
+		function save() {
+            var isValidate = jp.validateForm('#inputForm');//校验表单
+            if(!isValidate){
+                return false;
+			}else{
+                var index = jp.loading();
+                jp.post("${ctx}/oadata/zhuangang/formmain0150/save",$('#inputForm').serialize(),function(data){
+                    if(data.success){
+                        jp.getParent().refresh();
+                        var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                        parent.layer.close(dialogIndex);
+                        jp.toastr_success(data.msg)
+
+                    }else{
+                        jp.toastr_error(data.msg);
+                    }
+                    jp.close(index);
+                })
+			}
+
+        }
+	</script>
+<form id="inputForm"  method="post"  class="form-horizontal p-15">
+    <input type="hidden" name="id" value="${formmain0150.id!}"/>
+    <table class="table table-bordered">
+       <tbody>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">编号：</label></td>
+                <td class="width-35">
+                    <input name="field0005" value="${formmain0150.field0005!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">申请人：</label></td>
+                <td class="width-35">
+                    <input name="field0002" value="${formmain0150.field0002!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">申请日期：</label></td>
+                <td class="width-35">
+                    <div class="input-group">
+                        <input readonly="" id="field0004"  name="field0004"  placeholder="请选择日期" class="form-control   "   value="${fn.formatDate(formmain0150.field0004!, 'yyyy-MM-dd HH:mm:ss')}">
+                        <div class="input-group-append">
+                            <span class="input-group-text btn-custom border text-white"><i class="ti-calendar"></i></span>
+                        </div>
+                    </div>
+            </td>
+                <td class="width-15 active"><label class="pull-right">所属部门：</label></td>
+                <td class="width-35">
+                    <input name="field0003" value="${formmain0150.field0003!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">所属单位：</label></td>
+                <td class="width-35">
+                    <input name="field0009" value="${formmain0150.field0009!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">现岗位：</label></td>
+                <td class="width-35">
+                    <input name="field0011" value="${formmain0150.field0011!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">申请调入部门：</label></td>
+                <td class="width-35">
+                    <input name="field0012" value="${formmain0150.field0012!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">意向岗位：</label></td>
+                <td class="width-35">
+                    <input name="field0013" value="${formmain0150.field0013!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">申请原因：</label></td>
+                <td class="width-35">
+                    <input name="field0014" value="${formmain0150.field0014!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">审批意见：</label></td>
+                <td class="width-35">
+                    <input name="field0008" value="${formmain0150.field0008!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">申请人姓名：</label></td>
+                <td class="width-35">
+                    <input name="field0015" value="${formmain0150.field0015!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">现部门：</label></td>
+                <td class="width-35">
+                    <input name="field0016" value="${formmain0150.field0016!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">调入岗位：</label></td>
+                <td class="width-35">
+                    <input name="field0017" value="${formmain0150.field0017!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">调动开始时间：</label></td>
+                <td class="width-35">
+                    <div class="input-group">
+                        <input readonly="" id="field0018"  name="field0018"  placeholder="请选择日期" class="form-control   "   value="${fn.formatDate(formmain0150.field0018!, 'yyyy-MM-dd HH:mm:ss')}">
+                        <div class="input-group-append">
+                            <span class="input-group-text btn-custom border text-white"><i class="ti-calendar"></i></span>
+                        </div>
+                    </div>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">考察期期限：</label></td>
+                <td class="width-35">
+                    <input name="field0019" value="${formmain0150.field0019!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">基本工资：</label></td>
+                <td class="width-35">
+                    <input name="field0020" value="${formmain0150.field0020!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">岗位工资：</label></td>
+                <td class="width-35">
+                    <input name="field0021" value="${formmain0150.field0021!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">绩效工资：</label></td>
+                <td class="width-35">
+                    <input name="field0022" value="${formmain0150.field0022!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">保费费：</label></td>
+                <td class="width-35">
+                    <input name="field0023" value="${formmain0150.field0023!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">通讯费：</label></td>
+                <td class="width-35">
+                    <input name="field0024" value="${formmain0150.field0024!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">总工资：</label></td>
+                <td class="width-35">
+                    <input name="field0025" value="${formmain0150.field0025!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"></td>
+                <td class="width-35" ></td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<% } %>

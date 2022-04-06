@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.dashboard.mapper.WidgetMapper">
+
+    <sql id="widgetColumns">
+        a.id AS "id",
+        a.name AS "name",
+        a.url AS "url",
+        a.remarks AS "remarks",
+        a.type AS "type",
+        a.icon AS "icon",
+        a.t_sql AS "sql",
+        a.del_flag AS "delFlag",
+        a.target AS "target",
+        dataSource.id AS "dataSource.id",
+        dataSource.name AS "dataSource.name",
+        dataSource.enname AS "dataSource.enName"
+    </sql>
+
+
+    <sql id="widgetJoins">
+        LEFT JOIN plugin_datasource_link dataSource ON dataSource.id = a.datasource_id
+    </sql>
+
+
+
+    <select id="get" resultType="Widget">
+        SELECT
+        <include refid="widgetColumns"/>
+        FROM plugin_dashboard_widget a
+        <include refid="widgetJoins"/>
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="findList" resultType="Widget">
+        SELECT
+        <include refid="widgetColumns"/>
+        FROM plugin_dashboard_widget a
+        <include refid="widgetJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            ${dataScope}
+            <if test="name != null and name != ''">
+                AND a.name = #{name}
+            </if>
+            <if test="dataSet != null and dataSet.id != null and dataSet.id != ''">
+                AND a.model_id = #{dataSet.id}
+            </if>
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findAllList" resultType="Widget">
+        SELECT
+        <include refid="widgetColumns"/>
+        FROM plugin_dashboard_widget a
+        <include refid="widgetJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            ${dataScope}
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insert">
+        INSERT INTO plugin_dashboard_widget(
+        id,
+        name,
+        url,
+        remarks,
+        del_flag,
+        type,
+        icon,
+        t_sql,
+        datasource_id,
+        target
+        ) VALUES (
+        #{id},
+        #{name},
+        #{url},
+        #{remarks},
+        #{delFlag},
+        #{type},
+        #{icon},
+        #{sql},
+        #{dataSource.id},
+        #{target}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE plugin_dashboard_widget SET
+        name = #{name},
+        url = #{url},
+        remarks = #{remarks},
+        type = #{type},
+        icon = #{icon},
+        t_sql = #{sql},
+        datasource_id = #{dataSource.id},
+        target = #{target}
+        WHERE id = #{id}
+    </update>
+
+
+    <!--物理删除-->
+    <update id="delete">
+        DELETE FROM plugin_dashboard_widget
+        WHERE id = #{id}
+    </update>
+
+    <!--物理删除-->
+    <update id="deleteNoUse">
+        DELETE FROM plugin_dashboard_widget
+        WHERE id not in (select widget_id from plugin_dashboard_container)
+    </update>
+    <!--逻辑删除-->
+    <update id="deleteByLogic">
+        UPDATE plugin_dashboard_widget SET
+        del_flag = #{DEL_FLAG_DELETE}
+        WHERE id = #{id}
+    </update>
+
+
+    <!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+    <select id="findUniqueByProperty" resultType="Widget" statementType="STATEMENT">
+        select * FROM plugin_dashboard_widget where ${propertyName} = '${value}'
+    </select>
+
+</mapper>

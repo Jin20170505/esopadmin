@@ -1,0 +1,105 @@
+<%
+layout("/include/_dialog.html"){
+%>
+	<script type="text/javascript">
+
+		$(document).ready(function() {
+				        $('#checkinTime').datetimepicker({
+				 format:'Y-m-d H:i'
+		    });
+	        $('#schCheckinTime').datetimepicker({
+				 format:'Y-m-d H:i'
+		    });
+		});
+
+		function save() {
+            var isValidate = jp.validateForm('#inputForm');//校验表单
+            if(!isValidate){
+                return false;
+			}else{
+                var index = jp.loading();
+                jp.post("${ctx}/qiyewx/daka/qiYeWxDaKaRecord/save",$('#inputForm').serialize(),function(data){
+                    if(data.success){
+                        jp.getParent().refresh();
+                        var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                        parent.layer.close(dialogIndex);
+                        jp.toastr_success(data.msg)
+
+                    }else{
+                        jp.toastr_error(data.msg);
+                    }
+                    jp.close(index);
+                })
+			}
+
+        }
+	</script>
+<form id="inputForm"  method="post"  class="form-horizontal p-15">
+    <input type="hidden" name="id" value="${qiYeWxDaKaRecord.id!}"/>
+    <table class="table table-bordered">
+       <tbody>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">员工：</label></td>
+                <td class="width-35">
+                    <#gridselect url="${ctx}/qiyewx/base/qiYeWxEmployee/data" id="emplyee" name="emplyee.id" value="${qiYeWxDaKaRecord.emplyee.id!}" labelName="emplyee.name" labelValue="${qiYeWxDaKaRecord.emplyee.name!}"
+                         title="选择员工" class="form-control " fieldLabels="姓名" fieldKeys="name" searchLabels="姓名" searchKeys="name" />
+            </td>
+                <td class="width-15 active"><label class="pull-right">打卡规则：</label></td>
+                <td class="width-35">
+                    <input name="groupname" value="${qiYeWxDaKaRecord.groupname!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">打卡类型：</label></td>
+                <td class="width-35">
+                    <input name="checkinType" value="${qiYeWxDaKaRecord.checkinType!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">异常类型：</label></td>
+                <td class="width-35">
+                    <input name="exceptionType" value="${qiYeWxDaKaRecord.exceptionType!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">打卡时间：</label></td>
+                <td class="width-35">
+                    <div class="input-group">
+                        <input readonly="" id="checkinTime"  name="checkinTime"  placeholder="请选择日期" class="form-control   "   value="${fn.formatDate(qiYeWxDaKaRecord.checkinTime!, 'yyyy-MM-dd HH:mm:ss')}">
+                        <div class="input-group-append">
+                            <span class="input-group-text btn-custom border text-white"><i class="ti-calendar"></i></span>
+                        </div>
+                    </div>
+            </td>
+                <td class="width-15 active"><label class="pull-right">打卡地点：</label></td>
+                <td class="width-35">
+                    <input name="locationTitle" value="${qiYeWxDaKaRecord.locationTitle!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">打卡地点详情：</label></td>
+                <td class="width-35">
+                    <input name="locationDetail" value="${qiYeWxDaKaRecord.locationDetail!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">打卡备注：</label></td>
+                <td class="width-35">
+                    <input name="notes" value="${qiYeWxDaKaRecord.notes!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">打卡设备id：</label></td>
+                <td class="width-35">
+                    <input name="deviceid" value="${qiYeWxDaKaRecord.deviceid!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">标准打卡时间：</label></td>
+                <td class="width-35">
+                    <div class="input-group">
+                        <input readonly="" id="schCheckinTime"  name="schCheckinTime"  placeholder="请选择日期" class="form-control   "   value="${fn.formatDate(qiYeWxDaKaRecord.schCheckinTime!, 'yyyy-MM-dd HH:mm:ss')}">
+                        <div class="input-group-append">
+                            <span class="input-group-text btn-custom border text-white"><i class="ti-calendar"></i></span>
+                        </div>
+                    </div>
+            </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<% } %>

@@ -1,0 +1,247 @@
+<%
+layout("/include/_dialog.html"){
+%>
+<style>
+    /* 步骤 */
+    .wizard-steps {
+        display: table;
+        width: 100%;
+        position: fixed;
+        left: 0px;
+        top: 0px;
+        z-index: 100;
+    }
+
+    .wizard-steps > li.current, .wizard-steps > li.done {
+        background: #41b3f9;
+        color: #ffffff;
+    }
+
+    .wizard-steps > li.done {
+        background: #41b3f9;
+    }
+
+    .wizard-steps > li {
+        display: table-cell;
+        padding: 5px 10px;
+        background: #f7fafc;
+    }
+
+    .wizard-steps > li h4 {
+        margin-bottom: 0em;
+        margin-top: 0em;
+    }
+
+    .wizard-steps > li.current h4, .wizard-steps > li.done h4 {
+        color: #ffffff;
+    }
+
+    .wizard-steps > li.current span, .wizard-steps > li.done span {
+        border-color: #ffffff;
+        color: #ffffff;
+    }
+
+    .wizard-steps > li span {
+        border-radius: 100%;
+        border: 1px solid rgba(120, 130, 140, 0.13);
+        width: 40px;
+        height: 40px;
+        display: inline-block;
+        vertical-align: middle;
+        padding-top: 9px;
+        margin-right: 8px;
+        text-align: center;
+    }
+
+    .wizard-content {
+        padding: 0px;
+        border-color: rgba(120, 130, 140, 0.13);
+        margin-bottom: 0px;
+        border: 0px;
+    }
+</style>
+<script>
+    var sqlEditor;
+    $(document).ready(function () {
+        $('#widgetForm').wizard({
+            onInit: function () {
+                parent.$(".layui-layer-btn0").attr("disabled", "disabled");
+                parent.$(".layui-layer-btn2").attr("disabled", "dsiabled");
+            },
+            validator: function () {
+                $this = $(this);
+                return jp.validateForm($this)
+            },
+            onFinish: function () {
+                save();
+                jp.toastr_success("完成!");
+            },
+            onAfterChange: function () {
+                var api = $('#widgetForm').data('wizard');
+                var currentIndex = api.currentIndex();
+                var lastIndex = api.lastIndex();
+                if (currentIndex == 0) {
+                    parent.$(".layui-layer-btn0").attr("disabled", "disabled");
+                } else {
+                    parent.$(".layui-layer-btn0").removeAttr("disabled");
+                }
+                if (currentIndex < lastIndex) {
+                    parent.$(".layui-layer-btn1").removeAttr("disabled");
+                    parent.$(".layui-layer-btn2").attr("disabled", "dsiabled");
+                } else {
+                    parent.$(".layui-layer-btn1").attr("disabled", "disabled");
+                    parent.$(".layui-layer-btn2").removeAttr("disabled");
+                }
+            },
+            templates: {
+                buttons: function buttons() {// 去掉前后的button
+                    return '';
+                }
+            }
+        });
+        $("#inputForm").validate({
+            ignore: ""
+        });
+        sqlEditor = ace.edit('sql');
+
+        sqlEditor.getSession().setMode("ace/mode/sql");
+
+
+        sqlEditor.getSession().on('change', function (e) {
+            $("#sqlcmd").val(sqlEditor.getValue().trim());
+        });
+        jp.ajaxForm("#inputForm", function (data) {
+            if (data.success) {
+                jp.toastr_success(data.msg);
+            } else {
+                jp.toastr_error(data.msg);
+
+            }
+        }, function () {
+            if (sqlEditor.getValue().trim() == "") {
+                sqlEditor.focus();
+                jp.info("sql不能为空!")
+                return false;
+            }
+
+            return true;
+        })
+
+        $("#isNeedAll").change(function () {
+            if ($("#isNeedAll").is(':checked')) {
+                $("input[name*=isNeed]").prop("checked", true);
+            } else {
+                $("input[name*=isNeed]").prop("checked", false);
+            }
+        })
+
+
+
+        jp.get("${ctx}/database/datalink/dataSource/treeData2",function (data) {
+            var dataSource=new TreeSelect({
+                element:'#dataSource',
+                name:"dataSource.id",
+                initValue:"${widget.dataSource.id!'master'}",
+                initText:"${widget.dataSource.name!'本地数据库'}",
+                data:data,
+                valueKey:'value'
+            });
+
+        })
+
+
+
+    });
+    function save() {
+        var isValidate = jp.validateForm('#inputForm');//校验表单
+        if(!isValidate){
+            return false;
+        }else{
+            var index = jp.loading();
+            jp.post("${ctx}/widget/getRows",{sql:$("#sqlcmd").val(),"dataSource.id":$("input[name='dataSource.id']").val()}, function (result) {
+                jp.post("${ctx}/widget/save",$('#inputForm').serialize(),function(data){
+                    if(data.success){
+                        data.body.id = "${containerId!}";//设置容器id
+                        data.body.widget.result = result;
+                        jp.getParent().refresh4(data.body);
+                        var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                        parent.layer.close(dialogIndex);
+                        jp.success(data.msg)
+
+                    }else{
+                        jp.error(data.msg);
+                    }
+                })
+
+            })
+
+        }
+
+    }
+</script>
+<div id="widgetForm" class="wizard">
+    <ul class="wizard-steps" role="tablist">
+        <li class="active" role="tab">
+            <h4><span>1</span>基本信息</h4>
+        </li>
+        <li role="tab">
+            <h4><span>2</span>数据配置</h4>
+        </li>
+    </ul>
+        <form id="inputForm"  style="margin-top: 50px" action="${ctx}/widget/save" method="post" class="form-horizontal">
+            <input type="hidden" name="id" value="${widget.id!}">
+            <input type="hidden" name="type" value="4">
+            <div class="wizard-content">
+                <div class="wizard-pane active" role="tabpanel">
+
+                    <div class="row form-group">
+                        <label class="col-xs-3 col-sm-2"><div class="pull-right"><font color="red">*</font> 名称：</div> </label>
+                        <div class="col-xs-9 col-sm-10">
+                            <input class="form-control required" name="name" value="${widget.name!}">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label class="col-xs-3 col-sm-2"><div class="pull-right"> 图标：</div></label>
+                        <div class="col-xs-9 col-sm-10">
+                            <#iconselect id="icon" name="icon" value="${widget.icon!}" class="required"/>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label class="col-xs-3 col-sm-2">
+                            <div class="pull-right"><font color="red">*</font> 链接地址：</div>
+                        </label>
+                        <div class="col-xs-9 col-sm-10">
+                            <input class="form-control" name="url" value="${widget.url!}">
+                            <span class="text-muted"><small>点击组件打开的新页面地址，外部地址请使用http://或者https://开头，本系统地址请使用菜单地址</small></span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label class="col-xs-3 col-sm-2"><div class="pull-right"><font color="red">*</font> 链接目标：</div></label>
+                        <div class="col-xs-9 col-sm-10">
+                            <#select path="target" value="${widget.target!}" notAllowNull="${true}" class="form-control required" items="${fn.getDictList('target')}" itemLabel="label" itemValue="value"/>
+                            <span class="text-muted"><small>本系统页面打开:self,第三方链接打开:iframe，新窗口打开:blank</small></span>
+                        </div>
+                    </div>
+            </div>
+            <div class="wizard-pane" role="tabpanel">
+                <div class="row form-group">
+                    <label class="col-xs-3 col-sm-2"><div class="pull-right"><font color="red">*</font> 目标数据库：</div> </label>
+                    <div class="col-xs-9 col-sm-10">
+                        <div id="dataSource"></div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label class="col-xs-3 col-sm-2"><div class="pull-right"><font color="red">*</font> sql语句：</div></label>
+                    <div class="col-xs-9 col-sm-10">
+                        <div name="sql" id="sql" rows="4" style="height: 200px;border: 1px solid #d9d9d9;"
+                             class="required">${widget.sql!}
+                        </div>
+                        <input type="hidden" id="sqlcmd" name="sql" value="${widget.sql!}">
+                    </div>
+                </div>
+            </div>
+            </div>
+        </form>
+</div>
+
+<% } %>

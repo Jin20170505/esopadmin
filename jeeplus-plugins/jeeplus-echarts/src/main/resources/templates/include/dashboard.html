@@ -1,0 +1,55 @@
+<html>
+
+
+<!-- 设置浏览器图标 -->
+<link rel="shortcut icon" href="${ctxStatic}/plugins/images/favicon.ico">
+<!-- Bootstrap Core CSS -->
+<link href="${ctxStatic}/commons/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Menu CSS -->
+<!-- jQuery -->
+<script src="${ctxStatic}/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+
+<script src="${ctxStatic}/commons/js/jquery.pjax.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="${ctxStatic}/commons/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="${ctxStatic}/plugins/jquery-plugin/jquery.serializejson.min.js" type="text/javascript"></script>
+<script src="${ctxStatic}/plugins/jquery-plugin/jquery.form.js" type="text/javascript"></script>
+<script src="${ctxStatic}/plugins/jquery-plugin/jquery.contextMenu.min.js" type="text/javascript"></script>
+<script src="${ctxStatic}/plugins/jquery-validation/1.14.0/jquery.validate.js" type="text/javascript"></script>
+<script src="${ctxStatic}/plugins/jquery-validation/1.14.0/localization/messages_zh.min.js"
+        type="text/javascript"></script>
+<script src="${ctxStatic}/plugins/jquery-validation/1.14.0/validation-methods.js" type="text/javascript"></script>
+
+
+<!-- 引入layer插件,当做独立组件使用，不使用layui模块 -->
+<script src="${ctxStatic}/plugins/layui/layer/layer.js"></script>
+<script src="${ctxStatic}/plugins/layui/laytpl/laytpl.js"></script>
+<!--引入另一个模板文件当做laytpl模板的备用-->
+<script src="${ctxStatic}/plugins/tpl/mustache.min.js" type="text/javascript"></script>
+<!-- 引入toastr -->
+<link href="${ctxStatic}/plugins/bower_components/toast-master/css/jquery.toast.css" rel="stylesheet">
+<script src="${ctxStatic}/plugins/bower_components/toast-master/js/jquery.toast.js"></script>
+
+
+<script src="${ctxStatic}/plugins/echarts4/echarts.min.js"></script>
+<!-- 引入自定义文件 -->
+<script type="text/javascript">var ctx = '${ctx}', ctxStatic = '${ctxStatic}';</script>
+<!-- animation CSS -->
+<link href="${ctxStatic}/commons/css/animate.css" rel="stylesheet">
+<!-- Custom CSS -->
+<link href="${ctxStatic}/commons/css/style.css" rel="stylesheet">
+<link href="${ctxStatic}/commons/css/antdesign.css" rel="stylesheet">
+<!-- color CSS -->
+<script src="${ctxStatic}/common/js/jeeplus.js"></script>
+<link href="${ctxStatic}/commons/css/jeeplus.css" rel="stylesheet">
+
+<style>
+    html, body {
+        overflow-x: hidden;
+    }
+</style>
+<body>
+${layoutContent}
+</body>
+
+</html>

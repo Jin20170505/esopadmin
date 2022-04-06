@@ -1,0 +1,45 @@
+<%
+layout("/include/_dialog.html", {title:"查看数据", parent:"数据表管理"}){
+%>
+
+
+<div class="p-15">
+    <table id="table"></table>
+</div>
+
+
+<script type="text/javascript">
+    $(function () {
+        jp.post("${ctx}/database/table/executeSql/${name}", {dataSourceId: "${dataSourceId!}"}, function (data) {
+            var datas = [];
+            var columns = [{
+                checkbox: false
+
+            }]
+
+
+            var c = data.body.columns;
+            for (var i = 0; i < c.length; i++) {
+                columns.push({field: c[i].name, title: c[i].name, sortable: true});
+            }
+
+            var d = data.body.list;
+            for (var i = 0; i < d.length; i++) {
+                var obj = {};
+                for (var x in d[i]) {
+                    obj[x.toLowerCase()] = d[i][x];
+                }
+                datas.push(obj);
+            }
+
+            $('#table').bootstrapTable({
+                //请求方法
+                data: datas,
+                columns: columns
+
+            });
+
+        });
+    })
+</script>
+<% } %>

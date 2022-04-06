@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.dashboard.mapper.ContainerMapper">
+
+    <sql id="containerColumns">
+        a.id AS "id",
+        a.widget_id AS "widget.id",
+        a.x AS "x",
+        a.y AS "y",
+        a.width AS "width",
+        a.height AS "height",
+        a.dashboard_id AS "dashboard.id",
+        a.border_class AS "borderClass",
+        widget.name AS "widget.name",
+        widget.icon AS "widget.icon",
+        widget.url AS "widget.url",
+        widget.type AS "widget.type",
+        widget.t_sql AS "widget.sql",
+        widget.target AS "widget.target",
+        widget.remarks AS "widget.remarks",
+        dataSource.id AS "widget.dataSource.id",
+        dataSource.name AS "widget.dataSource.name",
+        dataSource.enname AS "widget.dataSource.enName"
+
+    </sql>
+
+    <sql id="containerJoins">
+        LEFT JOIN plugin_dashboard_widget widget ON widget.id = a.widget_id
+        LEFT JOIN plugin_datasource_link dataSource ON dataSource.id = widget.datasource_id
+        LEFT JOIN plugin_dashboard b ON b.id = a.dashboard_id
+    </sql>
+
+
+    <select id="get" resultType="Container">
+        SELECT
+        <include refid="containerColumns"/>
+        FROM plugin_dashboard_container a
+        <include refid="containerJoins"/>
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="findList" resultType="Container">
+        SELECT
+        <include refid="containerColumns"/>
+        FROM plugin_dashboard_container a
+        <include refid="containerJoins"/>
+        <where>
+
+            ${dataScope}
+            <if test="widget != null and widget.id != null and widget.id != ''">
+                AND a.widget_id = #{widget.id}
+            </if>
+            <if test="dashboard != null and dashboard.id != null and dashboard.id != ''">
+                AND a.dashboard_id = #{dashboard.id}
+            </if>
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findAllList" resultType="Container">
+        SELECT
+        <include refid="containerColumns"/>
+        FROM plugin_dashboard_container a
+        <include refid="containerJoins"/>
+        <where>
+
+            ${dataScope}
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insert">
+        INSERT INTO plugin_dashboard_container(
+        id,
+        widget_id,
+        x,
+        y,
+        width,
+        height,
+        dashboard_id,
+        border_class
+        ) VALUES (
+        #{id},
+        #{widget.id},
+        #{x},
+        #{y},
+        #{width},
+        #{height},
+        #{dashboard.id},
+        #{borderClass}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE plugin_dashboard_container SET
+        widget_id = #{widget.id},
+        x = #{x},
+        y = #{y},
+        width = #{width},
+        height = #{height},
+        dashboard_id = #{dashboard.id},
+        border_class = #{borderClass}
+        WHERE id = #{id}
+    </update>
+
+
+    <!--物理删除-->
+    <update id="delete">
+        DELETE FROM plugin_dashboard_container
+        <choose>
+            <when test="id !=null and id != ''">
+                WHERE id = #{id}
+            </when>
+            <otherwise>
+                WHERE dashboard_id = #{dashboard.id}
+            </otherwise>
+        </choose>
+    </update>
+
+    <!--逻辑删除-->
+    <update id="deleteByLogic">
+        UPDATE plugin_dashboard_container SET
+        del_flag = #{DEL_FLAG_DELETE}
+        <choose>
+            <when test="id !=null and id != ''">
+                WHERE id = #{id}
+            </when>
+            <otherwise>
+                WHERE dashboard_id = #{dashboard.id}
+            </otherwise>
+        </choose>
+    </update>
+
+
+    <!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+    <select id="findUniqueByProperty" resultType="Container" statementType="STATEMENT">
+        select * FROM plugin_dashboard_container where ${propertyName} = '${value}'
+    </select>
+
+</mapper>

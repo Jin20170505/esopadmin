@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jeeplus.modules.ureport.mapper.UreportFileMapper">
+
+    <resultMap type="UreportFileEntity" id="ureportFile">
+        <id column="id_" jdbcType="BIGINT" property="id"/>
+        <result column="name_" jdbcType="VARCHAR" property="name"/>
+        <result column="content_" jdbcType="BLOB" property="content"/>
+        <result column="create_time_" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time_" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    
+    <resultMap type="UreportFileEntity" id="simpleResult">
+        <result column="name_" jdbcType="VARCHAR" property="name"/>
+        <result column="update_time_" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    
+	<sql id="simpleSql">
+		id_ AS "id", name_ AS "name", update_time_ AS "updateTime"
+	</sql>
+	
+	<select id="findAllList" resultType="UreportFileEntity">
+		select <include refid="simpleSql"/> from plugin_ureport_file_tbl
+	</select>
+	
+	<delete id="deleteById" parameterType="int">
+		delete from plugin_ureport_file_tbl where id_ =#{id}
+	</delete>
+	
+	<select id="hasFile"  resultType="UreportFileEntity" parameterType="string">
+        select id_ AS "id" from plugin_ureport_file_tbl where name_ = #{name} limit 0,1
+    </select>
+    <select id="queryUreportFileEntityByName" resultMap="ureportFile">
+        select * from plugin_ureport_file_tbl where name_ = #{name} limit 0,1
+    </select>
+
+    <delete id="deleteReportFileByName" parameterType="java.lang.String">
+        delete from plugin_ureport_file_tbl where name_ = #{name}
+    </delete>
+
+    <insert id="insertReportFile" parameterType="UreportFileEntity">
+        insert into plugin_ureport_file_tbl (name_, content_, create_time_, update_time_) values
+        (#{name}, #{content}, #{createTime}, #{updateTime})
+    </insert>
+
+
+    <update id="updateReportFile" parameterType="UreportFileEntity">
+        update plugin_ureport_file_tbl set
+        content_ = #{content},
+        update_time_ = #{updateTime}
+        where id_ = #{id}
+    </update>
+
+</mapper> 

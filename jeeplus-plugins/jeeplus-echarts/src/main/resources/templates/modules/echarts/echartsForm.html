@@ -1,0 +1,1554 @@
+<%
+layout("/include/_dialog.html"){
+%>
+<link href="${ctxStatic}/plugins/spectrum/spectrum.css" rel="stylesheet"/>
+<script src="${ctxStatic}/plugins/spectrum/spectrum.js"></script>
+<!--<script src="${ctxStatic}/plugins/formbuilder/beautifyhtml.js"></script>-->
+<script src="${ctxStatic}/plugins/jquery-ui/jquery-ui.js"></script>
+<script src="${ctxStatic}/plugins/vue/vue.js"></script>
+<style>
+    <% include("echartsForm.css"){} %>
+</style>
+<script id="tableTpl" type="text/html">
+    <fieldset>
+        <legend>数据列:</legend>
+        {{# for(var item in d.body.meta){ }}
+
+        <div class="jp-field-component draggable" data-label="{{ d.body.meta[item].label }}"
+             data-id="{{ d.body.meta[item].id }}">
+            <i class=" fa fa-arrows "></i>
+            {{ d.body.meta[item].label }}
+        </div>
+        {{# } }}
+    </fieldset>
+
+</script>
+<style>
+    .text-shadow{
+        text-shadow: #2b1f1fc4 0 0 10px;
+        color: white;
+        font-size: 60px;
+        position: relative;
+        z-index: 1000;
+        left: calc(50% - 200px);
+        top: 150px;
+    }
+    .jp-icon:before {
+        display: block;
+    }
+     .dropdown-menu > li > a:focus,  .dropdown-menu > li > a:hover {
+        background: #f7fafc !important;
+        color: #262626;
+        text-decoration: none;
+    }
+
+    .dropdown-menu>li>a {
+        padding: 9px 20px;
+    }
+    .dropdown-menu>li>a {
+        display: block;
+        clear: both;
+        font-weight: 400;
+        color: #333;
+    }
+    .btn-circle {
+        width: 30px;
+        height: 30px;
+        padding: 6px 0;
+        border-radius: 15px;
+        text-align: center;
+        font-size: 12px;
+        line-height: 1.428571429;
+    }
+</style>
+
+
+<div id="inputForm" class="form-horizontal p-5 bg-white">
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="white-box" style="height: calc(100% - 20px)">
+                <div class="row">
+                    <div class="col-sm-12">
+                        请选择一个数据源: <select v-model="modelIdSelected" class="select2 form-control">
+                            <option v-for="option in modelIdOptions" :value="option.id"
+                                    class="jp-select-selection-selected-value" v-text="option.name">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <br/>
+                <div id="tableView" style="height: calc(100% - 80px);overflow-y:auto;position: relative">
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-9 p-l-0" >
+
+            <div class="white-box m-b-10">
+                <ul class="nav nav-pills float-left m-b-20" role="tablist">
+                    <li class="nav-item"><a href="#data" class="nav-link show active" data-toggle="tab">数据</a></li>
+                    <li class="nav-item"><a href="#property" class="nav-link show" data-toggle="tab">样式</a></li>
+                    <li class="nav-item"><a href="#title_tab" class="nav-link show" data-toggle="tab">标题</a></li>
+                    <li class="nav-item"><a href="#toolbox_tab" class="nav-link show" data-toggle="tab">工具栏和图例</a></li>
+                </ul>
+                <div class="tab-content data-viewer border-0 p-0">
+                    <div class="tab-pane fade active show jp-tabs-tabpane jp-tabs-tabpane-active" id="data">
+                        <div class="jp-bi-background jp-bi-border">
+                            <div class="btn-group">
+                                <button type="button"
+                                        class="btn jp-dropdown-trigger jp-bi-background jp-bi-border-hide"
+                                        data-toggle="dropdown">
+                                    折线图
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="#" @click="selectChart('line/line1','标准折线图')">
+                                            <img src="${ctxStatic}/plugins/echarts/img/line11.png">
+                                            <font>标准折线图</font>
+                                        </a>
+
+                                    </li>
+                                    <li>
+                                        <a href="#" @click="selectChart('line/line2','标准面积图')">
+                                            <img src="${ctxStatic}/plugins/echarts/img/line3.png">
+                                            <font>标准面积图</font>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" @click="selectChart('line/line3','堆积面积图')">
+                                            <img src="${ctxStatic}/plugins/echarts/img/line4.png">
+                                            <font>堆积面积图</font>
+                                        </a>
+                                    </li>
+                                    <!--<li>-->
+                                        <!--<a href="#" @click="selectChart('line/line4','标准折线图')">-->
+                                            <!--<img src="${ctxStatic}/plugins/echarts/img/line5.png">-->
+                                            <!--<font>标准折线图</font>-->
+                                        <!--</a>-->
+                                    <!--</li>-->
+                                    <!--<li>-->
+                                        <!--<a href="#" @click="selectChart('line/line5','折线图柱状图双轴')">-->
+                                            <!--<img src="${ctxStatic}/plugins/echarts/img/dt-mix0.png">-->
+                                            <!--<font>折线图柱状图双轴</font>-->
+                                        <!--</a>-->
+                                    <!--</li>-->
+                                </ul>
+                            </div>
+
+                            <div class="btn-group">
+                                <button type="button"
+                                        class="btn jp-dropdown-trigger jp-bi-background jp-bi-border-hide"
+                                        data-toggle="dropdown">
+                                    柱状图
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="#" @click="selectChart('bar/bar1','标准柱状图')">
+                                            <img src="${ctxStatic}/plugins/echarts/img/bar1.png">
+                                            <font>标准柱状图</font>
+                                        </a>
+
+                                    </li>
+                                    <li>
+                                        <a href="#" @click="selectChart('bar/bar2', '堆积柱状图')">
+                                            <img src="${ctxStatic}/plugins/echarts/img/bar21.png">
+                                            <font>堆积柱状图</font>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" @click="selectChart('bar/bar3', '标准条形图')">
+                                            <img src="${ctxStatic}/plugins/echarts/img/bar3.png">
+                                            <font>标准条形图</font>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" @click="selectChart('bar/bar4', '堆积条形图')">
+                                            <img src="${ctxStatic}/plugins/echarts/img/bar4.png">
+                                            <font>堆积条形图</font>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </div>
+
+                            <div class="btn-group">
+                                <button type="button"
+                                        class="btn jp-dropdown-trigger jp-bi-background jp-bi-border-hide"
+                                        data-toggle="dropdown">
+                                    饼图
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="#" @click="selectChart('pie/pie1', '标准饼图')">
+                                            <img src="${ctxStatic}/plugins/echarts/img/pie1.png">
+                                            <font>标准饼图</font>
+                                        </a>
+
+                                    </li>
+                                    <li>
+                                        <a href="#" @click="selectChart('pie/pie2', '标准饼图(数据标注)')">
+                                            <img src="${ctxStatic}/plugins/echarts/img/pie1.png">
+                                            <font>标准饼图(数据标注)</font>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" @click="selectChart('pie/pie3', '标准环形图')">
+                                            <img src="${ctxStatic}/plugins/echarts/img/pie2.png">
+                                            <font>标准环形图</font>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" @click="selectChart('pie/pie4', '嵌套饼图')">
+                                            <img src="${ctxStatic}/plugins/echarts/img/pie3.png">
+                                            <font>嵌套饼图</font>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" @click="selectChart('pie/pie5', '南丁格尔玫瑰图(半径模式)')">
+                                            <img src="${ctxStatic}/plugins/echarts/img/pie10.png">
+                                            <font>南丁格尔玫瑰图(半径模式)</font>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" @click="selectChart('pie/pie6', '南丁格尔玫瑰图(面积模式)')">
+                                            <img src="${ctxStatic}/plugins/echarts/img/pie11.png">
+                                            <font>南丁格尔玫瑰图(面积模式)</font>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" @click="selectChart('pie/pie7', '南丁格尔玫瑰图(双玫瑰图)')">
+                                            <img src="${ctxStatic}/plugins/echarts/img/pie4.png">
+                                            <font>南丁格尔玫瑰图(双玫瑰图)</font>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!--<div class="btn-group">-->
+                                <!--<button type="button"-->
+                                        <!--class="btn jp-dropdown-trigger jp-bi-background jp-bi-border-hide"-->
+                                        <!--data-toggle="dropdown">-->
+                                    <!--地图-->
+                                    <!--<span class="caret"></span>-->
+                                <!--</button>-->
+                                <!--<ul class="dropdown-menu">-->
+                                    <!--<li>-->
+                                        <!--<a @click="selectChart('map/map1')">-->
+                                            <!--<img src="${ctxStatic}/plugins/echarts/img/map1.png">-->
+                                            <!--<font>标准中国地图</font>-->
+                                        <!--</a>-->
+
+                                    <!--</li>-->
+                                    <!--<li>-->
+                                        <!--<a href="#" @click="selectChart('map/map2')">-->
+                                            <!--<img src="${ctxStatic}/plugins/echarts/img/map3.png">-->
+                                            <!--<font>标准省市区地图</font>-->
+                                        <!--</a>-->
+                                    <!--</li>-->
+                                    <!--<li>-->
+                                        <!--<a href="#" @click="selectChart('map/map3')">-->
+                                            <!--<img src="${ctxStatic}/plugins/echarts/img/map8.png">-->
+                                            <!--<font>多地图</font>-->
+                                        <!--</a>-->
+                                    <!--</li>-->
+                                <!--</ul>-->
+                            <!--</div>-->
+
+                            <!--<div class="btn-group">-->
+                                <!--<button type="button"-->
+                                        <!--class="btn jp-dropdown-trigger jp-bi-background jp-bi-border-hide"-->
+                                        <!--data-toggle="dropdown">-->
+                                    <!--散点图-->
+                                    <!--<span class="caret"></span>-->
+                                <!--</button>-->
+                                <!--<ul class="dropdown-menu">-->
+                                    <!--<li>-->
+                                        <!--<a href="#" @click="selectChart('scatter/scatter1', '标准散点图')">-->
+                                            <!--<img src="${ctxStatic}/plugins/echarts/img/scatter1.png">-->
+                                            <!--<font>标准散点图</font>-->
+                                        <!--</a>-->
+                                    <!--</li>-->
+
+                                <!--</ul>-->
+                            <!--</div>-->
+
+                            <!--<div class="btn-group">-->
+                                <!--<button type="button"-->
+                                        <!--class="btn jp-dropdown-trigger jp-bi-background jp-bi-border-hide"-->
+                                        <!--data-toggle="dropdown">-->
+                                    <!--气泡图-->
+                                    <!--<span class="caret"></span>-->
+                                <!--</button>-->
+                                <!--<ul class="dropdown-menu">-->
+                                    <!--<li>-->
+                                        <!--<a href="#" @click="selectChart('bubble/bubble1', '标准气泡图')">-->
+                                            <!--<img src="${ctxStatic}/plugins/echarts/img/scatter2.png">-->
+                                            <!--<font>标准气泡图</font>-->
+                                        <!--</a>-->
+
+                                    <!--</li>-->
+                                <!--</ul>-->
+                            <!--</div>-->
+
+                            <!--<div class="btn-group">-->
+                                <!--<button type="button"-->
+                                        <!--class="btn jp-dropdown-trigger jp-bi-background jp-bi-border-hide"-->
+                                        <!--data-toggle="dropdown">-->
+                                    <!--雷达图-->
+                                    <!--<span class="caret"></span>-->
+                                <!--</button>-->
+                                <!--<ul class="dropdown-menu">-->
+                                    <!--<li>-->
+                                        <!--<a href="#" @click="selectChart('radar/radar1','标准雷达图')">-->
+                                            <!--<img src="${ctxStatic}/plugins/echarts/img/radar1.png">-->
+                                            <!--<font>标准雷达图</font>-->
+                                        <!--</a>-->
+
+                                    <!--</li>-->
+
+                                <!--</ul>-->
+                            <!--</div>-->
+
+                            <div class="btn-group">
+                                <button type="button"
+                                        class="btn jp-dropdown-trigger jp-bi-background jp-bi-border-hide"
+                                        data-toggle="dropdown">
+                                    漏斗图
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="#" @click="selectChart('funnel/funnel1', '标准漏斗图')">
+                                            <img src="${ctxStatic}/plugins/echarts/img/funnel10.png">
+                                            <font>标准漏斗图</font>
+                                        </a>
+
+                                    </li>
+                                    <li>
+                                        <a href="#" @click="selectChart('funnel/funnel2', '带辅助背景的漏斗图')">
+                                            <img src="${ctxStatic}/plugins/echarts/img/funnel12.png">
+                                            <font>带辅助背景的漏斗图</font>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!--<div class="btn-group">-->
+                                <!--<button type="button"-->
+                                        <!--class="btn jp-dropdown-trigger jp-bi-background jp-bi-border-hide"-->
+                                        <!--data-toggle="dropdown">-->
+                                    <!--仪表盘-->
+                                    <!--<span class="caret"></span>-->
+                                <!--</button>-->
+                                <!--<ul class="dropdown-menu">-->
+                                    <!--<li>-->
+                                        <!--<a href="#" @click="selectChart('gauge/gauge1', '标准仪表盘')">-->
+                                            <!--<img src="${ctxStatic}/plugins/echarts/img/gauge1.png">-->
+                                            <!--<font>标准仪表盘</font>-->
+                                        <!--</a>-->
+
+                                    <!--</li>-->
+                                <!--</ul>-->
+                            <!--</div>-->
+                        </div>
+                        <hr style="margin-top: 0px">
+                        <div class="row">
+                            <div class="table-responsive col-sm-6">
+
+                                <div class="jp-field-echarts">
+                                    <label><i class="fa fa-list"></i>&nbsp;X轴</label>
+                                    <ul id="x-panel" class="fieldpanel droppable">
+
+                                        <% for(var column in xColumnList){ %>
+
+                                        <li>
+                                            <div class="field-button">
+                                                <button class="btn btn-danger btn-circle btn-sm" onclick="$(this).parent().parent().remove();vm.refreshCharts();" type="button"><i class="fa fa-minus"></i></button>
+                                            </div>
+                                            <a href="javascript:void(0)"><span>${column.name}</span></a>
+                                            <input type="hidden" name="xId" value= "${column.id}"/>
+                                        </li>
+
+                                        <% } %>
+
+                                    </ul>
+                                </div>
+
+                            </div>
+
+                            <div class="table-responsive col-sm-6">
+                                <div class="jp-field-echarts">
+                                    <label><i class="fa fa-list"></i>&nbsp;Y轴</label>
+                                    <ul id="y-panel" class="fieldpanel droppable">
+
+                                        <% for(var column in yColumnList){ %>
+
+                                        <li>
+                                            <div class="field-button">
+                                                <button class="btn btn-danger btn-circle btn-sm" onclick="$(this).parent().parent().remove();vm.refreshCharts();" type="button"><i class="fa fa-minus"></i></button>
+                                            </div>
+                                            <a href="javascript:void(0)"><span>${column.name}</span></a>
+                                            <input type="hidden" name="yId" value= "${column.id}"/>
+                                        </li>
+
+                                        <% } %>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="property">
+                        <h5 class="m-0 m-b-5">
+                              主题方案
+                        </h5>
+                        <form class="form-horizontal row">
+                            <div class="theme-plan-row  offset-sm-1"
+                                 style="margin-right: 5px;display: flex;flex-wrap: wrap;">
+                                <div class="theme-plat">
+                                    <a href="#" class="theme-plan-group" @click="selectTheme('default', $event)">
+                                        <div class="theme-plan-color" style="background-color: #c23531;"></div>
+                                        <div class="theme-plan-color" style="background-color: #2f4554;"></div>
+                                        <div class="theme-plan-color" style="background-color: #61a0a8;"></div>
+                                        <div class="theme-plan-color" style="background-color: #d48265;"></div>
+                                        <div class="theme-plan-color" style="background-color: #91c7ae;"></div>
+                                        <div class="theme-plan-color" style="background-color: #749f83;"></div>
+                                        <div class="theme-plan-color hide" style="background-color: #ca8622;"></div>
+                                        <div class="theme-plan-color hide" style="background-color: #bda29a;"></div>
+                                        <div class="theme-plan-color hide" style="background-color: #6e7074;"></div>
+                                        <div class="theme-plan-color hide" style="background-color: #546570;"></div>
+                                        <div class="theme-plan-color hide" style="background-color: #c4ccd3;"></div>
+                                        <i id="theme-font" class="jp-icon zmdi zmdi-check"></i>
+                                    </a>
+                                </div>
+                                <div class="theme-plat">
+                                    <a href="#" class="theme-plan-group" @click="selectTheme('light', $event)">
+                                        <div class="theme-plan-color" style="background-color: #37A2DA;"></div>
+                                        <div class="theme-plan-color" style="background-color: #32C5E9;"></div>
+                                        <div class="theme-plan-color" style="background-color: #67E0E3;"></div>
+                                        <div class="theme-plan-color" style="background-color: #9FE6B8;"></div>
+                                        <div class="theme-plan-color" style="background-color: #FFDB5C;"></div>
+                                        <div class="theme-plan-color" style="background-color: #ff9f7f;"></div>
+                                        <div class="theme-plan-color hide" style="background-color: #fb7293;"></div>
+                                        <div class="theme-plan-color hide" style="background-color: #E062AE;"></div>
+                                        <div class="theme-plan-color hide" style="background-color: #E690D1;"></div>
+                                        <div class="theme-plan-color hide" style="background-color: #e7bcf3;"></div>
+                                        <div class="theme-plan-color hide" style="background-color: #9d96f5;"></div>
+                                        <div class="theme-plan-color hide" style="background-color: #8378EA;"></div>
+                                        <div class="theme-plan-color hide" style="background-color: #96BFFF;"></div>
+                                    </a>
+                                </div>
+
+                                <div class="theme-plat">
+                                    <a href="#" class="theme-plan-group" @click="selectTheme('vintage', $event)"
+                                       style="background-color: rgb(254, 248, 239);">
+                                        <div class="theme-plan-color"
+                                             style="background-color: rgb(216, 124, 124);"></div>
+                                        <div class="theme-plan-color" style="background-color: rgb(145, 158, 139);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(215, 171, 130);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(110, 112, 116);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(97, 160, 168);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(239, 161, 141);">
+                                        </div>
+                                        <div class="theme-plan-color hide"
+                                             style="background-color: rgb(120, 116, 100);">
+                                        </div>
+                                        <div class="theme-plan-color hide" style="background-color: rgb(204, 126, 99);">
+                                        </div>
+                                        <div class="theme-plan-color hide" style="background-color: rgb(114, 78, 88);">
+                                        </div>
+                                        <div class="theme-plan-color hide" style="background-color: rgb(75, 86, 91);">
+                                        </div>
+
+                                    </a>
+                                </div>
+                                <div class="theme-plat">
+                                    <a href="#" class="theme-plan-group" @click="selectTheme('dark', $event)"
+                                       style="background-color: rgb(51, 51, 51);">
+                                        <div class="theme-plan-color" style="background-color: rgb(221, 107, 102);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(117, 154, 160);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(230, 157, 135);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(141, 193, 169);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(234, 126, 83);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(238, 221, 120);">
+                                        </div>
+                                        <div class="theme-plan-color hide"
+                                             style="background-color: rgb(115, 163, 115);">
+                                        </div>
+                                        <div class="theme-plan-color hide"
+                                             style="background-color: rgb(115, 185, 188);">
+                                        </div>
+                                        <div class="theme-plan-color hide"
+                                             style="background-color: rgb(114, 137, 171);">
+                                        </div>
+                                        <div class="theme-plan-color hide"
+                                             style="background-color: rgb(145, 202, 140);">
+                                        </div>
+                                        <div class="theme-plan-color hide" style="background-color: rgb(244, 159, 66);">
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="theme-plat">
+                                    <a href="#" class="theme-plan-group" @click="selectTheme('westeros', $event)"
+                                       style="background-color: transparent;">
+                                        <div class="theme-plan-color" style="background-color: rgb(81, 107, 145);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(89, 196, 230);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(237, 175, 218);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(147, 183, 227);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(165, 231, 240);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(203, 176, 227);">
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="theme-plat">
+                                    <a href="#" class="theme-plan-group" @click="selectTheme('essos', $event)"
+                                       style="background-color: rgba(242, 234, 191, 0.15);">
+                                        <div class="theme-plan-color" style="background-color: rgb(137, 52, 72);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(217, 88, 80);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(235, 129, 70);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(255, 178, 72);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(242, 214, 67);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(235, 219, 164);">
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="theme-plat">
+                                    <a href="#" class="theme-plan-group" @click="selectTheme('wonderland', $event)"
+                                       style="background-color: transparent;">
+                                        <div class="theme-plan-color" style="background-color: rgb(78, 163, 151);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(34, 195, 170);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(123, 217, 165);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(208, 100, 138);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(245, 141, 178);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(242, 179, 201);">
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="theme-plat">
+                                    <a href="#" class="theme-plan-group" @click="selectTheme('walden', $event)"
+                                       style="background-color: rgba(252, 252, 252, 0);">
+                                        <div class="theme-plan-color" style="background-color: rgb(63, 177, 227);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(107, 230, 193);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(98, 108, 145);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(160, 167, 230);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(196, 235, 173);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(150, 222, 232);">
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="theme-plat">
+                                    <a href="#" class="theme-plan-group" @click="selectTheme('chalk', $event)"
+                                       style="background-color: rgb(41, 52, 65);">
+                                        <div class="theme-plan-color" style="background-color: rgb(252, 151, 175);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(135, 247, 207);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(247, 244, 148);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(114, 204, 255);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(247, 197, 160);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(212, 164, 235);">
+                                        </div>
+                                        <div class="theme-plan-color hide"
+                                             style="background-color: rgb(210, 245, 166);">
+                                        </div>
+                                        <div class="theme-plan-color hide"
+                                             style="background-color: rgb(118, 242, 242);">
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="theme-plat">
+                                    <a href="#" class="theme-plan-group" @click="selectTheme('infographic', $event)"
+                                       style="background-color: transparent;">
+                                        <div class="theme-plan-color" style="background-color: rgb(193, 35, 43);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(39, 114, 123);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(252, 206, 16);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(232, 124, 37);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(181, 195, 52);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(254, 132, 99);">
+                                        </div>
+                                        <div class="theme-plan-color hide" style="background-color: rgb(155, 202, 99);">
+                                        </div>
+                                        <div class="theme-plan-color hide" style="background-color: rgb(250, 216, 96);">
+                                        </div>
+                                        <div class="theme-plan-color hide" style="background-color: rgb(243, 164, 59);">
+                                        </div>
+                                        <div class="theme-plan-color hide" style="background-color: rgb(96, 192, 221);">
+                                        </div>
+                                        <div class="theme-plan-color hide" style="background-color: rgb(215, 80, 75);">
+                                        </div>
+                                        <div class="theme-plan-color hide"
+                                             style="background-color: rgb(198, 229, 121);">
+                                        </div>
+                                        <div class="theme-plan-color hide" style="background-color: rgb(244, 224, 1);">
+                                        </div>
+                                        <div class="theme-plan-color hide" style="background-color: rgb(240, 128, 90);">
+                                        </div>
+                                        <div class="theme-plan-color hide" style="background-color: rgb(38, 192, 192);">
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="theme-plat">
+                                    <a href="#" class="theme-plan-group" @click="selectTheme('macarons', $event)"
+                                       style="background-color: transparent;">
+                                        <div class="theme-plan-color" style="background-color: rgb(46, 199, 201);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(182, 162, 222);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(90, 177, 239);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(255, 185, 128);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(216, 122, 128);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(141, 152, 179);">
+                                        </div>
+                                        <div class="theme-plan-color hide" style="background-color: rgb(229, 207, 13);">
+                                        </div>
+                                        <div class="theme-plan-color hide" style="background-color: rgb(151, 181, 82);">
+                                        </div>
+                                        <div class="theme-plan-color hide"
+                                             style="background-color: rgb(149, 112, 109);">
+                                        </div>
+                                        <div class="theme-plan-color hide"
+                                             style="background-color: rgb(220, 105, 170);">
+                                        </div>
+                                        <div class="theme-plan-color hide" style="background-color: rgb(7, 162, 164);">
+                                        </div>
+                                        <div class="theme-plan-color hide"
+                                             style="background-color: rgb(154, 127, 209);">
+                                        </div>
+                                        <div class="theme-plan-color hide" style="background-color: rgb(88, 141, 213);">
+                                        </div>
+                                        <div class="theme-plan-color hide" style="background-color: rgb(245, 153, 78);">
+                                        </div>
+                                        <div class="theme-plan-color hide" style="background-color: rgb(192, 80, 80);">
+                                        </div>
+                                        <div class="theme-plan-color hide" style="background-color: rgb(89, 103, 140);">
+                                        </div>
+                                        <div class="theme-plan-color hide" style="background-color: rgb(201, 171, 0);">
+                                        </div>
+                                        <div class="theme-plan-color hide" style="background-color: rgb(126, 176, 10);">
+                                        </div>
+                                        <div class="theme-plan-color hide" style="background-color: rgb(111, 85, 83);">
+                                        </div>
+                                        <div class="theme-plan-color hide" style="background-color: rgb(193, 64, 137);">
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="theme-plat">
+                                    <a href="#" class="theme-plan-group" @click="selectTheme('roma', $event)"
+                                       style="background-color: transparent;">
+                                        <div class="theme-plan-color" style="background-color: rgb(224, 31, 84);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(0, 24, 82);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(245, 232, 200);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(184, 210, 199);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(198, 179, 142);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(164, 216, 194);">
+                                        </div>
+                                        <div class="theme-plan-color hide"
+                                             style="background-color: rgb(243, 217, 153);">
+                                        </div>
+                                        <div class="theme-plan-color hide"
+                                             style="background-color: rgb(211, 117, 143);">
+                                        </div>
+                                        <div class="theme-plan-color hide"
+                                             style="background-color: rgb(220, 195, 146);">
+                                        </div>
+                                        <div class="theme-plan-color hide" style="background-color: rgb(46, 71, 131);">
+                                        </div>
+                                        <div class="theme-plan-color hide"
+                                             style="background-color: rgb(130, 182, 233);">
+                                        </div>
+                                        <div class="theme-plan-color hide" style="background-color: rgb(255, 99, 71);">
+                                        </div>
+                                        <div class="theme-plan-color hide"
+                                             style="background-color: rgb(160, 146, 241);">
+                                        </div>
+                                        <div class="theme-plan-color hide" style="background-color: rgb(10, 145, 93);">
+                                        </div>
+                                        <div class="theme-plan-color hide"
+                                             style="background-color: rgb(234, 248, 137);">
+                                        </div>
+                                        <div class="theme-plan-color hide"
+                                             style="background-color: rgb(102, 153, 255);">
+                                        </div>
+                                        <div class="theme-plan-color hide"
+                                             style="background-color: rgb(255, 102, 102);">
+                                        </div>
+                                        <div class="theme-plan-color hide" style="background-color: rgb(60, 179, 113);">
+                                        </div>
+                                        <div class="theme-plan-color hide" style="background-color: rgb(213, 177, 88);">
+                                        </div>
+                                        <div class="theme-plan-color hide" style="background-color: rgb(56, 182, 182);">
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="theme-plat">
+                                    <a href="#" class="theme-plan-group" @click="selectTheme('shine', $event)"
+                                       style="background-color: transparent;">
+                                        <div class="theme-plan-color" style="background-color: rgb(193, 46, 52);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(230, 182, 0);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(0, 152, 217);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(43, 130, 29);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(0, 94, 170);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(51, 156, 168);">
+                                        </div>
+                                        <div class="theme-plan-color hide" style="background-color: rgb(205, 168, 25);">
+                                        </div>
+                                        <div class="theme-plan-color hide" style="background-color: rgb(50, 164, 135);">
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="theme-plat">
+                                    <a href="#" class="theme-plan-group" @click="selectTheme('purple-passion', $event)"
+                                       style="background-color: rgb(91, 92, 110);">
+                                        <div class="theme-plan-color" style="background-color: rgb(138, 124, 168);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(224, 152, 199);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(143, 211, 232);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(113, 102, 158);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(204, 112, 175);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(124, 180, 204);">
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="theme-plat ">
+                                    <a href="#" class="theme-plan-group" @click="selectTheme('halloween', $event)"
+                                       style="background-color: rgb(51, 51, 51);">
+                                        <div class="theme-plan-color" style="background-color: rgb(255, 113, 94);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(255, 175, 81);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(255, 238, 81);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(121, 127, 186);">
+                                        </div>
+                                        <div class="theme-plan-color" style="background-color: rgb(113, 92, 135);">
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                        <hr>
+
+                        <h5 class="m-0 m-b-5 m-t-5">
+                            图表样式
+                        </h5>
+
+                            <div class="form-group row">
+                                <label class="offset-sm-1 control-label">组件背景</label>
+                                <div class="col-sm-9">
+                                    <input type="text" :value="option.backgroundColor" data-id="option.backgroundColor"
+                                           class="echarts-pickColor"/>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="offset-sm-1 control-label">组件配色</label>
+                                <div class="col-sm-9">
+                                    <input type="text" data-id="option.color.0" :value="colors[0]"
+                                           class="echarts-pickColor"/>
+                                    <input type="text" data-id="option.color.1" :value="colors[1]"
+                                           class="echarts-pickColor"/>
+                                    <input type="text" data-id="option.color.2" :value="colors[2]"
+                                           class="echarts-pickColor"/>
+                                    <input type="text" data-id="option.color.3" :value="colors[3]"
+                                           class="echarts-pickColor"/>
+                                    <input type="text" data-id="option.color.4" :value="colors[4]"
+                                           class="echarts-pickColor"/>
+                                    <input type="text" data-id="option.color.5" :value="colors[5]"
+                                           class="echarts-pickColor"/>
+                                    <input type="text" data-id="option.color.6" :value="colors[6]"
+                                           class="echarts-pickColor"/>
+                                    <input type="text" data-id="option.color.7" :value="colors[7]"
+                                           class="echarts-pickColor"/>
+                                    <input type="text" data-id="option.color.8" :value="colors[8]"
+                                           class="echarts-pickColor"/>
+                                    <input type="text" data-id="option.color.9" :value="colors[9]"
+                                           class="echarts-pickColor"/>
+                                    <input type="text" data-id="option.color.10" :value="colors[10]"
+                                           class="echarts-pickColor"/>
+                                    <input type="text" data-id="option.color.11" :value="colors[11]"
+                                           class="echarts-pickColor"/>
+                                    <input type="text" data-id="option.color.12" :value="colors[12]"
+                                           class="echarts-pickColor"/>
+                                    <input type="text" data-id="option.color.13" :value="colors[13]"
+                                           class="echarts-pickColor"/>
+                                    <input type="text" data-id="option.color.14" :value="colors[14]"
+                                           class="echarts-pickColor"/>
+                                    <input type="text" data-id="option.color.15" :value="colors[15]"
+                                           class="echarts-pickColor"/>
+                                    <input type="text" data-id="option.color.16" :value="colors[16]"
+                                           class="echarts-pickColor"/>
+                                    <input type="text" data-id="option.color.17" :value="colors[17]"
+                                           class="echarts-pickColor"/>
+                                    <input type="text" data-id="option.color.18" :value="colors[18]"
+                                           class="echarts-pickColor"/>
+                                    <input type="text" data-id="option.color.19" :value="colors[19]"
+                                           class="echarts-pickColor"/>
+
+                                </div>
+                            </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="title_tab">
+
+                        <h5 class="m-0">
+                            <div class="checkbox checkbox-custom ">
+                                <input id="checkbox1" v-model="option.title.show" @change="reload" type="checkbox">
+                                <label for="checkbox1">
+                                    <h5 style="margin:0"> 是否显示图表标题</h5>
+                                </label>
+                            </div>
+                        </h5>
+
+                        <form class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group row">
+                                                <label class="col-sm-offset-1 col-lg-2 col-sm-3 col-xs-3 control-label">
+                                                    主标题文本:
+                                                </label>
+                                                <div class="col-sm-7 col-xs-8">
+                                                    <input type="text" :disabled="!option.title.show"  @input="reload" id="title_text" v-model="option.title.text"
+                                                           class="form-control"/>
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <input type="text"  :disabled="!option.title.show" class="echarts-pickColor"
+                                                           :value="option.title.textStyle.color"
+                                                           data-id="option.title.textStyle.color"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <!--<div class="form-group">-->
+                                            <!--<label class="col-sm-offset-1 col-lg-2 col-sm-3 col-xs-3 control-label">-->
+                                            <!--<div class="checkbox jp-checkbox">-->
+                                            <!--<input id="title_url" type="checkbox">-->
+                                            <!--<label for="title_url">主标题文本超链接</label>-->
+                                            <!--</div>-->
+                                            <!--</label>-->
+                                            <!--<div class="col-sm-7 col-xs-8">-->
+                                            <!--<input type="text" id="title_url_text" @change="reload" v-model="option.title.link"-->
+                                            <!--class="form-control"/>-->
+                                            <!--</div>-->
+                                            <!--</div>-->
+                                            <div class="form-group row">
+                                                <label class="col-sm-offset-1 col-lg-2 col-sm-3 col-xs-3 control-label">
+                                                    副标题文本:
+                                                </label>
+                                                <div class="col-sm-7 col-xs-8">
+                                                    <input type="text" :disabled="!option.title.show" id="subtitle_text" @input="reload" v-model="option.title.subtext"
+                                                           class="form-control"/>
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <input type="text"  :disabled="!option.title.show" class="echarts-pickColor" :value="option.title.subtextStyle.color"
+                                                           data-id="option.title.subtextStyle.color"/>
+                                                </div>
+                                            </div>
+                                            <!--<div class="form-group">-->
+                                            <!--<label class="col-sm-offset-1 col-lg-2 col-sm-3 col-xs-3 control-label">-->
+                                            <!--<div class="checkbox jp-checkbox">-->
+                                            <!--<input id="subtitle_url" type="checkbox">-->
+                                            <!--<label for="subtitle_url">副标题文本超链接</label>-->
+                                            <!--</div>-->
+                                            <!--</label>-->
+                                            <!--<div class="col-sm-7 col-xs-8">-->
+                                            <!--<input type="text" id="subtitle_url_text" @change="reload"-->
+                                            <!--v-model="option.title.sublink" class="form-control"/>-->
+                                            <!--</div>-->
+                                            <!--</div>-->
+                                            <div class="form-group row">
+                                                <label class="col-sm-offset-1 col-lg-2 col-sm-3 col-xs-3 control-label">
+                                                    水平放置位置:
+                                                </label>
+                                                <div class="col-sm-7 col-xs-8">
+                                                    <div class="radio-list">
+
+                                                        <div class="radio radio-inline radio-custom form-check form-check-inline mr-0">
+                                                            <input type="radio" name="titlex" id="r1" class="required form-check-input " :disabled="!option.title.show" @change="reload"
+                                                                   v-model="option.title.x" value="left">
+                                                            <label class="form-check-label" for="r1">居左</label>
+                                                        </div>
+                                                        <div class="radio radio-inline radio-custom form-check form-check-inline mr-0">
+                                                            <input type="radio" name="titlex" id="r2" class="required form-check-input" :disabled="!option.title.show" @change="reload"
+                                                                   v-model="option.title.x" value="center">
+                                                            <label class="form-check-label" for="r2">居中</label>
+                                                        </div>
+                                                        <div class="radio radio-inline radio-custom form-check form-check-inline mr-0">
+                                                            <input id="r3" name="titlex" type="radio" class="required form-check-input"
+                                                                   @change="reload" v-model="option.title.x" :disabled="!option.title.show"
+                                                                   value="right">
+                                                            <label class="form-check-label" for="r3">居右</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="form-group row">
+                                                <label class="col-sm-offset-1 col-lg-2 col-sm-3 col-xs-3 control-label">
+                                                    垂直放置位置:
+                                                </label>
+                                                <div class="col-sm-7 col-xs-8">
+                                                    <div class="radio-list">
+
+                                                        <div class="radio radio-inline radio-custom form-check form-check-inline mr-0">
+                                                            <input type="radio" name="titley" id="rx1" class="required form-check-input" @change="reload" :disabled="!option.title.show"
+                                                                   v-model="option.title.y" value="top">
+                                                            <label for="rx1">居上</label>
+                                                        </div>
+                                                        <div class="radio radio-inline radio-custom form-check form-check-inline mr-0">
+                                                            <input type="radio" name="titley" id="rx2" class="required form-check-input" @change="reload" :disabled="!option.title.show"
+                                                                   v-model="option.title.y" value="center">
+                                                            <label for="rx2">居中</label>
+                                                        </div>
+                                                        <div class="radio radio-inline radio-custom form-check form-check-inline mr-0">
+                                                            <input checked="" type="radio" name="titley" id="rx3" class="required form-check-input" :disabled="!option.title.show"
+                                                                   @change="reload" v-model="option.title.y"
+                                                                   value="bottom">
+                                                            <label for="rx3">居下</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-offset-1 col-lg-2 col-sm-3 col-xs-3 control-label">
+                                                    水平对齐方式:
+                                                </label>
+                                                <div class="col-sm-7 col-xs-8">
+                                                    <div class="radio-list">
+                                                        <div class="radio radio-inline radio-custom form-check form-check-inline mr-0">
+                                                            <input type="radio" name="titlez" id="rt1" class="required form-check-input" @change="reload" :disabled="!option.title.show"
+                                                                   v-model="option.title.textAlign" value="left">
+                                                            <label for="rt1">居左</label>
+                                                        </div>
+                                                        <div class="radio radio-inline radio-custom form-check form-check-inline mr-0">
+                                                            <input type="radio" name="titlez" id="rt2" class="required form-check-input" @change="reload" :disabled="!option.title.show"
+                                                                   v-model="option.title.textAlign" value="center">
+                                                            <label for="rt2">居中</label>
+                                                        </div>
+                                                        <div class="radio radio-inline radio-custom form-check form-check-inline mr-0">
+                                                            <input checked="" name="titlez" id="rt3" type="radio" class="required form-check-input" :disabled="!option.title.show"
+                                                                   @change="reload" v-model="option.title.textAlign"
+                                                                   value="right">
+                                                            <label for="rt3">居右</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </form>
+
+                    </div>
+                    <div class="tab-pane fade" id="toolbox_tab">
+                        <div class="checkbox checkbox-custom ">
+                            <input id="show-tool" v-model="option.toolbox.show" @change="reload" type="checkbox">
+                            <label for="show-tool"><h5 style="margin: 0;">是否显示工具栏</h5> </label>
+                        </div>
+                        <hr>
+                        <div class="checkbox checkbox-custom ">
+                            <input id="show-x" v-model="option.legend.show" @change="reload" type="checkbox">
+                            <label for="show-x"><h5 style="margin: 0;">是否显示图例</h5></label>
+                        </div>
+
+                        <form class="form-horizontal">
+                                            <div class="form-group row">
+                                                <label class="col-md-3 control-label"> 水平放置位置:</label>
+                                                <div class="col-md-9">
+                                                    <div class="radio-list">
+                                                        <div class="radio radio-inline radio-custom form-check form-check-inline mr-0">
+                                                            <input type="radio" name="option.legend.x" class="required form-check-input" @change="reload"  :disabled="!option.legend.show"
+                                                                   v-model="option.legend.x" value="left">
+                                                            <label>居左</label>
+                                                        </div>
+                                                        <div class="radio radio-inline radio-custom form-check form-check-inline mr-0">
+                                                            <input type="radio"  name="option.legend.x" class="required form-check-input" @change="reload"  :disabled="!option.legend.show"
+                                                                   v-model="option.legend.x" value="center">
+                                                            <label>居中</label>
+                                                        </div>
+                                                        <div class="radio radio-inline radio-custom form-check form-check-inline mr-0">
+                                                            <input checked="" type="radio"  name="option.legend.x" class="required form-check-input"  :disabled="!option.legend.show"
+                                                                   @change="reload" v-model="option.legend.x"
+                                                                   value="right">
+                                                            <label>居右</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-md-3 control-label">垂直放置位置:</label>
+                                                <div class="col-md-9">
+                                                    <div class="radio-list">
+                                                        <div class="radio radio-inline radio-custom form-check form-check-inline mr-0">
+                                                            <input type="radio"  name="option.legend.y" class="required form-check-input" @change="reload"  :disabled="!option.legend.show"
+                                                                   v-model="option.legend.y" value="top">
+                                                            <label>居上</label>
+                                                        </div>
+
+
+                                                        <div class="radio radio-inline radio-custom form-check form-check-inline mr-0">
+                                                            <input type="radio" name="option.legend.y" class="required form-check-input" @change="reload"  :disabled="!option.legend.show"
+                                                                   v-model="option.legend.y" value="center">
+                                                            <label>居中</label>
+                                                        </div>
+                                                        <div class="radio radio-inline radio-custom form-check form-check-inline mr-0">
+                                                            <input checked="" name="option.legend.y" type="radio" class="required form-check-input"  :disabled="!option.legend.show"
+                                                                   @change="reload" v-model="option.legend.y"
+                                                                   value="bottom">
+                                                            <label>居下</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-md-3 control-label">水平放置还是垂直放置:</label>
+                                                <div class="col-md-9">
+                                                    <div class="radio-list">
+                                                        <div class="radio radio-inline radio-custom form-check form-check-inline mr-0">
+                                                            <input type="radio"  name="option.legend.orient"  class="required form-check-input" @change="reload"  :disabled="!option.legend.show"
+                                                                   v-model="option.legend.orient"
+                                                                   value="horizontal">
+                                                            <label>水平放置</label>
+                                                        </div>
+                                                        <div class="radio radio-inline radio-custom form-check form-check-inline mr-0">
+                                                            <input type="radio"  name="option.legend.orient"  class="required form-check-input " @change="reload"  :disabled="!option.legend.show"
+                                                                   v-model="option.legend.orient" value="vertical">
+                                                            <label>垂直放置</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="white-box m-t-5">
+                <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+
+                            <font v-show="showText" class="text-shadow" v-text="text"></font>
+                <div id="main" :class="borderClass" style="width: 100%;min-height: 350px;height: 100%">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var modelIdSelected = '${echarts.dataSet.id!}';
+    var option  = "${echarts.option!}" == "" ? undefined : JSON.parse(jp.unescapeHTML("${echarts.option!}"));
+    var boderClass = '${borderClass!}';
+    var echartsType = "${echarts.type!}";
+    var id = "${echarts.id!}";
+    var echartsName = '${echarts.name!}';
+    parent.refresh = jp.getParent().refresh;
+
+    var vm = new Vue({
+        el: "#inputForm",
+        data: {
+            modelIdSelected: modelIdSelected,
+            modelIdOptions: [],
+            option: option,
+            borderClass: boderClass,
+            myChart: null,
+            echartsType: echartsType,
+            id: id,
+            titleColor: 'aaa',
+            text:'无图形',
+            showText:true,
+            colors: ["#c23531", "#2f4554", "#61a0a8", "#d48265", "#91c7ae", "#749f83", "#ca8622", "#bda29a", "#6e7074", "#546570", "#c4ccd3", "#ff6347", "#7b68ee", "#00fa9a", "#ffd700", "#6699FF", "#ff6666", "#3cb371", "#b8860b", "#30e0e0"]
+
+        },
+        methods: {
+            setupDraggable: function () {
+                var _this = this;
+                $(".draggable").draggable({appendTo: "body", helper: "clone"});
+                $(".droppable").droppable({
+                    accept: ".draggable",
+                    helper: "clone",
+                    hoverClass: "droppable-active",
+                    drop: function (event, ui) {
+                        $(".empty-form").remove();
+                        var $orig = $(ui.draggable);
+                        if (!$(ui.draggable).hasClass("dropped")) {
+                            var column_name;
+
+                            if ($(this).attr("id") == "x-panel") {
+                                column_name = "xId";
+                            } else {
+                                column_name = "yId";
+                            }
+
+                            var li = $("<li>" +
+                                '<div class="field-button">' +
+                                '<button class="btn btn-danger btn-circle btn-sm" onclick="_this.delColumn(this)" type="button"><i class="fa fa-minus"></i></button>' +
+                                '</div>' +
+                                '<a href="javascript:void(0)"><span>' + $orig.attr("data-label") + '</span></a>' +
+                                '<input type="hidden" name="' + column_name + '" value= "' + $orig.attr("data-id") + '">' +
+                                '</li>');
+
+                            $(this).append(li);
+
+                            _this.refreshCharts();
+
+                        }
+                    }
+                }).sortable()
+            },
+            delColumn: function (_this) {
+
+                $(_this).parent().parent().remove();
+                this.refreshCharts();
+            },
+            refreshCharts: function () {
+                var xIds = ",", yIds = ",";
+                $("input[name=xId]").each(function () {
+                    xIds = xIds + $(this).val() + ",";
+                })
+                $("input[name=yId]").each(function () {
+                    yIds = yIds + $(this).val() + ",";
+                })
+                if (xIds == "," || yIds == "," || this.echartsType == "") {
+                    this.myChart.clear();
+                    this.showText = true;
+                    return;
+                }
+                var _this = this;
+                jp.post(ctx+"/echarts/mergeOption", {
+                    optionJson: JSON.stringify(this.option),
+                    xIds: xIds,
+                    yIds: yIds,
+                    dataSetId: _this.modelIdSelected,
+                    type: _this.echartsType
+                }, function (data) {
+                    _this.option = data;
+                    _this.myChart.setOption(data, true);
+                    _this.showText = false;
+                });
+            },
+            setChartsBorder: function (border) {
+                this.borderClass = border;
+            },
+            reload: function () {
+                var xIds = ",", yIds = ",";
+                $("input[name=xId]").each(function () {
+                    xIds = xIds + $(this).val() + ",";
+                })
+                $("input[name=yId]").each(function () {
+                    yIds = yIds + $(this).val() + ",";
+                })
+                if (xIds == "," || yIds == "," || this.echartsType == "") {
+                    this.myChart.clear();
+                    this.showText = true;
+                    return;
+                }
+                if (this.myChart) {
+                    this.showText = false;
+                    this.myChart.setOption(this.option)
+                }
+
+            },
+            selectChart: function (dataItem , text) {
+                var _this = this
+                if (this.myChart == null) {
+                    this.myChart = echarts.init(document.getElementById('main'));
+                    window.onresize = this.myChart.resize;
+                }
+
+                this.text = text;
+                $.get(ctxStatic+"/plugins/echarts/model/" + dataItem + ".json", function (data) {
+                    data.title.text = _this.option.title.text;
+                    data.title.subtext = _this.option.title.subtext;
+                    data.title.textStyle  = _this.option.title.textStyle;
+                    data.title.subtextStyle = _this.option.title.subtextStyle;
+                    _this.option = data;
+                    _this.echartsType = dataItem;
+                    _this.refreshCharts();
+
+                })
+
+            },
+            setPickColor: function (element) {
+                var _this = this;
+
+                $(element).each(function () {
+                    var color = $(this).val();
+                    if (!color) {
+                        color = "#000000";
+                    }
+                    $(this).spectrum({
+                        color: color,
+                        // flat: true,
+                        showInput: true,
+                        className: "full-spectrum",
+                        showInitial: true,
+                        showPalette: true,
+                        hideAfterPaletteSelect: false,
+                        showSelectionPalette: true,
+                        maxPaletteSize: 10,
+                        preferredFormat: "hex",
+                        localStorageKey: "jeeplus.org",
+                        cancelText: "取消",//取消按钮,按钮文字
+                        chooseText: "选择",//选择按钮,按钮文字
+                        showAlpha: true,
+                        change: function (color) {
+                            $(this).attr("value", color.toString());
+                            var propertyNames = $(this).attr("data-id");
+                            var propertyName = propertyNames.split(".");
+                            var p = _this;
+                            for (i = 0; i < propertyName.length - 1; i++) {
+                                if( p[propertyName[i]] == undefined){
+                                    p[propertyName[i]] = []
+                                }
+
+                                p = p[propertyName[i]]
+                            }
+
+                            p[propertyName[propertyName.length - 1]] = color.toString();
+                            _this.reload();
+
+
+                        },
+                        palette: [
+                            ["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)",
+                                "rgb(204, 204, 204)", "rgb(217, 217, 217)", "rgb(255, 255, 255)"],
+                            ["rgb(152, 0, 0)", "rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)",
+                                "rgb(0, 255, 255)", "rgb(74, 134, 232)", "rgb(0, 0, 255)", "rgb(153, 0, 255)", "rgb(255, 0, 255)"],
+                            ["rgb(230, 184, 175)", "rgb(244, 204, 204)", "rgb(252, 229, 205)", "rgb(255, 242, 204)", "rgb(217, 234, 211)",
+                                "rgb(208, 224, 227)", "rgb(201, 218, 248)", "rgb(207, 226, 243)", "rgb(217, 210, 233)", "rgb(234, 209, 220)",
+                                "rgb(221, 126, 107)", "rgb(234, 153, 153)", "rgb(249, 203, 156)", "rgb(255, 229, 153)", "rgb(182, 215, 168)",
+                                "rgb(162, 196, 201)", "rgb(164, 194, 244)", "rgb(159, 197, 232)", "rgb(180, 167, 214)", "rgb(213, 166, 189)",
+                                "rgb(204, 65, 37)", "rgb(224, 102, 102)", "rgb(246, 178, 107)", "rgb(255, 217, 102)", "rgb(147, 196, 125)",
+                                "rgb(118, 165, 175)", "rgb(109, 158, 235)", "rgb(111, 168, 220)", "rgb(142, 124, 195)", "rgb(194, 123, 160)",
+                                "rgb(166, 28, 0)", "rgb(204, 0, 0)", "rgb(230, 145, 56)", "rgb(241, 194, 50)", "rgb(106, 168, 79)",
+                                "rgb(69, 129, 142)", "rgb(60, 120, 216)", "rgb(61, 133, 198)", "rgb(103, 78, 167)", "rgb(166, 77, 121)",
+                                "rgb(91, 15, 0)", "rgb(102, 0, 0)", "rgb(120, 63, 4)", "rgb(127, 96, 0)", "rgb(39, 78, 19)",
+                                "rgb(12, 52, 61)", "rgb(28, 69, 135)", "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"]
+                        ]
+                    });
+                })
+
+
+            },
+            selectTheme: function (theme, ele) {
+                $("#theme-font").remove();
+                $(ele.currentTarget).append('<i id="theme-font" class=" jp-icon zmdi zmdi-check"></i>');
+                $("#backgroundColor").spectrum("set", $(ele.currentTarget).css("background-color"));
+                var list = $(ele.currentTarget).find(".theme-plan-color");
+                var sum = 20 / list.length;
+                var num = 20 % list.length;
+                var flag = 0
+                this.option.backgroundColor = $(ele.currentTarget).css("background-color");
+                this.option.color = [];
+                for (var x = 0; x < sum; x++) {
+                    for (var i = 0; i < list.length && i < 20; i++) {
+
+                        $($(".wdgt-bg").get(flag)).spectrum("set", $(list[i]).css("background-color"));
+                        flag = flag + 1;
+                        this.option.color.push($(list[i]).css("background-color"));
+
+                    }
+                }
+
+                for (var x = sum * list.length, i = 0; x < 20; x++, i++) {
+                    $($(".wdgt-bg").get(x)).spectrum("set", $(list[i]).css("background-color"));
+                    this.option.color.push($(list[i]).css("background-color"));
+
+                }
+
+
+                if (this.myChart) {
+                    this.myChart.dispose();
+
+                    this.myChart = echarts.init(document.getElementById('main'), theme);
+                    window.onresize = this.myChart.resize;
+
+
+                    var xIds = ",", yIds = ",";
+                    $("input[name=xId]").each(function () {
+                        xIds = xIds + $(this).val() + ",";
+                    })
+                    $("input[name=yId]").each(function () {
+                        yIds = yIds + $(this).val() + ",";
+                    })
+                    if (xIds == "," || yIds == "," || this.echartsType == "") {
+                        this.myChart.clear();
+                        this.showText = true;
+                        return;
+                    }
+
+
+                    this.myChart.setOption(this.option, true);
+
+                    if (this.myChart.getOption().title[0].textStyle.color) {
+                        this.option.title.textStyle.color = this.myChart.getOption().title[0].textStyle.color;
+                    }
+
+                    if (this.myChart.getOption().title[0].subtextStyle.color) {
+                        this.option.title.subtextStyle.color = this.myChart.getOption().title[0].subtextStyle.color;
+                    }
+
+                }
+            },
+            initModelOption: function(id, first){
+                if(!id){
+                    return;
+                }
+                var _this = this;
+                var index = jp.loading();
+                jp.post(ctx+"/echarts/dataMeta", {
+                    id: id
+                }, function (data) {
+                    jp.close(index);
+                    if (data.success) {
+                        if(!first){
+                            $("#x-panel, #y-panel").html("");
+                        }
+                        var getTpl = tableTpl.innerHTML
+                            , view = document.getElementById('tableView');
+                        laytpl(getTpl).render(data, function (html) {
+                            view.innerHTML = html;
+                        });
+                        _this.setupDraggable();
+                    } else {
+                        jp.error(data.msg);
+                    }
+                });
+            }
+
+
+
+        },
+        created: function () {
+            if (!this.option) {
+                this.option = {};
+            }
+            if (!this.option.title) {
+                this.option.title = {}
+            }
+
+            if(this.option.title.show == undefined){
+                this.option.title.show = true;
+            }
+            if (!this.option.title.textStyle) {
+                this.option.title.textStyle = {};
+            }
+            if (!this.option.title.subtextStyle) {
+                this.option.title.subtextStyle = {};
+            }
+            if(!this.option.toolbox){
+                this.option.toolbox = {};
+            }
+            if(this.option.toolbox.show == undefined){
+                this.option.toolbox.show = true;
+            }
+
+            if(!this.option.legend){
+                this.option.legend = {};
+            }
+            if(this.option.legend.show == undefined){
+                this.option.legend.show = true;
+            }
+            //默认颜色
+            if (this.option.color) {
+                //已存在颜色覆盖默认颜色
+                for (var i = 0; i < this.option.color.length; i++) {
+                    this.colors[i] = this.option.color[i];
+                }
+            }
+            if (!this.option.legend) {
+                this.option.legend = {};
+            }
+            if (!this.option.toolbox) {
+                this.option.toolbox = {};
+            }
+            this.initModelOption(this.modelIdSelected, true);
+        },
+        mounted: function () {
+            _this = this;
+
+            jp.post(ctx+"/database/datamodel/dataSet/data", {pageSize:-1},function (data) {
+                for (var index = 0; index < data.rows.length; index++) {
+                    _this.modelIdOptions.push({id: data.rows[index].id, name: data.rows[index].name});
+                }
+            })
+            //
+
+            this.myChart = echarts.init(document.getElementById('main'));
+            window.onresize = this.myChart.resize;
+            if (this.option) {
+                this.refreshCharts();
+            }
+            this.setPickColor($(".echarts-pickColor"));
+
+            $('.select2').select2();
+            //选择的值绑定到全局变量
+            $(".select2").on('change', function (e) {
+
+                _this.modelIdSelected = $(".select2").val();
+            });
+
+        },
+        computed: {},
+        watch: {
+            option:function(val){
+                if (!this.option) {
+                    this.option = {};
+                }
+                if (!this.option.title) {
+                    this.option.title = {}
+                }
+
+
+
+                if(this.option.title.show == undefined){
+                    this.option.title.show = true;
+                }
+                if (!this.option.title.textStyle) {
+                    this.option.title.textStyle = {};
+                }
+                if (!this.option.title.subtextStyle) {
+                    this.option.title.subtextStyle = {};
+                }
+                if(!this.option.toolbox){
+                    this.option.toolbox = {};
+                }
+                if(this.option.toolbox.show == undefined){
+                    this.option.toolbox.show = true;
+                }
+
+                if(!this.option.legend){
+                    this.option.legend = {};
+                }
+                if(this.option.legend.show == undefined){
+                    this.option.legend.show = true;
+                }
+            },
+            modelIdSelected: function (newVal, oldVal) {
+                $(".select2").val(newVal).trigger("change");
+                this.initModelOption(newVal, false);
+                this.myChart.clear();
+                this.showText = true;
+            }
+
+        }
+    });
+
+
+    save= function () {
+        var dsId = vm.modelIdSelected;
+        var type = vm.echartsType;
+        var xIds = "", yIds = "";
+        $("input[name=xId]").each(function () {
+            xIds = xIds + $(this).val() + ",";
+        })
+        $("input[name=yId]").each(function () {
+            yIds = yIds + $(this).val() + ",";
+        })
+
+        xIds = xIds.substr(0, xIds.length - 1);
+        yIds = yIds.substr(0, yIds.length - 1);
+        if(type == ""){
+            jp.error("你必须选择一个图形!");
+            return;
+        }
+
+        if (xIds == "" || yIds == "") {
+
+            jp.error("x轴或y轴的值不能为空!")
+            return;
+        }
+        var index1 = top.layer.prompt(
+            {
+                value: echartsName,
+                title: "输入图表的名字"
+            }, function (data) {
+                var params = {
+                    id: vm.id,
+                    name: data,
+                    option: JSON.stringify(vm.option),
+                    xIds: xIds,
+                    yIds: yIds,
+                    "dataSet.id": dsId,
+                    type: type,
+                    "container.borderClass": vm.borderClass
+                }
+                var index = jp.loading();
+                jp.post(ctx+"/echarts/save", params, function (data) {
+                    if (data.success) {
+                        jp.getParent().refresh(data.body.echarts.id, vm.borderClass);
+                        var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                        parent.layer.close(dialogIndex);
+                        jp.toastr_success(data.msg)
+
+                    } else {
+                        jp.toastr_error(data.msg);
+                    }
+                    jp.close(index);
+                    jp.close(index1);
+                })
+            })
+
+
+    }
+</script>
+<% } %>

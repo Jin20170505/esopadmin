@@ -1,0 +1,379 @@
+{
+  "title": {
+    "text": "手机销量",
+    "subtext": "纯属虚构",
+    "x": "110",
+    "textStyle": {
+    },
+    "subtextStyle": {
+    }
+  },
+  "tooltip": {
+    "trigger": "item"
+  },
+  "legend": {
+    "orient": "vertical",
+    "x": "left",
+    "data": [
+      "iphone3",
+      "iphone4",
+      "iphone5"
+    ]
+  },
+  "dataRange": {
+    "min": 0,
+    "max": 2500,
+    "x": "left",
+    "y": "bottom",
+    "text": [
+      "高",
+      "低"
+    ],
+    "calculable": true
+  },
+  "toolbox": {
+    "show": true,
+    "orient": "vertical",
+    "x": "right",
+    "y": "center",
+    "feature": {
+      "mark": {
+        "show": true
+      },
+      "dataView": {
+        "show": true,
+        "readOnly": false
+      },
+      "restore": {
+        "show": true
+      },
+      "saveAsImage": {
+        "show": true
+      }
+    }
+  },
+  "roamController": {
+    "show": true,
+    "x": "right",
+    "mapTypeControl": {
+      "广东": true
+    }
+  },
+  "series": [
+    {
+      "name": "iphone3",
+      "type": "map",
+      "mapType": "广东",
+      "roam": false,
+      "mapValueCalculation": "sum",
+      "itemStyle": {
+        "normal": {
+          "label": {
+            "show": true
+          }
+        },
+        "emphasis": {
+          "label": {
+            "show": true
+          }
+        }
+      },
+      "data": [
+        {
+          "name": "清远市",
+          "value": 351
+        },
+        {
+          "name": "韶关市",
+          "value": 376
+        },
+        {
+          "name": "湛江市",
+          "value": 68
+        },
+        {
+          "name": "梅州市",
+          "value": 563
+        },
+        {
+          "name": "河源市",
+          "value": 91
+        },
+        {
+          "name": "肇庆市",
+          "value": 947
+        },
+        {
+          "name": "惠州市",
+          "value": 228
+        },
+        {
+          "name": "茂名市",
+          "value": 989
+        },
+        {
+          "name": "江门市",
+          "value": 801
+        },
+        {
+          "name": "阳江市",
+          "value": 182
+        },
+        {
+          "name": "云浮市",
+          "value": 428
+        },
+        {
+          "name": "广州市",
+          "value": 194
+        },
+        {
+          "name": "汕尾市",
+          "value": 249
+        },
+        {
+          "name": "揭阳市",
+          "value": 709
+        },
+        {
+          "name": "珠海市",
+          "value": 437
+        },
+        {
+          "name": "佛山市",
+          "value": 356
+        },
+        {
+          "name": "潮州市",
+          "value": 659
+        },
+        {
+          "name": "汕头市",
+          "value": 829
+        },
+        {
+          "name": "深圳市",
+          "value": 877
+        },
+        {
+          "name": "东莞市",
+          "value": 546
+        },
+        {
+          "name": "中山市",
+          "value": 235
+        }
+      ]
+    },
+    {
+      "name": "iphone4",
+      "type": "map",
+      "mapType": "广东",
+      "roam": false,
+      "mapValueCalculation": "sum",
+      "itemStyle": {
+        "normal": {
+          "label": {
+            "show": true
+          }
+        },
+        "emphasis": {
+          "label": {
+            "show": true
+          }
+        }
+      },
+      "data": [
+        {
+          "name": "清远市",
+          "value": 415
+        },
+        {
+          "name": "韶关市",
+          "value": 7
+        },
+        {
+          "name": "湛江市",
+          "value": 442
+        },
+        {
+          "name": "梅州市",
+          "value": 395
+        },
+        {
+          "name": "河源市",
+          "value": 806
+        },
+        {
+          "name": "肇庆市",
+          "value": 452
+        },
+        {
+          "name": "惠州市",
+          "value": 35
+        },
+        {
+          "name": "茂名市",
+          "value": 440
+        },
+        {
+          "name": "江门市",
+          "value": 319
+        },
+        {
+          "name": "阳江市",
+          "value": 281
+        },
+        {
+          "name": "云浮市",
+          "value": 861
+        },
+        {
+          "name": "广州市",
+          "value": 926
+        },
+        {
+          "name": "汕尾市",
+          "value": 223
+        },
+        {
+          "name": "揭阳市",
+          "value": 778
+        },
+        {
+          "name": "珠海市",
+          "value": 358
+        },
+        {
+          "name": "佛山市",
+          "value": 60
+        },
+        {
+          "name": "潮州市",
+          "value": 647
+        },
+        {
+          "name": "汕头市",
+          "value": 639
+        },
+        {
+          "name": "深圳市",
+          "value": 516
+        },
+        {
+          "name": "东莞市",
+          "value": 68
+        },
+        {
+          "name": "中山市",
+          "value": 237
+        }
+      ]
+    },
+    {
+      "name": "iphone5",
+      "type": "map",
+      "mapType": "广东",
+      "roam": false,
+      "mapValueCalculation": "sum",
+      "itemStyle": {
+        "normal": {
+          "label": {
+            "show": true
+          }
+        },
+        "emphasis": {
+          "label": {
+            "show": true
+          }
+        }
+      },
+      "data": [
+        {
+          "name": "清远市",
+          "value": 220
+        },
+        {
+          "name": "韶关市",
+          "value": 398
+        },
+        {
+          "name": "湛江市",
+          "value": 836
+        },
+        {
+          "name": "梅州市",
+          "value": 851
+        },
+        {
+          "name": "河源市",
+          "value": 960
+        },
+        {
+          "name": "肇庆市",
+          "value": 526
+        },
+        {
+          "name": "惠州市",
+          "value": 817
+        },
+        {
+          "name": "茂名市",
+          "value": 405
+        },
+        {
+          "name": "江门市",
+          "value": 164
+        },
+        {
+          "name": "阳江市",
+          "value": 834
+        },
+        {
+          "name": "云浮市",
+          "value": 115
+        },
+        {
+          "name": "广州市",
+          "value": 747
+        },
+        {
+          "name": "汕尾市",
+          "value": 671
+        },
+        {
+          "name": "揭阳市",
+          "value": 131
+        },
+        {
+          "name": "珠海市",
+          "value": 756
+        },
+        {
+          "name": "佛山市",
+          "value": 134
+        },
+        {
+          "name": "潮州市",
+          "value": 592
+        },
+        {
+          "name": "汕头市",
+          "value": 95
+        },
+        {
+          "name": "深圳市",
+          "value": 921
+        },
+        {
+          "name": "东莞市",
+          "value": 853
+        },
+        {
+          "name": "中山市",
+          "value": 395
+        }
+      ]
+    }
+  ]
+}

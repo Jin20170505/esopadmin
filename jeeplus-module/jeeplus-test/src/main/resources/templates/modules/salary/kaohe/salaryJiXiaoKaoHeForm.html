@@ -1,0 +1,91 @@
+<%
+layout("/include/_dialog.html"){
+%>
+	<script type="text/javascript">
+
+		$(document).ready(function() {
+				        $('#khDate').datetimepicker({
+                            format:'Y-m',
+                            formatDate:'y-m',
+                            timepicker: true,
+                            validateOnBlur: false
+		    });
+		});
+
+		function save() {
+            var isValidate = jp.validateForm('#inputForm');//校验表单
+            if(!isValidate){
+                return false;
+			}else{
+                var index = jp.loading();
+                jp.post("${ctx}/salary/kaohe/salaryJiXiaoKaoHe/save",$('#inputForm').serialize(),function(data){
+                    if(data.success){
+                        jp.getParent().refresh();
+                        var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                        parent.layer.close(dialogIndex);
+                        jp.toastr_success(data.msg)
+
+                    }else{
+                        jp.toastr_error(data.msg);
+                    }
+                    jp.close(index);
+                })
+			}
+
+        }
+
+        function scoreChange(tag) {
+            var score = tag.value;
+            if(score==''||score<70){
+                $('#xishu').val("0.00");
+            }else if (score>69.999&&score<90) {
+                $('#xishu').val((score/100).toFixed(2));
+            }else if (score>89.999&&score<100) {
+                $('#xishu').val("1.00");
+            }else {
+                $('#xishu').val((score/100).toFixed(2));
+            }
+        }
+	</script>
+<form id="inputForm"  method="post"  class="form-horizontal p-15">
+    <input type="hidden" name="id" value="${salaryJiXiaoKaoHe.id!}"/>
+    <table class="table table-bordered">
+       <tbody>
+            <tr>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>考核年月：</label></td>
+                <td class="width-35">
+                    <div class="input-group">
+                        <input readonly="" id="khDate"  name="khDate"  placeholder="请选择日期" class="form-control   required"   value="${salaryJiXiaoKaoHe.khDate!}">
+                        <div class="input-group-append">
+                            <span class="input-group-text btn-custom border text-white"><i class="ti-calendar"></i></span>
+                        </div>
+                    </div>
+            </td>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>员工：</label></td>
+                <td class="width-35">
+                    <#gridselect url="${ctx}/qiyewx/base/qiYeWxEmployee/data" id="employee" name="employee.id" value="${salaryJiXiaoKaoHe.employee.id!}" labelName="employee.name" labelValue="${salaryJiXiaoKaoHe.employee.name!}"
+                         title="选择员工" class="form-control required" fieldLabels="编号|姓名" fieldKeys="userid|name" searchLabels="编号|姓名" searchKeys="userid|name" />
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>考核分数：</label></td>
+                <td class="width-35">
+                    <input name="score" value="${salaryJiXiaoKaoHe.score!}" onchange="scoreChange(this);"   class="form-control required isFloatGteZero"/>
+            </td>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>考核系数：</label></td>
+                <td class="width-35">
+                    <input name="xishu" id="xishu" value="${salaryJiXiaoKaoHe.xishu!}"    class="form-control required isFloatGteZero"/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">绩效工资：</label></td>
+                <td class="width-35">
+                    <input name="jixiaoSalary" value="${salaryJiXiaoKaoHe.jixiaoSalary!}"  readonly="readonly" placeholder="系统自动计算"  class="form-control  isFloatGteZero"/>
+            </td>
+                <td class="width-15 active"></td>
+                <td class="width-35" ></td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<% } %>

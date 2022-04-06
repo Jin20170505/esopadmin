@@ -1,0 +1,69 @@
+<style>
+    @media (max-width: 767px){
+        #o1 {
+            display: none;
+        }
+    }
+
+</style>
+
+<div class="topbar">
+
+    <!-- LOGO -->
+    <div class="topbar-left">
+        <div class="text-center">
+            <a href="${ctx}" class="logo">
+                <i class="zmdi zmdi-toys icon-c-logo"></i><span><img src="${ctxStatic}/common/images/logo2tuwei.png" style="height: 60px;width: auto;" /><!--${fn.getProductName()}--></span>
+
+            </a>
+        </div>
+    </div>
+
+    <div class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="">
+                <div class="float-left">
+                    <button class="button-menu-mobile open-left waves-effect waves-light">
+                        <i class="zmdi zmdi-menu"></i>
+                    </button>
+                </div>
+
+                <% if(fn.getCookie(request,'layout') == null && fn.getDefaultLayout() == 'horizontal' || fn.getCookie(request,'layout') == 'horizontal'){ %>
+                        <ul id="o1"  class="nav navbar-toolbar nav-tabs  navbar-left"  style="width: calc( 100% - 680px); height: 60px" role="tablist">
+                            <#jpMenu  menu="${fn.getTopMenu()}" position="top" ></#jpMenu>
+                        </ul>
+                <% } %>
+
+                <ul class="nav navbar-right float-right">
+                    <li class="dropdown user-box list-inline-item">
+                        <a href="" class="dropdown-toggle waves-effect waves-light profile" data-toggle="dropdown" aria-expanded="true">
+                            <img src="${fn.getUser().photo}" alt="user-img" class="rounded-circle user-img">
+                            <div class="user-status away"><i class="zmdi zmdi-dot-circle"></i></div>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li> <a href="${ctx}/sys/user/info" class="J_menuItem dropdown-item"><i class="ti-user m-r-5"></i> 个人资料</a>
+                            <li><a href="${ctx}/logout" class="dropdown-item"><i class="ti-power-off m-r-5"></i> 安全退出</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="list-inline-item">
+                        <div class="notification-box">
+                            <ul class="list-inline m-b-0">
+                                <li>
+                                    <a href="javascript:void(0);" class="right-bar-toggle">
+                                        <i class="fa fa-ellipsis-v"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </li>
+
+                </ul>
+
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+    </div>
+</div>

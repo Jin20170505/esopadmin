@@ -1,0 +1,275 @@
+<%
+layout("/include/_dialog.html"){
+%>
+	<script type="text/javascript">
+
+		$(document).ready(function() {
+					        $('#field0004').datetimepicker({
+				 format:'Y-m-d H:i'
+		    });
+		});
+
+		function save() {
+            var isValidate = jp.validateForm('#inputForm');//校验表单
+            if(!isValidate){
+                return false;
+			}else{
+                var index = jp.loading();
+                jp.post("${ctx}/oadata/tiaoxin/formmain0153/save",$('#inputForm').serialize(),function(data){
+                    if(data.success){
+                        jp.getParent().refresh();
+                        var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                        parent.layer.close(dialogIndex);
+                        jp.toastr_success(data.msg)
+
+                    }else{
+                        jp.toastr_error(data.msg);
+                    }
+                    jp.close(index);
+                })
+			}
+
+        }
+
+		function addRow(list, idx, tpl, row){
+			$(list).append(Mustache.render(tpl, {
+				idx: idx, delBtn: true, row: row
+			}));
+			$(list+idx).find("select").each(function(){
+				$(this).val($(this).attr("data-value"));
+			});
+			$(list+idx).find("input[type='checkbox'], input[type='radio']").each(function(){
+				var ss = $(this).attr("data-value").split(',');
+				for (var i=0; i<ss.length; i++){
+					if($(this).val() == ss[i]){
+						$(this).attr("checked","checked");
+					}
+				}
+			});
+			$(list+idx).find(".jp-calendar-picker-input").each(function(){
+				 $(this).datetimepicker({
+					 format:'Y-m-d H:i'
+			    });
+			});
+		}
+		function delRow(obj, prefix){
+			var id = $(prefix+"_id");
+			var delFlag = $(prefix+"_delFlag");
+			if (id.val() == ""){
+				$(obj).parent().parent().remove();
+			}else if(delFlag.val() == "0"){
+				delFlag.val("1");
+				$(obj).html("&divide;").attr("title", "撤销删除");
+				$(obj).parent().parent().addClass("error");
+			}else if(delFlag.val() == "1"){
+				delFlag.val("0");
+				$(obj).html("&times;").attr("title", "删除");
+				$(obj).parent().parent().removeClass("error");
+			}
+		}
+	</script>
+<form id="inputForm"  method="post"  class="form-horizontal p-15">
+		<input type="hidden" name="id" value="${formmain0153.id!}"/>
+		<table class="table table-bordered">
+		   <tbody>
+				<tr>
+					<td class="width-15 active"><label class="pull-right">编号：</label></td>
+					<td class="width-35">
+						<input name="field0005" value="${formmain0153.field0005!}"    class="form-control "/>
+				</td>
+					<td class="width-15 active"><label class="pull-right">申请人：</label></td>
+					<td class="width-35">
+						<input name="field0002" value="${formmain0153.field0002!}"    class="form-control "/>
+				</td>
+				</tr>
+				<tr>
+					<td class="width-15 active"><label class="pull-right">申请日期：</label></td>
+					<td class="width-35">
+                    <div class="input-group">
+                        <input readonly=""  id="field0004" name="field0004"  placeholder="请选择日期" class="form-control   "   value="${fn.formatDate(formmain0153.field0004!, 'yyyy-MM-dd HH:mm:ss')}">
+                        <div class="input-group-append">
+                            <span class="input-group-text btn-custom border text-white"><i class="ti-calendar"></i></span>
+                        </div>
+                    </div>
+				</td>
+					<td class="width-15 active"><label class="pull-right">所属部门：</label></td>
+					<td class="width-35">
+						<input name="field0003" value="${formmain0153.field0003!}"    class="form-control "/>
+				</td>
+				</tr>
+				<tr>
+					<td class="width-15 active"><label class="pull-right">所属单位：</label></td>
+					<td class="width-35">
+						<input name="field0009" value="${formmain0153.field0009!}"    class="form-control "/>
+				</td>
+					<td class="width-15 active"><label class="pull-right">审批意见：</label></td>
+					<td class="width-35">
+						<input name="field0008" value="${formmain0153.field0008!}"    class="form-control "/>
+				</td>
+				</tr>
+				<tr>
+					<td class="width-15 active"><label class="pull-right">调薪理由：</label></td>
+					<td class="width-35">
+						<input name="field0027" value="${formmain0153.field0027!}"    class="form-control "/>
+				</td>
+					<td class="width-15 active"></td>
+		   			<td class="width-35" ></td>
+		  		</tr>
+		 	</tbody>
+		</table>
+			<div class="card card-tabs">
+            <div class="card-heading  pb-0">
+                <ul class="nav nav-pills float-left" role="tablist">
+				<li class="nav-item">
+					<a data-toggle="tab" class="nav-link show active" role="tab" href="#tab-1" aria-expanded="true">调薪申请明细表：</a>
+                </li>
+            </ul>
+            </div>
+            <div class="card-body">
+		    <div class="tab-content">
+			<div id="tab-1" class="tab-pane fade active show">
+			<a class="btn btn-white btn-sm m-b-5" onclick="addRow('#formson0154List', formson0154RowIdx, formson0154Tpl);formson0154RowIdx = formson0154RowIdx + 1;" title="新增"><i class="fa fa-plus"></i> 新增</a>
+			<table class="table table-striped table-bordered table-condensed">
+				<thead>
+					<tr>
+						<th class="hide"></th>
+						<th>序号</th>
+						<th>员工id</th>
+						<th>员工姓名</th>
+						<th>现基本工资</th>
+						<th>现岗位工资</th>
+						<th>现绩效工资</th>
+						<th>现保密费</th>
+						<th>现通讯费</th>
+						<th>调前总月薪</th>
+						<th>调薪生效时间</th>
+						<th>调整后基本工资</th>
+						<th>调整后岗位工资</th>
+						<th>调整后绩效工资</th>
+						<th>调整后保密费</th>
+						<th>调整后通讯费</th>
+						<th>调后总月薪</th>
+						<th>调薪幅度</th>
+						<th width="10">&nbsp;</th>
+					</tr>
+				</thead>
+				<tbody id="formson0154List">
+				</tbody>
+			</table>
+			<script type="text/template" id="formson0154Tpl">//<!--
+				<tr id="formson0154List{{idx}}">
+					<td class="hide">
+						<input id="formson0154List{{idx}}_id" name="formson0154List[{{idx}}].id" type="hidden" value="{{row.id}}"/>
+						<input id="formson0154List{{idx}}_delFlag" name="formson0154List[{{idx}}].delFlag" type="hidden" value="0"/>
+					</td>
+					
+					<td>
+						<input id="formson0154List{{idx}}_field0006" name="formson0154List[{{idx}}].field0006" type="text" value="{{row.field0006}}"    class="form-control "/>
+					</td>
+					
+					
+					<td>
+						<input id="formson0154List{{idx}}_field0011" name="formson0154List[{{idx}}].field0011" type="text" value="{{row.field0011}}"    class="form-control "/>
+					</td>
+					
+					
+					<td>
+						<input id="formson0154List{{idx}}_field0012" name="formson0154List[{{idx}}].field0012" type="text" value="{{row.field0012}}"    class="form-control "/>
+					</td>
+					
+					
+					<td>
+						<input id="formson0154List{{idx}}_field0007" name="formson0154List[{{idx}}].field0007" type="text" value="{{row.field0007}}"    class="form-control "/>
+					</td>
+					
+					
+					<td>
+						<input id="formson0154List{{idx}}_field0013" name="formson0154List[{{idx}}].field0013" type="text" value="{{row.field0013}}"    class="form-control "/>
+					</td>
+					
+					
+					<td>
+						<input id="formson0154List{{idx}}_field0014" name="formson0154List[{{idx}}].field0014" type="text" value="{{row.field0014}}"    class="form-control "/>
+					</td>
+					
+					
+					<td>
+						<input id="formson0154List{{idx}}_field0015" name="formson0154List[{{idx}}].field0015" type="text" value="{{row.field0015}}"    class="form-control "/>
+					</td>
+					
+					
+					<td>
+						<input id="formson0154List{{idx}}_field0025" name="formson0154List[{{idx}}].field0025" type="text" value="{{row.field0025}}"    class="form-control "/>
+					</td>
+					
+					
+					<td>
+						<input id="formson0154List{{idx}}_field0016" name="formson0154List[{{idx}}].field0016" type="text" value="{{row.field0016}}"    class="form-control "/>
+					</td>
+					
+					
+					<td>
+						<div class="input-group">
+                            <input readonly=""  id="formson0154List{{idx}}_field0017"  name="formson0154List[{{idx}}].field0017"  placeholder="请选择日期" class="jp-calendar-picker-input form-control  "  value="{{row.field0017}}">
+                            <div class="input-group-append">
+                                <span class="input-group-text btn-custom border text-white"><i class="ti-calendar"></i></span>
+                            </div>
+                        </div>
+					</td>
+					
+					
+					<td>
+						<input id="formson0154List{{idx}}_field0018" name="formson0154List[{{idx}}].field0018" type="text" value="{{row.field0018}}"    class="form-control "/>
+					</td>
+					
+					
+					<td>
+						<input id="formson0154List{{idx}}_field0019" name="formson0154List[{{idx}}].field0019" type="text" value="{{row.field0019}}"    class="form-control "/>
+					</td>
+					
+					
+					<td>
+						<input id="formson0154List{{idx}}_field0020" name="formson0154List[{{idx}}].field0020" type="text" value="{{row.field0020}}"    class="form-control "/>
+					</td>
+					
+					
+					<td>
+						<input id="formson0154List{{idx}}_field0021" name="formson0154List[{{idx}}].field0021" type="text" value="{{row.field0021}}"    class="form-control "/>
+					</td>
+					
+					
+					<td>
+						<input id="formson0154List{{idx}}_field0026" name="formson0154List[{{idx}}].field0026" type="text" value="{{row.field0026}}"    class="form-control "/>
+					</td>
+					
+					
+					<td>
+						<input id="formson0154List{{idx}}_field0022" name="formson0154List[{{idx}}].field0022" type="text" value="{{row.field0022}}"    class="form-control "/>
+					</td>
+					
+					
+					<td>
+						<input id="formson0154List{{idx}}_field0023" name="formson0154List[{{idx}}].field0023" type="text" value="{{row.field0023}}"    class="form-control "/>
+					</td>
+					
+					<td class="text-center" width="10">
+						{{#delBtn}}<span class="close" onclick="delRow(this, '#formson0154List{{idx}}')" title="删除">&times;</span>{{/delBtn}}
+					</td>
+				</tr>//-->
+			</script>
+			<script type="text/javascript">
+				var formson0154RowIdx = 0, formson0154Tpl = $("#formson0154Tpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
+				$(document).ready(function() {
+					var data = ${fn.toJson(formmain0153.formson0154List)};
+					for (var i=0; i<data.length; i++){
+						addRow('#formson0154List', formson0154RowIdx, formson0154Tpl, data[i]);
+						formson0154RowIdx = formson0154RowIdx + 1;
+					}
+				});
+			</script>
+			</div>
+		</div>
+		</div>
+		</div>
+		</form>
+<% } %>

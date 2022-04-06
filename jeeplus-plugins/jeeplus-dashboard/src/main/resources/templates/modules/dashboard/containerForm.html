@@ -1,0 +1,66 @@
+<%
+layout("/include/_dialog.html"){
+%>
+<script type="text/javascript">
+
+    function save() {
+        var isValidate = jp.validateForm('#inputForm');//校验表单
+        if (!isValidate) {
+            return false;
+        } else {
+            var index = jp.loading();
+            jp.post("${ctx}/ireport/echarts/container/save", $('#inputForm').serialize(), function (data) {
+                if (data.success) {
+                    jp.getParent().refresh();
+                    var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                    parent.layer.close(dialogIndex);
+                    jp.toastr_success(data.msg)
+
+                } else {
+                    jp.toastr_error(data.msg);
+                }
+                jp.close(index);
+            })
+        }
+
+    }
+</script>
+<form id="inputForm" method="post" class="form-horizontal p-15">
+        <input type="hidden" name="id" value="${container.id!}"/>
+        <table class="table table-bordered">
+            <tbody>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">组件：</label></td>
+                <td class="width-35">
+                    <#gridselect url="${ctx}/ireport/echarts/widget/data" id="echarts" name="echarts.id"
+                    value="${container.widget.id!}" labelName="echarts.name" labelValue="${container.echarts.name!}"
+                    title="选择组件" class="form-control " fieldLabels="组件名" fieldKeys="name" searchLabels="组件名"
+                    searchKeys="name" />
+                </td>
+                <td class="width-15 active"><label class="pull-right">x坐标：</label></td>
+                <td class="width-35">
+                    <input name="x" value="${container.x!}" class="form-control "/>
+                </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">y坐标：</label></td>
+                <td class="width-35">
+                    <input name="y" value="${container.y!}" class="form-control "/>
+                </td>
+                <td class="width-15 active"><label class="pull-right">宽度：</label></td>
+                <td class="width-35">
+                    <input name="width" value="${container.width!}" class="form-control "/>
+                </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">高度：</label></td>
+                <td class="width-35">
+                    <input name="height" value="${container.height!}" class="form-control "/>
+                </td>
+                <td class="width-15 active"></td>
+                <td class="width-35"></td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+<% } %>

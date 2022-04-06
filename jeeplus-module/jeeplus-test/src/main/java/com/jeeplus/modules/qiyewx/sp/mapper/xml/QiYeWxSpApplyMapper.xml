@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.qiyewx.sp.mapper.QiYeWxSpApplyMapper">
+    
+	<sql id="qiYeWxSpApplyColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.sp_id AS "sp.id",
+		a.control AS "control",
+		a.control_id AS "controlid",
+		a.title AS "title",
+		a.value_json AS "valueJson",
+		a.value_text AS "valueText",
+		a.vacation_selector AS "vacationSelector",
+		a.vacation_attendance_type AS "vacationAttendanceType",
+		a.vacation_attendance_date_range_type AS "vacationAttendanceDateRangeType",
+		a.vacation_attendance_date_range_begin AS "vacationAttendanceDateRangeBegin",
+		a.vacation_attendance_date_range_end AS "vacationAttendanceDateRangeEnd",
+		a.vacation_attendance_date_range_duration AS "vacationAttendanceDateRangeDuration",
+		a.value_members AS "valueMembers",
+		a.value_departments AS "valueDepartments",
+		a.value_files AS "valueFiles",
+		a.punch_correction_state AS "punchCorrectionState",
+		a.punch_correction_time AS "punchCorrectionTime"
+	</sql>
+	
+	<sql id="qiYeWxSpApplyJoins">
+		
+			LEFT JOIN qiyewx_sp b ON b.id = a.sp_id
+	</sql>
+
+	<select id="findJiaBanBean" resultType="QiYeWxSpApply">
+		select
+		a.title AS "title",
+		a.value_text AS "valueText",
+		a.vacation_attendance_date_range_begin AS "vacationAttendanceDateRangeBegin",
+		a.vacation_attendance_date_range_end AS "vacationAttendanceDateRangeEnd"
+FROM qiyewx_sp_apply a
+where   a.sp_id = #{mid}
+	</select>
+    
+	<select id="get" resultType="QiYeWxSpApply" >
+		SELECT 
+			<include refid="qiYeWxSpApplyColumns"/>
+		FROM qiyewx_sp_apply a
+		<include refid="qiYeWxSpApplyJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="QiYeWxSpApply" >
+		SELECT 
+			<include refid="qiYeWxSpApplyColumns"/>
+		FROM qiyewx_sp_apply a
+		<include refid="qiYeWxSpApplyJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="sp != null and sp.id != null and sp.id != ''">
+				AND a.sp_id = #{sp.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="QiYeWxSpApply" >
+		SELECT 
+			<include refid="qiYeWxSpApplyColumns"/>
+		FROM qiyewx_sp_apply a
+		<include refid="qiYeWxSpApplyJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO qiyewx_sp_apply(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			sp_id,
+			control,
+			control_id,
+			title,
+			value_json,
+			value_text,
+			vacation_selector,
+			vacation_attendance_type,
+			vacation_attendance_date_range_type,
+			vacation_attendance_date_range_begin,
+			vacation_attendance_date_range_end,
+			vacation_attendance_date_range_duration,
+			value_members,
+			value_departments,
+			value_files,
+			punch_correction_state,
+			punch_correction_time
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{sp.id},
+			#{control},
+			#{controlid},
+			#{title},
+			#{valueJson},
+			#{valueText},
+			#{vacationSelector},
+			#{vacationAttendanceType},
+			#{vacationAttendanceDateRangeType},
+			#{vacationAttendanceDateRangeBegin},
+			#{vacationAttendanceDateRangeEnd},
+			#{vacationAttendanceDateRangeDuration},
+			#{valueMembers},
+			#{valueDepartments},
+			#{valueFiles},
+			#{punchCorrectionState},
+			#{punchCorrectionTime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE qiyewx_sp_apply SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			sp_id = #{sp.id},
+			control = #{control},
+			control_id = #{controlid},
+			title = #{title},
+			value_json = #{valueJson},
+			value_text = #{valueText},
+			vacation_selector = #{vacationSelector},
+			vacation_attendance_type = #{vacationAttendanceType},
+			vacation_attendance_date_range_type = #{vacationAttendanceDateRangeType},
+			vacation_attendance_date_range_begin = #{vacationAttendanceDateRangeBegin},
+			vacation_attendance_date_range_end = #{vacationAttendanceDateRangeEnd},
+			vacation_attendance_date_range_duration = #{vacationAttendanceDateRangeDuration},
+			value_members = #{valueMembers},
+			value_departments = #{valueDepartments},
+			value_files = #{valueFiles},
+			punch_correction_state = #{punchCorrectionState},
+			punch_correction_time = #{punchCorrectionTime}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM qiyewx_sp_apply
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE sp_id = #{sp.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE qiyewx_sp_apply SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE sp_id = #{sp.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="QiYeWxSpApply" statementType="STATEMENT">
+		select * FROM qiyewx_sp_apply  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>
