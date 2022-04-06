@@ -12,8 +12,6 @@ import com.jeeplus.modules.qiyewx.base.mapper.QiYeWxEmployeeMapper;
 import com.jeeplus.modules.qiyewx.daka.DaKaRecordsUtils;
 import com.jeeplus.modules.qiyewx.daka.entity.DaKaMonthData;
 import com.jeeplus.modules.qiyewx.daka.month.entity.*;
-import com.jeeplus.modules.salary.kaoqintongji.entity.SalaryKaoQinTongJi;
-import com.jeeplus.modules.salary.kaoqintongji.service.SalaryKaoQinTongJiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -118,15 +116,15 @@ public class QiYeWxDaKaMonthService extends CrudService<QiYeWxDaKaMonthMapper, Q
 		qiYeWxDaKaMonth.setQiYeWxDaKaMonthSummaryList(qiYeWxDaKaMonthSummaryMapper.findList(new QiYeWxDaKaMonthSummary(qiYeWxDaKaMonth)));
 		return qiYeWxDaKaMonth;
 	}
-	
+
 	public List<QiYeWxDaKaMonth> findList(QiYeWxDaKaMonth qiYeWxDaKaMonth) {
 		return super.findList(qiYeWxDaKaMonth);
 	}
-	
+
 	public Page<QiYeWxDaKaMonth> findPage(Page<QiYeWxDaKaMonth> page, QiYeWxDaKaMonth qiYeWxDaKaMonth) {
 		return super.findPage(page, qiYeWxDaKaMonth);
 	}
-	
+
 	@Transactional(readOnly = false)
 	public void save(QiYeWxDaKaMonth qiYeWxDaKaMonth) {
 		super.save(qiYeWxDaKaMonth);
@@ -199,7 +197,7 @@ public class QiYeWxDaKaMonthService extends CrudService<QiYeWxDaKaMonthMapper, Q
 			}
 		}
 	}
-	
+
 	@Transactional(readOnly = false)
 	public void delete(QiYeWxDaKaMonth qiYeWxDaKaMonth) {
 		super.delete(qiYeWxDaKaMonth);
@@ -208,8 +206,6 @@ public class QiYeWxDaKaMonthService extends CrudService<QiYeWxDaKaMonthMapper, Q
 		qiYeWxDaKaMonthSpItemMapper.delete(new QiYeWxDaKaMonthSpItem(qiYeWxDaKaMonth));
 		qiYeWxDaKaMonthSummaryMapper.delete(new QiYeWxDaKaMonthSummary(qiYeWxDaKaMonth));
 	}
-	@Autowired
-	private SalaryKaoQinTongJiService salaryKaoQinTongJiService;
 	@Transactional(readOnly = false)
 	public void syncData(Date start,Date end,String ym){
 		List<String> deleteids = mapper.findIdsByYm(ym);
@@ -223,13 +219,12 @@ public class QiYeWxDaKaMonthService extends CrudService<QiYeWxDaKaMonthMapper, Q
 				qiYeWxDaKaMonthSummaryMapper.delete(new QiYeWxDaKaMonthSummary(qiYeWxDaKaMonth));
 			});
 		}
-		salaryKaoQinTongJiService.deleteByYm(ym);
+
 		// 同步数据
 		List<String> useridList = employeeMapper.findIdOfAll();
 		List<DaKaMonthData> data = DaKaRecordsUtils.findDaKaMonthData(start,end,useridList);
 		if(data!=null && data.size()>0){
 			data.forEach(d->{
-				SalaryKaoQinTongJi tongJi = new SalaryKaoQinTongJi();
 				// 基本信息
 				QiYeWxDaKaMonth month = new QiYeWxDaKaMonth();
 				month.setAcctid(d.getBase_info().getAcctid());
@@ -237,9 +232,6 @@ public class QiYeWxDaKaMonthService extends CrudService<QiYeWxDaKaMonthMapper, Q
 				month.setRecordType(d.getBase_info().getRecord_type().toString());
 				month.setDepartsName(d.getBase_info().getDeparts_name());
 				month.setName(d.getBase_info().getName());
-
-				tongJi.setYearmonth(ym);
-				tongJi.setEmployee(new QiYeWxEmployee(d.getBase_info().getAcctid()));
 				// 汇总信息
 				if(d.getSummary_info()!=null){
 					QiYeWxDaKaMonthSummary summary = new QiYeWxDaKaMonthSummary();
@@ -248,7 +240,6 @@ public class QiYeWxDaKaMonthService extends CrudService<QiYeWxDaKaMonthMapper, Q
 					summary.setRegularWorkSec(d.getSummary_info().getRegular_work_sec());
 					summary.setStandardWorkSec(d.getSummary_info().getStandard_work_sec());
 					summary.setWorkDays(d.getSummary_info().getWork_days());
-					tongJi.setYingChuqinDay(summary.getWorkDays()*1.00);
 					summary.setId("");summary.setDelFlag("0");
 					month.getQiYeWxDaKaMonthSummaryList().add(summary);
 				}
@@ -261,17 +252,8 @@ public class QiYeWxDaKaMonthService extends CrudService<QiYeWxDaKaMonthMapper, Q
 						exception.setException(e.getException().toString());
 						exception.setId("");
 						exception.setDelFlag("0");
-						if(exception.getException().equals("4")){
-							tongJi.setQueqinDay(exception.getCount()*1.00);
-							double queqindays= tongJi.getYingChuqinDay()-tongJi.getQueqinDay();
-							tongJi.setShijiChuqinDay(queqindays<0.00?0:queqindays);
-						}
 						month.getQiYeWxDakaMonthExceptionList().add(exception);
 					});
-				}
-				if(tongJi.getQueqinDay()==null){
-					tongJi.setQueqinDay(0.00);
-					tongJi.setShijiChuqinDay(tongJi.getYingChuqinDay());
 				}
 				// 假勤统计信息
 				if(d.getSp_items()!=null){
@@ -283,12 +265,6 @@ public class QiYeWxDaKaMonthService extends CrudService<QiYeWxDaKaMonthMapper, Q
 						sp.setTimeType(e.getTime_type().toString());
 						sp.setType(e.getType().toString());
 						sp.setId("");sp.setDelFlag("0");
-						if(sp.getName().equals("出差")){
-							tongJi.setChuchaiDay(sp.getDuration()/86400.0);
-						}
-						if(sp.getName().equals("病假")){
-							tongJi.setBingjiaDay(sp.getDuration()/86400.0);
-						}
 						month.getQiYeWxDaKaMonthSpItemList().add(sp);
 					});
 				}
@@ -296,16 +272,14 @@ public class QiYeWxDaKaMonthService extends CrudService<QiYeWxDaKaMonthMapper, Q
 				QiYeWxDaKaMonthOverwork work = new QiYeWxDaKaMonthOverwork();
 				if(d.getOverwork_info()!=null&&d.getOverwork_info().getWorkday_over_sec()!=null){
 					work.setHolidaysOverSec(d.getOverwork_info().getHolidays_over_sec());
-					tongJi.setHolidayOverDay(work.getHolidaysOverSec()/(3600*8.00));
 					work.setRestdaysOverSec(d.getOverwork_info().getRestdays_over_sec());
-					tongJi.setRestOverDay(work.getRestdaysOverSec()/(3600*8.00));
 					work.setWorkdayOverSec(d.getOverwork_info().getWorkday_over_sec());
-					tongJi.setWorkOverDay(work.getWorkdayOverSec()/(3600*8.00));
+
 					work.setId("");work.setDelFlag("0");
 					month.getQiYeWxDaKaMonthOverworkList().add(work);
 				}
 				save(month);
-				salaryKaoQinTongJiService.save(tongJi);
+
 			});
 		}
 

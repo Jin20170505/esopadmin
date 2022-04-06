@@ -42,7 +42,7 @@ spring:
           master:
             username: root
             password: root1234
-            url: jdbc:mysql://127.0.0.1:3306/tuweikaoqin?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+            url: jdbc:mysql://127.0.0.1:3306/esop?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
             driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     properties:
@@ -123,7 +123,7 @@ userfiles.basedir:
 
 # 产品授权
 productId: Y2020091840
-license: 92A82FF635D20F9BFF93433FA7E99BFF700D838625E465C566F71335023ACA548222A6DC2075FCB4CA72AA30777366829A3CF9998C73E9089C1709FE86B246A8
+license: 139B00C84018F9330A8BAB96D612801D3E03CABCCD443797B5249C9E8D9F1247B3FE71B11C913F2CD8636DF009F5616241130EDAF8280BAE08A9E07002C099A5
 
 # ireport文件夹
 ireport.fileFolder: D:\\ireportfolder
