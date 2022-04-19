@@ -1,0 +1,65 @@
+<%
+layout("/include/_container.html", {title:"列表", parent:"ESOP文件"}){
+%>
+    <!-- 搜索框-->
+    <div id="search-collapse" class="white-box collapse m-b-5">
+        <a class="jp-ti-close close" onclick="$('#search-collapse').fadeToggle()">
+            <i class="fa fa-times"></i>
+        </a>
+        <form id="searchForm" class="form-inline" >
+			 <div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="文件编号：">文件编号：</label>
+				<input name="code"  maxlength="64"  class=" form-control"/>
+			</div>
+			 <div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="文件名称：">文件名称：</label>
+				<input name="name"  maxlength="64"  class=" form-control"/>
+			</div>
+			 <div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="状态：">状态：</label>
+				<input name="status"  maxlength="64"  class=" form-control"/>
+			</div>
+		    <div class="form-group m-b-10 m-r-10">
+                <a  id="search" class="btn  btn-custom waves-effect waves-light m-l-10 btn-md btn-rounded"><i class="fa fa-search"></i> 查询</a>
+                <a  id="reset" class="btn  btn-custom waves-effect waves-light m-l-10 btn-md btn-rounded" ><i class="fa fa-refresh"></i> 重置</a>
+            </div>
+        </form>
+    </div>
+
+	<div class="white-box">
+
+	<!-- 工具栏 -->
+	<div id="toolbar">
+			 <% if(shiro.hasPermission("esop:filemanger:esopFileManger:add") ){ %>
+			 	<button id="add" class="btn btn-custom waves-effect w-xs waves-light" onclick="add()">
+					<i class="fa fa-plus"></i> 新建
+				</button>
+			<% } %>
+			 <% if(shiro.hasPermission("esop:filemanger:esopFileManger:edit") ){ %>
+			    <button id="edit" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="edit()">
+	            	<i class="fa fa-edit"></i> 修改
+	        	</button>
+			<% } %>
+			 <% if(shiro.hasPermission("esop:filemanger:esopFileManger:del") ){ %>
+				<button id="remove" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="del()">
+	            	<i class="fa fa-remove"></i> 删除
+	        	</button>
+			<% } %>
+			 <% if(shiro.hasPermission("esop:filemanger:esopFileManger:import") ){ %>
+				<button id="import" disabled="disabled"  class="btn btn-white waves-effect w-xs waves-light" >
+					<i class="fa fa-upload"></i> 收回
+				</button>
+			<% } %>
+			 <% if(shiro.hasPermission("esop:filemanger:esopFileManger:export") ){ %>
+	        	<button id="export" disabled="disabled" class="btn btn-white waves-effect w-xs waves-light">
+					<i class="fa fa-download"></i> 下发
+				</button>
+			 <% } %>
+		    </div>
+		
+	<!-- 表格 -->
+	<table id="esopFileMangerTable" class="table-bordered"   data-toolbar="#toolbar"></table>
+	</div>
+
+	<% include("esopFileMangerList.js"){} %>
+	<% } %>

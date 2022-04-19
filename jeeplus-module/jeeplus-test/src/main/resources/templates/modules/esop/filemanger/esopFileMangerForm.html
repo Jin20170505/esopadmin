@@ -1,0 +1,61 @@
+<%
+layout("/include/_dialog.html"){
+%>
+	<script type="text/javascript">
+
+		$(document).ready(function() {
+					});
+
+		function save() {
+            var isValidate = jp.validateForm('#inputForm');//校验表单
+            if(!isValidate){
+                return false;
+			}else{
+                var index = jp.loading();
+                jp.post("${ctx}/esop/filemanger/esopFileManger/save",$('#inputForm').serialize(),function(data){
+                    if(data.success){
+                        jp.getParent().refresh();
+                        var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                        parent.layer.close(dialogIndex);
+                        jp.toastr_success(data.msg)
+
+                    }else{
+                        jp.toastr_error(data.msg);
+                    }
+                    jp.close(index);
+                })
+			}
+
+        }
+	</script>
+<form id="inputForm"  method="post"  class="form-horizontal p-15">
+    <input type="hidden" name="id" value="${esopFileManger.id!}"/>
+    <input type="hidden" name="status" value="${esopFileManger.status!'已保存'}"/>
+    <table class="table table-bordered">
+       <tbody>
+            <tr>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>文件编号：</label></td>
+                <td class="width-35">
+                    <input name="code" value="${esopFileManger.code!}"    class="form-control required"/>
+            </td>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>文件名称：</label></td>
+                <td class="width-35">
+                    <input name="name" value="${esopFileManger.name!}"    class="form-control required"/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>文件：</label></td>
+                <td class="width-35" colspan="3">
+                    <#fileUpload id="url" name="url"  value="${esopFileManger.url}" type="pdf" allowedExtensions="pdf,png,jpg" fileNumLimit="1" class="form-control required" uploadPath="/esop/filemanger/esopFileManger"/>
+            </td>
+            </tr>
+                <tr>
+                <td class="width-15 active"><label class="pull-right">备注信息：</label></td>
+                <td class="width-35" colspan="3">
+                    <textarea name="remarks" rows="4"    class="form-control ">${esopFileManger.remarks!}</textarea>
+            </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<% } %>

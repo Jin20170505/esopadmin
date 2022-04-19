@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.esop.filemanger.mapper.EsopFileMangerMapper">
+    
+	<sql id="esopFileMangerColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.code AS "code",
+		a.name AS "name",
+		a.url AS "url",
+		a.status AS "status",
+		a.remarks AS "remarks"
+	</sql>
+	
+	<sql id="esopFileMangerJoins">
+		
+	</sql>
+
+	<update id="updateStatus">
+		update esop_file_manger set status=#{status} where id = #{id}
+	</update>
+
+	<select id="findFiles" resultType="com.jeeplus.modules.esop.filemanger.entity.FileBean">
+		select a.id as "id",a.code as "code",a.name as "name",a.url as "url",
+		a.remarks AS "remarks" from esop_file_manger a where a.status = '下发'
+		<if test="name != null and name != ''">
+			and a.name like concat('%',#{name},'%')
+		</if>
+		order by a.update_date desc
+		limit #{from},#{size}
+	</select>
+
+	<select id="countFiles" resultType="int">
+		select count(*) from esop_file_manger where  status = '下发'
+		<if test="name != null and name != ''">
+			and name like concat('%',#{name},'%')
+		</if>
+	</select>
+	<select id="get" resultType="EsopFileManger" >
+		SELECT 
+			<include refid="esopFileMangerColumns"/>
+		FROM esop_file_manger a
+		<include refid="esopFileMangerJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="EsopFileManger" >
+		SELECT 
+			<include refid="esopFileMangerColumns"/>
+		FROM esop_file_manger a
+		<include refid="esopFileMangerJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="code != null and code != ''">
+				AND a.code LIKE
+				    <if test="_databaseId == 'postgre'">'%'||#{code}||'%'</if>
+					<if test="_databaseId == 'oracle'">'%'||#{code}||'%'</if>
+					<if test="_databaseId == 'mssql'">'%'+#{code}+'%'</if>
+					<if test="_databaseId == 'mysql'">concat('%',#{code},'%')</if>
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+				    <if test="_databaseId == 'postgre'">'%'||#{name}||'%'</if>
+					<if test="_databaseId == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="_databaseId == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="_databaseId == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="EsopFileManger" >
+		SELECT 
+			<include refid="esopFileMangerColumns"/>
+		FROM esop_file_manger a
+		<include refid="esopFileMangerJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO esop_file_manger(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+			code,
+			name,
+			url,
+			status,
+			remarks
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag},
+			#{code},
+			#{name},
+			#{url},
+			#{status},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE esop_file_manger SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			code = #{code},
+			name = #{name},
+			url = #{url},
+			status = #{status},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM esop_file_manger
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE esop_file_manger SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="EsopFileManger" statementType="STATEMENT">
+		select * FROM esop_file_manger  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>
