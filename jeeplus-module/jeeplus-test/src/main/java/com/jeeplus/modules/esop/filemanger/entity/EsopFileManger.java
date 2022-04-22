@@ -14,7 +14,8 @@ import com.jeeplus.common.utils.excel.annotation.ExcelField;
 public class EsopFileManger extends DataEntity<EsopFileManger> {
 	
 	private static final long serialVersionUID = 1L;
-	private String code;		// 文件编号
+	private String cinvname;    // 工序名称
+	private String code;		// 产品编号
 	private String name;		// 文件名称
 	private String url;		// 文件
 	private String status;		// 状态
@@ -27,7 +28,7 @@ public class EsopFileManger extends DataEntity<EsopFileManger> {
 		super(id);
 	}
 
-	@ExcelField(title="文件编号", align=2, sort=6)
+	@ExcelField(title="产品编号", align=2, sort=5)
 	public String getCode() {
 		return code;
 	}
@@ -35,7 +36,16 @@ public class EsopFileManger extends DataEntity<EsopFileManger> {
 	public void setCode(String code) {
 		this.code = code;
 	}
-	
+	@ExcelField(title="工序名称", align=2, sort=6)
+	public String getCinvname() {
+		return cinvname;
+	}
+
+	public EsopFileManger setCinvname(String cinvname) {
+		this.cinvname = cinvname;
+		return this;
+	}
+
 	@ExcelField(title="文件名称", align=2, sort=7)
 	public String getName() {
 		return name;

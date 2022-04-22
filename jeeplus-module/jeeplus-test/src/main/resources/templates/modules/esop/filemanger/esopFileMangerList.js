@@ -70,7 +70,7 @@ $(document).ready(function() {
 		    }
 			,{
 		        field: 'code',
-		        title: '文件编号',
+		        title: '产品编号',
 		        sortable: true,
 		        sortName: 'code'
 		        ,formatter:function(value, row , index){
@@ -92,6 +92,13 @@ $(document).ready(function() {
 		         }
 		       
 		    }
+            ,{
+            field: 'cinvname',
+            title: '工序名称',
+            sortable: true,
+            sortName: 'cinvname'
+
+            }
 			,{
 		        field: 'name',
 		        title: '文件名称',

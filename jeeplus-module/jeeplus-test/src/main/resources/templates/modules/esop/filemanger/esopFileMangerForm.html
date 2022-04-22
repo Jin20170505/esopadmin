@@ -34,18 +34,22 @@ layout("/include/_dialog.html"){
     <table class="table table-bordered">
        <tbody>
             <tr>
-                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>文件编号：</label></td>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>产品编号：</label></td>
                 <td class="width-35">
                     <input name="code" value="${esopFileManger.code!}"    class="form-control required"/>
-            </td>
+                </td>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>文件名称：</label></td>
+                <td class="width-35">
+                    <input name="cinvname" value="${esopFileManger.cinvname!}"    class="form-control required"/>
+                </td>
+            </tr>
+            <tr>
                 <td class="width-15 active"><label class="pull-right"><font color="red">*</font>文件名称：</label></td>
                 <td class="width-35">
                     <input name="name" value="${esopFileManger.name!}"    class="form-control required"/>
-            </td>
-            </tr>
-            <tr>
+                </td>
                 <td class="width-15 active"><label class="pull-right"><font color="red">*</font>文件：</label></td>
-                <td class="width-35" colspan="3">
+                <td class="width-35">
                     <#fileUpload id="url" name="url"  value="${esopFileManger.url}" type="pdf" allowedExtensions="pdf,png,jpg" fileNumLimit="1" class="form-control required" uploadPath="/esop/filemanger/esopFileManger"/>
             </td>
             </tr>
