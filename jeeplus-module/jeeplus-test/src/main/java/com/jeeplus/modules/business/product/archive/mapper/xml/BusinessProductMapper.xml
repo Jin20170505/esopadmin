@@ -13,14 +13,6 @@
 		a.name AS "name",
 		a.type_id AS "type.id",
 		a.remarks AS "remarks",
-				
-				
-				
-				
-				
-				
-				
-				
 		type.name AS "type.name"
 	</sql>
 	

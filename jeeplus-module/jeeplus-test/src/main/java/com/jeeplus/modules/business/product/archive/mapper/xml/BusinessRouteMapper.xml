@@ -17,28 +17,37 @@
 		a.end_date AS "enddate",
 		a.status AS "status",
 		a.remarks AS "remarks",
-				
-				
-				
-				
-				
-				
-		b.name AS "p.name",
-				
-				
 		site.name AS "site.name",
-				
 		file.name AS "file.name"
 	</sql>
 	
 	<sql id="businessRouteJoins">
-		
-			LEFT JOIN business_product b ON b.id = a.pid
 		LEFT JOIN base_site site ON site.id = a.site_id
 		LEFT JOIN business_file_manger file ON file.id = a.file_id
 	</sql>
-	
-    
+
+	<select id="findFileBySite" resultType="com.jeeplus.modules.api.bean.ApiFileViewBean">
+		select a.no as no, file.name as "name",file.id as "id",file.type as "type",file.remarks as "remarks",b.name as "productname"
+		from business_route a
+		LEFT JOIN business_product b ON b.id = a.pid
+		LEFT JOIN business_file_manger file ON file.id = a.file_id
+		where a.status = '下发' and (now() between a.start_date  and a.end_date) and a.site_id = #{siteid}
+		<if test="filename!=null and filename!=''">
+			and file.name like concat('%',#{filename},'%')
+		</if>
+		order by b.code asc, a.no asc
+		limit #{from},#{size}
+	</select>
+	<select id="countFileBySite" resultType="int">
+		select count(*)
+		from business_route a
+		LEFT JOIN business_file_manger file ON file.id = a.file_id
+		where a.status = '下发' and (now() between a.start_date  and a.end_date) and a.site_id = #{siteid}
+		<if test="filename!=null and filename!=''">
+			and file.name like concat('%',#{filename},'%')
+		</if>
+	</select>
+
 	<select id="get" resultType="BusinessRoute" >
 		SELECT 
 			<include refid="businessRouteColumns"/>

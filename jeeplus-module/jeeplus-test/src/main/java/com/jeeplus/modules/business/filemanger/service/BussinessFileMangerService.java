@@ -51,5 +51,14 @@ public class BussinessFileMangerService extends CrudService<BussinessFileMangerM
 			mapper.updatestatus(id,status);
 		});
 	}
+
+	/**
+	 * 获取文件物理路径
+	 * @param id
+	 * @return 文件物理路径
+	 */
+	public String getFilePath(String id){
+		return mapper.getFilePath(id);
+	}
 	
 }
