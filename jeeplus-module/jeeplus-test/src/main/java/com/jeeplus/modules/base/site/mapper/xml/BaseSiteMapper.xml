@@ -14,16 +14,8 @@
 		a.line_id AS "line.id",
 		a.name AS "name",
 		a.remarks AS "remarks",
-				
-				
-				
-				
-				
-				
 		factory.name AS "factory.name",
-				
 		workshop.name AS "workshop.name",
-				
 		line.name AS "line.name"
 	</sql>
 	

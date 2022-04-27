@@ -132,7 +132,7 @@ layout("/include/_dialog.html"){
 					</td>
 					<td>
 						<#gridselect url="${ctx}/base/site/baseSite/data" id="businessRouteList{{idx}}_site" name="businessRouteList[{{idx}}].site.id" value="{{row.site.id}}" labelName="businessRouteList{{idx}}.site.name" labelValue="{{row.site.name}}"
-							 title="选择工作站" class="form-control  required" fieldLabels="编码|名称" fieldKeys="id|name" searchLabels="编码|名称" searchKeys="id|name" />
+							 title="选择工作站" class="form-control  required" fieldLabels="编码|名称|所属产线|所属车间|所属工厂" fieldKeys="id|name|line.name|workshop.name|factory.name" searchLabels="编码|名称" searchKeys="id|name" />
 					</td>
 					<td>
 						<#gridselect url="${ctx}/business/filemanger/bussinessFileManger/data?status=已审核" id="businessRouteList{{idx}}_file" name="businessRouteList[{{idx}}].file.id" value="{{row.file.id}}" labelName="businessRouteList{{idx}}.file.name" labelValue="{{row.file.name}}"

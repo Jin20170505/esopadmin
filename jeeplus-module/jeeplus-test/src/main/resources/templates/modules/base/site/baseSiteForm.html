@@ -41,14 +41,16 @@ layout("/include/_dialog.html"){
                 <td class="width-15 active"><label class="pull-right"><font color="red">*</font>所属车间：</label></td>
                 <td class="width-35">
                     <#gridselect url="${ctx}/base/workshop/baseWorkShop/data" id="workshop" name="workshop.id" value="${baseSite.workshop.id!}" labelName="workshop.name" labelValue="${baseSite.workshop.name!}"
-                         title="选择所属车间" class="form-control required" fieldLabels="编码|名称" fieldKeys="id|name" searchLabels="编码|名称" searchKeys="id|name" />
+                         title="选择所属车间" class="form-control required" fieldLabels="编码|名称" fieldKeys="id|name" searchLabels="编码|名称" searchKeys="id|name"
+                    extendId="factory.id" extendTagId="factoryId" extendTagName="所属工厂" />
             </td>
             </tr>
             <tr>
                 <td class="width-15 active"><label class="pull-right"><font color="red">*</font>所属产线：</label></td>
                 <td class="width-35">
                     <#gridselect url="${ctx}/base/productionline/baseProductionLine/data" id="line" name="line.id" value="${baseSite.line.id!}" labelName="line.name" labelValue="${baseSite.line.name!}"
-                         title="选择所属产线" class="form-control required" fieldLabels="编码|名称" fieldKeys="id|name" searchLabels="编码|名称" searchKeys="id|name" />
+                         title="选择所属产线" class="form-control required" fieldLabels="编码|名称" fieldKeys="id|name" searchLabels="编码|名称" searchKeys="id|name"
+                    extendId="workshop.id" extendTagId="workshopId" extendTagName="所属车间"/>
             </td>
                 <td class="width-15 active"><label class="pull-right"><font color="red">*</font>工作站名称：</label></td>
                 <td class="width-35">

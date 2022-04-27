@@ -13,11 +13,6 @@
 		a.name AS "name",
 		a.manger AS "manger",
 		a.remarks AS "remarks",
-				
-				
-				
-				
-				
 		factory.name AS "factory.name"
 	</sql>
 	
