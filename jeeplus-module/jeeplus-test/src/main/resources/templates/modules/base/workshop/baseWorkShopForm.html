@@ -1,0 +1,59 @@
+<%
+layout("/include/_dialog.html"){
+%>
+	<script type="text/javascript">
+
+		$(document).ready(function() {
+					});
+
+		function save() {
+            var isValidate = jp.validateForm('#inputForm');//校验表单
+            if(!isValidate){
+                return false;
+			}else{
+                var index = jp.loading();
+                jp.post("${ctx}/base/workshop/baseWorkShop/save",$('#inputForm').serialize(),function(data){
+                    if(data.success){
+                        jp.getParent().refresh();
+                        var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                        parent.layer.close(dialogIndex);
+                        jp.toastr_success(data.msg)
+
+                    }else{
+                        jp.toastr_error(data.msg);
+                    }
+                    jp.close(index);
+                })
+			}
+
+        }
+	</script>
+<form id="inputForm"  method="post"  class="form-horizontal p-15">
+    <input type="hidden" name="id" value="${baseWorkShop.id!}"/>
+    <table class="table table-bordered">
+       <tbody>
+            <tr>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>所属工厂：</label></td>
+                <td class="width-35">
+                    <#gridselect url="${ctx}/base/factory/baseFactory/data" id="factory" name="factory.id" value="${baseWorkShop.factory.id!}" labelName="factory.name" labelValue="${baseWorkShop.factory.name!}"
+                         title="选择所属工厂" class="form-control required" fieldLabels="编码|名称" fieldKeys="id|name" searchLabels="编码|名称" searchKeys="id|name" />
+            </td>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>车间名称：</label></td>
+                <td class="width-35">
+                    <input name="name" value="${baseWorkShop.name!}"    class="form-control required"/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>负责人：</label></td>
+                <td class="width-35">
+                    <input name="manger" value="${baseWorkShop.manger!}"    class="form-control required"/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">备注信息：</label></td>
+                <td class="width-35">
+                    <textarea name="remarks" rows="4"    class="form-control ">${baseWorkShop.remarks!}</textarea>
+            </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<% } %>
