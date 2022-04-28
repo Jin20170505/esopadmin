@@ -7,12 +7,18 @@ import com.jeeplus.modules.business.filemanger.service.BussinessFileMangerServic
 import com.jeeplus.modules.business.product.archive.service.BusinessProductService;
 import com.jeeplus.modules.esop.filemanger.BaseFileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.File;
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.util.List;
 
 @Controller
@@ -69,4 +75,31 @@ public class ApiFileViewController {
         return json;
     }
 
+    @RequestMapping("/img/{id}")
+    public void getImage(@PathVariable("id") String id, HttpServletResponse response) throws IOException {
+        String path = bussinessFileMangerService.getFilePath(id);
+        response.reset();
+        response.setContentType("image/png");
+        ServletOutputStream out = null;
+        BufferedInputStream in = null;
+        try{
+            in = new BufferedInputStream(new FileInputStream(path));
+            out = response.getOutputStream();
+            // 读取文件流
+            int len = 0;
+            while ((len = in.read()) != -1) {
+                out.write(len);
+            }
+            out.flush();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            if(out!=null){
+                out.close();
+            }
+            if(in !=null){
+                in.close();
+            }
+        }
+    }
 }
