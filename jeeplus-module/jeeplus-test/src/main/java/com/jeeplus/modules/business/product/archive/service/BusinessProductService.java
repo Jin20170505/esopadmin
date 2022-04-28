@@ -5,6 +5,7 @@ package com.jeeplus.modules.business.product.archive.service;
 
 import java.util.List;
 
+import com.jeeplus.modules.api.bean.ApiFileViewBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,5 +70,17 @@ public class BusinessProductService extends CrudService<BusinessProductMapper, B
 		super.delete(businessProduct);
 		businessRouteMapper.delete(new BusinessRoute(businessProduct));
 	}
-	
+
+	public List<ApiFileViewBean> findFileBySite(String siteid,String filename,int pagenum,int size){
+		return businessRouteMapper.findFileBySite(siteid, filename, (pagenum-1)*size, size);
+	}
+
+	public int countFileBySite(String siteid,String filename,int size){
+		int rownum = businessRouteMapper.countFileBySite(siteid,filename);
+		if(rownum%size==0){
+			return rownum/size;
+		}else {
+			return rownum/size +1;
+		}
+	}
 }

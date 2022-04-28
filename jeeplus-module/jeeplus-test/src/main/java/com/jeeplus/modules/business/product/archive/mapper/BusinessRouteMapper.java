@@ -3,10 +3,14 @@
  */
 package com.jeeplus.modules.business.product.archive.mapper;
 
+import com.jeeplus.modules.api.bean.ApiFileViewBean;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import com.jeeplus.core.persistence.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import com.jeeplus.modules.business.product.archive.entity.BusinessRoute;
+
+import java.util.List;
 
 /**
  * 工艺路线MAPPER接口
@@ -16,5 +20,8 @@ import com.jeeplus.modules.business.product.archive.entity.BusinessRoute;
 @Mapper
 @Repository
 public interface BusinessRouteMapper extends BaseMapper<BusinessRoute> {
-	
+
+    List<ApiFileViewBean> findFileBySite(@Param("siteid") String siteid, @Param("filename") String filename, @Param("from") int from,@Param("size") int size);
+
+    int countFileBySite(@Param("siteid") String siteid, @Param("filename") String filename);
 }
