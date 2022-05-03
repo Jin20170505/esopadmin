@@ -42,5 +42,12 @@ public class BaseSiteService extends CrudService<BaseSiteMapper, BaseSite> {
 	public void delete(BaseSite baseSite) {
 		super.delete(baseSite);
 	}
-	
+
+	/**
+	 * 移动端查询所有工作站
+	 * @return
+	 */
+	public List<BaseSite> findAllSites(){
+		return mapper.findAllSites();
+	}
 }

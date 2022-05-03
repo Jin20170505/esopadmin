@@ -76,7 +76,23 @@
 		LEFT JOIN sys_role r ON r.id = ur.role_id
 		WHERE a.id = #{id}
 	</select>
-	
+	<!-- 根据工号查询用户 -->
+	<select id="getByNo" resultType="User">
+		select a.id,
+			   a.login_name AS "loginName",
+			   a.password,
+			   a.no,
+			   a.name,
+			   a.email,
+			   a.phone,
+			   a.mobile,
+			   a.photo,
+			   a.login_flag as "loginFlag",
+			   a.sign
+		from sys_user a
+		where a.no = #{no} and a.del_flag = '0'
+	</select>
+
 	<!-- 根据登录名查询用户 -->
 	<select id="getByLoginName" resultMap="userResult" parameterType="User">
 		SELECT
