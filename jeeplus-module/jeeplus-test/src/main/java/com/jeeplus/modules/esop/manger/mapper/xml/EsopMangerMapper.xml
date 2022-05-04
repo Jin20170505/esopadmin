@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.esop.manger.mapper.EsopMangerMapper">
+    
+	<sql id="esopMangerColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.code AS "code",
+		a.line AS "line",
+		a.product_id AS "product.id",
+		a.specification AS "specification",
+		a.version AS "version",
+		a.status AS "status",
+		product.name AS "product.name"
+	</sql>
+	
+	<sql id="esopMangerJoins">
+		
+		LEFT JOIN business_product product ON product.id = a.product_id
+	</sql>
+	
+    
+	<select id="get" resultType="EsopManger" >
+		SELECT 
+			<include refid="esopMangerColumns"/>
+		FROM esop_manger a
+		<include refid="esopMangerJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="EsopManger" >
+		SELECT 
+			<include refid="esopMangerColumns"/>
+		FROM esop_manger a
+		<include refid="esopMangerJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="line != null and line != ''">
+				AND a.line = #{line}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="EsopManger" >
+		SELECT 
+			<include refid="esopMangerColumns"/>
+		FROM esop_manger a
+		<include refid="esopMangerJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO esop_manger(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			code,
+			line,
+			product_id,
+			specification,
+			version,
+			status
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{code},
+			#{line},
+			#{product.id},
+			#{specification},
+			#{version},
+			#{status}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE esop_manger SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			code = #{code},
+			line = #{line},
+			product_id = #{product.id},
+			specification = #{specification},
+			version = #{version},
+			status = #{status}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM esop_manger
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE esop_manger SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="EsopManger" statementType="STATEMENT">
+		select * FROM esop_manger  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

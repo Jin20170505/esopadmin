@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.esop.manger.mapper.EsopMangerSubMapper">
+    
+	<sql id="esopMangerSubColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.mid AS "m.id",
+		a.no AS "no",
+		a.site_id AS "site.id",
+		a.file_url AS "fileurl"
+	</sql>
+	
+	<sql id="esopMangerSubJoins">
+		
+			LEFT JOIN esop_manger b ON b.id = a.mid
+	</sql>
+	
+    
+	<select id="get" resultType="EsopMangerSub" >
+		SELECT 
+			<include refid="esopMangerSubColumns"/>
+		FROM esop_manger_sub a
+		<include refid="esopMangerSubJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="EsopMangerSub" >
+		SELECT 
+			<include refid="esopMangerSubColumns"/>
+		FROM esop_manger_sub a
+		<include refid="esopMangerSubJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="m != null and m.id != null and m.id != ''">
+				AND a.mid = #{m.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="EsopMangerSub" >
+		SELECT 
+			<include refid="esopMangerSubColumns"/>
+		FROM esop_manger_sub a
+		<include refid="esopMangerSubJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO esop_manger_sub(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			mid,
+			no,
+			site_id,
+			file_url
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{m.id},
+			#{no},
+			#{site.id},
+			#{fileurl}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE esop_manger_sub SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			mid = #{m.id},
+			no = #{no},
+			site_id = #{site.id},
+			file_url = #{fileurl}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM esop_manger_sub
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE mid = #{m.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE esop_manger_sub SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE mid = #{m.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="EsopMangerSub" statementType="STATEMENT">
+		select * FROM esop_manger_sub  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>
