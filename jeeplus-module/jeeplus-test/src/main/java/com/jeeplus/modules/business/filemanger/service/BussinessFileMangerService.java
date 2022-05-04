@@ -1,9 +1,8 @@
 /**
- * 
+ * Copyright &copy; 2015-2020 <a href="http://www.jeeplus.org/">JeePlus</a> All rights reserved.
  */
 package com.jeeplus.modules.business.filemanger.service;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -17,6 +16,7 @@ import com.jeeplus.modules.business.filemanger.mapper.BussinessFileMangerMapper;
 /**
  * 文件档案Service
  * @author Jin
+ * @version 2022-05-04
  */
 @Service
 @Transactional(readOnly = true)
@@ -42,23 +42,6 @@ public class BussinessFileMangerService extends CrudService<BussinessFileMangerM
 	@Transactional(readOnly = false)
 	public void delete(BussinessFileManger bussinessFileManger) {
 		super.delete(bussinessFileManger);
-	}
-
-
-	@Transactional(readOnly = false)
-	public void updateStatus(String ids,String status){
-		Arrays.asList(ids.split(",")).forEach(id->{
-			mapper.updatestatus(id,status);
-		});
-	}
-
-	/**
-	 * 获取文件物理路径
-	 * @param id
-	 * @return 文件物理路径
-	 */
-	public String getFilePath(String id){
-		return mapper.getFilePath(id);
 	}
 	
 }

@@ -8,32 +8,28 @@ $(document).ready(function() {
                dataType: "json",
                contentType: "application/x-www-form-urlencoded",
                //移动端自适应
-               mobileResponsive: false,
+               mobileResponsive: true,
                //允许列拖动大小
-               resizable: false,
+               resizable: true,
                //固定表头
-               stickyHeader: false,
+               stickyHeader: true,
                stickyHeaderOffsetY: 0,
 			   //显示检索按钮
 		       showSearch: true,
                //显示刷新按钮
                showRefresh: true,
                //显示切换手机试图按钮
-               showToggle: false,
+               showToggle: true,
                //显示 内容列下拉框
     	       showColumns: true,
     	       //显示到处按钮
     	       showExport: false,
     	       //显示切换分页按钮
     	       showPaginationSwitch: false,
-    	       //显示详情按钮
-    	       detailView: true,
-    	       	//显示详细内容函数
-	           detailFormatter: "detailFormatter",
     	       //最低显示2行
     	       minimumCountColumns: 2,
                //是否显示行间隔色
-               striped: true,
+               striped: false,
                //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性(*)
                cache: false,    
                //是否显示分页(*)
@@ -59,8 +55,8 @@ $(document).ready(function() {
                	searchParam.pageSize = params.limit === undefined? -1 : params.limit;
                	if(params.sort && params.order){
                     searchParam.orderBy = params.sort+ " "+  params.order;
-				}
-			    return searchParam;
+                 }
+                 return searchParam;
                },
                onShowSearch: function () {
                	 $("#import-collapse").hide();
@@ -71,41 +67,56 @@ $(document).ready(function() {
 		       
 		    }
 			,{
-		        field: 'code',
-		        title: '产品编码',
+		        field: 'type.name',
+		        title: '存货分类',
 		        sortable: true,
-		        sortName: 'code'
+		        sortName: 'type.name'
 		        ,formatter:function(value, row , index){
-		        	  <% if(shiro.hasPermission("business:product:archive:businessProduct:edit") ){ %>
+		             <% if(shiro.hasPermission("business:product:archive:businessProduct:edit") ){ %>
 					   if(!value){
-						  return "<a  href='#' onclick='edit(\""+row.id+"\")'>-</a>";
+						  return "<a href='#' onclick='edit(\""+row.id+"\")'>-</a>";
 					   }else{
-						  return "<a  href='#' onclick='edit(\""+row.id+"\")'>"+value+"</a>";
-						}
+						  return "<a href='#' onclick='edit(\""+row.id+"\")'>"+value+"</a>";
+					   }
                      <% }else if(shiro.hasPermission("business:product:archive:businessProduct:view")){ %>
 					   if(!value){
-						  return "<a  href='#' onclick='view(\""+row.id+"\")'>-</a>";
-                       }else{
-                          return "<a  href='#' onclick='view(\""+row.id+"\")'>"+value+"</a>";
-                       }
+						  return "<a href='#' onclick='view(\""+row.id+"\")'>-</a>";
+					   }else{
+                          return "<a href='#' onclick='view(\""+row.id+"\")'>"+value+"</a>";
+					   }
                      <% }else{ %>
 					      return value;
 					 <% } %>
-		         }
+		        	
+		        }
+		       
+		    }
+			,{
+		        field: 'code',
+		        title: '存货编码',
+		        sortable: true,
+		        sortName: 'code'
 		       
 		    }
 			,{
 		        field: 'name',
-		        title: '产品名称',
+		        title: '存货名称',
 		        sortable: true,
 		        sortName: 'name'
 		       
 		    }
 			,{
-		        field: 'type.name',
-		        title: '产品类型',
+		        field: 'specification',
+		        title: '规格型号',
 		        sortable: true,
-		        sortName: 'type.name'
+		        sortName: 'specification'
+		       
+		    }
+			,{
+		        field: 'unit',
+		        title: '计量单位',
+		        sortable: true,
+		        sortName: 'unit'
 		       
 		    }
 			,{
@@ -151,6 +162,7 @@ $(document).ready(function() {
 		});
 		
 
+	  
 	  $('#businessProductTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
             $('#remove').prop('disabled', ! $('#businessProductTable').bootstrapTable('getSelections').length);
@@ -194,12 +206,12 @@ $(document).ready(function() {
             if(sortName != undefined && sortOrder != undefined){
                 values = values + "orderBy=" + sortName + " "+sortOrder;
             }
+
 			jp.downloadFile('${ctx}/business/product/archive/businessProduct/export?'+values);
 	  })
 
 	  $("#search").click("click", function() {// 绑定查询按扭
 		  refresh();
-
 		});
 
 	 $("#reset").click("click", function() { //绑定重置按钮
@@ -224,7 +236,7 @@ $(document).ready(function() {
      if(!ids){
           ids = getIdSelections();
      }
-	 jp.confirm('确认要删除该产品记录吗？', function(){
+	 jp.confirm('确认要删除该存货档案记录吗？', function(){
 		var index =jp.loading();
 		jp.get("${ctx}/business/product/archive/businessProduct/delete?ids=" + ids, function(data){
 				if(data.success){
@@ -247,102 +259,20 @@ $(document).ready(function() {
 
    //新增表单页面
  function add() {
-     jp.openSaveDialog('新增产品', "${ctx}/business/product/archive/businessProduct/form/add",'90%', '80%');
+     jp.openSaveDialog('新增存货档案', "${ctx}/business/product/archive/businessProduct/form/add",'800px', '500px');
  }
   //编辑表单页面
   function edit(id){
       if(!id){
           id = getIdSelections();
       }
-	  jp.openSaveDialog('编辑产品', "${ctx}/business/product/archive/businessProduct/form/edit?id="+id,'90%', '80%');
+	  jp.openSaveDialog('编辑存货档案', "${ctx}/business/product/archive/businessProduct/form/edit?id="+id,'800px', '500px');
   }
   //查看表单页面
   function view(id) {
       if(!id){
           id = getIdSelections();
       }
-      jp.openViewDialog('查看产品', "${ctx}/business/product/archive/businessProduct/form/view?id="+id,'90%', '80%');
+      jp.openViewDialog('查看存货档案', "${ctx}/business/product/archive/businessProduct/form/view?id="+id,'800px', '500px');
   }
- //子表展示
-		   
-  function detailFormatter(index, row) {
-	  var htmltpl =  $("#businessProductChildrenTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
-	  var html = Mustache.render(htmltpl, {
-			idx:row.id
-		});
-	  $.get("${ctx}/business/product/archive/businessProduct/detail?id="+row.id, function(businessProduct){
-    	var businessProductChild1RowIdx = 0, businessProductChild1Tpl = $("#businessProductChild1Tpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
-		var data1 =  businessProduct.businessRouteList;
-		for (var i=0; i<data1.length; i++){
-			data1[i].dict = {};
-			addRow('#businessProductChild-'+row.id+'-1-List', businessProductChild1RowIdx, businessProductChild1Tpl, data1[i]);
-			businessProductChild1RowIdx = businessProductChild1RowIdx + 1;
-		}
-				
-      	  			
-      })
-     
-        return html;
-    }
-  
-	function addRow(list, idx, tpl, row){
-		$(list).append(Mustache.render(tpl, {
-			idx: idx, delBtn: true, row: row
-		}));
-	}
 </script>
-<script type="text/template" id="businessProductChildrenTpl">//<!--
-	<div class="card card-tabs">
-	<div class="card-heading  pb-0">
-	    <ul class="nav nav-pills float-left" role="tablist">
-				<li class="nav-item"><a data-toggle="tab" class="nav-link show active" href="#tab-{{idx}}-1" aria-expanded="true">工艺路线</a></li>
-		</ul>
-		</div>
-		<div class="card-body">
-		<div class="tab-content">
-				 <div id="tab-{{idx}}-1" class="tab-pane fade active show" >
-						<table class="table table-bordered">
-						<thead>
-							<tr>
-								<th>序号</th>
-								<th>工作站</th>
-								<th>文件</th>
-								<th>有效期(始)</th>
-								<th>有效期(止)</th>
-								<th>状态</th>
-								<th>备注信息</th>
-							</tr>
-						</thead>
-						<tbody id="businessProductChild-{{idx}}-1-List">
-						</tbody>
-					</table>
-				</div>
-		</div>
-		</div>
-		</div>//-->
-	</script>
-	<script type="text/template" id="businessProductChild1Tpl">//<!--
-				<tr>
-					<td>
-						{{row.no}}
-					</td>
-					<td>
-						{{row.site.name}}
-					</td>
-					<td>
-						{{row.file.name}}
-					</td>
-					<td>
-						{{row.startdate}}
-					</td>
-					<td>
-						{{row.enddate}}
-					</td>
-					<td>
-						{{row.status}}
-					</td>
-					<td>
-						{{row.remarks}}
-					</td>
-				</tr>//-->
-	</script>

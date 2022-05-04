@@ -1,37 +1,52 @@
 /**
- *
+ * Jin
  */
 package com.jeeplus.modules.business.product.type.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import javax.validation.constraints.NotNull;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import com.jeeplus.core.persistence.DataEntity;
-import com.jeeplus.common.utils.excel.annotation.ExcelField;
+import com.jeeplus.core.persistence.TreeEntity;
 
 /**
- * 产品类型Entity
+ * 存货分类Entity
  * @author Jin
  */
-public class BusinessProductType extends DataEntity<BusinessProductType> {
+@JsonIgnoreProperties(value={"hibernateLazyInitializer","handler"})
+public class BusinessProductType extends TreeEntity<BusinessProductType> {
 	
 	private static final long serialVersionUID = 1L;
-	private String name;		// 类型
+	private String code;		// 分类编号
+	
 	
 	public BusinessProductType() {
 		super();
-		this.setIdType(IDTYPE_AUTO);
 	}
 
 	public BusinessProductType(String id){
 		super(id);
 	}
 
-	@ExcelField(title="类型", align=2, sort=6)
-	public String getName() {
-		return name;
+	public String getCode() {
+		return code;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setCode(String code) {
+		this.code = code;
 	}
 	
+	public  BusinessProductType getParent() {
+			return parent;
+	}
+	
+	@Override
+	public void setParent(BusinessProductType parent) {
+		this.parent = parent;
+		
+	}
+	
+	public String getParentId() {
+		return parent != null && parent.getId() != null ? parent.getId() : "0";
+	}
 }

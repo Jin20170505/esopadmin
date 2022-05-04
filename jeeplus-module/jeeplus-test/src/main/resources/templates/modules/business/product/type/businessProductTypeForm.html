@@ -4,7 +4,7 @@ layout("/include/_dialog.html"){
 	<script type="text/javascript">
 
 		$(document).ready(function() {
-					});
+						});
 
 		function save() {
             var isValidate = jp.validateForm('#inputForm');//校验表单
@@ -29,20 +29,39 @@ layout("/include/_dialog.html"){
         }
 	</script>
 <form id="inputForm"  method="post"  class="form-horizontal p-15">
-    <input type="hidden" name="id" value="${businessProductType.id!}"/>
-    <table class="table table-bordered">
-       <tbody>
-            <tr>
-                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>类型：</label></td>
-                <td class="width-35">
-                    <input name="name" value="${businessProductType.name!}"    class="form-control required"/>
-            </td>
-                <td class="width-15 active"><label class="pull-right">备注信息：</label></td>
-                <td class="width-35">
-                    <textarea name="remarks" rows="4"    class="form-control ">${businessProductType.remarks!}</textarea>
-            </td>
-            </tr>
-        </tbody>
-    </table>
-</form>
+		<input type="hidden" name="id" value="${businessProductType.id!}"/>
+		<table class="table table-bordered">
+		   <tbody>
+				<tr>
+					<td class="width-15 active"><label class="pull-right">上级分类：</label></td>
+					<td class="width-35">
+						<#treeselect id="parent" name="parent.id" value="${businessProductType.parent.id!}" labelName="parent.name" labelValue="${businessProductType.parent.name!}"
+						title="上级分类" url="/business/product/type/businessProductType/treeData" extId="${businessProductType.id!}" class="form-control " allowClear="true"/>
+					</td>
+					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>排序：</label></td>
+					<td class="width-35">
+						<input name="sort" value="${businessProductType.sort!}"    class="form-control required isIntGtZero"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>分类编号：</label></td>
+					<td class="width-35">
+						<input name="code" value="${businessProductType.code!}"    class="form-control required"/>
+					</td>
+					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>分类名称：</label></td>
+					<td class="width-35">
+						<input name="name" value="${businessProductType.name!}"    class="form-control required"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="width-15 active"><label class="pull-right">备注信息：</label></td>
+					<td class="width-35">
+						<textarea name="remarks" rows="4"    class="form-control ">${businessProductType.remarks!}</textarea>
+					</td>
+					<td class="width-15 active"></td>
+		   			<td class="width-35" ></td>
+		  		</tr>
+		 	</tbody>
+		</table>
+		</form>
 <% } %>

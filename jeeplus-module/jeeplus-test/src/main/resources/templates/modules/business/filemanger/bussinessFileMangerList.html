@@ -1,7 +1,31 @@
 <%
-layout("/include/_container.html", {title:"列表", parent:"文件"}){
+layout("/include/_container.html", {title:"列表", parent:"文件档案"}){
 %>
-    <!-- 文件上传 -->
+    <div class="row">
+    <div class="col-sm-3 col-md-2 p-r-5">
+        <div class="white-box">
+            <div>
+			<div style="width: calc(100% - 50px);float: left">
+		<div class="input-group">
+					<span class="input-group-prepend">
+						<button type="button" class="btn btn-sm waves-effect waves-light btn-custom"><i class="fa fa-search"></i></button>
+					</span>
+					<input type="text" class="form-control input-sm" id="search_q" placeholder="查找...">
+				</div>
+			</div>
+			<div style="width: 45px; float:right">
+               <button  class="btn btn-sm waves-effect waves-light btn-custom"  onclick="jp.openSaveDialog('新建文件分类', '${ctx}/business/filemanger/businessFileType/form/add','800px', '500px')">
+                <i class="fa fa-plus"></i>
+                </button>
+            </div>
+            </div>
+            <div id="businessFileTypejsTree"></div>
+        </div>
+    </div>
+    <div class="col-sm-9 col-md-10" style="padding-left: 0px">
+
+	
+				<!-- 文件上传 -->
     <div id="import-collapse" class="collapse white-box m-b-5">
         <a class="jp-ti-close close close" onclick="$('#import-collapse').fadeToggle()">
             <i class="fa fa-times"></i>
@@ -22,23 +46,30 @@ layout("/include/_container.html", {title:"列表", parent:"文件"}){
         <a class="jp-ti-close close" onclick="$('#search-collapse').fadeToggle()">
             <i class="fa fa-times"></i>
         </a>
-        <form id="searchForm" class="form-inline" >
-			 <div class="form-group m-b-10 m-r-10">
-				<label class="m-r-10" title="编号：">编号：</label>
-				<input name="id"   class=" form-control"/>
-			</div>
-			 <div class="form-group m-b-10 m-r-10">
-				<label class="m-r-10" title="名称：">名称：</label>
-				<input name="name"  maxlength="64"  class=" form-control"/>
-			</div>
-		    <div class="form-group m-b-10 m-r-10">
+        <form id="searchForm" class="form-inline">
+						 <div class="form-group m-b-10 m-r-10">
+							<label class="m-r-10" title="类型：">类型：</label>
+							<#treeselect id="type" name="type.id" labelName="type.name"
+								title="类型" url="/business/filemanger/businessFileType/treeData" extId="${bussinessFileManger.id}" class="form-control required" allowClear="true"/>
+						</div>
+						 <div class="form-group m-b-10 m-r-10">
+							<label class="m-r-10" title="编号：">编号：</label>
+							<input name="id"   class=" form-control"/>
+						</div>
+						 <div class="form-group m-b-10 m-r-10">
+							<label class="m-r-10" title="名称：">名称：</label>
+							<input name="name"  maxlength="64"  class=" form-control"/>
+						</div>
+					 <div class="form-group m-b-10 m-r-10">
                 <a  id="search" class="btn  btn-custom waves-effect waves-light m-l-10 btn-md btn-rounded"><i class="fa fa-search"></i> 查询</a>
                 <a  id="reset" class="btn  btn-custom waves-effect waves-light m-l-10 btn-md btn-rounded" ><i class="fa fa-refresh"></i> 重置</a>
             </div>
-        </form>
-    </div>
+				</form>
+
+				</div>
 
 	<div class="white-box">
+
 	<!-- 工具栏 -->
 	<div id="toolbar">
 			 <% if(shiro.hasPermission("business:filemanger:bussinessFileManger:add") ){ %>
@@ -61,15 +92,16 @@ layout("/include/_container.html", {title:"列表", parent:"文件"}){
 					<i class="fa fa-upload"></i> 导入
 				</button>
 			<% } %>
-			 <% if(shiro.hasPermission("business:filemanger:bussinessFileManger:shenhe") ){ %>
-	        	<button id="shenhe" class="btn btn-white waves-effect w-xs waves-light" onclick="shenhe('已审核');">审核</button>
-				<button id="qishen" class="btn btn-white waves-effect w-xs waves-light" onclick="shenhe('保存');">弃审</button>
+			 <% if(shiro.hasPermission("business:filemanger:bussinessFileManger:export") ){ %>
+	        	<button id="export" class="btn btn-white waves-effect w-xs waves-light">
+					<i class="fa fa-download"></i> 导出
+				</button>
 			 <% } %>
 		    </div>
 		
 	<!-- 表格 -->
 	<table id="bussinessFileMangerTable" class="table-bordered"   data-toolbar="#toolbar"></table>
 	</div>
-
+	<% include("businessFileTypeTreeList.js"){} %>
 	<% include("bussinessFileMangerList.js"){} %>
 	<% } %>

@@ -1,0 +1,17 @@
+<%
+layout("/include/_container.html", {title:"列表", parent:"文件类型"}){
+%>
+	<div class="white-box">
+
+	<!-- 工具栏 -->
+	<div id="toolbar">
+					 <% if(shiro.hasPermission("business:filemanger:type:businessFileTypeWrite:add") ){ %>
+						<button id="add" class="btn btn-custom waves-effect w-xs waves-light" onclick="add()"><i class="fa fa-plus"></i> 新建</button><!-- 增加按钮 -->
+					<% } %>
+		            <button id="expandAllBtn"  class="btn btn-white waves-effect w-xs waves-light">展开/折叠 所有</button>			</div>
+			<table id="businessFileTypeWriteTreeTable" class="table-bordered">
+			</table>
+	</div>
+
+	<% include("businessFileTypeWriteList.js"){} %>
+	<% } %>

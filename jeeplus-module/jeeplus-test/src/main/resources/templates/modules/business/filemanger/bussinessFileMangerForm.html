@@ -4,6 +4,7 @@ layout("/include/_dialog.html"){
 	<script type="text/javascript">
 
 		$(document).ready(function() {
+
 					});
 
 		function save() {
@@ -25,32 +26,35 @@ layout("/include/_dialog.html"){
                     jp.close(index);
                 })
 			}
+
         }
 	</script>
-<form id="inputForm"  method="post"  class="form-horizontal p-15">
-    <input type="hidden" name="id" value="${bussinessFileManger.id!}"/>
-    <input type="hidden" name="status" value="${bussinessFileManger.status!'保存'}"/>
-    <table class="table table-bordered">
-       <tbody>
-            <tr>
-                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>名称：</label></td>
-                <td class="width-35">
-                    <input name="name" value="${bussinessFileManger.name!}"    class="form-control required"/>
-            </td>
-                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>地址：</label></td>
-                <td class="width-35">
-                    <#fileUpload id="url" name="url" type="pdf" allowedExtensions="pdf,png,jpg" fileNumLimit="1" value="${bussinessFileManger.url}" class="form-control required" uploadPath="/business/filemanger/bussinessFileManger"/>
-            </td>
-            </tr>
-            <tr>
-                <td class="width-15 active"><label class="pull-right">备注信息：</label></td>
-                <td class="width-35">
-                    <textarea name="remarks" rows="4"    class="form-control ">${bussinessFileManger.remarks!}</textarea>
-            </td>
-                <td class="width-15 active"></td>
-                <td class="width-35" ></td>
-            </tr>
-        </tbody>
-    </table>
-</form>
+		<form id="inputForm"  method="post" class="form-horizontal p-15">
+		<input type="hidden" name="id" value="${bussinessFileManger.id!}"/>
+		<table class="table table-bordered">
+		   <tbody>
+				<tr>
+					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>类型：</label></td>
+					<td class="width-35">
+						<#treeselect id="type" name="type.id"  labelName="type.name" labelValue="${bussinessFileManger.type.name!}"
+							title="类型" url="/business/filemanger/businessFileType/treeData" extId="${bussinessFileManger.id}" class="form-control required" allowClear="true"/>
+					</td>
+					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>名称：</label></td>
+					<td class="width-35">
+						<input name="name" value="${bussinessFileManger.name!}"    class="form-control required"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>地址：</label></td>
+					<td class="width-35">
+			            <#fileUpload id="url" name="url"  value="${bussinessFileManger.url}" type="file" class="form-control required" uploadPath="/business/filemanger/bussinessFileManger"/>
+					</td>
+					<td class="width-15 active"><label class="pull-right">备注信息：</label></td>
+					<td class="width-35">
+						<textarea name="remarks" rows="4"    class="form-control ">${bussinessFileManger.remarks!}</textarea>
+					</td>
+				</tr>
+		 	</tbody>
+		</table>
+		</form>
 <% } %>

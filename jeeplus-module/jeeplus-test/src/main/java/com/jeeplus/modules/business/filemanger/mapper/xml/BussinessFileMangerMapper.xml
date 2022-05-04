@@ -8,19 +8,20 @@
 		a.update_by AS "updateBy.id",
 		a.update_date AS "updateDate",
 		a.del_flag AS "delFlag",
+		a.type_id AS "type.id",
 		a.id AS "id",
 		a.name AS "name",
 		a.url AS "url",
-		a.type AS "type",
 		a.path AS "path",
 		a.filename AS "filename",
 		a.version AS "version",
 		a.status AS "status",
+		b.name as "type.name",
 		a.remarks AS "remarks"
 	</sql>
 	
 	<sql id="bussinessFileMangerJoins">
-		
+			LEFT JOIN business_file_type b ON b.id = a.type_id
 	</sql>
 	
     
@@ -40,11 +41,15 @@
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
+                    <if test="type != null  and type.id != null and type.id != ''">
+                        AND (b.id = #{type.id} OR b.parent_ids LIKE
+                        <if test="_databaseId == 'postgre'">'%,'||#{type.id}||',%')</if>
+                        <if test="_databaseId == 'oracle'">'%,'||#{type.id}||',%')</if>
+                        <if test="_databaseId == 'mysql'">CONCAT('%,', #{type.id}, ',%'))</if>
+                        <if test="_databaseId == 'mssql'">'%'+#{type.id}+'%')</if>
+                    </if>
 			<if test="id != null and id != ''">
 				AND a.id = #{id}
-			</if>
-			<if test="status != null and status != ''">
-				AND a.status = #{status}
 			</if>
 			<if test="name != null and name != ''">
 				AND a.name LIKE
@@ -59,7 +64,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.update_date DESC
+				ORDER BY a.create_date ASC
 			</otherwise>
 		</choose>
 	</select>
@@ -78,7 +83,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.update_date DESC
+				ORDER BY a.create_date ASC
 			</otherwise>
 		</choose>
 	</select>
@@ -90,9 +95,9 @@
 			update_by,
 			update_date,
 			del_flag,
+			type_id,
 			name,
 			url,
-			type,
 			path,
 			filename,
 			version,
@@ -104,13 +109,13 @@
 			#{updateBy.id},
 			#{updateDate},
 			#{delFlag},
+			#{type.id},
 			#{name},
 			#{url},
-			#{type},
 			#{path},
 			#{filename},
 			#{version},
-			'保存',
+			#{status},
 			#{remarks}
 		)
 	</insert>
@@ -119,9 +124,9 @@
 		UPDATE business_file_manger SET 	
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
+			type_id = #{type.id},
 			name = #{name},
 			url = #{url},
-			type = #{type},
 			path = #{path},
 			filename = #{filename},
 			version = #{version},
@@ -134,14 +139,28 @@
 	<!--物理删除-->
 	<update id="delete">
 		DELETE FROM business_file_manger
-		WHERE id = #{id}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE type_id = #{type.id}
+			</otherwise>
+		</choose>
 	</update>
 	
 	<!--逻辑删除-->
 	<update id="deleteByLogic">
 		UPDATE business_file_manger SET 
 			del_flag = #{DEL_FLAG_DELETE}
-		WHERE id = #{id}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE type_id = #{type.id}
+			</otherwise>
+		</choose>
 	</update>
 	
 	

@@ -1,5 +1,5 @@
 /**
- * 
+ * Copyright &copy; 2015-2020 <a href="http://www.jeeplus.org/">JeePlus</a> All rights reserved.
  */
 package com.jeeplus.modules.business.product.archive.mapper;
 
@@ -9,8 +9,9 @@ import org.apache.ibatis.annotations.Mapper;
 import com.jeeplus.modules.business.product.archive.entity.BusinessProduct;
 
 /**
- * 产品档案MAPPER接口
+ * 存货档案MAPPER接口
  * @author Jin
+ * @version 2022-05-04
  */
 @Mapper
 @Repository

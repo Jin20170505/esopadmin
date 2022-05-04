@@ -1,5 +1,5 @@
 /**
- *
+ * Copyright &copy; 2015-2020 <a href="http://www.jeeplus.org/">JeePlus</a> All rights reserved.
  */
 package com.jeeplus.modules.business.filemanger.web;
 
@@ -39,6 +39,7 @@ import com.jeeplus.modules.business.filemanger.service.BussinessFileMangerServic
 /**
  * 文件档案Controller
  * @author Jin
+ * @version 2022-05-04
  */
 @Controller
 @RequestMapping(value = "${adminPath}/business/filemanger/bussinessFileManger")
@@ -60,7 +61,7 @@ public class BussinessFileMangerController extends BaseController {
 	}
 	
 	/**
-	 * 文件列表页面
+	 * 文件档案列表页面
 	 */
 	@RequiresPermissions("business:filemanger:bussinessFileManger:list")
 	@RequestMapping(value = {"list", ""})
@@ -70,7 +71,7 @@ public class BussinessFileMangerController extends BaseController {
 	}
 	
 		/**
-	 * 文件列表数据
+	 * 文件档案列表数据
 	 */
 	@ResponseBody
 	@RequiresPermissions("business:filemanger:bussinessFileManger:list")
@@ -81,7 +82,7 @@ public class BussinessFileMangerController extends BaseController {
 	}
 
 	/**
-	 * 查看，增加，编辑文件表单页面
+	 * 查看，增加，编辑文件档案表单页面
 	 * params:
 	 * 	mode: add, edit, view, 代表三种模式的页面
 	 */
@@ -94,7 +95,7 @@ public class BussinessFileMangerController extends BaseController {
 	}
 
 	/**
-	 * 保存文件
+	 * 保存文件档案
 	 */
 	@ResponseBody
 	@RequiresPermissions(value={"business:filemanger:bussinessFileManger:add","business:filemanger:bussinessFileManger:edit"},logical=Logical.OR)
@@ -113,30 +114,18 @@ public class BussinessFileMangerController extends BaseController {
 		// 文件地址
 		String url = bussinessFileManger.getUrl();
 		String filename = url.substring(url.lastIndexOf("/")+1);
-		String filetype=filename.substring(filename.lastIndexOf(".")+1);
 		bussinessFileManger.setFilename(filename);
-		bussinessFileManger.setType(filetype.toUpperCase(Locale.ROOT));
 		bussinessFileManger.setPath(FileKit.getAttachmentDir()+url.substring(url.indexOf("param/")+6));
 		//新增或编辑表单保存
 		bussinessFileMangerService.save(bussinessFileManger);//保存
 		j.setSuccess(true);
-		j.setMsg("保存文件成功");
+		j.setMsg("保存文件档案成功");
 		return j;
 	}
 
-
-	@ResponseBody
-	@RequestMapping(value = "shenhe")
-	public AjaxJson shenhe(String ids,String status){
-		AjaxJson json = new AjaxJson();
-		bussinessFileMangerService.updateStatus(ids,status);
-		json.setSuccess(true);
-		json.setMsg("操作成功");
-		return json;
-	}
-
+	
 	/**
-	 * 批量删除文件
+	 * 批量删除文件档案
 	 */
 	@ResponseBody
 	@RequiresPermissions("business:filemanger:bussinessFileManger:del")
@@ -147,7 +136,7 @@ public class BussinessFileMangerController extends BaseController {
 		for(String id : idArray){
 			bussinessFileMangerService.delete(bussinessFileMangerService.get(id));
 		}
-		j.setMsg("删除文件成功");
+		j.setMsg("删除文件档案成功");
 		return j;
 	}
 	
@@ -160,13 +149,13 @@ public class BussinessFileMangerController extends BaseController {
     public AjaxJson exportFile(BussinessFileManger bussinessFileManger, HttpServletRequest request, HttpServletResponse response) {
 		AjaxJson j = new AjaxJson();
 		try {
-            String fileName = "文件"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
+            String fileName = "文件档案"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
             Page<BussinessFileManger> page = bussinessFileMangerService.findPage(new Page<BussinessFileManger>(request, response, -1), bussinessFileManger);
-    		new ExportExcel("文件", BussinessFileManger.class).setDataList(page.getList()).write(response, fileName).dispose();
+    		new ExportExcel("文件档案", BussinessFileManger.class).setDataList(page.getList()).write(response, fileName).dispose();
     		return null;
 		} catch (Exception e) {
 			j.setSuccess(false);
-			j.setMsg("导出文件记录失败！失败信息："+e.getMessage());
+			j.setMsg("导出文件档案记录失败！失败信息："+e.getMessage());
 		}
 			return j;
     }
@@ -197,18 +186,18 @@ public class BussinessFileMangerController extends BaseController {
 				}
 			}
 			if (failureNum>0){
-				failureMsg.insert(0, "，失败 "+failureNum+" 条文件记录。");
+				failureMsg.insert(0, "，失败 "+failureNum+" 条文件档案记录。");
 			}
-			j.setMsg( "已成功导入 "+successNum+" 条文件记录"+failureMsg);
+			j.setMsg( "已成功导入 "+successNum+" 条文件档案记录"+failureMsg);
 		} catch (Exception e) {
 			j.setSuccess(false);
-			j.setMsg("导入文件失败！失败信息："+e.getMessage());
+			j.setMsg("导入文件档案失败！失败信息："+e.getMessage());
 		}
 		return j;
     }
 	
 	/**
-	 * 下载导入文件数据模板
+	 * 下载导入文件档案数据模板
 	 */
 	@ResponseBody
 	@RequiresPermissions("business:filemanger:bussinessFileManger:import")
@@ -216,9 +205,9 @@ public class BussinessFileMangerController extends BaseController {
      public AjaxJson importFileTemplate(HttpServletResponse response) {
 		AjaxJson j = new AjaxJson();
 		try {
-            String fileName = "文件数据导入模板.xlsx";
+            String fileName = "文件档案数据导入模板.xlsx";
     		List<BussinessFileManger> list = Lists.newArrayList(); 
-    		new ExportExcel("文件数据", BussinessFileManger.class, 1).setDataList(list).write(response, fileName).dispose();
+    		new ExportExcel("文件档案数据", BussinessFileManger.class, 1).setDataList(list).write(response, fileName).dispose();
     		return null;
 		} catch (Exception e) {
 			j.setSuccess(false);

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.test.leftright.mapper.TestRightTableMapper">
+    
+	<sql id="testRightTableColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.pid AS "p.id",
+		a.code AS "code",
+		a.name AS "name"
+	</sql>
+	
+	<sql id="testRightTableJoins">
+			LEFT JOIN test_left_tree b ON b.id = a.pid
+	</sql>
+	
+    
+	<select id="get" resultType="TestRightTable" >
+		SELECT 
+			<include refid="testRightTableColumns"/>
+		FROM test_right_table a
+		<include refid="testRightTableJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TestRightTable" >
+		SELECT 
+			<include refid="testRightTableColumns"/>
+		FROM test_right_table a
+		<include refid="testRightTableJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+                    <if test="p != null  and p.id != null and p.id != ''">
+                        AND (b.id = #{p.id} OR b.parent_ids LIKE
+                        <if test="_databaseId == 'postgre'">'%,'||#{p.id}||',%')</if>
+                        <if test="_databaseId == 'oracle'">'%,'||#{p.id}||',%')</if>
+                        <if test="_databaseId == 'mysql'">CONCAT('%,', #{p.id}, ',%'))</if>
+                        <if test="_databaseId == 'mssql'">'%'+#{p.id}+'%')</if>
+                    </if>
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TestRightTable" >
+		SELECT 
+			<include refid="testRightTableColumns"/>
+		FROM test_right_table a
+		<include refid="testRightTableJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO test_right_table(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			pid,
+			code,
+			name
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{p.id},
+			#{code},
+			#{name}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE test_right_table SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			pid = #{p.id},
+			code = #{code},
+			name = #{name}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM test_right_table
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE pid = #{p.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE test_right_table SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE pid = #{p.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="TestRightTable" statementType="STATEMENT">
+		select * FROM test_right_table  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

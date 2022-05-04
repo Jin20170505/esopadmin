@@ -1,7 +1,24 @@
 <%
-layout("/include/_container.html", {title:"列表", parent:"产品"}){
+layout("/include/_container.html", {title:"列表", parent:"存货档案"}){
 %>
-    <!-- 文件上传 -->
+    <div class="row">
+    <div class="col-sm-3 col-md-2 p-r-5">
+        <div class="white-box">
+            <div>
+			<div style="width: calc(100% - 0px);float: left">
+		<div class="input-group">
+					<span class="input-group-prepend">
+						<button type="button" class="btn btn-sm waves-effect waves-light btn-custom"><i class="fa fa-search"></i></button>
+					</span>
+					<input type="text" class="form-control input-sm" id="search_q" placeholder="查找...">
+				</div>
+			</div>
+            </div>
+            <div id="businessProductTypeOnlyReadjsTree"></div>
+        </div>
+    </div>
+    <div class="col-sm-9 col-md-10" style="padding-left: 0px">
+		<!-- 文件上传 -->
     <div id="import-collapse" class="collapse white-box m-b-5">
         <a class="jp-ti-close close close" onclick="$('#import-collapse').fadeToggle()">
             <i class="fa fa-times"></i>
@@ -23,25 +40,26 @@ layout("/include/_container.html", {title:"列表", parent:"产品"}){
             <i class="fa fa-times"></i>
         </a>
         <form id="searchForm" class="form-inline">
-			 <div class="form-group m-b-10 m-r-10">
-				<label class="m-r-10" title="产品编码：">产品编码：</label>
-				<input name="code"  maxlength="64"  class=" form-control"/>
-			</div>
-			 <div class="form-group m-b-10 m-r-10">
-				<label class="m-r-10" title="产品名称：">产品名称：</label>
-				<input name="name"  maxlength="64"  class=" form-control"/>
-			</div>
-			 <div class="form-group m-b-10 m-r-10">
-				<label class="m-r-10" title="产品类型：">产品类型：</label>
-				<#gridselect url="${ctx}/business.product/type/businessProductType/data" id="type" name="type.id"  labelName="type.name"
-							 title="选择产品类型" class="form-control required" fieldLabels="编码|名称" fieldKeys="id|name" searchLabels="编码|名称" searchKeys="id|name"/>
-			</div>
-		    <div class="form-group m-b-10 m-r-10">
+						 <div class="form-group m-b-10 m-r-10">
+							<label class="m-r-10" title="存货分类：">存货分类：</label>
+							<#treeselect id="type" name="type.id" labelName="type.name"
+								title="存货分类" url="/business/product/archive/businessProductTypeOnlyRead/treeData" extId="${businessProduct.id}" class="form-control required" allowClear="true"/>
+						</div>
+						 <div class="form-group m-b-10 m-r-10">
+							<label class="m-r-10" title="存货编码：">存货编码：</label>
+							<input name="code"  maxlength="64"  class=" form-control"/>
+						</div>
+						 <div class="form-group m-b-10 m-r-10">
+							<label class="m-r-10" title="存货名称：">存货名称：</label>
+							<input name="name"  maxlength="64"  class=" form-control"/>
+						</div>
+					 <div class="form-group m-b-10 m-r-10">
                 <a  id="search" class="btn  btn-custom waves-effect waves-light m-l-10 btn-md btn-rounded"><i class="fa fa-search"></i> 查询</a>
                 <a  id="reset" class="btn  btn-custom waves-effect waves-light m-l-10 btn-md btn-rounded" ><i class="fa fa-refresh"></i> 重置</a>
             </div>
-        </form>
-    </div>
+				</form>
+
+				</div>
 
 	<div class="white-box">
 
@@ -77,6 +95,6 @@ layout("/include/_container.html", {title:"列表", parent:"产品"}){
 	<!-- 表格 -->
 	<table id="businessProductTable" class="table-bordered"   data-toolbar="#toolbar"></table>
 	</div>
-
+	<% include("businessProductTypeOnlyReadTreeList.js"){} %>
 	<% include("businessProductList.js"){} %>
 	<% } %>

@@ -1,10 +1,8 @@
 /**
- * 
+ * Copyright &copy; 2015-2020 <a href="http://www.jeeplus.org/">JeePlus</a> All rights reserved.
  */
 package com.jeeplus.modules.business.product.archive.web;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
 
@@ -37,8 +35,9 @@ import com.jeeplus.modules.business.product.archive.entity.BusinessProduct;
 import com.jeeplus.modules.business.product.archive.service.BusinessProductService;
 
 /**
- * 产品档案Controller
+ * 存货档案Controller
  * @author Jin
+ * @version 2022-05-04
  */
 @Controller
 @RequestMapping(value = "${adminPath}/business/product/archive/businessProduct")
@@ -60,7 +59,7 @@ public class BusinessProductController extends BaseController {
 	}
 	
 	/**
-	 * 产品列表页面
+	 * 存货档案列表页面
 	 */
 	@RequiresPermissions("business:product:archive:businessProduct:list")
 	@RequestMapping(value = {"list", ""})
@@ -70,7 +69,7 @@ public class BusinessProductController extends BaseController {
 	}
 	
 		/**
-	 * 产品列表数据
+	 * 存货档案列表数据
 	 */
 	@ResponseBody
 	@RequiresPermissions("business:product:archive:businessProduct:list")
@@ -81,7 +80,7 @@ public class BusinessProductController extends BaseController {
 	}
 
 	/**
-	 * 查看，增加，编辑产品表单页面
+	 * 查看，增加，编辑存货档案表单页面
 	 * params:
 	 * 	mode: add, edit, view, 代表三种模式的页面
 	 */
@@ -94,7 +93,7 @@ public class BusinessProductController extends BaseController {
 	}
 
 	/**
-	 * 保存产品
+	 * 保存存货档案
 	 */
 	@ResponseBody
 	@RequiresPermissions(value={"business:product:archive:businessProduct:add","business:product:archive:businessProduct:edit"},logical=Logical.OR)
@@ -113,13 +112,13 @@ public class BusinessProductController extends BaseController {
 		//新增或编辑表单保存
 		businessProductService.save(businessProduct);//保存
 		j.setSuccess(true);
-		j.setMsg("保存产品成功");
+		j.setMsg("保存存货档案成功");
 		return j;
 	}
 
 	
 	/**
-	 * 批量删除产品
+	 * 批量删除存货档案
 	 */
 	@ResponseBody
 	@RequiresPermissions("business:product:archive:businessProduct:del")
@@ -130,7 +129,7 @@ public class BusinessProductController extends BaseController {
 		for(String id : idArray){
 			businessProductService.delete(businessProductService.get(id));
 		}
-		j.setMsg("删除产品成功");
+		j.setMsg("删除存货档案成功");
 		return j;
 	}
 	
@@ -143,23 +142,16 @@ public class BusinessProductController extends BaseController {
     public AjaxJson exportFile(BusinessProduct businessProduct, HttpServletRequest request, HttpServletResponse response) {
 		AjaxJson j = new AjaxJson();
 		try {
-            String fileName = "产品"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
+            String fileName = "存货档案"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
             Page<BusinessProduct> page = businessProductService.findPage(new Page<BusinessProduct>(request, response, -1), businessProduct);
-    		new ExportExcel("产品", BusinessProduct.class).setDataList(page.getList()).write(response, fileName).dispose();
+    		new ExportExcel("存货档案", BusinessProduct.class).setDataList(page.getList()).write(response, fileName).dispose();
     		return null;
 		} catch (Exception e) {
 			j.setSuccess(false);
-			j.setMsg("导出产品记录失败！失败信息："+e.getMessage());
+			j.setMsg("导出存货档案记录失败！失败信息："+e.getMessage());
 		}
 			return j;
     }
-    
-    @ResponseBody
-    @RequestMapping(value = "detail")
-	public BusinessProduct detail(String id) {
-		return businessProductService.get(id);
-	}
-	
 
 	/**
 	 * 导入Excel数据
@@ -187,18 +179,18 @@ public class BusinessProductController extends BaseController {
 				}
 			}
 			if (failureNum>0){
-				failureMsg.insert(0, "，失败 "+failureNum+" 条产品记录。");
+				failureMsg.insert(0, "，失败 "+failureNum+" 条存货档案记录。");
 			}
-			j.setMsg( "已成功导入 "+successNum+" 条产品记录"+failureMsg);
+			j.setMsg( "已成功导入 "+successNum+" 条存货档案记录"+failureMsg);
 		} catch (Exception e) {
 			j.setSuccess(false);
-			j.setMsg("导入产品失败！失败信息："+e.getMessage());
+			j.setMsg("导入存货档案失败！失败信息："+e.getMessage());
 		}
 		return j;
     }
 	
 	/**
-	 * 下载导入产品数据模板
+	 * 下载导入存货档案数据模板
 	 */
 	@ResponseBody
 	@RequiresPermissions("business:product:archive:businessProduct:import")
@@ -206,9 +198,9 @@ public class BusinessProductController extends BaseController {
      public AjaxJson importFileTemplate(HttpServletResponse response) {
 		AjaxJson j = new AjaxJson();
 		try {
-            String fileName = "产品数据导入模板.xlsx";
+            String fileName = "存货档案数据导入模板.xlsx";
     		List<BusinessProduct> list = Lists.newArrayList(); 
-    		new ExportExcel("产品数据", BusinessProduct.class, 1).setDataList(list).write(response, fileName).dispose();
+    		new ExportExcel("存货档案数据", BusinessProduct.class, 1).setDataList(list).write(response, fileName).dispose();
     		return null;
 		} catch (Exception e) {
 			j.setSuccess(false);
@@ -216,6 +208,5 @@ public class BusinessProductController extends BaseController {
 		}
 		return j;
     }
-	
 
 }
