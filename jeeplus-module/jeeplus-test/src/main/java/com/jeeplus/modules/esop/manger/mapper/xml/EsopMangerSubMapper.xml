@@ -13,15 +13,44 @@
 		a.mid AS "m.id",
 		a.no AS "no",
 		a.site_id AS "site.id",
+		site.name AS "site.name",
+		a.filename as "filename",
 		a.file_url AS "fileurl"
 	</sql>
 	
 	<sql id="esopMangerSubJoins">
-		
 			LEFT JOIN esop_manger b ON b.id = a.mid
+		LEFT JOIN base_site site ON site.id = a.site_id
 	</sql>
-	
-    
+
+	<select id="findFile" resultType="com.jeeplus.modules.api.bean.ApiFileViewBean">
+		select a.id as id,a.filename as name,a.no as no, a.file_url as url,product.name as productname
+		from esop_manger_sub a
+		LEFT JOIN esop_manger b ON b.id = a.mid
+		LEFT JOIN business_product product ON product.id = b.product_id
+		where b.status='已下发' and a.site_id = #{site}
+		<if test="name!=null and name!=''">
+			and a.filename like CONCAT('%',#{name}, '%'))
+		</if>
+		<if test="productid!=null and productid!=''">
+			and b.product_id = #{productid}
+		</if>
+		order by a.no
+		limit #{from},#{size}
+	</select>
+    <select id="countFile" resultType="int">
+		select count(*)
+		from esop_manger_sub a
+		LEFT JOIN esop_manger b ON b.id = a.mid
+		where b.status='已下发' and a.site_id = #{site}
+		  <if test="name!=null and name!=''">
+			  and a.filename like CONCAT('%',#{name}, '%'))
+		  </if>
+		<if test="productid!=null and productid!=''">
+			and b.product_id = #{productid}
+		</if>
+	</select>
+
 	<select id="get" resultType="EsopMangerSub" >
 		SELECT 
 			<include refid="esopMangerSubColumns"/>
@@ -47,7 +76,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.create_date ASC
+				ORDER BY a.no ASC
 			</otherwise>
 		</choose>
 	</select>
@@ -83,6 +112,7 @@
 			mid,
 			no,
 			site_id,
+			filename,
 			file_url
 		) VALUES (
 			#{id},
@@ -95,6 +125,7 @@
 			#{m.id},
 			#{no},
 			#{site.id},
+		    #{filename},
 			#{fileurl}
 		)
 	</insert>
@@ -107,6 +138,7 @@
 			mid = #{m.id},
 			no = #{no},
 			site_id = #{site.id},
+			filename = #{filename},
 			file_url = #{fileurl}
 		WHERE id = #{id}
 	</update>

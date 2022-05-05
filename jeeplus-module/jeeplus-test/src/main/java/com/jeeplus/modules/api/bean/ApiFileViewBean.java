@@ -1,14 +1,16 @@
 package com.jeeplus.modules.api.bean;
 
+import java.io.Serializable;
+
 /**
  * 文件浏览 列表 实体
  */
-public class ApiFileViewBean {
+public class ApiFileViewBean implements Serializable {
     private String id; // 文件ID
     private String no;
     private String name; // 文件名称
     private String remarks; // 文件备注
-    private String type; // 文件类型
+    private String url; // 文件地址
     private String productname; // 产品名称
 
     public String getId() {
@@ -47,12 +49,12 @@ public class ApiFileViewBean {
         return this;
     }
 
-    public String getType() {
-        return type;
+    public String getUrl() {
+        return url;
     }
 
-    public ApiFileViewBean setType(String type) {
-        this.type = type;
+    public ApiFileViewBean setUrl(String url) {
+        this.url = url;
         return this;
     }
 

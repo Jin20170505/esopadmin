@@ -310,6 +310,7 @@ function shouhui(){
 							<tr>
 								<th>序号</th>
 								<th>工作站</th>
+                                <th>名称</th>
 								<th>指导书</th>
 							</tr>
 						</thead>
@@ -329,6 +330,9 @@ function shouhui(){
 					<td>
 						{{row.site.name}}
 					</td>
+                    <td>
+                    {{row.filename}}
+                    </td>
 					<td>
 						{{row.fileurl}}
 					</td>

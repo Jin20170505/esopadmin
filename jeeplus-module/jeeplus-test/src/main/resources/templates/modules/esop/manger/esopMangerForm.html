@@ -117,7 +117,7 @@ layout("/include/_dialog.html"){
 						$('#esopMangerSubList').html('');
 						for(var i=0,len = routes.length;i<len;i++){
 							var ditem = routes[i];
-							var di = {'no':ditem.no,'id':'','fileurl':ditem.fileurl,'site':ditem.site};
+							var di = {'no':ditem.no,'id':'','filename':ditem.filename,'fileurl':ditem.fileurl,'site':ditem.site};
 							addRow('#esopMangerSubList', esopMangerSubRowIdx, esopMangerSubTpl, di);
 							esopMangerSubRowIdx = esopMangerSubRowIdx + 1;
 						}
@@ -177,6 +177,7 @@ layout("/include/_dialog.html"){
 						<th class="hide"></th>
 						<th><font color="red">*</font>序号</th>
 						<th><font color="red">*</font>工作站</th>
+						<th><font color="red">*</font>名称</th>
 						<th><font color="red">*</font>指导书</th>
 						<th width="10">&nbsp;</th>
 					</tr>
@@ -201,8 +202,9 @@ layout("/include/_dialog.html"){
                     	 	value="{{row.site.id}}" labelName="site.name" labelValue="{{row.site.name}}"
                          title="选择工作站" class="form-control required" fieldLabels="编码|名称" fieldKeys="id|name" searchLabels="编码|名称" searchKeys="id|name" />
 					</td>
-					
-					
+					<td>
+						<input id="esopMangerSubList{{idx}}_filename" name="esopMangerSubList[{{idx}}].filename" type="text" value="{{row.filename}}"    class="form-control required"/>
+					</td>
 					<td>
 					    <#fileUpload id="esopMangerSubList{{idx}}_fileurl"  name="esopMangerSubList[{{idx}}].fileurl" class="form-control  required" value="{{row.fileurl}}" type="file" uploadPath="/esop/manger/esopManger"/>
 					</td>

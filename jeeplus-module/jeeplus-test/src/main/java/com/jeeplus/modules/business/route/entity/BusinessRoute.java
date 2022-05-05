@@ -20,6 +20,7 @@ public class BusinessRoute extends DataEntity<BusinessRoute> {
 	private BusinessProduct product;		// 存货档案
 	private Integer no;		// 序号
 	private BaseSite site;		// 工作站
+	private String filename;	// 文件名
 	private String fileurl;		// 指导书
 	private String version;		// 版本号
 	private String status;		// 是否停用
@@ -66,7 +67,16 @@ public class BusinessRoute extends DataEntity<BusinessRoute> {
 	public void setSite(BaseSite site) {
 		this.site = site;
 	}
-	
+
+	public String getFilename() {
+		return filename;
+	}
+
+	public BusinessRoute setFilename(String filename) {
+		this.filename = filename;
+		return this;
+	}
+
 	@ExcelField(title="指导书", align=2, sort=9)
 	public String getFileurl() {
 		return fileurl;

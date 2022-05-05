@@ -37,22 +37,28 @@ layout("/include/_dialog.html"){
                 <td class="width-35">
                     <#gridselect url="${ctx}/business/product/archive/businessProduct/data" id="product" name="product.id" value="${businessRoute.product.id!}" labelName="product.name" labelValue="${businessRoute.product.name!}"
                          title="选择存货档案" class="form-control required" fieldLabels="存货编码|存货名称" fieldKeys="code|name" searchLabels="存货编码|存货名称" searchKeys="code|name" />
-            </td>
+                </td>
+            </tr>
+            <tr>
                 <td class="width-15 active"><label class="pull-right"><font color="red">*</font>序号：</label></td>
                 <td class="width-35">
                     <input name="no" value="${businessRoute.no!}"    class="form-control required isIntGtZero"/>
-            </td>
-            </tr>
-            <tr>
+                </td>
                 <td class="width-15 active"><label class="pull-right"><font color="red">*</font>工作站：</label></td>
                 <td class="width-35">
                     <#gridselect url="${ctx}/base/site/baseSite/data" id="site" name="site.id" value="${businessRoute.site.id!}" labelName="site.name" labelValue="${businessRoute.site.name!}"
                          title="选择工作站" class="form-control required" fieldLabels="编码|名称" fieldKeys="id|name" searchLabels="编码|名称" searchKeys="id|name" />
             </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>名称：</label></td>
+                <td class="width-35">
+                    <input name="filename" value="${businessRoute.filename!}"    class="form-control required"/>
+                </td>
                 <td class="width-15 active"><label class="pull-right"><font color="red">*</font>指导书：</label></td>
                 <td class="width-35">
                     <#fileUpload id="fileurl" name="fileurl"  value="${businessRoute.fileurl}" type="file" class="form-control required" uploadPath="/business/route/businessRoute"/>
-            </td>
+                </td>
             </tr>
             <tr>
                 <td class="width-15 active"><label class="pull-right"><font color="red">*</font>版本号：</label></td>

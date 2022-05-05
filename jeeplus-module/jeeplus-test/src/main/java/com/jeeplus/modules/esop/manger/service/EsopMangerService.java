@@ -6,6 +6,7 @@ package com.jeeplus.modules.esop.manger.service;
 import java.util.Arrays;
 import java.util.List;
 
+import com.jeeplus.modules.api.bean.ApiFileViewBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,20 +46,18 @@ public class EsopMangerService extends CrudService<EsopMangerMapper, EsopManger>
 	
 	@Transactional(readOnly = false)
 	public void save(EsopManger esopManger) {
+		if(StringUtils.isNotEmpty(esopManger.getId())){
+			esopMangerSubMapper.delete(new EsopMangerSub(esopManger));
+		}
 		super.save(esopManger);
 		for (EsopMangerSub esopMangerSub : esopManger.getEsopMangerSubList()){
 			if (esopMangerSub.getId() == null){
 				continue;
 			}
 			if (EsopMangerSub.DEL_FLAG_NORMAL.equals(esopMangerSub.getDelFlag())){
-				if (StringUtils.isBlank(esopMangerSub.getId())){
-					esopMangerSub.setM(esopManger);
-					esopMangerSub.preInsert();
-					esopMangerSubMapper.insert(esopMangerSub);
-				}else{
-					esopMangerSub.preUpdate();
-					esopMangerSubMapper.update(esopMangerSub);
-				}
+				esopMangerSub.setM(esopManger);
+				esopMangerSub.preInsert();
+				esopMangerSubMapper.insert(esopMangerSub);
 			}else{
 				esopMangerSubMapper.delete(esopMangerSub);
 			}
@@ -75,5 +74,23 @@ public class EsopMangerService extends CrudService<EsopMangerMapper, EsopManger>
 	@Transactional(readOnly = false)
 	public void updateStatus(String ids,String status){
 		Arrays.asList(ids.split(",")).forEach(id->mapper.updateStatus(id,status));
+	}
+
+	public List<ApiFileViewBean> findFile(String productid,String site,String name,int page,int size){
+		int from = (page-1) * size;
+		return esopMangerSubMapper.findFile(productid, site, name, from, size);
+	}
+
+	public int countPageSize(String productid,String site,String name,int size){
+		int len = esopMangerSubMapper.countFile(productid, site, name);
+		if(len%size==0){
+			return len/size;
+		}else {
+			return  1 + len/size;
+		}
+	}
+
+	public String getFileUrl(String id){
+		return esopMangerSubMapper.getFileUrl(id);
 	}
 }

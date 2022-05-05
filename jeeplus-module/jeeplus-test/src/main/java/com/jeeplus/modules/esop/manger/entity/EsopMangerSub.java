@@ -20,6 +20,7 @@ public class EsopMangerSub extends DataEntity<EsopMangerSub> {
 	private EsopManger m;		// 主表ID 父类
 	private Integer no;		// 序号
 	private BaseSite site;		// 工作站
+	private String filename;	// 文件名
 	private String fileurl;		// 指导书
 	
 	public EsopMangerSub() {
@@ -61,7 +62,16 @@ public class EsopMangerSub extends DataEntity<EsopMangerSub> {
 	public void setSite(BaseSite site) {
 		this.site = site;
 	}
-	
+
+	public String getFilename() {
+		return filename;
+	}
+
+	public EsopMangerSub setFilename(String filename) {
+		this.filename = filename;
+		return this;
+	}
+
 	@ExcelField(title="指导书", align=2, sort=10)
 	public String getFileurl() {
 		return fileurl;

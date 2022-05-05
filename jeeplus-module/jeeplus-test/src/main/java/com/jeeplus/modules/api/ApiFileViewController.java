@@ -6,6 +6,8 @@ import com.jeeplus.common.utils.StringUtils;
 import com.jeeplus.modules.api.bean.ApiFileViewBean;
 import com.jeeplus.modules.business.filemanger.service.BussinessFileMangerService;
 import com.jeeplus.modules.esop.filemanger.BaseFileUtil;
+import com.jeeplus.modules.esop.manger.service.EsopMangerService;
+import com.jeeplus.modules.sys.utils.FileKit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,16 +26,16 @@ import java.util.List;
 @RequestMapping("api/file/view")
 public class ApiFileViewController {
     @Autowired
-    private BussinessFileMangerService bussinessFileMangerService;
+    private EsopMangerService esopMangerService;
 
     @ResponseBody
     @RequestMapping("findFileList")
     public AjaxJson findFileList(String siteid,String name, int page, int size){
         AjaxJson json = new AjaxJson();
         try{
-            List<ApiFileViewBean> list = Lists.newArrayList();
+            List<ApiFileViewBean> list = esopMangerService.findFile(null,siteid,name,page,size);
             json.put("list",list);
-            json.put("pages",1);
+            json.put("pages",esopMangerService.countPageSize(null,siteid,name,size));
             json.setSuccess(true);
             json.setMsg("查询成功");
         }catch (Exception e){
@@ -49,12 +51,13 @@ public class ApiFileViewController {
     public AjaxJson getBase64OfFile(@PathVariable("id")String id){
         AjaxJson json = new AjaxJson();
         try{
-            String path = "";
+            String path = esopMangerService.getFileUrl(id);
             if(StringUtils.isEmpty(path)){
                 json.setSuccess(false);
                 json.setMsg("文件地址不存在");
                 return json;
             }
+            path = FileKit.getAttachmentDir()+ path.substring(path.lastIndexOf("/param/")+7);
             File file = new File(path);
             if(!file.exists()){
                 json.setSuccess(false);
@@ -74,7 +77,8 @@ public class ApiFileViewController {
 
     @RequestMapping("/img/{id}")
     public void getImage(@PathVariable("id") String id, HttpServletResponse response) throws IOException {
-        String path = "";
+        String path = esopMangerService.getFileUrl(id);
+        path = FileKit.getAttachmentDir()+ path.substring(path.lastIndexOf("/param/")+7);
         response.reset();
         response.setContentType("image/png");
         ServletOutputStream out = null;

@@ -107,6 +107,13 @@ $(document).ready(function() {
 		        sortName: 'site.name'
 		       
 		    }
+            ,{
+            field: 'filename',
+            title: '名称',
+            sortable: true,
+            sortName: 'filename'
+
+            }
 		    ,{
 		        field: 'fileurl',
 		        title: '指导书',
