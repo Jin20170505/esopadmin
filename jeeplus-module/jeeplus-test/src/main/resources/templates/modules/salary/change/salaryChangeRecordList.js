@@ -241,24 +241,24 @@ $(document).ready(function() {
       $('#salaryChangeRecordTable').bootstrapTable('refresh');
   }
     function goToSync(){
-    jp.openSaveDialog('年月选择', "${ctx}/salary/change/salaryChangeRecord/goToSync",'800px', '500px');
+    jp.openSaveDialog('年月选择', "${ctx}/salary/change/salaryChangeRecord/goToSync",'90%', '90%');
 }
    //新增表单页面
  function add() {
-     jp.openSaveDialog('新增薪资变更档案', "${ctx}/salary/change/salaryChangeRecord/form/add",'800px', '500px');
+     jp.openSaveDialog('新增薪资变更档案', "${ctx}/salary/change/salaryChangeRecord/form/add",'90%', '90%');
  }
   //编辑表单页面
   function edit(id){
       if(!id){
           id = getIdSelections();
       }
-	  jp.openSaveDialog('编辑薪资变更档案', "${ctx}/salary/change/salaryChangeRecord/form/edit?id="+id,'800px', '500px');
+	  jp.openSaveDialog('编辑薪资变更档案', "${ctx}/salary/change/salaryChangeRecord/form/edit?id="+id,'90%', '90%');
   }
   //查看表单页面
   function view(id) {
       if(!id){
           id = getIdSelections();
       }
-      jp.openViewDialog('查看薪资变更档案', "${ctx}/salary/change/salaryChangeRecord/form/view?id="+id,'800px', '500px');
+      jp.openViewDialog('查看薪资变更档案', "${ctx}/salary/change/salaryChangeRecord/form/view?id="+id,'90%', '90%');
   }
 </script>

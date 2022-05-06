@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.business.jihuadingdan.mapper.BusinessJiHuaGongDanMingXiMapper">
+    
+	<sql id="businessJiHuaGongDanMingXiColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.pid AS "p.id",
+		a.no AS "no",
+		a.site AS "site.id",
+		a.num AS "num",
+		a.userno AS "userno",
+		a.username AS "username",
+		a.classgroup AS "classgroup.id",
+		a.remarks AS "remarks",
+		a.incomplete AS "incomplete",
+		a.qrcade AS "qrcade",
+				
+				
+				
+				
+				
+				
+				
+				
+		site.name AS "site.name",
+				
+				
+				
+				
+		classgroup.name AS "classgroup.name"
+	</sql>
+	
+	<sql id="businessJiHuaGongDanMingXiJoins">
+		
+			LEFT JOIN business_jihua_gongdan b ON b.id = a.pid
+		LEFT JOIN base_site site ON site.id = a.site
+		LEFT JOIN sys_user userno ON userno.id = a.userno
+		LEFT JOIN base_class_group classgroup ON classgroup.id = a.classgroup
+	</sql>
+	
+    
+	<select id="get" resultType="BusinessJiHuaGongDanMingXi" >
+		SELECT 
+			<include refid="businessJiHuaGongDanMingXiColumns"/>
+		FROM business_jihua_gongdan_mingxi a
+		<include refid="businessJiHuaGongDanMingXiJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BusinessJiHuaGongDanMingXi" >
+		SELECT 
+			<include refid="businessJiHuaGongDanMingXiColumns"/>
+		FROM business_jihua_gongdan_mingxi a
+		<include refid="businessJiHuaGongDanMingXiJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="p != null and p.id != null and p.id != ''">
+				AND a.pid = #{p.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BusinessJiHuaGongDanMingXi" >
+		SELECT 
+			<include refid="businessJiHuaGongDanMingXiColumns"/>
+		FROM business_jihua_gongdan_mingxi a
+		<include refid="businessJiHuaGongDanMingXiJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO business_jihua_gongdan_mingxi(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+			pid,
+			no,
+			site,
+			num,
+			userno,
+			username,
+			classgroup,
+			remarks,
+			incomplete,
+			qrcade
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag},
+			#{p.id},
+			#{no},
+			#{site.id},
+			#{num},
+			#{userno},
+			#{username},
+			#{classgroup.id},
+			#{remarks},
+			#{incomplete},
+			#{qrcade}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE business_jihua_gongdan_mingxi SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			pid = #{p.id},
+			no = #{no},
+			site = #{site.id},
+			num = #{num},
+			userno = #{userno},
+			username = #{username},
+			classgroup = #{classgroup.id},
+			remarks = #{remarks},
+			incomplete = #{incomplete},
+			qrcade = #{qrcade}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM business_jihua_gongdan_mingxi
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE pid = #{p.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE business_jihua_gongdan_mingxi SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE pid = #{p.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="BusinessJiHuaGongDanMingXi" statementType="STATEMENT">
+		select * FROM business_jihua_gongdan_mingxi  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

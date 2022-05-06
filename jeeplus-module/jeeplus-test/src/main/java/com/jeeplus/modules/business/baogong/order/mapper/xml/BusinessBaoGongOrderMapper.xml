@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.business.baogong.order.mapper.BusinessBaoGongOrderMapper">
+    
+	<sql id="businessBaoGongOrderColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.ordercode AS "ordercode",
+		a.orderline AS "orderline",
+		a.plancode AS "plancode",
+		a.dept AS "dept",
+		a.cinvcode AS "cinvcode",
+		a.cinvname AS "cinvname",
+		a.cinvstd AS "cinvstd",
+		a.num AS "num",
+		a.start_date AS "start_date",
+		a.end_date AS "end_date",
+		a.bgcode AS "end_date",
+		a.complate AS "complate",
+		a.remarks AS "remarks"
+	</sql>
+	
+	<sql id="businessBaoGongOrderJoins">
+		
+	</sql>
+	
+    
+	<select id="get" resultType="BusinessBaoGongOrder" >
+		SELECT 
+			<include refid="businessBaoGongOrderColumns"/>
+		FROM business_baogao_order a
+		<include refid="businessBaoGongOrderJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BusinessBaoGongOrder" >
+		SELECT 
+			<include refid="businessBaoGongOrderColumns"/>
+		FROM business_baogao_order a
+		<include refid="businessBaoGongOrderJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="ordercode != null and ordercode != ''">
+				AND a.ordercode = #{ordercode}
+			</if>
+			<if test="plancode != null and plancode != ''">
+				AND a.plancode = #{plancode}
+			</if>
+			<if test="dept != null and dept != ''">
+				AND a.dept = #{dept}
+			</if>
+			<if test="end_date != null and end_date != ''">
+				AND a.bgcode = #{end_date}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BusinessBaoGongOrder" >
+		SELECT 
+			<include refid="businessBaoGongOrderColumns"/>
+		FROM business_baogao_order a
+		<include refid="businessBaoGongOrderJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO business_baogao_order(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+			ordercode,
+			orderline,
+			plancode,
+			dept,
+			cinvcode,
+			cinvname,
+			cinvstd,
+			num,
+			start_date,
+			end_date,
+			bgcode,
+			complate,
+			remarks
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag},
+			#{ordercode},
+			#{orderline},
+			#{plancode},
+			#{dept},
+			#{cinvcode},
+			#{cinvname},
+			#{cinvstd},
+			#{num},
+			#{start_date},
+			#{end_date},
+			#{end_date},
+			#{complate},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE business_baogao_order SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			ordercode = #{ordercode},
+			orderline = #{orderline},
+			plancode = #{plancode},
+			dept = #{dept},
+			cinvcode = #{cinvcode},
+			cinvname = #{cinvname},
+			cinvstd = #{cinvstd},
+			num = #{num},
+			start_date = #{start_date},
+			end_date = #{end_date},
+			bgcode = #{end_date},
+			complate = #{complate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM business_baogao_order
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE business_baogao_order SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="BusinessBaoGongOrder" statementType="STATEMENT">
+		select * FROM business_baogao_order  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

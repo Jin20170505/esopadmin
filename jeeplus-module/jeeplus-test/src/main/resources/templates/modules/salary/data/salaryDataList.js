@@ -350,7 +350,7 @@ $(document).ready(function() {
 
    //新增表单页面
  function add() {
-     jp.openSaveDialog('新增薪资发放', "${ctx}/salary/data/salaryData/form/add",'800px', '500px');
+     jp.openSaveDialog('新增薪资发放', "${ctx}/salary/data/salaryData/form/add",'90%', '90%');
  }
 function computer() {
     jp.openSaveDialog('计算——选择年月', "${ctx}/salary/data/salaryData/goToJs",'500px', '500px');
@@ -360,13 +360,13 @@ function computer() {
       if(!id){
           id = getIdSelections();
       }
-	  jp.openSaveDialog('修正', "${ctx}/salary/data/salaryData/form/edit?id="+id,'800px', '500px');
+	  jp.openSaveDialog('修正', "${ctx}/salary/data/salaryData/form/edit?id="+id,'90%', '90%');
   }
   //查看表单页面
   function view(id) {
       if(!id){
           id = getIdSelections();
       }
-      jp.openViewDialog('查看薪资发放', "${ctx}/salary/data/salaryData/form/view?id="+id,'800px', '500px');
+      jp.openViewDialog('查看薪资发放', "${ctx}/salary/data/salaryData/form/view?id="+id,'90%', '90%');
   }
 </script>

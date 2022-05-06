@@ -238,23 +238,23 @@ $(document).ready(function() {
 
    //新增表单页面
  function add() {
-     jp.openSaveDialog('新增考勤统计', "${ctx}/salary/kaoqintongji/salaryKaoQinTongJi/form/add",'800px', '500px');
+     jp.openSaveDialog('新增考勤统计', "${ctx}/salary/kaoqintongji/salaryKaoQinTongJi/form/add",'90%', '90%');
  }
  function computer() {
-    jp.openSaveDialog('计算加班情况--年月选择', "${ctx}/salary/kaoqintongji/salaryKaoQinTongJi/goToJs",'800px', '500px');
+    jp.openSaveDialog('计算加班情况--年月选择', "${ctx}/salary/kaoqintongji/salaryKaoQinTongJi/goToJs",'90%', '90%');
 }
   //编辑表单页面
   function edit(id){
       if(!id){
           id = getIdSelections();
       }
-	  jp.openSaveDialog('编辑考勤统计', "${ctx}/salary/kaoqintongji/salaryKaoQinTongJi/form/edit?id="+id,'800px', '500px');
+	  jp.openSaveDialog('编辑考勤统计', "${ctx}/salary/kaoqintongji/salaryKaoQinTongJi/form/edit?id="+id,'90%', '90%');
   }
   //查看表单页面
   function view(id) {
       if(!id){
           id = getIdSelections();
       }
-      jp.openViewDialog('查看考勤统计', "${ctx}/salary/kaoqintongji/salaryKaoQinTongJi/form/view?id="+id,'800px', '500px');
+      jp.openViewDialog('查看考勤统计', "${ctx}/salary/kaoqintongji/salaryKaoQinTongJi/form/view?id="+id,'90%', '90%');
   }
 </script>

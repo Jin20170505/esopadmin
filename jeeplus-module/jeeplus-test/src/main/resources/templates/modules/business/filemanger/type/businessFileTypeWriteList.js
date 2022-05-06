@@ -98,7 +98,7 @@ $(document).ready(function() {
 
     //添加下级
  function addChild(id){//添加下级
-    jp.openSaveDialog('添加下级文件类型', '${ctx}/business/filemanger/type/businessFileTypeWrite/form/add?parent.id='+id,'800px', '500px');
+    jp.openSaveDialog('添加下级文件类型', '${ctx}/business/filemanger/type/businessFileTypeWrite/form/add?parent.id='+id,'90%', '90%');
  }
     //刷新列表
   function refresh() {
@@ -107,15 +107,15 @@ $(document).ready(function() {
 
    //新增表单页面
  function add() {
-     jp.openSaveDialog('新增文件类型', "${ctx}/business/filemanger/type/businessFileTypeWrite/form/add",'800px', '500px');
+     jp.openSaveDialog('新增文件类型', "${ctx}/business/filemanger/type/businessFileTypeWrite/form/add",'90%', '90%');
  }
   //编辑表单页面
   function edit(id){
-	  jp.openSaveDialog('编辑文件类型', "${ctx}/business/filemanger/type/businessFileTypeWrite/form/edit?id="+id,'800px', '500px');
+	  jp.openSaveDialog('编辑文件类型', "${ctx}/business/filemanger/type/businessFileTypeWrite/form/edit?id="+id,'90%', '90%');
   }
   //查看表单页面
   function view(id) {
-      jp.openViewDialog('查看文件类型', "${ctx}/business/filemanger/type/businessFileTypeWrite/form/view?id="+id,'800px', '500px');
+      jp.openViewDialog('查看文件类型', "${ctx}/business/filemanger/type/businessFileTypeWrite/form/view?id="+id,'90%', '90%');
   }
 
       var _expandFlag_all = false;

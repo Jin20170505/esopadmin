@@ -241,27 +241,27 @@ $(document).ready(function() {
 
    //新增表单页面
  function add() {
-     jp.openSaveDialog('新增日期所属', "${ctx}/qiyewx/date_type/qiYeWxDateType/form/add",'800px', '500px');
+     jp.openSaveDialog('新增日期所属', "${ctx}/qiyewx/date_type/qiYeWxDateType/form/add",'90%', '90%');
  }
 function computer() {
-    jp.openSaveDialog('计算--选择年月', "${ctx}/qiyewx/date_type/qiYeWxDateType/goToComputer",'800px', '500px');
+    jp.openSaveDialog('计算--选择年月', "${ctx}/qiyewx/date_type/qiYeWxDateType/goToComputer",'90%', '90%');
 }
 function pledit() {
 
-    jp.openSaveDialog('批量修改--选择类型', "${ctx}/qiyewx/date_type/qiYeWxDateType/goToEdit?rid="+getIdSelections(),'800px', '500px');
+    jp.openSaveDialog('批量修改--选择类型', "${ctx}/qiyewx/date_type/qiYeWxDateType/goToEdit?rid="+getIdSelections(),'90%', '90%');
 }
   //编辑表单页面
   function edit(id){
       if(!id){
           id = getIdSelections();
       }
-	  jp.openSaveDialog('编辑日期所属', "${ctx}/qiyewx/date_type/qiYeWxDateType/form/edit?id="+id,'800px', '500px');
+	  jp.openSaveDialog('编辑日期所属', "${ctx}/qiyewx/date_type/qiYeWxDateType/form/edit?id="+id,'90%', '90%');
   }
   //查看表单页面
   function view(id) {
       if(!id){
           id = getIdSelections();
       }
-      jp.openViewDialog('查看日期所属', "${ctx}/qiyewx/date_type/qiYeWxDateType/form/view?id="+id,'800px', '500px');
+      jp.openViewDialog('查看日期所属', "${ctx}/qiyewx/date_type/qiYeWxDateType/form/view?id="+id,'90%', '90%');
   }
 </script>

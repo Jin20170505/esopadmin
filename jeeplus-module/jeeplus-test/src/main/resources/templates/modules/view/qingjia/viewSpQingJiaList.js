@@ -247,20 +247,20 @@ $(document).ready(function() {
 }
    //新增表单页面
  function add() {
-     jp.openSaveDialog('新增请假报表', "${ctx}/view/qingjia/viewSpQingJia/form/add",'800px', '500px');
+     jp.openSaveDialog('新增请假报表', "${ctx}/view/qingjia/viewSpQingJia/form/add",'90%', '90%');
  }
   //编辑表单页面
   function edit(id){
       if(!id){
           id = getIdSelections();
       }
-	  jp.openSaveDialog('编辑请假报表', "${ctx}/view/qingjia/viewSpQingJia/form/edit?id="+id,'800px', '500px');
+	  jp.openSaveDialog('编辑请假报表', "${ctx}/view/qingjia/viewSpQingJia/form/edit?id="+id,'90%', '90%');
   }
   //查看表单页面
   function view(id) {
       if(!id){
           id = getIdSelections();
       }
-      jp.openViewDialog('查看请假报表', "${ctx}/view/qingjia/viewSpQingJia/form/view?id="+id,'800px', '500px');
+      jp.openViewDialog('查看请假报表', "${ctx}/view/qingjia/viewSpQingJia/form/view?id="+id,'90%', '90%');
   }
 </script>

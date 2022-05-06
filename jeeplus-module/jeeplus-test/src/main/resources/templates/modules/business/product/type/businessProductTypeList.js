@@ -105,7 +105,7 @@ $(document).ready(function() {
 
     //添加下级
  function addChild(id){//添加下级
-    jp.openSaveDialog('添加下级存货分类', '${ctx}/business/product/type/businessProductType/form/add?parent.id='+id,'800px', '500px');
+    jp.openSaveDialog('添加下级存货分类', '${ctx}/business/product/type/businessProductType/form/add?parent.id='+id,'90%', '90%');
  }
     //刷新列表
   function refresh() {
@@ -114,15 +114,15 @@ $(document).ready(function() {
 
    //新增表单页面
  function add() {
-     jp.openSaveDialog('新增存货分类', "${ctx}/business/product/type/businessProductType/form/add",'800px', '500px');
+     jp.openSaveDialog('新增存货分类', "${ctx}/business/product/type/businessProductType/form/add",'90%', '90%');
  }
   //编辑表单页面
   function edit(id){
-	  jp.openSaveDialog('编辑存货分类', "${ctx}/business/product/type/businessProductType/form/edit?id="+id,'800px', '500px');
+	  jp.openSaveDialog('编辑存货分类', "${ctx}/business/product/type/businessProductType/form/edit?id="+id,'90%', '90%');
   }
   //查看表单页面
   function view(id) {
-      jp.openViewDialog('查看存货分类', "${ctx}/business/product/type/businessProductType/form/view?id="+id,'800px', '500px');
+      jp.openViewDialog('查看存货分类', "${ctx}/business/product/type/businessProductType/form/view?id="+id,'90%', '90%');
   }
 
       var _expandFlag_all = false;

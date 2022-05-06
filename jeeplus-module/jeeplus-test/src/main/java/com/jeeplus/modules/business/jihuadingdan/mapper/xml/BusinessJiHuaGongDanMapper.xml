@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.business.jihuadingdan.mapper.BusinessJiHuaGongDanMapper">
+    
+	<sql id="businessJiHuaGongDanColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.code AS "code",
+		a.order_code AS "dd.id",
+		a.order_no AS "orderno",
+		a.cinvcode AS "cinvcode",
+		a.cinvname AS "cinvname",
+		a.cinvstd AS "cinvstd",
+		a.unit AS "unit",
+		a.start_date AS "startdate",
+		a.end_date AS "enddate",
+		a.scnum AS "scnum",
+		a.gdnum AS "gdnum",
+		a.synum AS "synum",
+		a.dept AS "dept.id",
+		a.status AS "status",
+				
+				
+				
+				
+				
+				
+				
+				
+		dd.code AS "dd.code",
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+		dept.name AS "dept.name"
+	</sql>
+	
+	<sql id="businessJiHuaGongDanJoins">
+		
+		LEFT JOIN business_shengchan_dingdan dd ON dd.id = a.order_code
+		LEFT JOIN sys_office dept ON dept.id = a.dept
+	</sql>
+	
+    
+	<select id="get" resultType="BusinessJiHuaGongDan" >
+		SELECT 
+			<include refid="businessJiHuaGongDanColumns"/>
+		FROM business_jihua_gongdan a
+		<include refid="businessJiHuaGongDanJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BusinessJiHuaGongDan" >
+		SELECT 
+			<include refid="businessJiHuaGongDanColumns"/>
+		FROM business_jihua_gongdan a
+		<include refid="businessJiHuaGongDanJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="code != null and code != ''">
+				AND a.code LIKE
+				    <if test="_databaseId == 'postgre'">'%'||#{code}||'%'</if>
+					<if test="_databaseId == 'oracle'">'%'||#{code}||'%'</if>
+					<if test="_databaseId == 'mssql'">'%'+#{code}+'%'</if>
+					<if test="_databaseId == 'mysql'">concat('%',#{code},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BusinessJiHuaGongDan" >
+		SELECT 
+			<include refid="businessJiHuaGongDanColumns"/>
+		FROM business_jihua_gongdan a
+		<include refid="businessJiHuaGongDanJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO business_jihua_gongdan(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			code,
+			order_code,
+			order_no,
+			cinvcode,
+			cinvname,
+			cinvstd,
+			unit,
+			start_date,
+			end_date,
+			scnum,
+			gdnum,
+			synum,
+			dept,
+			status
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{code},
+			#{dd.id},
+			#{orderno},
+			#{cinvcode},
+			#{cinvname},
+			#{cinvstd},
+			#{unit},
+			#{startdate},
+			#{enddate},
+			#{scnum},
+			#{gdnum},
+			#{synum},
+			#{dept.id},
+			#{status}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE business_jihua_gongdan SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			code = #{code},
+			order_code = #{dd.id},
+			order_no = #{orderno},
+			cinvcode = #{cinvcode},
+			cinvname = #{cinvname},
+			cinvstd = #{cinvstd},
+			unit = #{unit},
+			start_date = #{startdate},
+			end_date = #{enddate},
+			scnum = #{scnum},
+			gdnum = #{gdnum},
+			synum = #{synum},
+			dept = #{dept.id},
+			status = #{status}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM business_jihua_gongdan
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE business_jihua_gongdan SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="BusinessJiHuaGongDan" statementType="STATEMENT">
+		select * FROM business_jihua_gongdan  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

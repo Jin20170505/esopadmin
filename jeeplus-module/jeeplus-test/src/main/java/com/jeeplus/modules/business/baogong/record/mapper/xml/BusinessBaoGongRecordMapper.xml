@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.business.baogong.record.mapper.BusinessBaoGongRecordMapper">
+    
+	<sql id="businessBaoGongRecordColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.bgdate AS "bgdate",
+		a.bgcode AS "bgcode",
+		a.ordercode AS "ordercode",
+		a.orderline AS "orderline",
+		a.site AS "site",
+		a.username AS "username",
+		a.gdnum AS "gdnum",
+		a.doingnum AS "doingnum",
+		a.lfnum AS "lfnum",
+		a.gfnum AS "gfnum",
+		a.fgnum AS "fgnum",
+		a.bhgnum AS "bhgnum",
+		a.hgnum AS "hgnum",
+		a.remarks AS "remarks"
+	</sql>
+	
+	<sql id="businessBaoGongRecordJoins">
+		
+	</sql>
+	
+    
+	<select id="get" resultType="BusinessBaoGongRecord" >
+		SELECT 
+			<include refid="businessBaoGongRecordColumns"/>
+		FROM business_baogong_record a
+		<include refid="businessBaoGongRecordJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BusinessBaoGongRecord" >
+		SELECT 
+			<include refid="businessBaoGongRecordColumns"/>
+		FROM business_baogong_record a
+		<include refid="businessBaoGongRecordJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="beginBgdate != null and endBgdate != null ">
+				AND a.bgdate BETWEEN #{beginBgdate} AND #{endBgdate}
+			</if>
+			<if test="bgcode != null and bgcode != ''">
+				AND a.bgcode = #{bgcode}
+			</if>
+			<if test="ordercode != null and ordercode != ''">
+				AND a.ordercode = #{ordercode}
+			</if>
+			<if test="username != null and username != ''">
+				AND a.username = #{username}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BusinessBaoGongRecord" >
+		SELECT 
+			<include refid="businessBaoGongRecordColumns"/>
+		FROM business_baogong_record a
+		<include refid="businessBaoGongRecordJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO business_baogong_record(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+			bgdate,
+			bgcode,
+			ordercode,
+			orderline,
+			site,
+			username,
+			gdnum,
+			doingnum,
+			lfnum,
+			gfnum,
+			fgnum,
+			bhgnum,
+			hgnum,
+			remarks
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag},
+			#{bgdate},
+			#{bgcode},
+			#{ordercode},
+			#{orderline},
+			#{site},
+			#{username},
+			#{gdnum},
+			#{doingnum},
+			#{lfnum},
+			#{gfnum},
+			#{fgnum},
+			#{bhgnum},
+			#{hgnum},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE business_baogong_record SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			bgdate = #{bgdate},
+			bgcode = #{bgcode},
+			ordercode = #{ordercode},
+			orderline = #{orderline},
+			site = #{site},
+			username = #{username},
+			gdnum = #{gdnum},
+			doingnum = #{doingnum},
+			lfnum = #{lfnum},
+			gfnum = #{gfnum},
+			fgnum = #{fgnum},
+			bhgnum = #{bhgnum},
+			hgnum = #{hgnum},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM business_baogong_record
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE business_baogong_record SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="BusinessBaoGongRecord" statementType="STATEMENT">
+		select * FROM business_baogong_record  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

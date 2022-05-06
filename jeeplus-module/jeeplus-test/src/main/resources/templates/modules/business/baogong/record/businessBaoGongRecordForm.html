@@ -1,0 +1,116 @@
+<%
+layout("/include/_dialog.html"){
+%>
+	<script type="text/javascript">
+
+		$(document).ready(function() {
+				        $('#bgdate').datetimepicker({
+				 format:'Y-m-d H:i'
+		    });
+		});
+
+		function save() {
+            var isValidate = jp.validateForm('#inputForm');//校验表单
+            if(!isValidate){
+                return false;
+			}else{
+                var index = jp.loading();
+                jp.post("${ctx}/business/baogong/record/businessBaoGongRecord/save",$('#inputForm').serialize(),function(data){
+                    if(data.success){
+                        jp.getParent().refresh();
+                        var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                        parent.layer.close(dialogIndex);
+                        jp.toastr_success(data.msg)
+
+                    }else{
+                        jp.toastr_error(data.msg);
+                    }
+                    jp.close(index);
+                })
+			}
+
+        }
+	</script>
+<form id="inputForm"  method="post"  class="form-horizontal p-15">
+    <input type="hidden" name="id" value="${businessBaoGongRecord.id!}"/>
+    <table class="table table-bordered">
+       <tbody>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">报工时间：</label></td>
+                <td class="width-35">
+                    <div class="input-group">
+                        <input readonly="" id="bgdate"  name="bgdate"  placeholder="请选择日期" class="form-control   "   value="${fn.formatDate(businessBaoGongRecord.bgdate!, 'yyyy-MM-dd HH:mm:ss')}">
+                        <div class="input-group-append">
+                            <span class="input-group-text btn-custom border text-white"><i class="ti-calendar"></i></span>
+                        </div>
+                    </div>
+            </td>
+                <td class="width-15 active"><label class="pull-right">报工单号：</label></td>
+                <td class="width-35">
+                    <input name="bgcode" value="${businessBaoGongRecord.bgcode!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">生产订单号：</label></td>
+                <td class="width-35">
+                    <input name="ordercode" value="${businessBaoGongRecord.ordercode!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">生产订单行号：</label></td>
+                <td class="width-35">
+                    <input name="orderline" value="${businessBaoGongRecord.orderline!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">工序名称：</label></td>
+                <td class="width-35">
+                    <input name="site" value="${businessBaoGongRecord.site!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">姓名：</label></td>
+                <td class="width-35">
+                    <input name="username" value="${businessBaoGongRecord.username!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">工单数量：</label></td>
+                <td class="width-35">
+                    <input name="gdnum" value="${businessBaoGongRecord.gdnum!}"    class="form-control  number"/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">待报工数量：</label></td>
+                <td class="width-35">
+                    <input name="doingnum" value="${businessBaoGongRecord.doingnum!}"    class="form-control  number"/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">料废数量：</label></td>
+                <td class="width-35">
+                    <input name="lfnum" value="${businessBaoGongRecord.lfnum!}"    class="form-control  number"/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">工废数量：</label></td>
+                <td class="width-35">
+                    <input name="gfnum" value="${businessBaoGongRecord.gfnum!}"    class="form-control  number"/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">返工数量：</label></td>
+                <td class="width-35">
+                    <input name="fgnum" value="${businessBaoGongRecord.fgnum!}"    class="form-control  number"/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">不合格数量：</label></td>
+                <td class="width-35">
+                    <input name="bhgnum" value="${businessBaoGongRecord.bhgnum!}"    class="form-control  number"/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">合格数量：</label></td>
+                <td class="width-35">
+                    <input name="hgnum" value="${businessBaoGongRecord.hgnum!}"    class="form-control  number"/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">备注信息：</label></td>
+                <td class="width-35">
+                    <textarea name="remarks" rows="4"    class="form-control ">${businessBaoGongRecord.remarks!}</textarea>
+            </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<% } %>

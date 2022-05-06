@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.business.shengchan.dingdan.mapper.BusinessShengChanDingDanMingXiMapper">
+    
+	<sql id="businessShengChanDingDanMingXiColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.pid AS "p.id",
+		a.no AS "no",
+		a.cinv_code AS "cinv.id",
+		a.cinv_name AS "cinvname",
+		a.std AS "std",
+		a.unit AS "unit",
+		a.num AS "num",
+		a.start_date AS "startdate",
+		a.end_date AS "enddate",
+				
+				
+				
+				
+				
+				
+				
+				
+				
+		cinv.cdoe AS "cinv.cdoe"
+	</sql>
+	
+	<sql id="businessShengChanDingDanMingXiJoins">
+		
+			LEFT JOIN business_shengchan_dingdan b ON b.id = a.pid
+		LEFT JOIN business_product cinv ON cinv.id = a.cinv_code
+		LEFT JOIN base_unit unit ON unit.id = a.unit
+	</sql>
+	
+    
+	<select id="get" resultType="BusinessShengChanDingDanMingXi" >
+		SELECT 
+			<include refid="businessShengChanDingDanMingXiColumns"/>
+		FROM business_shengchan_dingdan_mingxi a
+		<include refid="businessShengChanDingDanMingXiJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BusinessShengChanDingDanMingXi" >
+		SELECT 
+			<include refid="businessShengChanDingDanMingXiColumns"/>
+		FROM business_shengchan_dingdan_mingxi a
+		<include refid="businessShengChanDingDanMingXiJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="p != null and p.id != null and p.id != ''">
+				AND a.pid = #{p.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BusinessShengChanDingDanMingXi" >
+		SELECT 
+			<include refid="businessShengChanDingDanMingXiColumns"/>
+		FROM business_shengchan_dingdan_mingxi a
+		<include refid="businessShengChanDingDanMingXiJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO business_shengchan_dingdan_mingxi(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			pid,
+			no,
+			cinv_code,
+			cinv_name,
+			std,
+			unit,
+			num,
+			start_date,
+			end_date
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{p.id},
+			#{no},
+			#{cinv.id},
+			#{cinvname},
+			#{std},
+			#{unit},
+			#{num},
+			#{startdate},
+			#{enddate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE business_shengchan_dingdan_mingxi SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			pid = #{p.id},
+			no = #{no},
+			cinv_code = #{cinv.id},
+			cinv_name = #{cinvname},
+			std = #{std},
+			unit = #{unit},
+			num = #{num},
+			start_date = #{startdate},
+			end_date = #{enddate}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM business_shengchan_dingdan_mingxi
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE pid = #{p.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE business_shengchan_dingdan_mingxi SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE pid = #{p.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="BusinessShengChanDingDanMingXi" statementType="STATEMENT">
+		select * FROM business_shengchan_dingdan_mingxi  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>
