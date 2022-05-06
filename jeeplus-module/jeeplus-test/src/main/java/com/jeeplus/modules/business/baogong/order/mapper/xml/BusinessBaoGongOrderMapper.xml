@@ -19,7 +19,7 @@
 		a.num AS "num",
 		a.start_date AS "start_date",
 		a.end_date AS "end_date",
-		a.bgcode AS "end_date",
+		a.bgcode AS "bgcode",
 		a.complate AS "complate",
 		a.remarks AS "remarks"
 	</sql>
@@ -54,8 +54,8 @@
 			<if test="dept != null and dept != ''">
 				AND a.dept = #{dept}
 			</if>
-			<if test="end_date != null and end_date != ''">
-				AND a.bgcode = #{end_date}
+			<if test="bgcode != null and bgcode != ''">
+				AND a.bgcode = #{bgcode}
 			</if>
 		</where>
 		<choose>
@@ -125,7 +125,7 @@
 			#{num},
 			#{start_date},
 			#{end_date},
-			#{end_date},
+			#{bgcode},
 			#{complate},
 			#{remarks}
 		)
@@ -145,7 +145,7 @@
 			num = #{num},
 			start_date = #{start_date},
 			end_date = #{end_date},
-			bgcode = #{end_date},
+			bgcode = #{bgcode},
 			complate = #{complate},
 			remarks = #{remarks}
 		WHERE id = #{id}

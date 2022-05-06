@@ -18,7 +18,7 @@ public class BusinessBaoGongOrderMingXi extends DataEntity<BusinessBaoGongOrderM
 	private Integer no;		// 序号
 	private String site;		// 工作站
 	private String opname;		// 操作人
-	private String opname;		// 员工编号
+	private String opcode;		// 员工编号
 	private Double num;		// 加工数量
 	private String complete;		// 是否完成
 	private String qrcode;		// 二维码
@@ -64,12 +64,12 @@ public class BusinessBaoGongOrderMingXi extends DataEntity<BusinessBaoGongOrderM
 	}
 	
 	@ExcelField(title="员工编号", align=2, sort=10)
-	public String getOpname() {
-		return opname;
+	public String getOpcode() {
+		return opcode;
 	}
 
-	public void setOpname(String opname) {
-		this.opname = opname;
+	public void setOpcode(String opcode) {
+		this.opcode = opcode;
 	}
 	
 	@ExcelField(title="加工数量", align=2, sort=11)

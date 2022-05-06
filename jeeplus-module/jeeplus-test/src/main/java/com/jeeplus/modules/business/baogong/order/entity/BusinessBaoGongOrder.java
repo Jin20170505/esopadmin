@@ -26,7 +26,7 @@ public class BusinessBaoGongOrder extends DataEntity<BusinessBaoGongOrder> {
 	private Double num;		// 数量
 	private String start_date;		// 开始日期
 	private String end_date;		// 结束日期
-	private String end_date;		// 报工单号
+	private String bgcode;		// 报工单号
 	private String complate;		// 是否完成
 	private List<BusinessBaoGongOrderMingXi> businessBaoGongOrderMingXiList = Lists.newArrayList();		// 子表列表
 	
@@ -129,12 +129,12 @@ public class BusinessBaoGongOrder extends DataEntity<BusinessBaoGongOrder> {
 	}
 	
 	@ExcelField(title="报工单号", align=2, sort=16)
-	public String getEnd_date() {
-		return end_date;
+	public String getBgcode() {
+		return bgcode;
 	}
 
-	public void setEnd_date(String end_date) {
-		this.end_date = end_date;
+	public void setBgcode(String bgcode) {
+		this.bgcode = bgcode;
 	}
 	
 	@ExcelField(title="是否完成", align=2, sort=17)

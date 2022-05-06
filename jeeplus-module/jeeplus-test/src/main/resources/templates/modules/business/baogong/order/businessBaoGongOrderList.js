@@ -158,10 +158,10 @@ $(document).ready(function() {
 		       
 		    }
 			,{
-		        field: 'end_date',
+		        field: 'bgcode',
 		        title: '报工单号',
 		        sortable: true,
-		        sortName: 'end_date'
+		        sortName: 'bgcode'
 		       
 		    }
 			,{
@@ -297,21 +297,21 @@ $(document).ready(function() {
 
    //新增表单页面
  function add() {
-     jp.openSaveDialog('新增报工单', "${ctx}/business/baogong/order/businessBaoGongOrder/form/add",'90%', '90%');
+     jp.openSaveDialog('新增报工单', "${ctx}/business/baogong/order/businessBaoGongOrder/form/add",'800px', '500px');
  }
   //编辑表单页面
   function edit(id){
       if(!id){
           id = getIdSelections();
       }
-	  jp.openSaveDialog('编辑报工单', "${ctx}/business/baogong/order/businessBaoGongOrder/form/edit?id="+id,'90%', '90%');
+	  jp.openSaveDialog('编辑报工单', "${ctx}/business/baogong/order/businessBaoGongOrder/form/edit?id="+id,'800px', '500px');
   }
   //查看表单页面
   function view(id) {
       if(!id){
           id = getIdSelections();
       }
-      jp.openViewDialog('查看报工单', "${ctx}/business/baogong/order/businessBaoGongOrder/form/view?id="+id,'90%', '90%');
+      jp.openViewDialog('查看报工单', "${ctx}/business/baogong/order/businessBaoGongOrder/form/view?id="+id,'800px', '500px');
   }
  //子表展示
 		   
@@ -384,7 +384,7 @@ $(document).ready(function() {
 						{{row.opname}}
 					</td>
 					<td>
-						{{row.opname}}
+						{{row.opcode}}
 					</td>
 					<td>
 						{{row.num}}
