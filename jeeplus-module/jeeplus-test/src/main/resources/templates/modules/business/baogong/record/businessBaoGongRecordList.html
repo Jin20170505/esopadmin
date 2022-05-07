@@ -56,13 +56,13 @@ layout("/include/_container.html", {title:"列表", parent:"员工报工"}){
 	<div id="toolbar">
 			 <% if(shiro.hasPermission("business:baogong:record:businessBaoGongRecord:add") ){ %>
 			 	<button id="add" class="btn btn-custom waves-effect w-xs waves-light" onclick="add()">
-					<i class="fa fa-plus"></i> 新建
+					<i class="fa fa-plus"></i> 报工
 				</button>
 			<% } %>
 			 <% if(shiro.hasPermission("business:baogong:record:businessBaoGongRecord:edit") ){ %>
-			    <button id="edit" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="edit()">
-	            	<i class="fa fa-edit"></i> 修改
-	        	</button>
+<!--			    <button id="edit" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="edit()">-->
+<!--	            	<i class="fa fa-edit"></i> 修改-->
+<!--	        	</button>-->
 			<% } %>
 			 <% if(shiro.hasPermission("business:baogong:record:businessBaoGongRecord:del") ){ %>
 				<button id="remove" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="del()">
@@ -70,14 +70,14 @@ layout("/include/_container.html", {title:"列表", parent:"员工报工"}){
 	        	</button>
 			<% } %>
 			 <% if(shiro.hasPermission("business:baogong:record:businessBaoGongRecord:import") ){ %>
-				<button id="import"  class="btn btn-white waves-effect w-xs waves-light" >
-					<i class="fa fa-upload"></i> 导入
-				</button>
+<!--				<button id="import"  class="btn btn-white waves-effect w-xs waves-light" >-->
+<!--					<i class="fa fa-upload"></i> 导入-->
+<!--				</button>-->
 			<% } %>
 			 <% if(shiro.hasPermission("business:baogong:record:businessBaoGongRecord:export") ){ %>
-	        	<button id="export" class="btn btn-white waves-effect w-xs waves-light">
-					<i class="fa fa-download"></i> 导出
-				</button>
+<!--	        	<button id="export" class="btn btn-white waves-effect w-xs waves-light">-->
+<!--					<i class="fa fa-download"></i> 导出-->
+<!--				</button>-->
 			 <% } %>
 		    </div>
 		

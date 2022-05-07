@@ -74,21 +74,11 @@ $(document).ready(function() {
 		        sortable: true,
 		        sortName: 'bgdate'
 		        ,formatter:function(value, row , index){
-		        	  <% if(shiro.hasPermission("business:baogong:record:businessBaoGongRecord:edit") ){ %>
-					   if(!value){
-						  return "<a  href='#' onclick='edit(\""+row.id+"\")'>-</a>";
-					   }else{
-						  return "<a  href='#' onclick='edit(\""+row.id+"\")'>"+value+"</a>";
-						}
-                     <% }else if(shiro.hasPermission("business:baogong:record:businessBaoGongRecord:view")){ %>
-					   if(!value){
-						  return "<a  href='#' onclick='view(\""+row.id+"\")'>-</a>";
-                       }else{
-                          return "<a  href='#' onclick='view(\""+row.id+"\")'>"+value+"</a>";
-                       }
-                     <% }else{ %>
-					      return value;
-					 <% } %>
+                           if(!value){
+                               return "<a  href='#' onclick='view(\""+row.id+"\")'>-</a>";
+                           }else{
+                               return "<a  href='#' onclick='view(\""+row.id+"\")'>"+value+"</a>";
+                           }
 		         }
 		       
 		    }
@@ -183,37 +173,6 @@ $(document).ready(function() {
 		        sortName: 'remarks'
 		       
 		    }
-			,{
-			   field: 'operate',
-			   title: '操作',
-			   align: 'center',
-			   class: 'text-nowrap',
-			   events: {
-				   'click .view': function (e, value, row, index) {
-					   view(row.id);
-				   },
-				   'click .edit': function (e, value, row, index) {
-					   edit(row.id)
-				   },
-				   'click .del': function (e, value, row, index) {
-					   del(row.id);
-
-				   }
-			   },
-			   formatter:  function operateFormatter(value, row, index) {
-				   return [
-					<% if(shiro.hasPermission("business:baogong:record:businessBaoGongRecord:view")){ %>
-					   '<a class="view btn btn-icon waves-effect waves-light btn-custom btn-xs m-r-5"> <i class="fa fa-search"></i></a>',
-				   <% } %>
-				   <% if(shiro.hasPermission("business:baogong:record:businessBaoGongRecord:edit")){ %>
-					   '<a class="edit btn btn-icon waves-effect waves-light btn-success btn-xs m-r-5"> <i class="fa fa-pencil"></i></a>',
-				   <% } %>
-				   <% if(shiro.hasPermission("business:baogong:record:businessBaoGongRecord:del")){ %>
-					   '<a class="del btn btn-icon waves-effect waves-light btn-danger btn-xs"> <i class="fa fa-trash-o"></a>'
-				   <% } %>
-				   ].join('');
-			   }
-		   }
 		     ]
 		
 		});

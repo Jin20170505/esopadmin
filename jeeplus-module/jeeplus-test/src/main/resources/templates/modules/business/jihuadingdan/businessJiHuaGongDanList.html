@@ -74,6 +74,11 @@ layout("/include/_container.html", {title:"列表", parent:"计划工单"}){
 			撤回
 		</button>
 		<% } %>
+		<% if(shiro.hasPermission("business:jihuadingdan:businessJiHuaGongDan:shengchengbaogongdan") ){ %>
+		<button id="shengchengbaogongdan" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="shengchengbaogongdan()">
+			生成报工单
+		</button>
+		<% } %>
 		    </div>
 		
 	<!-- 表格 -->

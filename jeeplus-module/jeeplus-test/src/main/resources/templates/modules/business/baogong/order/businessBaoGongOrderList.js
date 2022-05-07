@@ -70,28 +70,25 @@ $(document).ready(function() {
 		        checkbox: true
 		       
 		    }
+                   ,{
+                       field: 'bgcode',
+                       title: '报工单号',
+                       sortable: true,
+                       sortName: 'bgcode'
+                       ,formatter:function(value, row , index){
+                           if(!value){
+                               return "<a  href='#' onclick='view(\""+row.id+"\")'>-</a>";
+                           }else{
+                               return "<a  href='#' onclick='view(\""+row.id+"\")'>"+value+"</a>";
+                           }
+                       }
+
+                   }
 			,{
 		        field: 'ordercode',
 		        title: '生产订单号',
 		        sortable: true,
 		        sortName: 'ordercode'
-		        ,formatter:function(value, row , index){
-		        	  <% if(shiro.hasPermission("business:baogong:order:businessBaoGongOrder:edit") ){ %>
-					   if(!value){
-						  return "<a  href='#' onclick='edit(\""+row.id+"\")'>-</a>";
-					   }else{
-						  return "<a  href='#' onclick='edit(\""+row.id+"\")'>"+value+"</a>";
-						}
-                     <% }else if(shiro.hasPermission("business:baogong:order:businessBaoGongOrder:view")){ %>
-					   if(!value){
-						  return "<a  href='#' onclick='view(\""+row.id+"\")'>-</a>";
-                       }else{
-                          return "<a  href='#' onclick='view(\""+row.id+"\")'>"+value+"</a>";
-                       }
-                     <% }else{ %>
-					      return value;
-					 <% } %>
-		         }
 		       
 		    }
 			,{
@@ -157,44 +154,6 @@ $(document).ready(function() {
 		        sortName: 'end_date'
 		       
 		    }
-			,{
-		        field: 'bgcode',
-		        title: '报工单号',
-		        sortable: true,
-		        sortName: 'bgcode'
-		       
-		    }
-			,{
-			   field: 'operate',
-			   title: '操作',
-			   align: 'center',
-			   class: 'text-nowrap',
-			   events: {
-				   'click .view': function (e, value, row, index) {
-					   view(row.id);
-				   },
-				   'click .edit': function (e, value, row, index) {
-					   edit(row.id)
-				   },
-				   'click .del': function (e, value, row, index) {
-					   del(row.id);
-
-				   }
-			   },
-			   formatter:  function operateFormatter(value, row, index) {
-				   return [
-					<% if(shiro.hasPermission("business:baogong:order:businessBaoGongOrder:view")){ %>
-					   '<a class="view btn btn-icon waves-effect waves-light btn-custom btn-xs m-r-5"> <i class="fa fa-search"></i></a>',
-				   <% } %>
-				   <% if(shiro.hasPermission("business:baogong:order:businessBaoGongOrder:edit")){ %>
-					   '<a class="edit btn btn-icon waves-effect waves-light btn-success btn-xs m-r-5"> <i class="fa fa-pencil"></i></a>',
-				   <% } %>
-				   <% if(shiro.hasPermission("business:baogong:order:businessBaoGongOrder:del")){ %>
-					   '<a class="del btn btn-icon waves-effect waves-light btn-danger btn-xs"> <i class="fa fa-trash-o"></a>'
-				   <% } %>
-				   ].join('');
-			   }
-		   }
 		     ]
 		
 		});
@@ -203,7 +162,7 @@ $(document).ready(function() {
 	  $('#businessBaoGongOrderTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
             $('#remove').prop('disabled', ! $('#businessBaoGongOrderTable').bootstrapTable('getSelections').length);
-            $('#edit').prop('disabled', $('#businessBaoGongOrderTable').bootstrapTable('getSelections').length!=1);
+            $('#edit,#print').prop('disabled', $('#businessBaoGongOrderTable').bootstrapTable('getSelections').length!=1);
         });
 
 	 $("#import").click(function(){//显示导入面板
@@ -261,7 +220,14 @@ $(document).ready(function() {
 
 		
 	});
+    // 生成报工单
+    function shengchengbaogongdan(){
 
+}
+    // 打印报工单
+    function printbgd(){
+
+    }
 	//获取选中行
   function getIdSelections() {
         return $.map($("#businessBaoGongOrderTable").bootstrapTable('getSelections'), function (row) {
@@ -297,21 +263,21 @@ $(document).ready(function() {
 
    //新增表单页面
  function add() {
-     jp.openSaveDialog('新增报工单', "${ctx}/business/baogong/order/businessBaoGongOrder/form/add",'800px', '500px');
+     jp.openSaveDialog('新增报工单', "${ctx}/business/baogong/order/businessBaoGongOrder/form/add",'90%', '90%');
  }
   //编辑表单页面
   function edit(id){
       if(!id){
           id = getIdSelections();
       }
-	  jp.openSaveDialog('编辑报工单', "${ctx}/business/baogong/order/businessBaoGongOrder/form/edit?id="+id,'800px', '500px');
+	  jp.openSaveDialog('编辑报工单', "${ctx}/business/baogong/order/businessBaoGongOrder/form/edit?id="+id,'90%', '90%');
   }
   //查看表单页面
   function view(id) {
       if(!id){
           id = getIdSelections();
       }
-      jp.openViewDialog('查看报工单', "${ctx}/business/baogong/order/businessBaoGongOrder/form/view?id="+id,'800px', '500px');
+      jp.openViewDialog('查看报工单', "${ctx}/business/baogong/order/businessBaoGongOrder/form/view?id="+id,'90%', '90%');
   }
  //子表展示
 		   

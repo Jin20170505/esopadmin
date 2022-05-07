@@ -224,7 +224,7 @@ $(document).ready(function() {
 	  $('#businessJiHuaGongDanTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
             $('#remove').prop('disabled', ! $('#businessJiHuaGongDanTable').bootstrapTable('getSelections').length);
-            $('#edit,#xiafa,#chehui').prop('disabled', $('#businessJiHuaGongDanTable').bootstrapTable('getSelections').length!=1);
+            $('#edit,#xiafa,#chehui,#shengchengbaogongdan').prop('disabled', $('#businessJiHuaGongDanTable').bootstrapTable('getSelections').length!=1);
         });
 
 	 $("#import").click(function(){//显示导入面板
@@ -288,6 +288,10 @@ function xiafa(){
 }
    // 撤回
 function chehui(){
+
+}
+// 生成报工单
+function shengchengbaogongdan(){
 
 }
 	//获取选中行
