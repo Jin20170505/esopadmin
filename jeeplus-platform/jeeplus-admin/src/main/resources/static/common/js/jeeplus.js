@@ -248,6 +248,7 @@
 			    	var ids = layero.find("iframe")[0].contentWindow.getIdSelections();
 			    	var names = layero.find("iframe")[0].contentWindow.getNameSelections();
 			    	var loginNames = layero.find("iframe")[0].contentWindow.getLoginNameSelections();
+			    	var rows = layero.find("iframe")[0].contentWindow.getRowsSelections();
 					if(ids.length ==0){
 						jp.warning("请选择至少一个用户!");
 						return;
@@ -257,7 +258,7 @@
                         return;
                     }
 			    	// 执行保存
-			    	yesFuc(ids.join(","), names.join(","), loginNames.join(","));
+			    	yesFuc(ids.join(","), names.join(","), loginNames.join(","),rows);
 			    	
 			    	top.layer.close(index);
 				  },

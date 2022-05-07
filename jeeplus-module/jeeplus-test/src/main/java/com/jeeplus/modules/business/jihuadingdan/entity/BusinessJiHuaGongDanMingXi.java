@@ -23,7 +23,7 @@ public class BusinessJiHuaGongDanMingXi extends DataEntity<BusinessJiHuaGongDanM
 	private Integer no;		// 序号
 	private BaseSite site;		// 工作站
 	private Double num;		// 加工数量
-	private User userno;		// 人员工号
+	private String userno;		// 人员工号
 	private String username;		// 人员名称
 	private BaseClassGroup classgroup;		// 班组
 	private String incomplete;		// 是否完成
@@ -79,12 +79,12 @@ public class BusinessJiHuaGongDanMingXi extends DataEntity<BusinessJiHuaGongDanM
 		this.num = num;
 	}
 	
-	@ExcelField(title="人员工号", fieldType=User.class, value="", align=2, sort=10)
-	public User getUserno() {
+	@ExcelField(title="人员工号", align=2, sort=10)
+	public String getUserno() {
 		return userno;
 	}
 
-	public void setUserno(User userno) {
+	public void setUserno(String userno) {
 		this.userno = userno;
 	}
 	

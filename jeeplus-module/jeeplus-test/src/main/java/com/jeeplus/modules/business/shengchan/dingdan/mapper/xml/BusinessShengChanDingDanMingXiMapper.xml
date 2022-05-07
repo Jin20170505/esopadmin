@@ -33,8 +33,8 @@
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
-			<if test="p != null and p.id != null and p.id != ''">
-				AND a.pid = #{p.id}
+			<if test="p != null and p.code != null and p.code != ''">
+				AND p.code = #{p.code}
 			</if>
 		</where>
 		<choose>

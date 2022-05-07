@@ -11,7 +11,7 @@
 		a.del_flag AS "delFlag",
 		a.pid AS "p.id",
 		a.no AS "no",
-		a.site AS "site.id",
+		a.site AS "site.name",
 		a.num AS "num",
 		a.userno AS "userno",
 		a.username AS "username",
@@ -19,27 +19,10 @@
 		a.remarks AS "remarks",
 		a.incomplete AS "incomplete",
 		a.qrcade AS "qrcade",
-				
-				
-				
-				
-				
-				
-				
-				
-		site.name AS "site.name",
-				
-				
-				
-				
 		classgroup.name AS "classgroup.name"
 	</sql>
 	
 	<sql id="businessJiHuaGongDanMingXiJoins">
-		
-			LEFT JOIN business_jihua_gongdan b ON b.id = a.pid
-		LEFT JOIN base_site site ON site.id = a.site
-		LEFT JOIN sys_user userno ON userno.id = a.userno
 		LEFT JOIN base_class_group classgroup ON classgroup.id = a.classgroup
 	</sql>
 	
@@ -120,7 +103,7 @@
 			#{delFlag},
 			#{p.id},
 			#{no},
-			#{site.id},
+			#{site.name},
 			#{num},
 			#{userno},
 			#{username},
@@ -137,7 +120,7 @@
 			update_date = #{updateDate},
 			pid = #{p.id},
 			no = #{no},
-			site = #{site.id},
+			site = #{site.name},
 			num = #{num},
 			userno = #{userno},
 			username = #{username},

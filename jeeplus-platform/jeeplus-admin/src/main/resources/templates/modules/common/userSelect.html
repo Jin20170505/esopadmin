@@ -111,6 +111,11 @@ layout("/include/_dialog.html"){
 				        sortable: true
 				       
 				    }, {
+						field: 'no',
+						title: '工号',
+						sortable: true
+
+					}, {
 				        field: 'name',
 				        title: '姓名',
 				        sortable: true,
@@ -146,12 +151,12 @@ layout("/include/_dialog.html"){
                    var ids = ","+getIdSelections().join(",")+",";
                    if(row['0']){
                        if(ids.indexOf(","+row.id+",") < 0) {
-                           $('#selectedUsers').tagsinput('add', {id: row.id, name: row.name, loginName: row.loginName});
+                           $('#selectedUsers').tagsinput('add', {id: row.id, name: row.name, loginName: row.loginName,no:row.no});
                        }
                    }else{
 
                        if(ids.indexOf(","+row.id+",") >= 0){
-                           $('#selectedUsers').tagsinput('remove', { id: row.id, name: row.name ,loginName: row.loginName});
+                           $('#selectedUsers').tagsinput('remove', { id: row.id, name: row.name ,loginName: row.loginName,no:row.no});
                        }
 
                    }
@@ -164,12 +169,9 @@ layout("/include/_dialog.html"){
 				for(var i=0; i<rows.length; i++){
 					var row = rows[i];
 					var ids = ","+getIdSelections().join(",")+",";
-
 						if(ids.indexOf(","+row.id+",") >= 0){
-							$('#selectedUsers').tagsinput('remove', { id: row.id, name: row.name ,loginName: row.loginName});
+							$('#selectedUsers').tagsinput('remove', { id: row.id, name: row.name ,loginName: row.loginName,no:row.no});
 						}
-
-
 				}
 			});
 
@@ -221,7 +223,7 @@ layout("/include/_dialog.html"){
 		        });
 		    }
 		  
-		  function getSelections() {
+		  function getRowsSelections() {
 		        return $.map($("#selectedUsers").tagsinput('items'), function (row) {
 		            return row
 		        });

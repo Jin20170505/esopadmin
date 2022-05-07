@@ -11,7 +11,7 @@
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
 		a.code AS "code",
-		a.order_code AS "dd.id",
+		a.order_code AS "dd.code",
 		a.order_no AS "orderno",
 		a.cinvcode AS "cinvcode",
 		a.cinvname AS "cinvname",
@@ -24,32 +24,10 @@
 		a.synum AS "synum",
 		a.dept AS "dept.id",
 		a.status AS "status",
-				
-				
-				
-				
-				
-				
-				
-				
-		dd.code AS "dd.code",
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
 		dept.name AS "dept.name"
 	</sql>
 	
 	<sql id="businessJiHuaGongDanJoins">
-		
-		LEFT JOIN business_shengchan_dingdan dd ON dd.id = a.order_code
 		LEFT JOIN sys_office dept ON dept.id = a.dept
 	</sql>
 	
@@ -139,7 +117,7 @@
 			#{remarks},
 			#{delFlag},
 			#{code},
-			#{dd.id},
+			#{dd.code},
 			#{orderno},
 			#{cinvcode},
 			#{cinvname},
@@ -161,7 +139,7 @@
 			update_date = #{updateDate},
 			remarks = #{remarks},
 			code = #{code},
-			order_code = #{dd.id},
+			order_code = #{dd.code},
 			order_no = #{orderno},
 			cinvcode = #{cinvcode},
 			cinvname = #{cinvname},

@@ -389,7 +389,6 @@ function chehui(){
 								<th>人员名称</th>
 								<th>班组</th>
 								<th>备注信息</th>
-								<th>是否完成</th>
 							</tr>
 						</thead>
 						<tbody id="businessJiHuaGongDanChild-{{idx}}-1-List">
@@ -412,7 +411,7 @@ function chehui(){
 						{{row.num}}
 					</td>
 					<td>
-						{{row.}}
+						{{row.userno}}
 					</td>
 					<td>
 						{{row.username}}
@@ -422,9 +421,6 @@ function chehui(){
 					</td>
 					<td>
 						{{row.remarks}}
-					</td>
-					<td>
-						{{row.incomplete}}
 					</td>
 				</tr>//-->
 	</script>

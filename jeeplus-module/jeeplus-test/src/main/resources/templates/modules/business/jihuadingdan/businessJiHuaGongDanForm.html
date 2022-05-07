@@ -64,81 +64,114 @@ layout("/include/_dialog.html"){
 				$(obj).parent().parent().removeClass("error");
 			}
 		}
+		function shengchanCallBack(items,tagid){
+			var item = items[0];
+			$('#ddName').val(item.p.code);
+			$('#orderno').val(item.no);
+			$('#cinvcode').val(item.cinv.code);
+			$('#cinvname').val(item.cinvname);
+			$('#cinvstd').val(item.std);
+			$('#unit').val(item.unit);
+			$('#startdate').val(item.startdate);
+			$('#enddate').val(item.enddate);
+			$('#scnum').val(item.num);
+			$('#deptId').val(item.dept.id);
+			$('#deptName').val(item.dept.name)
+		}
+		// 工单数量
+		function gdnumChange(){
+			var num = $('#gdnum').val();
+			if(!num){
+				num=0;
+			}
+			var scnum = $('#scnum').val();
+			if(!scnum){
+				jp.warning('请选择生产单号');
+				return false;
+			}
+			var cz = scnum - num;
+			if(cz < 0){
+				jp.warning('工单数量大于生产数量，请重新输入');
+				$('#gdnum').val('');
+				return false;
+			}
+			$('#synum').val(scnum-num);
+		}
 	</script>
 <form id="inputForm"  method="post"  class="form-horizontal p-15">
 		<input type="hidden" name="id" value="${businessJiHuaGongDan.id!}"/>
 		<table class="table table-bordered">
 		   <tbody>
 				<tr>
-					<td class="width-15 active"><label class="pull-right">单号：</label></td>
+					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>单号：</label></td>
 					<td class="width-35">
-						<input name="code" value="${businessJiHuaGongDan.code!}"    class="form-control "/>
+						<input name="code" value="${businessJiHuaGongDan.code!}"    class="form-control required"/>
 				</td>
-					<td class="width-15 active"><label class="pull-right">生产订单号：</label></td>
+					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>生产订单号：</label></td>
 					<td class="width-35">
-						<#gridselect url="${ctx}/business/shengchan.dingdan/businessShengChanDingDan/data" id="dd" name="dd.id" value="${businessJiHuaGongDan.dd.id!}" labelName="dd.code" labelValue="${businessJiHuaGongDan.dd.code!}"
-							 title="选择生产订单号" class="form-control " fieldLabels="单号" fieldKeys="code" searchLabels="单号" searchKeys="code" />
+						<#gridselect callback="shengchanCallBack" url="${ctx}/business/shengchan/dingdan/businessShengChanDingDan/mxdata" id="dd" name="dd.id" value="${businessJiHuaGongDan.dd.id!}" labelName="dd.code" labelValue="${businessJiHuaGongDan.dd.code!}"
+							 title="选择生产订单号" class="form-control " fieldLabels="单号|行号|存货编码|存货名称|规格型号|单位|数量" fieldKeys="p.code|no|cinv.code|cinvname|std|unit|num" searchLabels="生产单号" searchKeys="p.code" />
 				</td>
 				</tr>
 				<tr>
 					<td class="width-15 active"><label class="pull-right">生产订单行号：</label></td>
 					<td class="width-35">
-						<input name="orderno" value="${businessJiHuaGongDan.orderno!}"    class="form-control "/>
+						<input name="orderno" value="${businessJiHuaGongDan.orderno!}" id="orderno"  readonly  class="form-control "/>
 				</td>
 					<td class="width-15 active"><label class="pull-right">存货编码：</label></td>
 					<td class="width-35">
-						<input name="cinvcode" value="${businessJiHuaGongDan.cinvcode!}"    class="form-control "/>
+						<input name="cinvcode" value="${businessJiHuaGongDan.cinvcode!}"  id="cinvcode" readonly  class="form-control "/>
 				</td>
 				</tr>
 				<tr>
 					<td class="width-15 active"><label class="pull-right">存货名称：</label></td>
 					<td class="width-35">
-						<input name="cinvname" value="${businessJiHuaGongDan.cinvname!}"    class="form-control "/>
+						<input name="cinvname" value="${businessJiHuaGongDan.cinvname!}" id="cinvname"  readonly class="form-control "/>
 				</td>
 					<td class="width-15 active"><label class="pull-right">规格型号：</label></td>
 					<td class="width-35">
-						<input name="cinvstd" value="${businessJiHuaGongDan.cinvstd!}"    class="form-control "/>
+						<input name="cinvstd" value="${businessJiHuaGongDan.cinvstd!}" id="cinvstd" readonly  class="form-control "/>
 				</td>
 				</tr>
 				<tr>
 					<td class="width-15 active"><label class="pull-right">计量单位：</label></td>
 					<td class="width-35">
-						<input name="unit" value="${businessJiHuaGongDan.unit!}"    class="form-control "/>
+						<input name="unit" value="${businessJiHuaGongDan.unit!}" id="unit" readonly  class="form-control "/>
 				</td>
 					<td class="width-15 active"><label class="pull-right">开始日期：</label></td>
 					<td class="width-35">
-						<input name="startdate" value="${businessJiHuaGongDan.startdate!}"    class="form-control "/>
+						<input name="startdate" value="${businessJiHuaGongDan.startdate!}" id="startdate" readonly   class="form-control "/>
 				</td>
 				</tr>
 				<tr>
 					<td class="width-15 active"><label class="pull-right">结束日期：</label></td>
 					<td class="width-35">
-						<input name="enddate" value="${businessJiHuaGongDan.enddate!}"    class="form-control "/>
+						<input name="enddate" value="${businessJiHuaGongDan.enddate!}" id="enddate" readonly   class="form-control "/>
 				</td>
 					<td class="width-15 active"><label class="pull-right">生产数量：</label></td>
 					<td class="width-35">
-						<input name="scnum" value="${businessJiHuaGongDan.scnum!}"    class="form-control "/>
+						<input name="scnum" value="${businessJiHuaGongDan.scnum!}" id="scnum" readonly   class="form-control "/>
 				</td>
 				</tr>
 				<tr>
-					<td class="width-15 active"><label class="pull-right">工单数量：</label></td>
+					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>工单数量：</label></td>
 					<td class="width-35">
-						<input name="gdnum" value="${businessJiHuaGongDan.gdnum!}"    class="form-control "/>
+						<input name="gdnum" value="${businessJiHuaGongDan.gdnum!}"  id="gdnum" oninput="gdnumChange(this);"  class="form-control required"/>
 				</td>
 					<td class="width-15 active"><label class="pull-right">剩余数量：</label></td>
 					<td class="width-35">
-						<input name="synum" value="${businessJiHuaGongDan.synum!}"    class="form-control "/>
+						<input name="synum" value="${businessJiHuaGongDan.synum!}" readonly id="synum"  class="form-control "/>
 				</td>
 				</tr>
 				<tr>
 					<td class="width-15 active"><label class="pull-right">生产部门：</label></td>
 					<td class="width-35">
-						<#treeselect id="dept" name="dept.id" value="${businessJiHuaGongDan.dept.id!}" labelName="dept.name" labelValue="${businessJiHuaGongDan.dept.name!}"
+						<#treeselect id="dept" disabled="disabled" name="dept.id" value="${businessJiHuaGongDan.dept.id!}" labelName="dept.name" labelValue="${businessJiHuaGongDan.dept.name!}"
 							title="部门" url="/sys/office/treeData?type=2" class="form-control " allowClear="true" notAllowSelectParent="true"/>
 				</td>
 					<td class="width-15 active"><label class="pull-right">状态：</label></td>
 					<td class="width-35">
-						<input name="status" value="${businessJiHuaGongDan.status!}"    class="form-control "/>
+						<input name="status" value="${businessJiHuaGongDan.status!'未下发'}"  readonly  class="form-control "/>
 				</td>
 				</tr>
 		 	</tbody>
@@ -178,42 +211,29 @@ layout("/include/_dialog.html"){
 						<input id="businessJiHuaGongDanMingXiList{{idx}}_id" name="businessJiHuaGongDanMingXiList[{{idx}}].id" type="hidden" value="{{row.id}}"/>
 						<input id="businessJiHuaGongDanMingXiList{{idx}}_delFlag" name="businessJiHuaGongDanMingXiList[{{idx}}].delFlag" type="hidden" value="0"/>
 					</td>
-					
 					<td>
 						<input id="businessJiHuaGongDanMingXiList{{idx}}_no" name="businessJiHuaGongDanMingXiList[{{idx}}].no" type="text" value="{{row.no}}"    class="form-control required"/>
 					</td>
-					
-					
 					<td>
-						<#gridselect url="${ctx}/base/site/baseSite/data" id="businessJiHuaGongDanMingXiList{{idx}}_site" name="businessJiHuaGongDanMingXiList[{{idx}}].site.id" value="{{row.site.id}}" labelName="businessJiHuaGongDanMingXiList{{idx}}.site.name" labelValue="{{row.site.name}}"
+						<#gridselect url="${ctx}/base/site/baseSite/data" id="businessJiHuaGongDanMingXiList{{idx}}_site" name="businessJiHuaGongDanMingXiList[{{idx}}].site.id" value="{{row.site.id}}" labelName="businessJiHuaGongDanMingXiList[{{idx}}].site.name" labelValue="{{row.site.name}}"
 							 title="选择工作站" class="form-control  required" fieldLabels="编码|名称" fieldKeys="id|name" searchLabels="编码|名称" searchKeys="id|name" />
 					</td>
-					
-					
 					<td>
 						<input id="businessJiHuaGongDanMingXiList{{idx}}_num" name="businessJiHuaGongDanMingXiList[{{idx}}].num" type="text" value="{{row.num}}"    class="form-control required isFloatGteZero"/>
 					</td>
-					
-					
 					<td  class="max-width-250">
-						<#userselect id="businessJiHuaGongDanMingXiList{{idx}}_userno" name="businessJiHuaGongDanMingXiList[{{idx}}].userno" value="{{row.userno}}" labelName="businessJiHuaGongDanMingXiList{{idx}}." labelValue="{{row.}}"
-							    class="form-control "  allowClear="true"/>
+						<#userselect callback="usercallback"  delcall="delusercall" id="businessJiHuaGongDanMingXiList{{idx}}_userno" name="businessJiHuaGongDanMingXiList[{{idx}}].userno" value="{{row.userno}}" labelName="businessJiHuaGongDanMingXiList{{idx}}.no" labelValue="{{row.userno}}"
+							    class="form-control "  allowInput="false" allowClear="true"/>
 					</td>
-					
-					
 					<td>
-						<input id="businessJiHuaGongDanMingXiList{{idx}}_username" name="businessJiHuaGongDanMingXiList[{{idx}}].username" type="text" value="{{row.username}}"    class="form-control "/>
+						<input id="businessJiHuaGongDanMingXiList{{idx}}_username" name="businessJiHuaGongDanMingXiList[{{idx}}].username" type="text" value="{{row.username}}"   readonly class="form-control "/>
 					</td>
-					
-					
 					<td>
 						<#gridselect url="${ctx}/base/classgroup/baseClassGroup/data" id="businessJiHuaGongDanMingXiList{{idx}}_classgroup" name="businessJiHuaGongDanMingXiList[{{idx}}].classgroup.id" value="{{row.classgroup.id}}" labelName="businessJiHuaGongDanMingXiList{{idx}}.classgroup.name" labelValue="{{row.classgroup.name}}"
 							 title="选择班组" class="form-control  " fieldLabels="编码|名称" fieldKeys="code|name" searchLabels="编码|名称" searchKeys="code|name" />
 					</td>
-					
-					
 					<td>
-						<textarea id="businessJiHuaGongDanMingXiList{{idx}}_remarks" name="businessJiHuaGongDanMingXiList[{{idx}}].remarks" rows="4"    class="form-control ">{{row.remarks}}</textarea>
+						<input id="businessJiHuaGongDanMingXiList{{idx}}_remarks" name="businessJiHuaGongDanMingXiList[{{idx}}].remarks" type="text" value="{{row.remarks}}"  class="form-control "/>
 					</td>
 					
 					<td class="text-center" width="10">
@@ -221,6 +241,19 @@ layout("/include/_dialog.html"){
 					</td>
 				</tr>//-->
 			</script>
+				<script type="text/javascript">
+					function usercallback(rows,tagid){
+						var row = rows[0];
+						$('#'+tagid+"Id").val(row.no);
+						$('#'+tagid+"Name").val(row.no);
+						var idpre = tagid.split('_')[0];
+						$('#'+idpre+'_username').val(row.name);
+					}
+					function delusercall(tagid){
+						var idpre = tagid.split('_')[0];
+						$('#'+idpre+'_username').val('');
+					}
+				</script>
 			<script type="text/javascript">
 				var businessJiHuaGongDanMingXiRowIdx = 0, businessJiHuaGongDanMingXiTpl = $("#businessJiHuaGongDanMingXiTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
 				$(document).ready(function() {

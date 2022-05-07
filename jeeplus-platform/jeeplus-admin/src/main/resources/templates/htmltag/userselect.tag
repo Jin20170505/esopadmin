@@ -1,4 +1,4 @@
-	<input id="${id}Id" name="${name}"  type="hidden" value="${value!}"/>
+	<input id="${id}Id" name="${name}"  type="hidden" value="${value!}" data-fun="${callback!}" data-del="${delcall!}"/>
 
 
 	<div class="input-group">
@@ -20,10 +20,19 @@
 		}
 		// 正常打开	
 		
-		jp.openUserSelectDialog(${isMultiSelected!false},function(ids, names){
+		jp.openUserSelectDialog(${isMultiSelected!false},function(ids, names,loginnames,rows){
 			$("#${id}Id").val(ids.replace(/u_/ig,""));
 			$("#${id}Name").val(names);
 			$("#${id}Name").focus();
+			var callbackFunName = $("#${id}Id").attr("data-fun");
+			var tagid = "${id}";
+			if(callbackFunName){
+				if(typeof(eval(callbackFunName)) == "function"){
+					var tempObject = {};
+					tempObject.fun = eval(callbackFunName);
+					tempObject.fun(rows,tagid);
+				}
+			}
 		})
 	
 	});
@@ -37,6 +46,15 @@
 		$("#${id}Id").val("");
 		$("#${id}Name").val("");
 		$("#${id}Name").focus();
+		var callbackFunName = $("#${id}Id").attr("data-del");
+		var tagid = "${id}";
+		if(callbackFunName){
+			if(typeof(eval(callbackFunName)) == "function"){
+				var tempObject = {};
+				tempObject.fun = eval(callbackFunName);
+				tempObject.fun(tagid);
+			}
+		}
 	
 	});
 </script>
