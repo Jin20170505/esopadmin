@@ -54,15 +54,26 @@ layout("/include/_container.html", {title:"列表", parent:"计划工单"}){
 	        	</button>
 			<% } %>
 			 <% if(shiro.hasPermission("business:jihuadingdan:businessJiHuaGongDan:import") ){ %>
-				<button id="import"  class="btn btn-white waves-effect w-xs waves-light" >
-					<i class="fa fa-upload"></i> 导入
-				</button>
+<!--				<button id="import"  class="btn btn-white waves-effect w-xs waves-light" >-->
+<!--					<i class="fa fa-upload"></i> 导入-->
+<!--				</button>-->
 			<% } %>
 			 <% if(shiro.hasPermission("business:jihuadingdan:businessJiHuaGongDan:export") ){ %>
-	        	<button id="export" class="btn btn-white waves-effect w-xs waves-light">
-					<i class="fa fa-download"></i> 导出
-				</button>
+<!--	        	<button id="export" class="btn btn-white waves-effect w-xs waves-light">-->
+<!--					<i class="fa fa-download"></i> 导出-->
+<!--				</button>-->
 			 <% } %>
+			<% if(shiro.hasPermission("business:jihuadingdan:businessJiHuaGongDan:shenhe") ){ %>
+			<button id="xiafa" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="xiafa()">
+				下发
+			</button>
+			<% } %>
+
+		<% if(shiro.hasPermission("business:jihuadingdan:businessJiHuaGongDan:shenhe") ){ %>
+		<button id="chehui" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="chehui()">
+			撤回
+		</button>
+		<% } %>
 		    </div>
 		
 	<!-- 表格 -->

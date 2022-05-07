@@ -72,7 +72,6 @@ public class BusinessProductController extends BaseController {
 	 * 存货档案列表数据
 	 */
 	@ResponseBody
-	@RequiresPermissions("business:product:archive:businessProduct:list")
 	@RequestMapping(value = "data")
 	public Map<String, Object> data(BusinessProduct businessProduct, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<BusinessProduct> page = businessProductService.findPage(new Page<BusinessProduct>(request, response), businessProduct); 

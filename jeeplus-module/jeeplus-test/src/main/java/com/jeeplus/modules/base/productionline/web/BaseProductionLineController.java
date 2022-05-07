@@ -73,7 +73,6 @@ public class BaseProductionLineController extends BaseController {
 	 * 产线列表数据
 	 */
 	@ResponseBody
-	@RequiresPermissions("base:productionline:baseProductionLine:list")
 	@RequestMapping(value = "data")
 	public Map<String, Object> data(BaseProductionLine baseProductionLine, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<BaseProductionLine> page = baseProductionLineService.findPage(new Page<BaseProductionLine>(request, response), baseProductionLine); 

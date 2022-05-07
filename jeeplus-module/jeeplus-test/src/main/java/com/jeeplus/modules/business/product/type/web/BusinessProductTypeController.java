@@ -63,7 +63,6 @@ public class BusinessProductTypeController extends BaseController {
 	/**
 	 * 存货分类树表数据
 	 */
-	@RequiresPermissions("business:product:type:businessProductType:list")
 	@ResponseBody
 	@RequestMapping(value = "data")
 	public List<BusinessProductType> data(BusinessProductType businessProductType) {

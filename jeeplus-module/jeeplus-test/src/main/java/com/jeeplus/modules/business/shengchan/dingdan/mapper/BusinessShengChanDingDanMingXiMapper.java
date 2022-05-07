@@ -8,6 +8,8 @@ import com.jeeplus.core.persistence.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import com.jeeplus.modules.business.shengchan.dingdan.entity.BusinessShengChanDingDanMingXi;
 
+import java.util.List;
+
 /**
  * 生产订单明细MAPPER接口
  * @author Jin
@@ -16,5 +18,6 @@ import com.jeeplus.modules.business.shengchan.dingdan.entity.BusinessShengChanDi
 @Mapper
 @Repository
 public interface BusinessShengChanDingDanMingXiMapper extends BaseMapper<BusinessShengChanDingDanMingXi> {
-	
+
+	List<BusinessShengChanDingDanMingXi> findShengChanDingDanMingXi(BusinessShengChanDingDanMingXi businessShengChanDingDanMingXi);
 }

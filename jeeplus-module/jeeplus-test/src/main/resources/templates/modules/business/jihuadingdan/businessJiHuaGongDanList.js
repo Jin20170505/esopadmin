@@ -224,7 +224,7 @@ $(document).ready(function() {
 	  $('#businessJiHuaGongDanTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
             $('#remove').prop('disabled', ! $('#businessJiHuaGongDanTable').bootstrapTable('getSelections').length);
-            $('#edit').prop('disabled', $('#businessJiHuaGongDanTable').bootstrapTable('getSelections').length!=1);
+            $('#edit,#xiafa,#chehui').prop('disabled', $('#businessJiHuaGongDanTable').bootstrapTable('getSelections').length!=1);
         });
 
 	 $("#import").click(function(){//显示导入面板
@@ -282,7 +282,14 @@ $(document).ready(function() {
 
 		
 	});
+   // 下发
+function xiafa(){
 
+}
+   // 撤回
+function chehui(){
+
+}
 	//获取选中行
   function getIdSelections() {
         return $.map($("#businessJiHuaGongDanTable").bootstrapTable('getSelections'), function (row) {

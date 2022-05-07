@@ -71,7 +71,6 @@ public class BaseClassGroupController extends BaseController {
 	 * 班组列表数据
 	 */
 	@ResponseBody
-	@RequiresPermissions("base:classgroup:baseClassGroup:list")
 	@RequestMapping(value = "data")
 	public Map<String, Object> data(BaseClassGroup baseClassGroup, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<BaseClassGroup> page = baseClassGroupService.findPage(new Page<BaseClassGroup>(request, response), baseClassGroup); 

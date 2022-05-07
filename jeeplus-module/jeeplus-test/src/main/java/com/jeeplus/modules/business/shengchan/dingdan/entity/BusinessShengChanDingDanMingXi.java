@@ -9,6 +9,7 @@ import com.jeeplus.modules.base.unit.entity.BaseUnit;
 
 import com.jeeplus.core.persistence.DataEntity;
 import com.jeeplus.common.utils.excel.annotation.ExcelField;
+import com.jeeplus.modules.sys.entity.Office;
 
 /**
  * 生产订单明细Entity
@@ -19,6 +20,7 @@ public class BusinessShengChanDingDanMingXi extends DataEntity<BusinessShengChan
 	
 	private static final long serialVersionUID = 1L;
 	private BusinessShengChanDingDan p;		// 生产订单 父类
+	private Office dept; // 生产部门
 	private Integer no;		// 行号
 	private BusinessProduct cinv;		// 存货编码
 	private String cinvname;		// 存货名称
@@ -47,7 +49,16 @@ public class BusinessShengChanDingDanMingXi extends DataEntity<BusinessShengChan
 	public void setP(BusinessShengChanDingDan p) {
 		this.p = p;
 	}
-	
+
+	public Office getDept() {
+		return dept;
+	}
+
+	public BusinessShengChanDingDanMingXi setDept(Office dept) {
+		this.dept = dept;
+		return this;
+	}
+
 	@NotNull(message="行号不能为空")
 	@ExcelField(title="行号", align=2, sort=8)
 	public Integer getNo() {

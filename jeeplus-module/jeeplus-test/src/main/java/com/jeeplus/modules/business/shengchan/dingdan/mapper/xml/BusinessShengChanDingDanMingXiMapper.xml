@@ -23,7 +23,29 @@
 	
 	<sql id="businessShengChanDingDanMingXiJoins">
 	</sql>
-	
+
+	<select id="findShengChanDingDanMingXi" resultType="BusinessShengChanDingDanMingXi">
+		select a.id as "id",a.no AS "no",a.cinv_code AS "cinv.code",a.cinv_name AS "cinvname",a.std AS "std",a.unit AS "unit",a.num AS "num",a.start_date AS "startdate",
+			   a.end_date AS "enddate",p.code as "p.code",p.dept AS "dept.id",dept.name AS "dept.name"
+		FROM business_shengchan_dingdan_mingxi a
+		left join business_shengchan_dingdan p on p.id = a.pid
+		LEFT JOIN sys_office dept ON dept.id = p.dept
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="p != null and p.id != null and p.id != ''">
+				AND a.pid = #{p.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY p.code asc,a.no ASC
+			</otherwise>
+		</choose>
+	</select>
     
 	<select id="get" resultType="BusinessShengChanDingDanMingXi" >
 		SELECT 

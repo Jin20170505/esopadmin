@@ -73,7 +73,6 @@ public class BaseWorkShopController extends BaseController {
 	 * 车间列表数据
 	 */
 	@ResponseBody
-	@RequiresPermissions("base:workshop:baseWorkShop:list")
 	@RequestMapping(value = "data")
 	public Map<String, Object> data(BaseWorkShop baseWorkShop, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<BaseWorkShop> page = baseWorkShopService.findPage(new Page<BaseWorkShop>(request, response), baseWorkShop); 

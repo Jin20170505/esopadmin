@@ -71,7 +71,6 @@ public class BaseFactoryController extends BaseController {
 	 * 工厂列表数据
 	 */
 	@ResponseBody
-	@RequiresPermissions("base:factory:baseFactory:list")
 	@RequestMapping(value = "data")
 	public Map<String, Object> data(BaseFactory baseFactory, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<BaseFactory> page = baseFactoryService.findPage(new Page<BaseFactory>(request, response), baseFactory); 

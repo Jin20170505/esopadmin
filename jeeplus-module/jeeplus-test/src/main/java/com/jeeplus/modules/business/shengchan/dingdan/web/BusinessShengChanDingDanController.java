@@ -71,7 +71,6 @@ public class BusinessShengChanDingDanController extends BaseController {
 	 * 生产订单列表数据
 	 */
 	@ResponseBody
-	@RequiresPermissions("business:shengchan:dingdan:businessShengChanDingDan:list")
 	@RequestMapping(value = "data")
 	public Map<String, Object> data(BusinessShengChanDingDan businessShengChanDingDan, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<BusinessShengChanDingDan> page = businessShengChanDingDanService.findPage(new Page<BusinessShengChanDingDan>(request, response), businessShengChanDingDan); 

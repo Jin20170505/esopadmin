@@ -71,7 +71,6 @@ public class BaseUnitController extends BaseController {
 	 * 计量单位列表数据
 	 */
 	@ResponseBody
-	@RequiresPermissions("base:unit:baseUnit:list")
 	@RequestMapping(value = "data")
 	public Map<String, Object> data(BaseUnit baseUnit, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<BaseUnit> page = baseUnitService.findPage(new Page<BaseUnit>(request, response), baseUnit); 

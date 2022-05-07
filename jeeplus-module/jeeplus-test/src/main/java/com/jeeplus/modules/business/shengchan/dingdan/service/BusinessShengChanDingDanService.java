@@ -41,7 +41,14 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 	public Page<BusinessShengChanDingDan> findPage(Page<BusinessShengChanDingDan> page, BusinessShengChanDingDan businessShengChanDingDan) {
 		return super.findPage(page, businessShengChanDingDan);
 	}
-	
+
+	public Page<BusinessShengChanDingDanMingXi> findPage(Page<BusinessShengChanDingDanMingXi> page,BusinessShengChanDingDanMingXi businessShengChanDingDanMingXi){
+		businessShengChanDingDanMingXi.setPage(page);
+		page.setList(businessShengChanDingDanMingXiMapper.findShengChanDingDanMingXi(businessShengChanDingDanMingXi));
+		return page;
+	}
+
+
 	@Transactional(readOnly = false)
 	public void save(BusinessShengChanDingDan businessShengChanDingDan) {
 		super.save(businessShengChanDingDan);

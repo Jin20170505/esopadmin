@@ -12,19 +12,10 @@
 		a.del_flag AS "delFlag",
 		a.code AS "code",
 		a.dept AS "dept.id",
-				
-				
-				
-				
-				
-				
-				
-				
 		dept.name AS "dept.name"
 	</sql>
 	
 	<sql id="businessShengChanDingDanJoins">
-		
 		LEFT JOIN sys_office dept ON dept.id = a.dept
 	</sql>
 	

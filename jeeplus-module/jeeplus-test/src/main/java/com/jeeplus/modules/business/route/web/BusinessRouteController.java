@@ -97,7 +97,6 @@ public class BusinessRouteController extends BaseController {
 	 * 工艺路线列表数据
 	 */
 	@ResponseBody
-	@RequiresPermissions("business:route:businessRoute:list")
 	@RequestMapping(value = "data")
 	public Map<String, Object> data(BusinessRoute businessRoute, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<BusinessRoute> page = businessRouteService.findPage(new Page<BusinessRoute>(request, response), businessRoute); 

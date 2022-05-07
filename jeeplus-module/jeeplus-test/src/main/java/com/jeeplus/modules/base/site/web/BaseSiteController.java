@@ -73,7 +73,6 @@ public class BaseSiteController extends BaseController {
 	 * 工作站列表数据
 	 */
 	@ResponseBody
-	@RequiresPermissions("base:site:baseSite:list")
 	@RequestMapping(value = "data")
 	public Map<String, Object> data(BaseSite baseSite, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<BaseSite> page = baseSiteService.findPage(new Page<BaseSite>(request, response), baseSite); 
