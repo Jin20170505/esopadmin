@@ -23,7 +23,7 @@ public class BusinessShengChanDingDanMingXi extends DataEntity<BusinessShengChan
 	private BusinessProduct cinv;		// 存货编码
 	private String cinvname;		// 存货名称
 	private String std;		// 存货规格型号
-	private BaseUnit unit;		// 单位
+	private String unit;		// 单位
 	private Double num;		// 数量
 	private String startdate;		// 开工日期
 	private String enddate;		// 完工日期
@@ -87,12 +87,12 @@ public class BusinessShengChanDingDanMingXi extends DataEntity<BusinessShengChan
 	}
 	
 	@NotNull(message="单位不能为空")
-	@ExcelField(title="单位", fieldType=BaseUnit.class, value="", align=2, sort=12)
-	public BaseUnit getUnit() {
+	@ExcelField(title="单位", align=2, sort=12)
+	public String getUnit() {
 		return unit;
 	}
 
-	public void setUnit(BaseUnit unit) {
+	public void setUnit(String unit) {
 		this.unit = unit;
 	}
 	

@@ -140,7 +140,7 @@ $(document).ready(function() {
 	  $('#businessShengChanDingDanTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
             $('#remove').prop('disabled', ! $('#businessShengChanDingDanTable').bootstrapTable('getSelections').length);
-            $('#edit').prop('disabled', $('#businessShengChanDingDanTable').bootstrapTable('getSelections').length!=1);
+            $('#edit,#jihua').prop('disabled', $('#businessShengChanDingDanTable').bootstrapTable('getSelections').length!=1);
         });
 
 	 $("#import").click(function(){//显示导入面板
@@ -225,8 +225,10 @@ $(document).ready(function() {
 
 	 })
   }
+// 生成计划工单
+function jihua(){
 
-
+}
     //刷新列表
   function refresh() {
       $('#businessShengChanDingDanTable').bootstrapTable('refresh');
@@ -315,7 +317,7 @@ $(document).ready(function() {
 						{{row.no}}
 					</td>
 					<td>
-						{{row.cinv.cdoe}}
+						{{row.cinv.code}}
 					</td>
 					<td>
 						{{row.cinvname}}
@@ -324,7 +326,7 @@ $(document).ready(function() {
 						{{row.std}}
 					</td>
 					<td>
-						{{row.}}
+						{{row.unit}}
 					</td>
 					<td>
 						{{row.num}}

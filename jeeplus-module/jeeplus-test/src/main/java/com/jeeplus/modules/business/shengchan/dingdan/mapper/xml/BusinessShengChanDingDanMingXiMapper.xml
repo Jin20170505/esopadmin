@@ -12,30 +12,16 @@
 		a.del_flag AS "delFlag",
 		a.pid AS "p.id",
 		a.no AS "no",
-		a.cinv_code AS "cinv.id",
+		a.cinv_code AS "cinv.code",
 		a.cinv_name AS "cinvname",
 		a.std AS "std",
 		a.unit AS "unit",
 		a.num AS "num",
 		a.start_date AS "startdate",
-		a.end_date AS "enddate",
-				
-				
-				
-				
-				
-				
-				
-				
-				
-		cinv.cdoe AS "cinv.cdoe"
+		a.end_date AS "enddate"
 	</sql>
 	
 	<sql id="businessShengChanDingDanMingXiJoins">
-		
-			LEFT JOIN business_shengchan_dingdan b ON b.id = a.pid
-		LEFT JOIN business_product cinv ON cinv.id = a.cinv_code
-		LEFT JOIN base_unit unit ON unit.id = a.unit
 	</sql>
 	
     
@@ -64,7 +50,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.create_date ASC
+				ORDER BY a.no ASC
 			</otherwise>
 		</choose>
 	</select>
@@ -116,7 +102,7 @@
 			#{delFlag},
 			#{p.id},
 			#{no},
-			#{cinv.id},
+			#{cinv.code},
 			#{cinvname},
 			#{std},
 			#{unit},
@@ -133,7 +119,7 @@
 			remarks = #{remarks},
 			pid = #{p.id},
 			no = #{no},
-			cinv_code = #{cinv.id},
+			cinv_code = #{cinv.code},
 			cinv_name = #{cinvname},
 			std = #{std},
 			unit = #{unit},

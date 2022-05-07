@@ -45,7 +45,7 @@ layout("/include/_dialog.html"){
 			});
 			$(list+idx).find(".jp-calendar-picker-input").each(function(){
 				 $(this).datetimepicker({
-					 format:'Y-m-d H:i'
+					 format:'Y-m-d'
 			    });
 			});
 		}
@@ -125,23 +125,23 @@ layout("/include/_dialog.html"){
 					
 					
 					<td>
-						<#gridselect url="${ctx}/business/product/archive/businessProduct/data" id="businessShengChanDingDanMingXiList{{idx}}_cinv" name="businessShengChanDingDanMingXiList[{{idx}}].cinv.id" value="{{row.cinv.id}}" labelName="businessShengChanDingDanMingXiList{{idx}}.cinv.cdoe" labelValue="{{row.cinv.cdoe}}"
+						<#gridselect callback="cinvCallBack" url="${ctx}/business/product/archive/businessProduct/data" id="businessShengChanDingDanMingXiList{{idx}}_cinv" name="businessShengChanDingDanMingXiList{{idx}}.cinv.id" value="{{row.cinv.id}}" labelName="businessShengChanDingDanMingXiList[{{idx}}].cinv.code" labelValue="{{row.cinv.code}}"
 							 title="选择存货编码" class="form-control  required" fieldLabels="编号|名称|规格" fieldKeys="code|name|specification" searchLabels="编号|名称" searchKeys="code|name" />
 					</td>
 					
 					
 					<td>
-						<input id="businessShengChanDingDanMingXiList{{idx}}_cinvname" name="businessShengChanDingDanMingXiList[{{idx}}].cinvname" type="text" value="{{row.cinvname}}"    class="form-control "/>
+						<input id="businessShengChanDingDanMingXiList{{idx}}_cinvname" readonly name="businessShengChanDingDanMingXiList[{{idx}}].cinvname" type="text" value="{{row.cinvname}}"    class="form-control "/>
 					</td>
 					
 					
 					<td>
-						<input id="businessShengChanDingDanMingXiList{{idx}}_std" name="businessShengChanDingDanMingXiList[{{idx}}].std" type="text" value="{{row.std}}"    class="form-control "/>
+						<input id="businessShengChanDingDanMingXiList{{idx}}_std" readonly name="businessShengChanDingDanMingXiList[{{idx}}].std" type="text" value="{{row.std}}"    class="form-control "/>
 					</td>
 					
 					
 					<td>
-						<#gridselect url="${ctx}/base/unit/baseUnit/data" id="businessShengChanDingDanMingXiList{{idx}}_unit" name="businessShengChanDingDanMingXiList[{{idx}}].unit" value="{{row.unit}}" labelName="businessShengChanDingDanMingXiList{{idx}}." labelValue="{{row.}}"
+						<#gridselect callback="unitCallBack" url="${ctx}/base/unit/baseUnit/data" id="businessShengChanDingDanMingXiList{{idx}}_unit" name="businessShengChanDingDanMingXiList[{{idx}}].unit" value="{{row.unit}}" labelName="businessShengChanDingDanMingXiList{{idx}}.u.name" labelValue="{{row.unit}}"
 							 title="选择单位" class="form-control  required" fieldLabels="编号|名称|备注" fieldKeys="id|name|remarks" searchLabels="名称" searchKeys="name" />
 					</td>
 					
@@ -174,6 +174,19 @@ layout("/include/_dialog.html"){
 						{{#delBtn}}<span class="close" onclick="delRow(this, '#businessShengChanDingDanMingXiList{{idx}}')" title="删除">&times;</span>{{/delBtn}}
 					</td>
 				</tr>//-->
+			</script>
+			<script type="text/javascript">
+				function cinvCallBack(items,tagid){
+					var item = items[0];
+					var idpre = tagid.split('_')[0];
+					$('#'+idpre+'_cinvname').val(item.name);
+					$('#'+idpre+'_std').val(item.specification);
+				}
+
+				function unitCallBack(items,tagid){
+					var item = items[0];
+					$('#'+tagid+"Id").val(item.name)
+				}
 			</script>
 			<script type="text/javascript">
 				var businessShengChanDingDanMingXiRowIdx = 0, businessShengChanDingDanMingXiTpl = $("#businessShengChanDingDanMingXiTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
