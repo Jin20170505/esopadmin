@@ -26,8 +26,11 @@ layout("/include/_dialog.html"){
                     jp.close(index);
                 })
 			}
-
         }
+        function unitCallBack(items,tagid){
+			var item = items[0];
+			$('#unit').val(item.name);
+		}
 	</script>
 		<form id="inputForm"  method="post" class="form-horizontal p-15">
 		<input type="hidden" name="id" value="${businessProduct.id!}"/>
@@ -36,7 +39,7 @@ layout("/include/_dialog.html"){
 				<tr>
 					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>存货分类：</label></td>
 					<td class="width-35">
-						<#treeselect id="type" name="type.id"  labelName="type.name" labelValue="${businessProduct.type.name!}"
+						<#treeselect id="type" name="type.id" value="${businessProduct.type.id!}" labelName="type.name" labelValue="${businessProduct.type.name!}"
 							title="存货分类" url="/business/product/archive/businessProductTypeOnlyRead/treeData" extId="${businessProduct.id}" class="form-control required" allowClear="true"/>
 					</td>
 					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>存货编码：</label></td>
@@ -57,7 +60,9 @@ layout("/include/_dialog.html"){
 				<tr>
 					<td class="width-15 active"><label class="pull-right">计量单位：</label></td>
 					<td class="width-35">
-						<input name="unit" value="${businessProduct.unit!}"    class="form-control "/>
+						<input name="unit" id="unit" value="${businessProduct.unit!}"  type="hidden"  class="form-control "/>
+						<#gridselect callback="unitCallBack" url="${ctx}/base/unit/baseUnit/data" id="unit" name="u.id" value="" labelName="u.name" labelValue="${businessProduct.unit!}"
+						title="选择单位" class="form-control  required" fieldLabels="编号|名称|备注" fieldKeys="id|name|remarks" searchLabels="名称" searchKeys="name" />
 					</td>
 					<td class="width-15 active"><label class="pull-right">备注信息：</label></td>
 					<td class="width-35">

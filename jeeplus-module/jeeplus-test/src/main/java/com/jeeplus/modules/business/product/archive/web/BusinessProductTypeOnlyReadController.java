@@ -148,7 +148,7 @@ public class BusinessProductTypeOnlyReadController extends BaseController {
 			if (StringUtils.isBlank(extId) || (extId!=null && !extId.equals(e.getId()) && e.getParentIds().indexOf(","+extId+",")==-1)){
 				Map<String, Object> map = Maps.newHashMap();
 				map.put("id", e.getId());
-				map.put("text", e.getName());
+				map.put("text", e.getName()+"("+e.getCode()+")");
 				if(StringUtils.isBlank(e.getParentId()) || "0".equals(e.getParentId())){
 					map.put("parent", "#");
 					Map<String, Object> state = Maps.newHashMap();

@@ -259,7 +259,9 @@ $(document).ready(function() {
 
    //新增表单页面
  function add() {
-     jp.openSaveDialog('新增存货档案', "${ctx}/business/product/archive/businessProduct/form/add",'90%', '90%');
+    var typeid = $('#typeId').val();
+    var typename = $('#typeName').val();
+     jp.openSaveDialog('新增存货档案', "${ctx}/business/product/archive/businessProduct/form/add?type.id="+typeid+"&type.name="+typename,'90%', '90%');
  }
   //编辑表单页面
   function edit(id){
