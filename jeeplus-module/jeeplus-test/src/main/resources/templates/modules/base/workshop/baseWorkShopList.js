@@ -95,15 +95,18 @@ $(document).ready(function() {
 		        title: '所属工厂',
 		        sortable: true,
 		        sortName: 'factory.name'
-		       
 		    }
 			,{
-		        field: 'name',
-		        title: '车间名称',
+		        field: 'code',
+		        title: '车间编号',
 		        sortable: true,
-		        sortName: 'name'
-		       
-		    }
+		        sortName: 'code'
+		    },{
+            field: 'name',
+            title: '车间名称',
+            sortable: true,
+            sortName: 'name'
+            }
 			,{
 		        field: 'manger',
 		        title: '负责人',

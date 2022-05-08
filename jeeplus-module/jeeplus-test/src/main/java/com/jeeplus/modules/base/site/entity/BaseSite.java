@@ -21,6 +21,7 @@ public class BaseSite extends DataEntity<BaseSite> {
 	private BaseFactory factory;		// 所属工厂
 	private BaseWorkShop workshop;		// 所属车间
 	private BaseProductionLine line;		// 所属产线
+	private String code; // 编号
 	private String name;		// 工作站名称
 	
 	public BaseSite() {
@@ -61,8 +62,18 @@ public class BaseSite extends DataEntity<BaseSite> {
 	public void setLine(BaseProductionLine line) {
 		this.line = line;
 	}
-	
-	@ExcelField(title="工作站名称", align=2, sort=9)
+
+	@ExcelField(title="工作站编号", align=2, sort=10)
+	public String getCode() {
+		return code;
+	}
+
+	public BaseSite setCode(String code) {
+		this.code = code;
+		return this;
+	}
+
+	@ExcelField(title="工作站名称", align=2, sort=10)
 	public String getName() {
 		return name;
 	}

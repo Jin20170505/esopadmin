@@ -17,6 +17,7 @@ public class BaseWorkShop extends DataEntity<BaseWorkShop> {
 	
 	private static final long serialVersionUID = 1L;
 	private BaseFactory factory;		// 所属工厂
+	private String code; // 编号
 	private String name;		// 车间名称
 	private String manger;		// 负责人
 	
@@ -38,8 +39,17 @@ public class BaseWorkShop extends DataEntity<BaseWorkShop> {
 	public void setFactory(BaseFactory factory) {
 		this.factory = factory;
 	}
-	
-	@ExcelField(title="车间名称", align=2, sort=7)
+	@ExcelField(title="车间编号", align=2, sort=7)
+	public String getCode() {
+		return code;
+	}
+
+	public BaseWorkShop setCode(String code) {
+		this.code = code;
+		return this;
+	}
+
+	@ExcelField(title="车间名称", align=2, sort=8)
 	public String getName() {
 		return name;
 	}
@@ -48,7 +58,7 @@ public class BaseWorkShop extends DataEntity<BaseWorkShop> {
 		this.name = name;
 	}
 	
-	@ExcelField(title="负责人", align=2, sort=8)
+	@ExcelField(title="负责人", align=2, sort=10)
 	public String getManger() {
 		return manger;
 	}

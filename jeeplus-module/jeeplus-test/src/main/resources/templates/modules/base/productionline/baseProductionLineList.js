@@ -91,7 +91,12 @@ $(document).ready(function() {
                 <% } %>
 
                 }
-           }
+           },{
+            field: 'code',
+            title: '产线编号',
+            sortable: true,
+            sortName: 'code'
+            }
             ,{
             field: 'name',
             title: '产线名称',

@@ -33,22 +33,24 @@ layout("/include/_dialog.html"){
     <table class="table table-bordered">
        <tbody>
             <tr>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>工厂编号：</label></td>
+                <td class="width-35">
+                    <input name="code" value="${baseFactory.code!}"    class="form-control required"/>
+                </td>
                 <td class="width-15 active"><label class="pull-right"><font color="red">*</font>工厂名称：</label></td>
                 <td class="width-35">
                     <input name="name" value="${baseFactory.name!}"    class="form-control required"/>
             </td>
+            </tr>
+            <tr>
                 <td class="width-15 active"><label class="pull-right">负责人：</label></td>
                 <td class="width-35">
                     <input name="manger" value="${baseFactory.manger!}"    class="form-control"/>
-            </td>
-            </tr>
-            <tr>
+                </td>
                 <td class="width-15 active"><label class="pull-right">备注信息：</label></td>
                 <td class="width-35">
                     <textarea name="remarks" rows="4"    class="form-control ">${baseFactory.remarks!}</textarea>
-            </td>
-                <td class="width-15 active"></td>
-                <td class="width-35" ></td>
+                </td>
             </tr>
         </tbody>
     </table>

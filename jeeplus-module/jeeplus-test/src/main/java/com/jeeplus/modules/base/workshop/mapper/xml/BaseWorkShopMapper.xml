@@ -10,6 +10,7 @@
 		a.del_flag AS "delFlag",
 		a.factorry_id AS "factory.id",
 		a.id AS "id",
+		a.code as "code",
 		a.name AS "name",
 		a.manger AS "manger",
 		a.remarks AS "remarks",
@@ -43,6 +44,9 @@
 			</if>
 			<if test="id != null and id != ''">
 				AND a.id = #{id}
+			</if>
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
 			</if>
 			<if test="name != null and name != ''">
 				AND a.name LIKE
@@ -88,7 +92,7 @@
 			update_by,
 			update_date,
 			del_flag,
-			factorry_id,
+			factorry_id,code,
 			name,
 			manger,
 			remarks
@@ -98,7 +102,7 @@
 			#{updateBy.id},
 			#{updateDate},
 			#{delFlag},
-			#{factory.id},
+			#{factory.id},#{code},
 			#{name},
 			#{manger},
 			#{remarks}
@@ -110,6 +114,7 @@
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
 			factorry_id = #{factory.id},
+			code = #{code},
 			name = #{name},
 			manger = #{manger},
 			remarks = #{remarks}

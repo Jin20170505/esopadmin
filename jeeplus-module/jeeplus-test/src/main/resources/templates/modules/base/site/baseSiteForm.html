@@ -25,7 +25,13 @@ layout("/include/_dialog.html"){
                     jp.close(index);
                 })
 			}
-
+        }
+        function linkCallBack(items,tagid){
+            var item = items[0];
+            $('#factoryId').val(item.factory.id);
+            $('#factoryName').val(item.factory.name);
+            $('#workshopId').val(item.workshop.id);
+            $('#workshopName').val(item.workshop.name);
         }
 	</script>
 <form id="inputForm"  method="post"  class="form-horizontal p-15">
@@ -33,37 +39,37 @@ layout("/include/_dialog.html"){
     <table class="table table-bordered">
        <tbody>
             <tr>
-                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>所属工厂：</label></td>
-                <td class="width-35">
-                    <#gridselect url="${ctx}/base/factory/baseFactory/data" id="factory" name="factory.id" value="${baseSite.factory.id!}" labelName="factory.name" labelValue="${baseSite.factory.name!}"
-                         title="选择所属工厂" class="form-control required" fieldLabels="编码|名称" fieldKeys="id|name" searchLabels="编码|名称" searchKeys="id|name" />
-            </td>
-                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>所属车间：</label></td>
-                <td class="width-35">
-                    <#gridselect url="${ctx}/base/workshop/baseWorkShop/data" id="workshop" name="workshop.id" value="${baseSite.workshop.id!}" labelName="workshop.name" labelValue="${baseSite.workshop.name!}"
-                         title="选择所属车间" class="form-control required" fieldLabels="编码|名称" fieldKeys="id|name" searchLabels="编码|名称" searchKeys="id|name"
-                    extendId="factory.id" extendTagId="factoryId" extendTagName="所属工厂" />
-            </td>
-            </tr>
-            <tr>
                 <td class="width-15 active"><label class="pull-right"><font color="red">*</font>所属产线：</label></td>
                 <td class="width-35">
-                    <#gridselect url="${ctx}/base/productionline/baseProductionLine/data" id="line" name="line.id" value="${baseSite.line.id!}" labelName="line.name" labelValue="${baseSite.line.name!}"
-                         title="选择所属产线" class="form-control required" fieldLabels="编码|名称" fieldKeys="id|name" searchLabels="编码|名称" searchKeys="id|name"
-                    extendId="workshop.id" extendTagId="workshopId" extendTagName="所属车间"/>
-            </td>
+                    <#gridselect callback="linkCallBack" url="${ctx}/base/productionline/baseProductionLine/data" id="line" name="line.id" value="${baseSite.line.id!}" labelName="line.name" labelValue="${baseSite.line.name!}"
+                         title="选择所属产线" class="form-control required" fieldLabels="编码|编号|名称|所属车间|所属工厂" fieldKeys="id|code|name|workshop.name|factory.name" searchLabels="编码|编号|名称" searchKeys="id|code|name"/>
+                </td>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>所属车间：</label></td>
+                <td class="width-35">
+                    <#gridselect disabled="disabled" url="${ctx}/base/workshop/baseWorkShop/data" id="workshop" name="workshop.id" value="${baseSite.workshop.id!}" labelName="workshop.name" labelValue="${baseSite.workshop.name!}"
+                    title="选择所属车间" class="form-control required" fieldLabels="编码|名称" fieldKeys="id|name" searchLabels="编码|名称" searchKeys="id|name"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>所属工厂：</label></td>
+                <td class="width-35">
+                    <#gridselect disabled="disabled" url="${ctx}/base/factory/baseFactory/data" id="factory" name="factory.id" value="${baseSite.factory.id!}" labelName="factory.name" labelValue="${baseSite.factory.name!}"
+                    title="选择所属工厂" class="form-control required" fieldLabels="编码|名称" fieldKeys="id|name" searchLabels="编码|名称" searchKeys="id|name" />
+                </td>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>工作站编号：</label></td>
+                <td class="width-35">
+                    <input name="code" value="${baseSite.code!}"    class="form-control required"/>
+                </td>
+            </tr>
+            <tr>
                 <td class="width-15 active"><label class="pull-right"><font color="red">*</font>工作站名称：</label></td>
                 <td class="width-35">
                     <input name="name" value="${baseSite.name!}"    class="form-control required"/>
-            </td>
-            </tr>
-            <tr>
+                </td>
                 <td class="width-15 active"><label class="pull-right">备注信息：</label></td>
                 <td class="width-35">
                     <textarea name="remarks" rows="4"    class="form-control ">${baseSite.remarks!}</textarea>
-            </td>
-                <td class="width-15 active"></td>
-                <td class="width-35" ></td>
+                </td>
             </tr>
         </tbody>
     </table>

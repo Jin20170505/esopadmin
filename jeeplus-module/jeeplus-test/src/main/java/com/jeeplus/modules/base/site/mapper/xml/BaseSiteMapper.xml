@@ -12,6 +12,7 @@
 		a.factory_id AS "factory.id",
 		a.workshop_id AS "workshop.id",
 		a.line_id AS "line.id",
+		a.code as "code",
 		a.name AS "name",
 		a.remarks AS "remarks",
 		factory.name AS "factory.name",
@@ -45,6 +46,9 @@
 			${dataScope}
 			<if test="id != null and id != ''">
 				AND a.id = #{id}
+			</if>
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
 			</if>
 			<if test="factory != null and factory.id != null and factory.id != ''">
 				AND a.factory_id = #{factory.id}
@@ -101,7 +105,7 @@
 			del_flag,
 			factory_id,
 			workshop_id,
-			line_id,
+			line_id,code,
 			name,
 			remarks
 		) VALUES (
@@ -112,7 +116,7 @@
 			#{delFlag},
 			#{factory.id},
 			#{workshop.id},
-			#{line.id},
+			#{line.id},#{code},
 			#{name},
 			#{remarks}
 		)
@@ -125,6 +129,7 @@
 			factory_id = #{factory.id},
 			workshop_id = #{workshop.id},
 			line_id = #{line.id},
+			code = #{code},
 			name = #{name},
 			remarks = #{remarks}
 		WHERE id = #{id}

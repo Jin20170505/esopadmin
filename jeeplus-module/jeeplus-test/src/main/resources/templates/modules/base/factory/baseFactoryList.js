@@ -91,7 +91,13 @@ $(document).ready(function() {
 					 <% } %>
 		         }
 		       
-		    }
+		    },{
+                field: 'code',
+                title: '工厂编号',
+                sortable: true,
+                sortName: 'code'
+
+                }
 			,{
 		        field: 'name',
 		        title: '工厂名称',

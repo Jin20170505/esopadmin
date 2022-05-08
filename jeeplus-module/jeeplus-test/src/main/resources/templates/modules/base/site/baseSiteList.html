@@ -27,6 +27,10 @@ layout("/include/_container.html", {title:"列表", parent:"工作站"}){
 				<label class="m-r-10" title="工作站编码：">工作站编码：</label>
 				<input name="id"   class=" form-control"/>
 			</div>
+			<div class="form-group m-b-10 m-r-10">
+			<label class="m-r-10" title="工作站编码：">工作站编号：</label>
+			<input name="code"   class=" form-control"/>
+			</div>
 			 <div class="form-group m-b-10 m-r-10">
 				<label class="m-r-10" title="所属工厂：">所属工厂：</label>
 				<#gridselect url="${ctx}/base/factory/baseFactory/data" id="factory" name="factory.id"  labelName="factory.name"

@@ -14,6 +14,7 @@ import com.jeeplus.common.utils.excel.annotation.ExcelField;
 public class BaseFactory extends DataEntity<BaseFactory> {
 	
 	private static final long serialVersionUID = 1L;
+	private String code;
 	private String name;		// 工厂名称
 	private String manger;		// 负责人
 	
@@ -25,7 +26,14 @@ public class BaseFactory extends DataEntity<BaseFactory> {
 	public BaseFactory(String id){
 		super(id);
 	}
+	@ExcelField(title="工厂编号", align=2, sort=5)
+	public String getCode() {
+		return code;
+	}
 
+	public void setCode(String code) {
+		this.code = code;
+	}
 	@ExcelField(title="工厂名称", align=2, sort=6)
 	public String getName() {
 		return name;

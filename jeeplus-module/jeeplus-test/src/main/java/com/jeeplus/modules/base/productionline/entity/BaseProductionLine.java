@@ -5,6 +5,8 @@ package com.jeeplus.modules.base.productionline.entity;
 
 import com.jeeplus.modules.base.factory.entity.BaseFactory;
 import javax.validation.constraints.NotNull;
+
+import com.jeeplus.modules.base.site.entity.BaseSite;
 import com.jeeplus.modules.base.workshop.entity.BaseWorkShop;
 
 import com.jeeplus.core.persistence.DataEntity;
@@ -19,6 +21,7 @@ public class BaseProductionLine extends DataEntity<BaseProductionLine> {
 	private static final long serialVersionUID = 1L;
 	private BaseFactory factory;		// 所属工厂
 	private BaseWorkShop workshop;		// 所属车间
+	private String code;
 	private String name;		// 产线名称
 	private String manger;		// 负责人
 	
@@ -50,7 +53,15 @@ public class BaseProductionLine extends DataEntity<BaseProductionLine> {
 	public void setWorkshop(BaseWorkShop workshop) {
 		this.workshop = workshop;
 	}
-	
+
+	@ExcelField(title="产线编号", align=2, sort=7)
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
 	@ExcelField(title="产线名称", align=2, sort=8)
 	public String getName() {
 		return name;
