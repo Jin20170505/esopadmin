@@ -4,7 +4,7 @@ layout("/include/_dialog.html"){
 	<script type="text/javascript">
 
 		$(document).ready(function() {
-					});
+						});
 
 		function save() {
             var isValidate = jp.validateForm('#inputForm');//校验表单
@@ -27,30 +27,198 @@ layout("/include/_dialog.html"){
 			}
 
         }
+
+		function addRow(list, idx, tpl, row){
+			$(list).append(Mustache.render(tpl, {
+				idx: idx, delBtn: true, row: row
+			}));
+			$(list+idx).find("select").each(function(){
+				$(this).val($(this).attr("data-value"));
+			});
+			$(list+idx).find("input[type='checkbox'], input[type='radio']").each(function(){
+				var ss = $(this).attr("data-value").split(',');
+				for (var i=0; i<ss.length; i++){
+					if($(this).val() == ss[i]){
+						$(this).attr("checked","checked");
+					}
+				}
+			});
+			$(list+idx).find(".jp-calendar-picker-input").each(function(){
+				 $(this).datetimepicker({
+					 format:'Y-m-d H:i'
+			    });
+			});
+		}
+		function delRow(obj, prefix){
+			var id = $(prefix+"_id");
+			var delFlag = $(prefix+"_delFlag");
+			if (id.val() == ""){
+				$(obj).parent().parent().remove();
+			}else if(delFlag.val() == "0"){
+				delFlag.val("1");
+				$(obj).html("&divide;").attr("title", "撤销删除");
+				$(obj).parent().parent().addClass("error");
+			}else if(delFlag.val() == "1"){
+				delFlag.val("0");
+				$(obj).html("&times;").attr("title", "删除");
+				$(obj).parent().parent().removeClass("error");
+			}
+		}
+		function leadercallback(items,tagid){
+			var item = items[0];
+			$('#leadercode').val(item.no);
+		}
+		function delleadercall(tagid){
+			$('#leadercode').val('');
+		}
+		function linecallback(items,tagid){
+			var item = items[0];
+			$('#factoryId').val(item.factory.id);
+			$('#factoryName').val(item.factory.name);
+			$('#workshopId').val(item.workshop.id);
+			$('#workshopName').val(item.workshop.name);
+
+		}
+		function workshopcallback(items,tagid){
+			var item = items[0];
+			$('#factoryId').val(item.factory.id);
+			$('#factoryName').val(item.factory.name);
+		}
 	</script>
 <form id="inputForm"  method="post"  class="form-horizontal p-15">
-    <input type="hidden" name="id" value="${baseClassGroup.id!}"/>
-    <table class="table table-bordered">
-       <tbody>
-            <tr>
-                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>班组编号：</label></td>
-                <td class="width-35">
-                    <input name="code" value="${baseClassGroup.code!}"    class="form-control required"/>
-            </td>
-                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>班组名称：</label></td>
-                <td class="width-35">
-                    <input name="name" value="${baseClassGroup.name!}"    class="form-control required"/>
-            </td>
-            </tr>
-            <tr>
-                <td class="width-15 active"><label class="pull-right">备注信息：</label></td>
-                <td class="width-35">
-                    <textarea name="remarks" rows="4"    class="form-control ">${baseClassGroup.remarks!}</textarea>
-            </td>
-                <td class="width-15 active"></td>
-                <td class="width-35" ></td>
-            </tr>
-        </tbody>
-    </table>
-</form>
+		<input type="hidden" name="id" value="${baseClassGroup.id!}"/>
+		<table class="table table-bordered">
+		   <tbody>
+				<tr>
+					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>班组编号：</label></td>
+					<td class="width-35">
+						<input name="code" value="${baseClassGroup.code!}"    class="form-control required"/>
+				</td>
+					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>班组名称：</label></td>
+					<td class="width-35">
+						<input name="name" value="${baseClassGroup.name!}"    class="form-control required"/>
+				</td>
+				</tr>
+				<tr>
+					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>班长：</label></td>
+					<td class="width-35">
+						<#userselect  callback="leadercallback"  delcall="delleadercall"  id="leader" name="leader.id" value="${baseClassGroup.leader.id!}" labelName="leader.name" labelValue="${baseClassGroup.leader.name!}"
+							    class="form-control required"  allowClear="true"/>
+				</td>
+					<td class="width-15 active"><label class="pull-right">班长工号：</label></td>
+					<td class="width-35">
+						<input name="leadercode" value="${baseClassGroup.leadercode!}" readonly id="leadercode"   class="form-control "/>
+				</td>
+				</tr>
+				<tr>
+					<td class="width-15 active"><label class="pull-right">所属产线：</label></td>
+					<td class="width-35">
+						<#gridselect callback="linecallback" url="${ctx}/base/productionline/baseProductionLine/data" id="line" name="line.id" value="${baseClassGroup.line.id!}" labelName="line.name" labelValue="${baseClassGroup.line.name!}"
+						title="选择所属产线" class="form-control " fieldLabels="编号|名称|所属车间|所属工厂" fieldKeys="code|name|workshop.name|factory.name" searchLabels="编号|名称" searchKeys="code|name" />
+					</td>
+					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>所属车间：</label></td>
+					<td class="width-35">
+						<#gridselect callback="workshopcallback" url="${ctx}/base/workshop/baseWorkShop/data" id="workshop" name="workshop.id" value="${baseClassGroup.workshop.id!}" labelName="workshop.name" labelValue="${baseClassGroup.workshop.name!}"
+							 title="选择所属车间" class="form-control required" fieldLabels="编号|名称|所属工厂" fieldKeys="code|name|factory.name" searchLabels="编号|名称" searchKeys="code|name" />
+				</td>
+				</tr>
+				<tr>
+					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>所属工厂：</label></td>
+					<td class="width-35">
+						<#gridselect disabled="disabled" url="${ctx}/base/factory/baseFactory/data" id="factory" name="factory.id" value="${baseClassGroup.factory.id!}" labelName="factory.name" labelValue="${baseClassGroup.factory.name!}"
+						title="选择所属工厂" class="form-control required" fieldLabels="编号|名称" fieldKeys="code|name" searchLabels="编号|名称" searchKeys="code|name" />
+					</td>
+					<td class="width-15 active"><label class="pull-right">备注信息：</label></td>
+					<td class="width-35">
+						<textarea name="remarks" rows="4"    class="form-control ">${baseClassGroup.remarks!}</textarea>
+				</td>
+				</tr>
+		 	</tbody>
+		</table>
+			<div class="card card-tabs">
+            <div class="card-heading  pb-0">
+                <ul class="nav nav-pills float-left" role="tablist">
+				<li class="nav-item">
+					<a data-toggle="tab" class="nav-link show active" role="tab" href="#tab-1" aria-expanded="true">班组成员：</a>
+                </li>
+            </ul>
+            </div>
+            <div class="card-body">
+		    <div class="tab-content">
+			<div id="tab-1" class="tab-pane fade active show">
+			<a class="btn btn-white btn-sm m-b-5" onclick="addRow('#baseClassGroupUserList', baseClassGroupUserRowIdx, baseClassGroupUserTpl);baseClassGroupUserRowIdx = baseClassGroupUserRowIdx + 1;" title="新增"><i class="fa fa-plus"></i> 新增</a>
+			<table class="table table-striped table-bordered table-condensed">
+				<thead>
+					<tr>
+						<th class="hide"></th>
+						<th><font color="red">*</font>序号</th>
+						<th><font color="red">*</font>工号</th>
+						<th>姓名</th>
+						<th>备注信息</th>
+						<th width="10">&nbsp;</th>
+					</tr>
+				</thead>
+				<tbody id="baseClassGroupUserList">
+				</tbody>
+			</table>
+			<script type="text/template" id="baseClassGroupUserTpl">//<!--
+				<tr id="baseClassGroupUserList{{idx}}">
+					<td class="hide">
+						<input id="baseClassGroupUserList{{idx}}_id" name="baseClassGroupUserList[{{idx}}].id" type="hidden" value="{{row.id}}"/>
+						<input id="baseClassGroupUserList{{idx}}_delFlag" name="baseClassGroupUserList[{{idx}}].delFlag" type="hidden" value="0"/>
+					</td>
+					
+					<td>
+						<input id="baseClassGroupUserList{{idx}}_no" name="baseClassGroupUserList[{{idx}}].no" type="text" value="{{row.no}}"    class="form-control required isIntGtZero"/>
+					</td>
+					
+					
+					<td  class="max-width-250">
+						<#userselect callback="usercallback"  delcall="delusercall" id="baseClassGroupUserList{{idx}}_user" name="baseClassGroupUserList[{{idx}}].user.id" value="{{row.user.id}}" labelName="baseClassGroupUserList[{{idx}}].user.no" labelValue="{{row.user.no}}"
+							    class="form-control required"  allowClear="true"/>
+					</td>
+					
+					
+					<td>
+						<input id="baseClassGroupUserList{{idx}}_username"readonly name="baseClassGroupUserList[{{idx}}].username" type="text" value="{{row.username}}"    class="form-control "/>
+					</td>
+					
+					
+					<td>
+						<input id="baseClassGroupUserList{{idx}}_remarks" name="baseClassGroupUserList[{{idx}}].remarks" type="text" value="{{row.remarks}}"    class="form-control "/>
+					</td>
+					
+					<td class="text-center" width="10">
+						{{#delBtn}}<span class="close" onclick="delRow(this, '#baseClassGroupUserList{{idx}}')" title="删除">&times;</span>{{/delBtn}}
+					</td>
+				</tr>//-->
+			</script>
+				<script type="text/javascript">
+					function usercallback(rows,tagid){
+						var row = rows[0];
+						$('#'+tagid+"Id").val(row.no);
+						$('#'+tagid+"Name").val(row.no);
+						var idpre = tagid.split('_')[0];
+						$('#'+idpre+'_username').val(row.name);
+					}
+					function delusercall(tagid){
+						var idpre = tagid.split('_')[0];
+						$('#'+idpre+'_username').val('');
+					}
+				</script>
+			<script type="text/javascript">
+				var baseClassGroupUserRowIdx = 0, baseClassGroupUserTpl = $("#baseClassGroupUserTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
+				$(document).ready(function() {
+					var data = ${fn.toJson(baseClassGroup.baseClassGroupUserList)};
+					for (var i=0; i<data.length; i++){
+						addRow('#baseClassGroupUserList', baseClassGroupUserRowIdx, baseClassGroupUserTpl, data[i]);
+						baseClassGroupUserRowIdx = baseClassGroupUserRowIdx + 1;
+					}
+				});
+			</script>
+			</div>
+		</div>
+		</div>
+		</div>
+		</form>
 <% } %>

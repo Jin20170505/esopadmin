@@ -26,19 +26,21 @@ $(document).ready(function() {
     	       showExport: false,
     	       //显示切换分页按钮
     	       showPaginationSwitch: false,
+    	       //显示详情按钮
+    	       detailView: true,
+    	       	//显示详细内容函数
+	           detailFormatter: "detailFormatter",
     	       //最低显示2行
     	       minimumCountColumns: 2,
                //是否显示行间隔色
                striped: true,
-               rightFixedColumns: false, //右侧冻结列
-               rightFixedNumber: 1,
                //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性(*)
                cache: false,    
                //是否显示分页(*)
                pagination: true,
                //分页方式: client客户端分页，server服务端分页(*)
                sidePagination: "server",
-                //排序方式
+                //排序方式 
                sortOrder: "asc",  
                //初始化加载第一页，默认第一页
                pageNumber:1,   
@@ -57,8 +59,8 @@ $(document).ready(function() {
                	searchParam.pageSize = params.limit === undefined? -1 : params.limit;
                	if(params.sort && params.order){
                     searchParam.orderBy = params.sort+ " "+  params.order;
-                 }
-                 return searchParam;
+				}
+			    return searchParam;
                },
                onShowSearch: function () {
                	 $("#import-collapse").hide();
@@ -99,6 +101,40 @@ $(document).ready(function() {
 		        sortName: 'name'
 		       
 		    }
+			,{
+		        field: 'leader.name',
+		        title: '班长',
+		        sortable: true,
+		        sortName: 'leader.name'
+		       
+		    }
+			,{
+		        field: 'leadercode',
+		        title: '班长工号',
+		        sortable: true,
+		        sortName: 'leadercode'
+		       
+		    }
+			,{
+		        field: 'line.name',
+		        title: '所属产线',
+		        sortable: true,
+		        sortName: 'line.name'
+		       
+		    }
+            ,{
+            field: 'workshop.name',
+            title: '所属车间',
+            sortable: true,
+            sortName: 'workshop.name'
+
+            }
+            ,{
+            field: 'factory.name',
+            title: '所属工厂',
+            sortable: true,
+            sortName: 'factory.name'
+            }
 			,{
 		        field: 'remarks',
 		        title: '备注信息',
@@ -172,7 +208,7 @@ $(document).ready(function() {
             jp.downloadFile('${ctx}/base/classgroup/baseClassGroup/import/template');
 		})
 
-	$("#export").click(function(){//导出Excel文件
+	 $("#export").click(function(){//导出Excel文件
 	        var searchParam = $("#searchForm").serializeJSON();
 	        searchParam.pageNo = 1;
 	        searchParam.pageSize = -1;
@@ -190,7 +226,7 @@ $(document).ready(function() {
 	  })
 
 	  $("#search").click("click", function() {// 绑定查询按扭
-  		  refresh();
+		  refresh();
 
 		});
 
@@ -255,4 +291,74 @@ $(document).ready(function() {
       }
       jp.openViewDialog('查看班组', "${ctx}/base/classgroup/baseClassGroup/form/view?id="+id,'90%', '90%');
   }
+ //子表展示
+		   
+  function detailFormatter(index, row) {
+	  var htmltpl =  $("#baseClassGroupChildrenTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
+	  var html = Mustache.render(htmltpl, {
+			idx:row.id
+		});
+	  $.get("${ctx}/base/classgroup/baseClassGroup/detail?id="+row.id, function(baseClassGroup){
+    	var baseClassGroupChild1RowIdx = 0, baseClassGroupChild1Tpl = $("#baseClassGroupChild1Tpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
+		var data1 =  baseClassGroup.baseClassGroupUserList;
+		for (var i=0; i<data1.length; i++){
+			data1[i].dict = {};
+			addRow('#baseClassGroupChild-'+row.id+'-1-List', baseClassGroupChild1RowIdx, baseClassGroupChild1Tpl, data1[i]);
+			baseClassGroupChild1RowIdx = baseClassGroupChild1RowIdx + 1;
+		}
+				
+      	  			
+      })
+     
+        return html;
+    }
+  
+	function addRow(list, idx, tpl, row){
+		$(list).append(Mustache.render(tpl, {
+			idx: idx, delBtn: true, row: row
+		}));
+	}
 </script>
+<script type="text/template" id="baseClassGroupChildrenTpl">//<!--
+	<div class="card card-tabs">
+	<div class="card-heading  pb-0">
+	    <ul class="nav nav-pills float-left" role="tablist">
+				<li class="nav-item"><a data-toggle="tab" class="nav-link show active" href="#tab-{{idx}}-1" aria-expanded="true">班组成员</a></li>
+		</ul>
+		</div>
+		<div class="card-body">
+		<div class="tab-content">
+				 <div id="tab-{{idx}}-1" class="tab-pane fade active show" >
+						<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th>序号</th>
+								<th>工号</th>
+								<th>姓名</th>
+								<th>备注信息</th>
+							</tr>
+						</thead>
+						<tbody id="baseClassGroupChild-{{idx}}-1-List">
+						</tbody>
+					</table>
+				</div>
+		</div>
+		</div>
+		</div>//-->
+	</script>
+	<script type="text/template" id="baseClassGroupChild1Tpl">//<!--
+				<tr>
+					<td>
+						{{row.no}}
+					</td>
+					<td>
+						{{row.user.no}}
+					</td>
+					<td>
+						{{row.username}}
+					</td>
+					<td>
+						{{row.remarks}}
+					</td>
+				</tr>//-->
+	</script>

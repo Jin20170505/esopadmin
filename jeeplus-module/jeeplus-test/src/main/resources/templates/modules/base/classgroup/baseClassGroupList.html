@@ -22,7 +22,7 @@ layout("/include/_container.html", {title:"列表", parent:"班组"}){
         <a class="jp-ti-close close" onclick="$('#search-collapse').fadeToggle()">
             <i class="fa fa-times"></i>
         </a>
-        <form id="searchForm" class="form-inline" >
+        <form id="searchForm" class="form-inline">
 			 <div class="form-group m-b-10 m-r-10">
 				<label class="m-r-10" title="班组编号：">班组编号：</label>
 				<input name="code"  maxlength="64"  class=" form-control"/>
@@ -30,6 +30,26 @@ layout("/include/_container.html", {title:"列表", parent:"班组"}){
 			 <div class="form-group m-b-10 m-r-10">
 				<label class="m-r-10" title="班组名称：">班组名称：</label>
 				<input name="name"  maxlength="64"  class=" form-control"/>
+			</div>
+			 <div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="班长：">班长：</label>
+				<#userselect id="leader" name="leader.id"  labelName="leader.name" labelValue=""
+							    class="form-control"  allowClear="true"/>
+			</div>
+			 <div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="所属工厂：">所属工厂：</label>
+				<#gridselect url="${ctx}/base/factory/baseFactory/data" id="factory" name="factory.id"  labelName="factory.name"
+							 title="选择所属工厂" class="form-control required" fieldLabels="编号|名称" fieldKeys="code|name" searchLabels="编号|名称" searchKeys="code|name"/>
+			</div>
+			 <div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="所属车间：">所属车间：</label>
+				<#gridselect url="${ctx}/base/workshop/baseWorkShop/data" id="workshop" name="workshop.id"  labelName="workshop.name"
+							 title="选择所属车间" class="form-control required" fieldLabels="编号|名称" fieldKeys="code|name" searchLabels="编号|名称" searchKeys="code|name"/>
+			</div>
+			 <div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="所属产线：">所属产线：</label>
+				<#gridselect url="${ctx}/base/productionline/baseProductionLine/data" id="line" name="line.id"  labelName="line.name"
+							 title="选择所属产线" class="form-control " fieldLabels="编号|名称" fieldKeys="code|name" searchLabels="编号|名称" searchKeys="code|name"/>
 			</div>
 		    <div class="form-group m-b-10 m-r-10">
                 <a  id="search" class="btn  btn-custom waves-effect waves-light m-l-10 btn-md btn-rounded"><i class="fa fa-search"></i> 查询</a>

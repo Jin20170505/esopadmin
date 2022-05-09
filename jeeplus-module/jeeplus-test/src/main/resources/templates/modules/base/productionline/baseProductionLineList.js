@@ -69,10 +69,10 @@ $(document).ready(function() {
 		       
 		    }
            ,{
-               field: 'id',
-               title: '产线编码',
-               sortable: true,
-               sortName: 'id'
+                       field: 'code',
+                       title: '产线编号',
+                       sortable: true,
+                       sortName: 'code'
                        ,formatter:function(value, row , index){
                            <% if(shiro.hasPermission("base:productionline:baseProductionLine:edit") ){ %>
 					   if(!value){
@@ -91,12 +91,7 @@ $(document).ready(function() {
                 <% } %>
 
                 }
-           },{
-            field: 'code',
-            title: '产线编号',
-            sortable: true,
-            sortName: 'code'
-            }
+           }
             ,{
             field: 'name',
             title: '产线名称',

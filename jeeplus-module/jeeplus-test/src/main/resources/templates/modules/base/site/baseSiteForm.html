@@ -42,7 +42,7 @@ layout("/include/_dialog.html"){
                 <td class="width-15 active"><label class="pull-right"><font color="red">*</font>所属产线：</label></td>
                 <td class="width-35">
                     <#gridselect callback="linkCallBack" url="${ctx}/base/productionline/baseProductionLine/data" id="line" name="line.id" value="${baseSite.line.id!}" labelName="line.name" labelValue="${baseSite.line.name!}"
-                         title="选择所属产线" class="form-control required" fieldLabels="编码|编号|名称|所属车间|所属工厂" fieldKeys="id|code|name|workshop.name|factory.name" searchLabels="编码|编号|名称" searchKeys="id|code|name"/>
+                         title="选择所属产线" class="form-control required" fieldLabels="编号|名称|所属车间|所属工厂" fieldKeys="code|name|workshop.name|factory.name" searchLabels="编号|名称" searchKeys="code|name"/>
                 </td>
                 <td class="width-15 active"><label class="pull-right"><font color="red">*</font>所属车间：</label></td>
                 <td class="width-35">

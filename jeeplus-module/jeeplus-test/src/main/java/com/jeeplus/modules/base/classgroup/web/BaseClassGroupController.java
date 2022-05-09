@@ -1,8 +1,10 @@
 /**
- *
+ * 
  */
 package com.jeeplus.modules.base.classgroup.web;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
 
@@ -71,6 +73,7 @@ public class BaseClassGroupController extends BaseController {
 	 * 班组列表数据
 	 */
 	@ResponseBody
+	@RequiresPermissions("base:classgroup:baseClassGroup:list")
 	@RequestMapping(value = "data")
 	public Map<String, Object> data(BaseClassGroup baseClassGroup, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<BaseClassGroup> page = baseClassGroupService.findPage(new Page<BaseClassGroup>(request, response), baseClassGroup); 
@@ -150,6 +153,13 @@ public class BaseClassGroupController extends BaseController {
 		}
 			return j;
     }
+    
+    @ResponseBody
+    @RequestMapping(value = "detail")
+	public BaseClassGroup detail(String id) {
+		return baseClassGroupService.get(id);
+	}
+	
 
 	/**
 	 * 导入Excel数据
@@ -206,5 +216,6 @@ public class BaseClassGroupController extends BaseController {
 		}
 		return j;
     }
+	
 
 }

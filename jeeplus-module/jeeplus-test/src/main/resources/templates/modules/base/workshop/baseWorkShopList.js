@@ -66,47 +66,41 @@ $(document).ready(function() {
                },
                columns: [{
 		        checkbox: true
-		    }
-           ,{
-               field: 'id',
-               title: '车间编码',
-               sortable: true,
-               sortName: 'id'
-               ,formatter:function(value, row , index){
-                   <% if(shiro.hasPermission("base:workshop:baseWorkShop:edit") ){ %>
-               if(!value){
-                  return "<a  href='#' onclick='edit(\""+row.id+"\")'>-</a>";
-               }else{
-                   return "<a  href='#' onclick='edit(\""+row.id+"\")'>"+value+"</a>";
-               }
-           <% }else if(shiro.hasPermission("base:workshop:baseWorkShop:view")){ %>
-               if(!value){
-                  return "<a  href='#' onclick='view(\""+row.id+"\")'>-</a>";
+		    },{
+                   field: 'code',
+                   title: '车间编号',
+                   sortable: true,
+                   sortName: 'code'
+                   ,formatter:function(value, row , index){
+                       <% if(shiro.hasPermission("base:workshop:baseWorkShop:edit") ){ %>
+                               if(!value){
+                                  return "<a  href='#' onclick='edit(\""+row.id+"\")'>-</a>";
+                                   }else{
+                                       return "<a  href='#' onclick='edit(\""+row.id+"\")'>"+value+"</a>";
+                                   }
+                                   <% }else if(shiro.hasPermission("base:workshop:baseWorkShop:view")){ %>
+                               if(!value){
+                                  return "<a  href='#' onclick='view(\""+row.id+"\")'>-</a>";
                 }else{
                     return "<a  href='#' onclick='view(\""+row.id+"\")'>"+value+"</a>";
                 }
-            <% }else{ %>
-            return value;
-            <% } %>
-            }
-           }
+                    <% }else{ %>
+                    return value;
+                    <% } %>
+                    }
+               },{
+                   field: 'name',
+                   title: '车间名称',
+                   sortable: true,
+                   sortName: 'name'
+               }
 			,{
 		        field: 'factory.name',
 		        title: '所属工厂',
 		        sortable: true,
 		        sortName: 'factory.name'
 		    }
-			,{
-		        field: 'code',
-		        title: '车间编号',
-		        sortable: true,
-		        sortName: 'code'
-		    },{
-            field: 'name',
-            title: '车间名称',
-            sortable: true,
-            sortName: 'name'
-            }
+
 			,{
 		        field: 'manger',
 		        title: '负责人',

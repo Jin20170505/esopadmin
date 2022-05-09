@@ -69,10 +69,10 @@ $(document).ready(function() {
 		       
 		    }
 			,{
-		        field: 'id',
-		        title: '工作站编码',
-		        sortable: true,
-		        sortName: 'id'
+                       field: 'code',
+                       title: '工作站编号',
+                       sortable: true,
+                       sortName: 'code'
 		        ,formatter:function(value, row , index){
 		        	  <% if(shiro.hasPermission("base:site:baseSite:edit") ){ %>
 					   if(!value){
@@ -91,12 +91,6 @@ $(document).ready(function() {
 					 <% } %>
 		         }
 		    }
-            ,{
-            field: 'code',
-            title: '工作站编号',
-            sortable: true,
-            sortName: 'code'
-            }
             ,{
             field: 'name',
             title: '工作站名称',

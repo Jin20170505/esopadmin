@@ -69,35 +69,28 @@ $(document).ready(function() {
 		       
 		    }
 			,{
-		        field: 'id',
-		        title: '工厂编码',
-		        sortable: true,
-		        sortName: 'id'
-		        ,formatter:function(value, row , index){
-		        	  <% if(shiro.hasPermission("base:factory:baseFactory:edit") ){ %>
-					   if(!value){
-						  return "<a  href='#' onclick='edit(\""+row.id+"\")'>-</a>";
-					   }else{
-						  return "<a  href='#' onclick='edit(\""+row.id+"\")'>"+value+"</a>";
-						}
-                     <% }else if(shiro.hasPermission("base:factory:baseFactory:view")){ %>
-					   if(!value){
-						  return "<a  href='#' onclick='view(\""+row.id+"\")'>-</a>";
-                       }else{
-                          return "<a  href='#' onclick='view(\""+row.id+"\")'>"+value+"</a>";
-                       }
-                     <% }else{ %>
-					      return value;
-					 <% } %>
-		         }
-		       
-		    },{
                 field: 'code',
                 title: '工厂编号',
                 sortable: true,
                 sortName: 'code'
-
+               ,formatter:function(value, row , index){
+                   <% if(shiro.hasPermission("base:factory:baseFactory:edit") ){ %>
+               if(!value){
+                  return "<a  href='#' onclick='edit(\""+row.id+"\")'>-</a>";
+               }else{
+                   return "<a  href='#' onclick='edit(\""+row.id+"\")'>"+value+"</a>";
+               }
+           <% }else if(shiro.hasPermission("base:factory:baseFactory:view")){ %>
+               if(!value){
+                  return "<a  href='#' onclick='view(\""+row.id+"\")'>-</a>";
+            }else{
+                return "<a  href='#' onclick='view(\""+row.id+"\")'>"+value+"</a>";
+            }
+                <% }else{ %>
+                return value;
+                <% } %>
                 }
+            }
 			,{
 		        field: 'name',
 		        title: '工厂名称',

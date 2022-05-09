@@ -11,11 +11,36 @@
 		a.del_flag AS "delFlag",
 		a.code AS "code",
 		a.name AS "name",
-		a.remarks AS "remarks"
+		a.leader_id AS "leader.id",
+		a.leader_code AS "leadercode",
+		a.factory_id AS "factory.id",
+		a.workshop_id AS "workshop.id",
+		a.productline_id AS "line.id",
+		a.remarks AS "remarks",
+				
+				
+				
+				
+				
+				
+				
+				
+		leader.name AS "leader.name",
+				
+				
+		factory.name AS "factory.name",
+				
+		workshop.name AS "workshop.name",
+				
+		line.name AS "line.name"
 	</sql>
 	
 	<sql id="baseClassGroupJoins">
 		
+		LEFT JOIN sys_user leader ON leader.id = a.leader_id
+		LEFT JOIN base_factory factory ON factory.id = a.factory_id
+		LEFT JOIN base_workshop workshop ON workshop.id = a.workshop_id
+		LEFT JOIN base_productionline line ON line.id = a.productline_id
 	</sql>
 	
     
@@ -48,6 +73,18 @@
 					<if test="_databaseId == 'oracle'">'%'||#{name}||'%'</if>
 					<if test="_databaseId == 'mssql'">'%'+#{name}+'%'</if>
 					<if test="_databaseId == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="leader != null and leader.id != null and leader.id != ''">
+				AND a.leader_id = #{leader.id}
+			</if>
+			<if test="factory != null and factory.id != null and factory.id != ''">
+				AND a.factory_id = #{factory.id}
+			</if>
+			<if test="workshop != null and workshop.id != null and workshop.id != ''">
+				AND a.workshop_id = #{workshop.id}
+			</if>
+			<if test="line != null and line.id != null and line.id != ''">
+				AND a.productline_id = #{line.id}
 			</if>
 		</where>
 		<choose>
@@ -89,6 +126,11 @@
 			del_flag,
 			code,
 			name,
+			leader_id,
+			leader_code,
+			factory_id,
+			workshop_id,
+			productline_id,
 			remarks
 		) VALUES (
 			#{id},
@@ -99,6 +141,11 @@
 			#{delFlag},
 			#{code},
 			#{name},
+			#{leader.id},
+			#{leadercode},
+			#{factory.id},
+			#{workshop.id},
+			#{line.id},
 			#{remarks}
 		)
 	</insert>
@@ -109,6 +156,11 @@
 			update_date = #{updateDate},
 			code = #{code},
 			name = #{name},
+			leader_id = #{leader.id},
+			leader_code = #{leadercode},
+			factory_id = #{factory.id},
+			workshop_id = #{workshop.id},
+			productline_id = #{line.id},
 			remarks = #{remarks}
 		WHERE id = #{id}
 	</update>
