@@ -80,9 +80,6 @@ public class BaseRoute extends DataEntity<BaseRoute> {
 	}
 
 	public String getFilename() {
-		if(StringUtils.isNotEmpty(fileurl)){
-			filename=fileurl.substring(fileurl.lastIndexOf("/")+1);
-		}
 		return filename;
 	}
 

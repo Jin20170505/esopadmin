@@ -33,7 +33,11 @@ public class BaseRoteMainService extends CrudService<BaseRoteMainMapper, BaseRot
 		baseRoteMain.setBaseRouteList(baseRouteMapper.findList(new BaseRoute(baseRoteMain)));
 		return baseRoteMain;
 	}
-	
+
+	public List<BaseRoute> getRoutes(String rid){
+		return baseRouteMapper.findList(new BaseRoute(new BaseRoteMain(rid)));
+	}
+
 	public List<BaseRoteMain> findList(BaseRoteMain baseRoteMain) {
 		return super.findList(baseRoteMain);
 	}
@@ -71,5 +75,8 @@ public class BaseRoteMainService extends CrudService<BaseRoteMainMapper, BaseRot
 		super.delete(baseRoteMain);
 		baseRouteMapper.delete(new BaseRoute(baseRoteMain));
 	}
-	
+
+	public List<BaseRoteMain> findVersion(String productid){
+		return mapper.findVersion(productid);
+	}
 }

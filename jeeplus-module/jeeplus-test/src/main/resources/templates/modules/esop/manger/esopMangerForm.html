@@ -68,16 +68,16 @@ layout("/include/_dialog.html"){
 		function productSelect(items,tagid){
 			var item = items[0];
 			$('#specification').val(item.specification);
-			jp.get("${ctx}/business/route/businessRoute/findVersion?productid="+item.id,function (rs){
+			jp.get("${ctx}/base/route/baseRoteMain/findVersion?productid="+item.id,function (rs){
 				if(rs.success){
 					var versions =rs.body.versions;
 					if(versions){
 						if(versions.length==1){
-							addRoute(item.id,versions[0])
+							addRoute(versions[0].id,versions[0].version);
 						}else {
 							var selectHtml = '';
 							for(var j=0,len=versions.length;j<len;j++){
-								selectHtml +=`<option value="`+versions[j]+`">`+versions[j]+`</option>`;
+								selectHtml +=`<option value="`+versions[j].id+`">`+versions[j].version+`</option>`;
 							}
 							top.layer.open({
 								type: 1,
@@ -85,15 +85,16 @@ layout("/include/_dialog.html"){
 								title:"选择版本",
 								auto:true,
 								maxmin: true, //开启最大化最小化按钮
-								content: '<select id="versionSelect" class="form-control"><option value=""></option>'+selectHtml+'</select>',
+								content: '<select id="versionSelect" class="form-control"><option value="">请选择版本</option>'+selectHtml+'</select>',
 								btn: ['确定', '关闭'],
 								yes: function(index, layero){
-									var v = $(layero).find("#versionSelect").val();
-									if(!v){
+									var rid = $(layero).find("#versionSelect").val();
+									if(!rid){
 										jp.warning("请选择");
 										return false;
 									}
-									addRoute(item.id,v);
+									var version = $(layero).find("#versionSelect").text();
+									addRoute(rid,version);
 									top.layer.close(index);
 								},
 								cancel: function(index){
@@ -108,9 +109,9 @@ layout("/include/_dialog.html"){
 			});
 		}
 
-		function addRoute(productid,version){
+		function addRoute(rid,version){
 			$('#version').val(version)
-			jp.get("${ctx}/business/route/businessRoute/getRoutes?productid="+productid+"&version="+version,function (rs){
+			jp.get("${ctx}/base/route/baseRoteMain/getRoutes?rid="+rid,function (rs){
 				if(rs.success){
 					var routes = rs.body.routes;
 					if(routes){

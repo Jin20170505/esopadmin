@@ -12,6 +12,7 @@
 		a.product_id AS "product.id",
 		a.no AS "no",
 		a.site_id AS "site.id",
+		a.filename as "filename",
 		a.file_url AS "fileurl",
 		a.version AS "version",
 		a.pid AS "p.id",
@@ -83,7 +84,7 @@
 			product_id,
 			no,
 			site_id,
-			file_url,
+			file_url,filename,
 			version,
 			pid,
 			remarks
@@ -96,7 +97,7 @@
 			#{product.id},
 			#{no},
 			#{site.id},
-			#{fileurl},
+			#{fileurl},#{filename},
 			#{version},
 			#{p.id},
 			#{remarks}
@@ -111,6 +112,7 @@
 			no = #{no},
 			site_id = #{site.id},
 			file_url = #{fileurl},
+			filename = #{filename},
 			version = #{version},
 			pid = #{p.id},
 			remarks = #{remarks}

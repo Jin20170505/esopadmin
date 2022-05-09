@@ -15,16 +15,10 @@
 		a.remarks AS "remarks",
 		a.create_date AS "createDate",
 		a.update_date AS "updateDate",
-				
-				
-				
-				
-				
 		product.name AS "product.name"
 	</sql>
 	
 	<sql id="baseRoteMainJoins">
-		
 		LEFT JOIN business_product product ON product.id = a.product_id
 	</sql>
 	

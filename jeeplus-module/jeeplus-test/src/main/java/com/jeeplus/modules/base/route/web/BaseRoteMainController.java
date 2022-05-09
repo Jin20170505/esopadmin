@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
+import com.jeeplus.modules.base.route.entity.BaseRoute;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,12 +69,27 @@ public class BaseRoteMainController extends BaseController {
 		model.addAttribute("baseRoteMain", baseRoteMain);
 		return "modules/base/route/baseRoteMainList";
 	}
-	
+
+	@ResponseBody
+	@RequestMapping("findVersion")
+	public AjaxJson findVersion(String productid){
+		AjaxJson json = new AjaxJson();
+		try {
+			json.put("versions",baseRoteMainService.findVersion(productid));
+			json.setMsg("success");
+			json.setSuccess(true);
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setSuccess(false);
+			json.setMsg("查询失败");
+		}
+		return json;
+	}
+
 		/**
 	 * 工艺路线列表数据
 	 */
 	@ResponseBody
-	@RequiresPermissions("base:route:baseRoteMain:list")
 	@RequestMapping(value = "data")
 	public Map<String, Object> data(BaseRoteMain baseRoteMain, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<BaseRoteMain> page = baseRoteMainService.findPage(new Page<BaseRoteMain>(request, response), baseRoteMain); 
@@ -117,6 +133,19 @@ public class BaseRoteMainController extends BaseController {
 		return j;
 	}
 
+	@ResponseBody
+	@RequestMapping("getRoutes")
+	public AjaxJson getRoutes(String rid){
+		AjaxJson json = new AjaxJson();
+		try {
+			json.put("routes",baseRoteMainService.getRoutes(rid));
+			json.setSuccess(true);
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setSuccess(false);
+		}
+		return json;
+	}
 	
 	/**
 	 * 批量删除工艺路线
