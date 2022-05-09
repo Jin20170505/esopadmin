@@ -268,10 +268,7 @@ $(document).ready(function() {
 			})
 	 })
   }
-// 生成计划工单
-function jihua(){
 
-}
     //刷新列表
   function refresh() {
       $('#businessShengChanDingDanTable').bootstrapTable('refresh');

@@ -111,10 +111,10 @@
 });
 
 
-    $('#baseProductionLineTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
+    $('#table').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
-            $('#remove').prop('disabled', ! $('#baseProductionLineTable').bootstrapTable('getSelections').length);
-            $('#jihua').prop('disabled', $('#baseProductionLineTable').bootstrapTable('getSelections').length!=1);
+            $('#remove').prop('disabled', ! $('#table').bootstrapTable('getSelections').length);
+            $('#jihua').prop('disabled', $('#table').bootstrapTable('getSelections').length!=1);
         });
 
     $("#search").click("click", function() {// 绑定查询按扭
@@ -134,16 +134,19 @@
 
 	//获取选中行
   function getIdSelections() {
-        return $.map($("#baseProductionLineTable").bootstrapTable('getSelections'), function (row) {
+        return $.map($("#table").bootstrapTable('getSelections'), function (row) {
             return row.id
         });
     }
 
+    // 生成计划工单
+    function jihua(){
 
+    }
 
     //刷新列表
   function refresh() {
-      $('#baseProductionLineTable').bootstrapTable('refresh');
+      $('#table').bootstrapTable('refresh');
   }
 
 </script>
