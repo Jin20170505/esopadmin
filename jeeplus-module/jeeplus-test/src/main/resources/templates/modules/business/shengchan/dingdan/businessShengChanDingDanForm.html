@@ -39,7 +39,8 @@ layout("/include/_dialog.html"){
 				var dept  ={};
 				var startdate = $('#startdate').val(),enddate = $('#enddate').val();
 				dept.id = $('#deptId').val(),dept.name = $('#deptName').val();
-				row = {'no':((idx-0)+1),'type':'标准','startdate':startdate,'enddate':enddate,'id':'','dept':dept,'status':'锁定'};
+				var no = getLineNum();
+				row = {'no': no,'type':'标准','startdate':startdate,'enddate':enddate,'id':'','dept':dept,'status':'锁定'};
 			}
 			$(list).append(Mustache.render(tpl, {
 				idx: idx, delBtn: true, row: row
@@ -75,6 +76,18 @@ layout("/include/_dialog.html"){
 				$(obj).html("&times;").attr("title", "删除");
 				$(obj).parent().parent().removeClass("error");
 			}
+		}
+
+		function getLineNum(){
+			var num = $('#businessShengChanDingDanMingXiList').find('tr').length;
+			if(num==0){
+				return 1;
+			}else {
+				var trg = $('#businessShengChanDingDanMingXiList').find('tr')[num-1];
+				var maxnum = $(trg).find('.no').val();
+				return (maxnum-0) +1;
+			}
+
 		}
 	</script>
 <form id="inputForm"  method="post"  class="form-horizontal p-15">
@@ -154,7 +167,7 @@ layout("/include/_dialog.html"){
 						<input id="businessShengChanDingDanMingXiList{{idx}}_delFlag" name="businessShengChanDingDanMingXiList[{{idx}}].delFlag" type="hidden" value="0"/>
 					</td>
 					<td>
-						<input id="businessShengChanDingDanMingXiList{{idx}}_no" name="businessShengChanDingDanMingXiList[{{idx}}].no" type="text" value="{{row.no}}"    class="form-control required"/>
+						<input id="businessShengChanDingDanMingXiList{{idx}}_no" name="businessShengChanDingDanMingXiList[{{idx}}].no" type="text" value="{{row.no}}"    class="form-control no required"/>
 					</td>
 					<td>
 					<select id="businessShengChanDingDanMingXiList{{idx}}_type" name="businessShengChanDingDanMingXiList[{{idx}}].type" data-value="{{row.type}}" class="form-control m-b required">

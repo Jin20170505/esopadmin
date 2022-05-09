@@ -67,7 +67,11 @@ public class BusinessShengChanDingDanController extends BaseController {
 		model.addAttribute("businessShengChanDingDan", businessShengChanDingDan);
 		return "modules/business/shengchan/dingdan/businessShengChanDingDanList";
 	}
-	
+	@RequestMapping("goToList")
+	public String goToList(){
+		return "modules/business/shengchan/dingdan/list/list";
+	}
+
 		/**
 	 * 生产订单列表数据
 	 */
