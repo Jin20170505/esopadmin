@@ -1,8 +1,9 @@
 /**
- *
+ * Copyright &copy; 2015-2020 <a href="http://www.jeeplus.org/">JeePlus</a> All rights reserved.
  */
-package com.jeeplus.modules.business.route.entity;
+package com.jeeplus.modules.base.route.entity;
 
+import com.jeeplus.common.utils.StringUtils;
 import com.jeeplus.modules.business.product.archive.entity.BusinessProduct;
 import javax.validation.constraints.NotNull;
 import com.jeeplus.modules.base.site.entity.BaseSite;
@@ -13,29 +14,30 @@ import com.jeeplus.common.utils.excel.annotation.ExcelField;
 /**
  * 工艺路线Entity
  * @author Jin
+ * @version 2022-05-09
  */
-public class BusinessRoute extends DataEntity<BusinessRoute> {
+public class BaseRoute extends DataEntity<BaseRoute> {
 	
 	private static final long serialVersionUID = 1L;
 	private BusinessProduct product;		// 存货档案
 	private Integer no;		// 序号
 	private BaseSite site;		// 工作站
-	private String filename;	// 文件名
 	private String fileurl;		// 指导书
+	private String filename;	// 文件名称
 	private String version;		// 版本号
-	private String status;		// 是否停用
+	private BaseRoteMain p;		// 父键 父类
 	
-	public BusinessRoute() {
+	public BaseRoute() {
 		super();
 		this.setIdType(IDTYPE_AUTO);
 	}
 
-	public BusinessRoute(String id){
+	public BaseRoute(String id){
 		super(id);
 	}
 
-	public BusinessRoute(BusinessProduct product){
-		this.product = product;
+	public BaseRoute(BaseRoteMain p){
+		this.p = p;
 	}
 
 	@NotNull(message="存货档案不能为空")
@@ -67,16 +69,7 @@ public class BusinessRoute extends DataEntity<BusinessRoute> {
 	public void setSite(BaseSite site) {
 		this.site = site;
 	}
-
-	public String getFilename() {
-		return filename;
-	}
-
-	public BusinessRoute setFilename(String filename) {
-		this.filename = filename;
-		return this;
-	}
-
+	
 	@ExcelField(title="指导书", align=2, sort=9)
 	public String getFileurl() {
 		return fileurl;
@@ -85,7 +78,19 @@ public class BusinessRoute extends DataEntity<BusinessRoute> {
 	public void setFileurl(String fileurl) {
 		this.fileurl = fileurl;
 	}
-	
+
+	public String getFilename() {
+		if(StringUtils.isNotEmpty(fileurl)){
+			filename=fileurl.substring(fileurl.lastIndexOf("/")+1);
+		}
+		return filename;
+	}
+
+	public BaseRoute setFilename(String filename) {
+		this.filename = filename;
+		return this;
+	}
+
 	@ExcelField(title="版本号", align=2, sort=10)
 	public String getVersion() {
 		return version;
@@ -95,13 +100,12 @@ public class BusinessRoute extends DataEntity<BusinessRoute> {
 		this.version = version;
 	}
 	
-	@ExcelField(title="是否停用", dictType="yes_no", align=2, sort=11)
-	public String getStatus() {
-		return status;
+	public BaseRoteMain getP() {
+		return p;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setP(BaseRoteMain p) {
+		this.p = p;
 	}
 	
 }

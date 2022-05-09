@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.base.route.mapper.BaseRoteMainMapper">
+    
+	<sql id="baseRoteMainColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.update_by AS "updateBy.id",
+		a.del_flag AS "delFlag",
+		a.code AS "code",
+		a.product_id AS "product.id",
+		a.std AS "std",
+		a.version AS "version",
+		a.enable AS "enable",
+		a.remarks AS "remarks",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+				
+				
+				
+				
+				
+		product.name AS "product.name"
+	</sql>
+	
+	<sql id="baseRoteMainJoins">
+		
+		LEFT JOIN business_product product ON product.id = a.product_id
+	</sql>
+	
+    
+	<select id="get" resultType="BaseRoteMain" >
+		SELECT 
+			<include refid="baseRoteMainColumns"/>
+		FROM base_route_main a
+		<include refid="baseRoteMainJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BaseRoteMain" >
+		SELECT 
+			<include refid="baseRoteMainColumns"/>
+		FROM base_route_main a
+		<include refid="baseRoteMainJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="product != null and product.id != null and product.id != ''">
+				AND a.product_id = #{product.id}
+			</if>
+			<if test="version != null and version != ''">
+				AND a.version = #{version}
+			</if>
+			<if test="enable != null and enable != ''">
+				AND a.enable = #{enable}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BaseRoteMain" >
+		SELECT 
+			<include refid="baseRoteMainColumns"/>
+		FROM base_route_main a
+		<include refid="baseRoteMainJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO base_route_main(
+			id,
+			create_by,
+			update_by,
+			del_flag,
+			code,
+			product_id,
+			std,
+			version,
+			enable,
+			remarks,
+			create_date,
+			update_date
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{updateBy.id},
+			#{delFlag},
+			#{code},
+			#{product.id},
+			#{std},
+			#{version},
+			#{enable},
+			#{remarks},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE base_route_main SET 	
+			update_by = #{updateBy.id},
+			code = #{code},
+			product_id = #{product.id},
+			std = #{std},
+			version = #{version},
+			enable = #{enable},
+			remarks = #{remarks},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM base_route_main
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE base_route_main SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="BaseRoteMain" statementType="STATEMENT">
+		select * FROM base_route_main  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jeeplus.modules.business.route.mapper.BusinessRouteMapper">
+<mapper namespace="com.jeeplus.modules.base.route.mapper.BaseRouteMapper">
     
-	<sql id="businessRouteColumns">
+	<sql id="baseRouteColumns">
 		a.id AS "id",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
@@ -12,48 +12,36 @@
 		a.product_id AS "product.id",
 		a.no AS "no",
 		a.site_id AS "site.id",
-		a.filename as "filename",
 		a.file_url AS "fileurl",
 		a.version AS "version",
-		a.status AS "status",
+		a.pid AS "p.id",
 		a.remarks AS "remarks",
-		product.name AS "product.name",
 		site.name AS "site.name"
 	</sql>
 	
-	<sql id="businessRouteJoins">
-		LEFT JOIN business_product product ON product.id = a.product_id
+	<sql id="baseRouteJoins">
 		LEFT JOIN base_site site ON site.id = a.site_id
 	</sql>
 	
     
-	<select id="get" resultType="BusinessRoute" >
+	<select id="get" resultType="BaseRoute" >
 		SELECT 
-			<include refid="businessRouteColumns"/>
-		FROM business_route a
-		<include refid="businessRouteJoins"/>
+			<include refid="baseRouteColumns"/>
+		FROM base_route a
+		<include refid="baseRouteJoins"/>
 		WHERE a.id = #{id}
 	</select>
 	
-	<select id="findList" resultType="BusinessRoute" >
+	<select id="findList" resultType="BaseRoute" >
 		SELECT 
-			<include refid="businessRouteColumns"/>
-		FROM business_route a
-		<include refid="businessRouteJoins"/>
+			<include refid="baseRouteColumns"/>
+		FROM base_route a
+		<include refid="baseRouteJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
-			<if test="product != null and product.id != null and product.id != ''">
-				AND a.product_id = #{product.id}
-			</if>
-			<if test="site != null and site.id != null and site.id != ''">
-				AND a.site_id = #{site.id}
-			</if>
-			<if test="version!=null and version!=''">
-				and a.version = #{version}
-			</if>
-			<if test="status!=null and status!=''">
-				and a.status = #{status}
+			<if test="p != null and p.id != null and p.id != ''">
+				AND a.pid = #{p.id}
 			</if>
 		</where>
 		<choose>
@@ -61,16 +49,16 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.no asc
+				ORDER BY a.create_date ASC
 			</otherwise>
 		</choose>
 	</select>
 	
-	<select id="findAllList" resultType="BusinessRoute" >
+	<select id="findAllList" resultType="BaseRoute" >
 		SELECT 
-			<include refid="businessRouteColumns"/>
-		FROM business_route a
-		<include refid="businessRouteJoins"/>
+			<include refid="baseRouteColumns"/>
+		FROM base_route a
+		<include refid="baseRouteJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
@@ -80,13 +68,13 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.update_date DESC
+				ORDER BY a.create_date ASC
 			</otherwise>
 		</choose>
 	</select>
 	
 	<insert id="insert">
-		INSERT INTO business_route(
+		INSERT INTO base_route(
 			create_by,
 			create_date,
 			update_by,
@@ -95,10 +83,9 @@
 			product_id,
 			no,
 			site_id,
-			filename,
 			file_url,
 			version,
-			status,
+			pid,
 			remarks
 		) VALUES (
 			#{createBy.id},
@@ -109,25 +96,23 @@
 			#{product.id},
 			#{no},
 			#{site.id},
-		    #{filename},
 			#{fileurl},
 			#{version},
-			#{status},
+			#{p.id},
 			#{remarks}
 		)
 	</insert>
 	
 	<update id="update">
-		UPDATE business_route SET 	
+		UPDATE base_route SET 	
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
 			product_id = #{product.id},
 			no = #{no},
 			site_id = #{site.id},
-		    filename = #{filename},
 			file_url = #{fileurl},
 			version = #{version},
-			status = #{status},
+			pid = #{p.id},
 			remarks = #{remarks}
 		WHERE id = #{id}
 	</update>
@@ -135,21 +120,35 @@
 	
 	<!--物理删除-->
 	<update id="delete">
-		DELETE FROM business_route
-		WHERE id = #{id}
+		DELETE FROM base_route
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE pid = #{p.id}
+			</otherwise>
+		</choose>
 	</update>
 	
 	<!--逻辑删除-->
 	<update id="deleteByLogic">
-		UPDATE business_route SET 
+		UPDATE base_route SET 
 			del_flag = #{DEL_FLAG_DELETE}
-		WHERE id = #{id}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE pid = #{p.id}
+			</otherwise>
+		</choose>
 	</update>
 	
 	
 	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
-	<select id="findUniqueByProperty" resultType="BusinessRoute" statementType="STATEMENT">
-		select * FROM business_route  where ${propertyName} = '${value}'
+	<select id="findUniqueByProperty" resultType="BaseRoute" statementType="STATEMENT">
+		select * FROM base_route  where ${propertyName} = '${value}'
 	</select>
 	
 </mapper>
