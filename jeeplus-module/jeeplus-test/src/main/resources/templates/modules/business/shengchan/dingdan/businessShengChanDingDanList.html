@@ -68,6 +68,16 @@ layout("/include/_container.html", {title:"列表", parent:"生产订单"}){
 <!--					<i class="fa fa-download"></i> 导出-->
 <!--				</button>-->
 			 <% } %>
+		<% if(shiro.hasPermission("business:shengchan:dingdan:businessShengChanDingDan:shenhe") ){ %>
+		<button id="shenhe" class="btn btn-custom waves-effect w-xs waves-light" disabled onclick="shenhe()">
+			审核
+		</button>
+		<% } %>
+		<% if(shiro.hasPermission("business:shengchan:dingdan:businessShengChanDingDan:shenhe") ){ %>
+		<button id="fanshen" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="shenhe()">
+			反审
+		</button>
+		<% } %>
 			<% if(shiro.hasPermission("business:shengchan:dingdan:businessShengChanDingDan:jihua") ){ %>
 				<button id="jihua" class="btn btn-custom waves-effect w-xs waves-light" disabled onclick="jihua()">
 					生成计划工单

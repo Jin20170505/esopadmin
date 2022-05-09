@@ -20,6 +20,8 @@ public class BusinessShengChanDingDan extends DataEntity<BusinessShengChanDingDa
 	private static final long serialVersionUID = 1L;
 	private String code;		// 生产单号
 	private Office dept;		// 生产部门
+	private String startdate;	// 开工日期
+	private String enddate;	// 完工日期
 	private List<BusinessShengChanDingDanMingXi> businessShengChanDingDanMingXiList = Lists.newArrayList();		// 子表列表
 	
 	public BusinessShengChanDingDan() {
@@ -48,7 +50,25 @@ public class BusinessShengChanDingDan extends DataEntity<BusinessShengChanDingDa
 	public void setDept(Office dept) {
 		this.dept = dept;
 	}
-	
+
+	public String getStartdate() {
+		return startdate;
+	}
+
+	public BusinessShengChanDingDan setStartdate(String startdate) {
+		this.startdate = startdate;
+		return this;
+	}
+
+	public String getEnddate() {
+		return enddate;
+	}
+
+	public BusinessShengChanDingDan setEnddate(String enddate) {
+		this.enddate = enddate;
+		return this;
+	}
+
 	public List<BusinessShengChanDingDanMingXi> getBusinessShengChanDingDanMingXiList() {
 		return businessShengChanDingDanMingXiList;
 	}

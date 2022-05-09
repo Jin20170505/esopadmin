@@ -122,7 +122,36 @@ public class BusinessShengChanDingDanController extends BaseController {
 		return j;
 	}
 
-	
+	@ResponseBody
+	@RequestMapping("shenhe")
+	public AjaxJson shenhe(String ids){
+		AjaxJson json = new AjaxJson();
+		try {
+			businessShengChanDingDanService.shenhe(ids);
+			json.setSuccess(true);
+			json.setMsg("操作成功");
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setSuccess(false);
+			json.setMsg("操作失败");
+		}
+		return json;
+	}
+	@ResponseBody
+	@RequestMapping("fanshen")
+	public AjaxJson fanshen(String ids){
+		AjaxJson json = new AjaxJson();
+		try {
+			businessShengChanDingDanService.fanshen(ids);
+			json.setSuccess(true);
+			json.setMsg("操作成功");
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setSuccess(false);
+			json.setMsg("操作失败");
+		}
+		return json;
+	}
 	/**
 	 * 批量删除生产订单
 	 */

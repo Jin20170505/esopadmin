@@ -12,6 +12,8 @@
 		a.del_flag AS "delFlag",
 		a.code AS "code",
 		a.dept AS "dept.id",
+		a.startdate as "startdate",
+		a.enddate as "enddate",
 		dept.name AS "dept.name"
 	</sql>
 	
@@ -81,7 +83,7 @@
 			update_date,
 			remarks,
 			del_flag,
-			code,
+			code,startdate,enddate,
 			dept
 		) VALUES (
 			#{id},
@@ -91,7 +93,7 @@
 			#{updateDate},
 			#{remarks},
 			#{delFlag},
-			#{code},
+			#{code},#{startdate},#{enddate},
 			#{dept.id}
 		)
 	</insert>
@@ -102,6 +104,8 @@
 			update_date = #{updateDate},
 			remarks = #{remarks},
 			code = #{code},
+			startdate = #{startdate},
+		    enddate = #{enddate},
 			dept = #{dept.id}
 		WHERE id = #{id}
 	</update>

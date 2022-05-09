@@ -3,6 +3,7 @@
  */
 package com.jeeplus.modules.business.shengchan.dingdan.service;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,5 +77,14 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 		super.delete(businessShengChanDingDan);
 		businessShengChanDingDanMingXiMapper.delete(new BusinessShengChanDingDanMingXi(businessShengChanDingDan));
 	}
-	
+	@Transactional(readOnly = false)
+	public void shenhe(String ids){
+		Arrays.asList(ids.split(",")).forEach(id->businessShengChanDingDanMingXiMapper.shenhe(id));
+	}
+
+	@Transactional(readOnly = false)
+	public void fanshen(String ids){
+		Arrays.asList(ids.split(",")).forEach(id->businessShengChanDingDanMingXiMapper.fanshen(id));
+	}
+
 }

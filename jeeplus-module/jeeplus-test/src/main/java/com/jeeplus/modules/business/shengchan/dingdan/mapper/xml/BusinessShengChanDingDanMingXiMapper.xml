@@ -11,6 +11,9 @@
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
 		a.pid AS "p.id",
+		a.dept AS "dept.id",
+		a.status as "status",
+		a.type as "type",
 		a.no AS "no",
 		a.cinv_code AS "cinv.code",
 		a.cinv_name AS "cinvname",
@@ -18,18 +21,20 @@
 		a.unit AS "unit",
 		a.num AS "num",
 		a.start_date AS "startdate",
-		a.end_date AS "enddate"
+		a.end_date AS "enddate",
+		dept.name AS "dept.name"
 	</sql>
 	
 	<sql id="businessShengChanDingDanMingXiJoins">
+		LEFT JOIN sys_office dept ON dept.id = a.dept
 	</sql>
 
 	<select id="findShengChanDingDanMingXi" resultType="BusinessShengChanDingDanMingXi">
 		select a.id as "id",a.no AS "no",a.cinv_code AS "cinv.code",a.cinv_name AS "cinvname",a.std AS "std",a.unit AS "unit",a.num AS "num",a.start_date AS "startdate",
-			   a.end_date AS "enddate",p.code as "p.code",p.dept AS "dept.id",dept.name AS "dept.name"
+			   a.end_date AS "enddate",p.code as "p.code",a.dept AS "dept.id",dept.name AS "dept.name"
 		FROM business_shengchan_dingdan_mingxi a
 		left join business_shengchan_dingdan p on p.id = a.pid
-		LEFT JOIN sys_office dept ON dept.id = p.dept
+		LEFT JOIN sys_office dept ON dept.id = a.dept
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
@@ -113,7 +118,7 @@
 			unit,
 			num,
 			start_date,
-			end_date
+			end_date,dept,type,status
 		) VALUES (
 			#{id},
 			#{createBy.id},
@@ -130,7 +135,8 @@
 			#{unit},
 			#{num},
 			#{startdate},
-			#{enddate}
+			#{enddate},
+		    #{dept.id},#{type},#{status}
 		)
 	</insert>
 	
@@ -146,6 +152,9 @@
 			std = #{std},
 			unit = #{unit},
 			num = #{num},
+		    type = #{type},
+		    dept = #{dept.id},
+		    status = #{status},
 			start_date = #{startdate},
 			end_date = #{enddate}
 		WHERE id = #{id}

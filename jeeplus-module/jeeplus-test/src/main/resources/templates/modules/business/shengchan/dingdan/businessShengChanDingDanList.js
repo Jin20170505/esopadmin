@@ -101,6 +101,19 @@ $(document).ready(function() {
 		        sortName: 'dept.name'
 		       
 		    }
+            ,{
+            field: 'startdate',
+            title: '开工日期',
+            sortable: true,
+            sortName: 'startdate'
+
+            }
+            ,{
+            field: 'enddate',
+            title: '完工日期',
+            sortable: true,
+            sortName: 'enddate'
+            }
 			,{
 			   field: 'operate',
 			   title: '操作',
@@ -140,7 +153,7 @@ $(document).ready(function() {
 	  $('#businessShengChanDingDanTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
             $('#remove').prop('disabled', ! $('#businessShengChanDingDanTable').bootstrapTable('getSelections').length);
-            $('#edit,#jihua').prop('disabled', $('#businessShengChanDingDanTable').bootstrapTable('getSelections').length!=1);
+            $('#edit,#jihua,#shenhe,#fanshen').prop('disabled', $('#businessShengChanDingDanTable').bootstrapTable('getSelections').length!=1);
         });
 
 	 $("#import").click(function(){//显示导入面板
@@ -198,7 +211,38 @@ $(document).ready(function() {
 
 		
 	});
-
+    // 审核
+    function shenhe(){
+        var ids = getIdSelections();
+        jp.confirm('确认要审核该生产订单记录吗？', function(){
+            var index =jp.loading();
+            jp.get("${ctx}/business/shengchan/dingdan/businessShengChanDingDan/shenhe?ids=" + ids, function(data){
+                    if(data.success){
+                        refresh();
+                        jp.toastr_success(data.msg);
+                    }else{
+                        jp.toastr_error(data.msg);
+                    }
+                    jp.close(index);
+            })
+        })
+    }
+    // 反审
+    function fanshen(){
+        var ids = getIdSelections();
+        jp.confirm('确认要反审该生产订单记录吗？', function(){
+            var index =jp.loading();
+            jp.get("${ctx}/business/shengchan/dingdan/businessShengChanDingDan/fanshen?ids=" + ids, function(data){
+                    if(data.success){
+                        refresh();
+                        jp.toastr_success(data.msg);
+                    }else{
+                        jp.toastr_error(data.msg);
+                    }
+                    jp.close(index);
+            })
+        })
+    }
 	//获取选中行
   function getIdSelections() {
         return $.map($("#businessShengChanDingDanTable").bootstrapTable('getSelections'), function (row) {
@@ -222,7 +266,6 @@ $(document).ready(function() {
 				}
 				jp.close(index);
 			})
-
 	 })
   }
 // 生成计划工单
@@ -294,6 +337,7 @@ function jihua(){
 						<thead>
 							<tr>
 								<th>行号</th>
+                                <th>类型</th>
 								<th>存货编码</th>
 								<th>存货名称</th>
 								<th>存货规格型号</th>
@@ -301,6 +345,8 @@ function jihua(){
 								<th>数量</th>
 								<th>开工日期</th>
 								<th>完工日期</th>
+                                <th>生产部门</th>
+                                <th>状态</th>
 							</tr>
 						</thead>
 						<tbody id="businessShengChanDingDanChild-{{idx}}-1-List">
@@ -316,6 +362,9 @@ function jihua(){
 					<td>
 						{{row.no}}
 					</td>
+                    <td>
+                    {{row.type}}
+                    </td>
 					<td>
 						{{row.cinv.code}}
 					</td>
@@ -337,5 +386,11 @@ function jihua(){
 					<td>
 						{{row.enddate}}
 					</td>
+                    <td>
+                    {{row.dept.name}}
+                    </td>
+                    <td>
+                    {{row.status}}
+                    </td>
 				</tr>//-->
 	</script>

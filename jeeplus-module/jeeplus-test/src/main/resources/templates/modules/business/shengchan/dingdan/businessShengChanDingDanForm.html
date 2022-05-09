@@ -4,7 +4,13 @@ layout("/include/_dialog.html"){
 	<script type="text/javascript">
 
 		$(document).ready(function() {
-						});
+			$('#startdate').datetimepicker({
+				format:'Y-m-d'
+			});
+			$('#enddate').datetimepicker({
+				format:'Y-m-d'
+			});
+		});
 
 		function save() {
             var isValidate = jp.validateForm('#inputForm');//校验表单
@@ -29,6 +35,12 @@ layout("/include/_dialog.html"){
         }
 
 		function addRow(list, idx, tpl, row){
+			if(!row){
+				var dept  ={};
+				var startdate = $('#startdate').val(),enddate = $('#enddate').val();
+				dept.id = $('#deptId').val(),dept.name = $('#deptName').val();
+				row = {'no':((idx-0)+1),'type':'标准','startdate':startdate,'enddate':enddate,'id':'','dept':dept,'status':'锁定'};
+			}
 			$(list).append(Mustache.render(tpl, {
 				idx: idx, delBtn: true, row: row
 			}));
@@ -73,12 +85,32 @@ layout("/include/_dialog.html"){
 					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>生产单号：</label></td>
 					<td class="width-35">
 						<input name="code" value="${businessShengChanDingDan.code!}"    class="form-control required"/>
-				</td>
-					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>生产部门：</label></td>
+					</td>
+					<td class="width-15 active"><label class="pull-right">生产部门：</label></td>
 					<td class="width-35">
 						<#treeselect id="dept" name="dept.id" value="${businessShengChanDingDan.dept.id!}" labelName="dept.name" labelValue="${businessShengChanDingDan.dept.name!}"
-							title="部门" url="/sys/office/treeData?type=2" class="form-control required" allowClear="true" notAllowSelectParent="true"/>
+							title="部门" url="/sys/office/treeData?type=2" class="form-control" allowClear="true" notAllowSelectParent="true"/>
 				</td>
+				</tr>
+		   		<tr>
+					<td class="width-15 active"><label class="pull-right">开工日期：</label></td>
+					<td class="width-35">
+						<div class="input-group">
+						<input name="startdate" value="${businessShengChanDingDan.startdate!}" id="startdate" readonly   class="form-control "/>
+							<div class="input-group-append">
+								<span class="input-group-text btn-custom border text-white"><i class="ti-calendar"></i></span>
+							</div>
+						</div>
+					</td>
+					<td class="width-15 active"><label class="pull-right">完工日期：</label></td>
+					<td class="width-35">
+						<div class="input-group">
+						<input name="enddate" value="${businessShengChanDingDan.enddate!}" id="enddate" readonly   class="form-control "/>
+							<div class="input-group-append">
+								<span class="input-group-text btn-custom border text-white"><i class="ti-calendar"></i></span>
+							</div>
+						</div>
+					</td>
 				</tr>
 		 	</tbody>
 		</table>
@@ -98,7 +130,8 @@ layout("/include/_dialog.html"){
 				<thead>
 					<tr>
 						<th class="hide"></th>
-						<th><font color="red">*</font>行号</th>
+						<th width="80"><font color="red">*</font>行号</th>
+						<th width="100"><font color="red">*</font>类型</th>
 						<th><font color="red">*</font>存货编码</th>
 						<th>存货名称</th>
 						<th>存货规格型号</th>
@@ -106,6 +139,8 @@ layout("/include/_dialog.html"){
 						<th><font color="red">*</font>数量</th>
 						<th><font color="red">*</font>开工日期</th>
 						<th><font color="red">*</font>完工日期</th>
+						<th><font color="red">*</font>生产部门</th>
+						<th><font color="red">*</font>状态</th>
 						<th width="10">&nbsp;</th>
 					</tr>
 				</thead>
@@ -118,15 +153,20 @@ layout("/include/_dialog.html"){
 						<input id="businessShengChanDingDanMingXiList{{idx}}_id" name="businessShengChanDingDanMingXiList[{{idx}}].id" type="hidden" value="{{row.id}}"/>
 						<input id="businessShengChanDingDanMingXiList{{idx}}_delFlag" name="businessShengChanDingDanMingXiList[{{idx}}].delFlag" type="hidden" value="0"/>
 					</td>
-					
 					<td>
 						<input id="businessShengChanDingDanMingXiList{{idx}}_no" name="businessShengChanDingDanMingXiList[{{idx}}].no" type="text" value="{{row.no}}"    class="form-control required"/>
 					</td>
-					
+					<td>
+					<select id="businessShengChanDingDanMingXiList{{idx}}_type" name="businessShengChanDingDanMingXiList[{{idx}}].type" data-value="{{row.type}}" class="form-control m-b required">
+							<% for(dict in fn.getDictList('shengchan_type') ){ %>
+								<option value="${dict.value}">${dict.label}</option>
+							<% } %>
+						</select>
+					</td>
 					
 					<td>
 						<#gridselect callback="cinvCallBack" url="${ctx}/business/product/archive/businessProduct/data" id="businessShengChanDingDanMingXiList{{idx}}_cinv" name="businessShengChanDingDanMingXiList{{idx}}.cinv.id" value="{{row.cinv.id}}" labelName="businessShengChanDingDanMingXiList[{{idx}}].cinv.code" labelValue="{{row.cinv.code}}"
-							 title="选择存货编码" class="form-control  required" fieldLabels="编号|名称|规格" fieldKeys="code|name|specification" searchLabels="编号|名称" searchKeys="code|name" />
+							 title="选择存货编码" class="form-control  required" fieldLabels="编号|名称|规格|单位" fieldKeys="code|name|specification|unit" searchLabels="编号|名称" searchKeys="code|name" />
 					</td>
 					
 					
@@ -169,7 +209,13 @@ layout("/include/_dialog.html"){
                             </div>
                         </div>
 					</td>
-					
+					<td>
+						<#treeselect id="businessShengChanDingDanMingXiList{{idx}}_dept" name="businessShengChanDingDanMingXiList[{{idx}}].dept.id" value="{{row.dept.id}}" labelName="businessShengChanDingDanMingXiList[{{idx}}].dept.name" labelValue="{{row.dept.name}}"
+							title="部门" url="/sys/office/treeData?type=2" class="form-control required" allowClear="true" notAllowSelectParent="true"/>
+					</td>
+					<td>
+						<input id="businessShengChanDingDanMingXiList{{idx}}_status" readonly name="businessShengChanDingDanMingXiList[{{idx}}].status" type="text" value="{{row.status}}"    class="form-control "/>
+					</td>
 					<td class="text-center" width="10">
 						{{#delBtn}}<span class="close" onclick="delRow(this, '#businessShengChanDingDanMingXiList{{idx}}')" title="删除">&times;</span>{{/delBtn}}
 					</td>
@@ -181,6 +227,8 @@ layout("/include/_dialog.html"){
 					var idpre = tagid.split('_')[0];
 					$('#'+idpre+'_cinvname').val(item.name);
 					$('#'+idpre+'_std').val(item.specification);
+					$('#'+idpre+'_unitId').val(item.unit);
+					$('#'+idpre+'_unitName').val(item.unit);
 				}
 
 				function unitCallBack(items,tagid){

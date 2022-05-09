@@ -71,7 +71,7 @@ layout("/include/_dialog.html"){
 			jp.get("${ctx}/base/route/baseRoteMain/findVersion?productid="+item.id,function (rs){
 				if(rs.success){
 					var versions =rs.body.versions;
-					if(versions){
+					if(versions&&versions.length>0){
 						if(versions.length==1){
 							addRoute(versions[0].id,versions[0].version);
 						}else {
@@ -102,6 +102,9 @@ layout("/include/_dialog.html"){
 								}
 							});
 						}
+					}else {
+						$('#version').val(0)
+						$('#esopMangerSubList').html('');
 					}
 				}else {
 					jp.warning(rs.msg);
