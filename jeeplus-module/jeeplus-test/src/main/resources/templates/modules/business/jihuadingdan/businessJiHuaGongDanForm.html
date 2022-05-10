@@ -29,6 +29,11 @@ layout("/include/_dialog.html"){
         }
 
 		function addRow(list, idx, tpl, row){
+			if(!row){
+				var num = $('#gdnum').val();
+				row = {};
+				row.num = num;
+			}
 			$(list).append(Mustache.render(tpl, {
 				idx: idx, delBtn: true, row: row
 			}));
@@ -91,11 +96,30 @@ layout("/include/_dialog.html"){
 			}
 			var cz = scnum - num;
 			if(cz < 0){
-				jp.warning('工单数量大于生产数量，请重新输入');
-				$('#gdnum').val('');
-				return false;
+				cz = 0;
 			}
-			$('#synum').val(scnum-num);
+			$('#synum').val(cz);
+			$('.gdnum').each(function (){
+				$(this).val(num);
+			})
+		}
+		function routecallback(items,tagid){
+			var item = items[0];
+			var num = $('#gdnum').val();
+			jp.get("${ctx}/base/route/baseRoteMain/getRoutes?rid="+item.id,function (rs){
+				if(rs.success){
+					var routes = rs.body.routes;
+					if(routes){
+						$('#businessJiHuaGongDanMingXiList').html('');
+						for(var i=0,len = routes.length;i<len;i++){
+							var ditem = routes[i];
+							var di = {'no':ditem.no,'id':'','num':num,'site':ditem.site};
+							addRow('#businessJiHuaGongDanMingXiList', businessJiHuaGongDanMingXiRowIdx, businessJiHuaGongDanMingXiTpl, di);
+							businessJiHuaGongDanMingXiRowIdx = businessJiHuaGongDanMingXiRowIdx + 1;
+						}
+					}
+				}
+			});
 		}
 	</script>
 <form id="inputForm"  method="post"  class="form-horizontal p-15">
@@ -109,7 +133,7 @@ layout("/include/_dialog.html"){
 				</td>
 					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>生产订单号：</label></td>
 					<td class="width-35">
-						<#gridselect callback="shengchanCallBack" url="${ctx}/business/shengchan/dingdan/businessShengChanDingDan/mxdata" id="dd" name="dd.id" value="${businessJiHuaGongDan.dd.id!}" labelName="dd.code" labelValue="${businessJiHuaGongDan.dd.code!}"
+						<#gridselect callback="shengchanCallBack" url="${ctx}/business/shengchan/dingdan/businessShengChanDingDan/mxdata?status=开立" id="dd" name="dd.id" value="${businessJiHuaGongDan.dd.id!}" labelName="dd.code" labelValue="${businessJiHuaGongDan.dd.code!}"
 							 title="选择生产订单号" class="form-control " fieldLabels="单号|行号|存货编码|存货名称|规格型号|单位|数量" fieldKeys="p.code|no|cinv.code|cinvname|std|unit|num" searchLabels="生产单号" searchKeys="p.code" />
 				</td>
 				</tr>
@@ -174,6 +198,13 @@ layout("/include/_dialog.html"){
 						<input name="status" value="${businessJiHuaGongDan.status!'未下发'}"  readonly  class="form-control "/>
 				</td>
 				</tr>
+		   		<tr>
+					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>工艺路线版本：</label></td>
+					<td class="width-35">
+						<#gridselect callback="routecallback" url="${ctx}/base/route/baseRoteMain/data?enable=0" id="route" name="route.id" value="${businessJiHuaGongDan.route.id!}" labelName="route.version" labelValue="${businessJiHuaGongDan.route.version!}"
+						title="工艺路线版本" class="form-control " fieldLabels="版本" fieldKeys="version" searchLabels="" searchKeys="" extendId="product.code" extendTagId="cinvcode" extendTagName="生产订单" />
+					</td>
+				</tr>
 		 	</tbody>
 		</table>
 			<div class="card card-tabs">
@@ -194,7 +225,7 @@ layout("/include/_dialog.html"){
 						<th class="hide"></th>
 						<th><font color="red">*</font>序号</th>
 						<th><font color="red">*</font>工作站</th>
-						<th><font color="red">*</font>加工数量</th>
+						<th class="hidden"><font color="red">*</font>加工数量</th>
 						<th>人员工号</th>
 						<th>人员名称</th>
 						<th>班组</th>
@@ -218,8 +249,8 @@ layout("/include/_dialog.html"){
 						<#gridselect url="${ctx}/base/site/baseSite/data" id="businessJiHuaGongDanMingXiList{{idx}}_site" name="businessJiHuaGongDanMingXiList[{{idx}}].site.id" value="{{row.site.id}}" labelName="businessJiHuaGongDanMingXiList[{{idx}}].site.name" labelValue="{{row.site.name}}"
 							 title="选择工作站" class="form-control  required" fieldLabels="编码|名称" fieldKeys="id|name" searchLabels="编码|名称" searchKeys="id|name" />
 					</td>
-					<td>
-						<input id="businessJiHuaGongDanMingXiList{{idx}}_num" name="businessJiHuaGongDanMingXiList[{{idx}}].num" type="text" value="{{row.num}}"    class="form-control required isFloatGteZero"/>
+					<td class="hidden">
+						<input id="businessJiHuaGongDanMingXiList{{idx}}_num" name="businessJiHuaGongDanMingXiList[{{idx}}].num" type="text" value="{{row.num}}"    class="form-control required isFloatGteZero gdnum"/>
 					</td>
 					<td  class="max-width-250">
 						<#userselect callback="usercallback"  delcall="delusercall" id="businessJiHuaGongDanMingXiList{{idx}}_userno" name="businessJiHuaGongDanMingXiList[{{idx}}].userno" value="{{row.userno}}" labelName="businessJiHuaGongDanMingXiList{{idx}}.no" labelValue="{{row.userno}}"

@@ -22,16 +22,18 @@
 		a.num AS "num",
 		a.start_date AS "startdate",
 		a.end_date AS "enddate",
+		p.code as "p.code",
 		dept.name AS "dept.name"
 	</sql>
 	
 	<sql id="businessShengChanDingDanMingXiJoins">
+		left join business_shengchan_dingdan p on p.id = a.pid
 		LEFT JOIN sys_office dept ON dept.id = a.dept
 	</sql>
 
 	<select id="findShengChanDingDanMingXi" resultType="BusinessShengChanDingDanMingXi">
 		select a.id as "id",a.no AS "no",a.cinv_code AS "cinv.code",a.cinv_name AS "cinvname",a.std AS "std",a.unit AS "unit",a.num AS "num",a.start_date AS "startdate",
-			   a.end_date AS "enddate",p.code as "p.code",a.dept AS "dept.id",dept.name AS "dept.name"
+			   a.end_date AS "enddate",p.code as "p.code",a.dept AS "dept.id",dept.name AS "dept.name",a.status as "status"
 		FROM business_shengchan_dingdan_mingxi a
 		left join business_shengchan_dingdan p on p.id = a.pid
 		LEFT JOIN sys_office dept ON dept.id = a.dept
@@ -44,13 +46,19 @@
 			<if test="dept != null and dept.id != null and dept.id != ''">
 				AND a.dept = #{dept.id}
 			</if>
+			<if test="dept != null and dept.id != null and dept.id != ''">
+				AND a.dept = #{dept.id}
+			</if>
+			<if test="status!=null and status !=''">
+				and a.status = #{status}
+			</if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY p.code asc,a.no ASC
+				ORDER BY p.code desc,a.no ASC
 			</otherwise>
 		</choose>
 	</select>

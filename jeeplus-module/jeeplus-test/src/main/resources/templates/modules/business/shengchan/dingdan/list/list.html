@@ -34,5 +34,17 @@ layout("/include/_container.html", {title:"明细列表", parent:"生产订单"}
     <!-- 表格 -->
     <table id="table" class="table-bordered"   data-toolbar="#toolbar"></table>
 </div>
+
+<div id="scddform" class="form-horizontal p-15" style="display: none;">
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <td class="width-15 active"><label class="pull-right">数量（能效）：</label></td>
+            <td class="width-35">
+                <input name="num" id="num" value="" type="number"   class="form-control "/>
+            </td>
+        </tr>
+    </table>
+</div>
 <% include("list.js"){} %>
 <% } %>

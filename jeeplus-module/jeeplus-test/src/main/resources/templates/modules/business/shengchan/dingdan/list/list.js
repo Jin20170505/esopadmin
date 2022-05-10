@@ -66,30 +66,30 @@
                 title: '生产单号',
                 sortable: true,
                 sortName: 'p.code'
-    }
-    ,{
-    field: 'no',
-    title: '行号',
-    sortable: true,
-    sortName: 'no'
-    }
-    ,{
-    field: 'cinv.code',
-    title: '存货编号'
+              }
+              ,{
+              field: 'no',
+              title: '行号',
+              sortable: true,
+              sortName: 'no'
+              }
+              ,{
+              field: 'cinv.code',
+              title: '存货编号'
 
-    }
-    ,{
-    field: 'cinvname',
-    title: '存货名称'
-    }
-    ,{
-    field: 'std',
-    title: '规格型号'
-    }
-    ,{
-    field: 'num',
-    title: '数量'
-    }
+              }
+              ,{
+              field: 'cinvname',
+              title: '存货名称'
+              }
+              ,{
+              field: 'std',
+              title: '规格型号'
+              }
+              ,{
+              field: 'num',
+              title: '数量'
+              }
             ,{
                 field: 'unit',
                 title: '计量单位'
@@ -119,8 +119,7 @@
 
     $("#search").click("click", function() {// 绑定查询按扭
   		  refresh();
-
-		});
+	});
 
 	 $("#reset").click("click", function() { //绑定重置按钮
 		  $("#searchForm  input").val("");
@@ -128,8 +127,6 @@
 		  $("#searchForm  .select-item").html("");
 		  refresh();
 		});
-
-
 	});
 
 	//获取选中行
@@ -141,9 +138,40 @@
 
     // 生成计划工单
     function jihua(){
-
+      var rid = getIdSelections();
+      top.layer.open({
+        type: 1,
+        area: ['500px', '200px'],
+        title:"输入能效(即计划工单每单的工单数量)",
+        auto:true,
+        maxmin: true, //开启最大化最小化按钮
+        content: $('#scddform').html(),
+        btn: ['确定', '关闭'],
+        yes: function(index, layero){
+          var num = $(layero).find("#num").val();
+          if(!num){
+            jp.warning("请输入数量");
+            return false;
+          }
+          doPlan(rid,num);
+          top.layer.close(index);
+        },
+        cancel: function(index){
+          top.layer.close(index);
+        }
+      });
     }
-
+  function doPlan(rid,num){
+    var index  =  jp.loading('生成中...');
+    jp.get('${ctx}/business/shengchan/dingdan/businessShengChanDingDan/doPlan?rid='+rid+'&num='+num,function (rs){
+        if(rs.success){
+          jp.toastr_success(rs.msg);
+        }else{
+          jp.toastr_error(rs.msg);
+        }
+        jp.close(index);
+    });
+  }
     //刷新列表
   function refresh() {
       $('#table').bootstrapTable('refresh');

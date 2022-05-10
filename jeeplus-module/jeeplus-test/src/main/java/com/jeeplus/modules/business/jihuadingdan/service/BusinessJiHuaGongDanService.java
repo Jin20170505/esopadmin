@@ -44,6 +44,9 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 	
 	@Transactional(readOnly = false)
 	public void save(BusinessJiHuaGongDan businessJiHuaGongDan) {
+		if(StringUtils.isNotEmpty(businessJiHuaGongDan.getId())){
+			businessJiHuaGongDanMingXiMapper.delete(new BusinessJiHuaGongDanMingXi(businessJiHuaGongDan));
+		}
 		super.save(businessJiHuaGongDan);
 		for (BusinessJiHuaGongDanMingXi businessJiHuaGongDanMingXi : businessJiHuaGongDan.getBusinessJiHuaGongDanMingXiList()){
 			if (businessJiHuaGongDanMingXi.getId() == null){
@@ -68,6 +71,11 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 	public void delete(BusinessJiHuaGongDan businessJiHuaGongDan) {
 		super.delete(businessJiHuaGongDan);
 		businessJiHuaGongDanMingXiMapper.delete(new BusinessJiHuaGongDanMingXi(businessJiHuaGongDan));
+	}
+
+	public Boolean hasScddLineid(String lineid){
+		Integer num = mapper.hasScdd(lineid);
+		return num!=null;
 	}
 	
 }

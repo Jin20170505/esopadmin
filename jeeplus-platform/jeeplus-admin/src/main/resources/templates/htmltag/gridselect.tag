@@ -29,7 +29,12 @@ $(document).ready(function(){
 				return false;
             }
             var pidName = $("#${id}Id").attr("data-extendId");
-			extendUrl = "?"+pidName+"="+extendId;
+			var urltemp = '${url}';
+			if(urltemp.indexOf('?')>0){
+				extendUrl = "&"+pidName+"="+extendId;
+			}else{
+				extendUrl = "?"+pidName+"="+extendId;
+			}
         }
 		top.layer.open({
 		    type: 2,

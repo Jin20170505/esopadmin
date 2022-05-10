@@ -79,4 +79,8 @@ public class BaseRoteMainService extends CrudService<BaseRoteMainMapper, BaseRot
 	public List<BaseRoteMain> findVersion(String productid){
 		return mapper.findVersion(productid);
 	}
+
+	public BaseRoteMain getRouteVersionByCinvCode(String cinvcode){
+		return mapper.getRouteVersionByCinvCode(cinvcode);
+	}
 }

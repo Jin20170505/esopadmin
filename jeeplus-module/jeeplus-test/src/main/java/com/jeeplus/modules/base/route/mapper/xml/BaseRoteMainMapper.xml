@@ -45,6 +45,9 @@
 			<if test="product != null and product.id != null and product.id != ''">
 				AND a.product_id = #{product.id}
 			</if>
+			<if test="product != null and product.code != null and product.code != ''">
+				AND product.code = #{product.code}
+			</if>
 			<if test="version != null and version != ''">
 				AND a.version = #{version}
 			</if>

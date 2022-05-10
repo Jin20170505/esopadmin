@@ -3,6 +3,8 @@
  */
 package com.jeeplus.modules.business.product.archive.mapper;
 
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 import com.jeeplus.core.persistence.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,5 +18,7 @@ import com.jeeplus.modules.business.product.archive.entity.BusinessProduct;
 @Mapper
 @Repository
 public interface BusinessProductMapper extends BaseMapper<BusinessProduct> {
-	
+
+    @Select("select id from business_product where code = #{code}")
+    String getIdByCode(@Param("code") String code);
 }

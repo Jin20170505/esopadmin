@@ -101,6 +101,21 @@ public class BusinessShengChanDingDanController extends BaseController {
 		model.addAttribute("businessShengChanDingDan", businessShengChanDingDan);
 		return "modules/business/shengchan/dingdan/businessShengChanDingDanForm";
 	}
+	@ResponseBody
+	@RequestMapping("doPlan")
+	public AjaxJson doPlan(String rid,int num){
+		AjaxJson json = new AjaxJson();
+		try {
+			businessShengChanDingDanService.doPlan(rid,num);
+			json.setMsg("生成成功");
+			json.setSuccess(true);
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setSuccess(false);
+			json.setMsg("生成失败,原因："+e.getMessage());
+		}
+		return json;
+	}
 
 	/**
 	 * 保存生产订单

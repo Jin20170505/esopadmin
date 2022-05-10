@@ -112,6 +112,9 @@ public class BusinessShengChanDingDanMingXi extends DataEntity<BusinessShengChan
 	@NotNull(message="数量不能为空")
 	@ExcelField(title="数量", align=2, sort=13)
 	public Double getNum() {
+		if(num==null){
+			num = .0;
+		}
 		return num;
 	}
 

@@ -3,6 +3,7 @@
  */
 package com.jeeplus.modules.business.jihuadingdan.entity;
 
+import com.jeeplus.modules.base.route.entity.BaseRoteMain;
 import com.jeeplus.modules.business.shengchan.dingdan.entity.BusinessShengChanDingDan;
 import com.jeeplus.modules.sys.entity.Office;
 import java.util.List;
@@ -25,6 +26,7 @@ public class BusinessJiHuaGongDan extends DataEntity<BusinessJiHuaGongDan> {
 	private String cinvname;		// 存货名称
 	private String cinvstd;		// 规格型号
 	private String unit;		// 计量单位
+	private BaseRoteMain route; // 工艺路线
 	private String startdate;		// 开始日期
 	private String enddate;		// 结束日期
 	private Double scnum;		// 生产数量
@@ -104,7 +106,16 @@ public class BusinessJiHuaGongDan extends DataEntity<BusinessJiHuaGongDan> {
 	public void setUnit(String unit) {
 		this.unit = unit;
 	}
-	
+
+	public BaseRoteMain getRoute() {
+		return route;
+	}
+
+	public BusinessJiHuaGongDan setRoute(BaseRoteMain route) {
+		this.route = route;
+		return this;
+	}
+
 	@ExcelField(title="开始日期", align=2, sort=14)
 	public String getStartdate() {
 		return startdate;
