@@ -74,6 +74,7 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 					businessShengChanDingDanMingXi.preInsert();
 					businessShengChanDingDanMingXiMapper.insert(businessShengChanDingDanMingXi);
 				}else{
+					businessShengChanDingDanMingXi.setP(businessShengChanDingDan);
 					businessShengChanDingDanMingXi.preUpdate();
 					businessShengChanDingDanMingXiMapper.update(businessShengChanDingDanMingXi);
 				}

@@ -60,6 +60,7 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 					businessJiHuaGongDanMingXi.preInsert();
 					businessJiHuaGongDanMingXiMapper.insert(businessJiHuaGongDanMingXi);
 				}else{
+					businessJiHuaGongDanMingXi.setP(businessJiHuaGongDan);
 					businessJiHuaGongDanMingXi.preUpdate();
 					businessJiHuaGongDanMingXiMapper.update(businessJiHuaGongDanMingXi);
 				}
