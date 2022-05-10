@@ -9,8 +9,12 @@ layout("/include/_container.html", {title:"明细列表", parent:"生产订单"}
     <form id="searchForm" class="form-inline">
         <div class="form-group m-b-10 m-r-10">
             <label class="m-r-10" title="生产单号：">生产单号：</label>
-            <input name="code"  maxlength="64"  class=" form-control"/>
+            <input name="p.code"  maxlength="64"  class=" form-control"/>
         </div>
+        <div class="form-group m-b-10 m-r-10">
+        <label class="m-r-10" title="生产单号：">生产批号：</label>
+        <input name="batchno"  maxlength="64"  class=" form-control"/>
+    </div>
         <div class="form-group m-b-10 m-r-10">
             <label class="m-r-10" title="生产部门：">生产部门：</label>
             <#treeselect id="dept" name="dept.id"  labelName="dept.name"

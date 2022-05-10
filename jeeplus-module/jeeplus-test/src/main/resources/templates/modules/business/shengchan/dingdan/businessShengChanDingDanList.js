@@ -342,6 +342,7 @@ $(document).ready(function() {
 								<th>数量</th>
 								<th>开工日期</th>
 								<th>完工日期</th>
+                                <th>批号</th>
                                 <th>生产部门</th>
                                 <th>状态</th>
 							</tr>
@@ -383,6 +384,9 @@ $(document).ready(function() {
 					<td>
 						{{row.enddate}}
 					</td>
+                    <td>
+                    {{row.batchno}}
+                    </td>
                     <td>
                     {{row.dept.name}}
                     </td>

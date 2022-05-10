@@ -107,7 +107,13 @@ $(document).ready(function() {
 		        sortable: true,
 		        sortName: 'orderno'
 		       
-		    }
+		    },{
+                field: 'batchno',
+                title: '生产批号',
+                sortable: true,
+                sortName: 'batchno'
+
+                }
 			,{
 		        field: 'cinvcode',
 		        title: '存货编码',
@@ -284,11 +290,35 @@ $(document).ready(function() {
 	});
    // 下发
 function xiafa(){
-
+    var ids = getIdSelections();
+    jp.confirm('确认要下发该计划工单吗？', function(){
+		var index =jp.loading();
+		jp.get("${ctx}/business/jihuadingdan/businessJiHuaGongDan/xiafa?ids=" + ids, function(data){
+				if(data.success){
+					refresh();
+					jp.toastr_success(data.msg);
+				}else{
+					jp.toastr_error(data.msg);
+				}
+				jp.close(index);
+			})
+	 })
 }
    // 撤回
 function chehui(){
-
+    var ids = getIdSelections();
+    jp.confirm('确认要撤回该计划工单吗？', function(){
+		var index =jp.loading();
+		jp.get("${ctx}/business/jihuadingdan/businessJiHuaGongDan/chehui?ids=" + ids, function(data){
+				if(data.success){
+					refresh();
+					jp.toastr_success(data.msg);
+				}else{
+					jp.toastr_error(data.msg);
+				}
+				jp.close(index);
+			})
+	 })
 }
 // 生成报工单
 function shengchengbaogongdan(){

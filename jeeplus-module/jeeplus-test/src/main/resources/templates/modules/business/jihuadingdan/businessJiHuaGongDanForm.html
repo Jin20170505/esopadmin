@@ -69,29 +69,46 @@ layout("/include/_dialog.html"){
 				$(obj).parent().parent().removeClass("error");
 			}
 		}
+		var sygdnum = 0.0;
 		function shengchanCallBack(items,tagid){
 			var item = items[0];
-			$('#ddName').val(item.p.code);
-			$('#orderno').val(item.no);
-			$('#cinvcode').val(item.cinv.code);
-			$('#cinvname').val(item.cinvname);
-			$('#cinvstd').val(item.std);
-			$('#unit').val(item.unit);
-			$('#startdate').val(item.startdate);
-			$('#enddate').val(item.enddate);
-			$('#scnum').val(item.num);
-			$('#deptId').val(item.dept.id);
-			$('#deptName').val(item.dept.name);
-			jp.get("${ctx}/base/route/baseRoteMain/getRouteVersionByCinvCode?cinvcode="+item.cinv.code,function (rs){
+			var orrderid = item.id;
+			jp.get("${ctx}//business/jihuadingdan/businessJiHuaGongDan/getSyGdNum?scddlineid="+orrderid,function (rs){
 				if(rs.success){
-					var version = rs.body.version;
-					if(version){
-						$('#routeId').val(version.id);
-						$('#routeName').val(version.version);
-						addRounte(version.id)
+					sygdnum = rs.body.num;
+					if(sygdnum>0){
+						$('#ddName').val(item.p.code);
+						$('#batchno').val(item.batchno);
+						$('#orderno').val(item.no);
+						$('#cinvcode').val(item.cinv.code);
+						$('#cinvname').val(item.cinvname);
+						$('#cinvstd').val(item.std);
+						$('#unit').val(item.unit);
+						$('#startdate').val(item.startdate);
+						$('#enddate').val(item.enddate);
+						$('#scnum').val(item.num);
+						$('#gdnum').val(sygdnum);
+						$('#synum').val(0)
+						$('#deptId').val(item.dept.id);
+						$('#deptName').val(item.dept.name);
+						jp.get("${ctx}/base/route/baseRoteMain/getRouteVersionByCinvCode?cinvcode="+item.cinv.code,function (rs){
+							if(rs.success){
+								var version = rs.body.version;
+								if(version){
+									$('#routeId').val(version.id);
+									$('#routeName').val(version.version);
+									addRounte(version.id)
+								}
+							}
+						});
+					}else {
+						$('#ddId').val('');
+						$('#ddName').val('');
+						jp.warning("该生产订单的数量已分配完，不可再拆成计划工单")
 					}
 				}
 			});
+
 		}
 		// 工单数量
 		function gdnumChange(){
@@ -99,8 +116,8 @@ layout("/include/_dialog.html"){
 			if(!num){
 				num=0;
 			}
-			var scnum = $('#scnum').val();
-			if(!scnum){
+			var scnum = sygdnum;
+			if(scnum<=0){
 				jp.warning('请选择生产单号');
 				return false;
 			}
@@ -148,7 +165,7 @@ layout("/include/_dialog.html"){
 					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>生产订单号：</label></td>
 					<td class="width-35">
 						<#gridselect callback="shengchanCallBack" url="${ctx}/business/shengchan/dingdan/businessShengChanDingDan/mxdata?status=开立" id="dd" name="dd.id" value="${businessJiHuaGongDan.dd.id!}" labelName="dd.code" labelValue="${businessJiHuaGongDan.dd.code!}"
-							 title="选择生产订单号" class="form-control " fieldLabels="单号|行号|存货编码|存货名称|规格型号|单位|数量" fieldKeys="p.code|no|cinv.code|cinvname|std|unit|num" searchLabels="生产单号" searchKeys="p.code" />
+							 title="选择生产订单号" class="form-control " fieldLabels="单号|生产批号|行号|存货编码|存货名称|规格型号|单位|数量" fieldKeys="p.code|batchno|no|cinv.code|cinvname|std|unit|num" searchLabels="生产单号|生产批号" searchKeys="p.code|batchno" />
 				</td>
 				</tr>
 				<tr>
@@ -217,6 +234,10 @@ layout("/include/_dialog.html"){
 					<td class="width-35">
 						<#gridselect callback="routecallback" url="${ctx}/base/route/baseRoteMain/data?enable=0" id="route" name="route.id" value="${businessJiHuaGongDan.route.id!}" labelName="route.version" labelValue="${businessJiHuaGongDan.route.version!}"
 						title="工艺路线版本" class="form-control " fieldLabels="版本" fieldKeys="version" searchLabels="" searchKeys="" extendId="product.code" extendTagId="cinvcode" extendTagName="生产订单" />
+					</td>
+					<td class="width-15 active"><label class="pull-right">生产批号：</label></td>
+					<td class="width-35">
+						<input name="batchno" id="batchno" value="${businessJiHuaGongDan.batchno}"  readonly  class="form-control "/>
 					</td>
 				</tr>
 		 	</tbody>

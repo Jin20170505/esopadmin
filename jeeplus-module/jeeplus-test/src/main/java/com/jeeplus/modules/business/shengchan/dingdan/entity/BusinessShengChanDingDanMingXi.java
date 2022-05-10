@@ -29,6 +29,7 @@ public class BusinessShengChanDingDanMingXi extends DataEntity<BusinessShengChan
 	private Double num;		// 数量
 	private String startdate;		// 开工日期
 	private String enddate;		// 完工日期
+	private String batchno; // 批号
 	private String type;
 	private String status;
 	
@@ -138,6 +139,15 @@ public class BusinessShengChanDingDanMingXi extends DataEntity<BusinessShengChan
 
 	public void setEnddate(String enddate) {
 		this.enddate = enddate;
+	}
+
+	public String getBatchno() {
+		return batchno;
+	}
+
+	public BusinessShengChanDingDanMingXi setBatchno(String batchno) {
+		this.batchno = batchno;
+		return this;
 	}
 
 	public String getType() {

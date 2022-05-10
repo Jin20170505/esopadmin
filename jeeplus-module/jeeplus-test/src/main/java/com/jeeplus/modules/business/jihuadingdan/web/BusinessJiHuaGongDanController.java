@@ -68,7 +68,49 @@ public class BusinessJiHuaGongDanController extends BaseController {
 		model.addAttribute("businessJiHuaGongDan", businessJiHuaGongDan);
 		return "modules/business/jihuadingdan/businessJiHuaGongDanList";
 	}
-	
+
+	@ResponseBody
+	@RequestMapping("getSyGdNum")
+	public AjaxJson getSyGdNum(String scddlineid){
+		AjaxJson json = new AjaxJson();
+		json.setSuccess(true);
+		json.put("num",businessJiHuaGongDanService.getGdNum(scddlineid));
+		return json;
+	}
+
+	@ResponseBody
+	@RequestMapping("xiafa")
+	public AjaxJson xiafa(String ids){
+		AjaxJson json = new AjaxJson();
+		try {
+			businessJiHuaGongDanService.xiafa(ids);
+			json.setMsg("操作成功");
+			json.setSuccess(true);
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setSuccess(false);
+			json.setMsg("操作失败,原因:"+e.getMessage());
+		}
+		return json;
+	}
+
+	@ResponseBody
+	@RequestMapping("chehui")
+	public AjaxJson chehui(String ids){
+		AjaxJson json = new AjaxJson();
+		try {
+			businessJiHuaGongDanService.chehui(ids);
+			json.setMsg("操作成功");
+			json.setSuccess(true);
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setSuccess(false);
+			json.setMsg("操作失败,原因:"+e.getMessage());
+		}
+		return json;
+	}
+
+
 		/**
 	 * 计划工单列表数据
 	 */

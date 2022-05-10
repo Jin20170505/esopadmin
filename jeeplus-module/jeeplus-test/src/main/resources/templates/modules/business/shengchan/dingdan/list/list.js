@@ -72,11 +72,13 @@
               title: '行号',
               sortable: true,
               sortName: 'no'
+              },{
+                field: 'batchno',
+                title: '生产批号'
               }
               ,{
               field: 'cinv.code',
               title: '存货编号'
-
               }
               ,{
               field: 'cinvname',

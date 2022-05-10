@@ -4,6 +4,7 @@
 package com.jeeplus.modules.business.shengchan.dingdan.mapper;
 
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 import com.jeeplus.core.persistence.BaseMapper;
@@ -28,4 +29,7 @@ public interface BusinessShengChanDingDanMingXiMapper extends BaseMapper<Busines
 
 	@Update("update business_shengchan_dingdan_mingxi set status = '锁定' where pid = #{pid} and status = '开立'")
 	void fanshen(@Param("pid") String pid);
+
+	@Select("select num from business_shengchan_dingdan_mingxi where id = #{id}")
+	Double getScNum(@Param("id") String id);
 }

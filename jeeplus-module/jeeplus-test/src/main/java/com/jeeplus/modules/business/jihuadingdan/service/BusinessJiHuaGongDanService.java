@@ -3,8 +3,10 @@
  */
 package com.jeeplus.modules.business.jihuadingdan.service;
 
+import java.util.Arrays;
 import java.util.List;
 
+import com.jeeplus.modules.business.shengchan.dingdan.mapper.BusinessShengChanDingDanMingXiMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,5 +79,27 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 		Integer num = mapper.hasScdd(lineid);
 		return num!=null;
 	}
-	
+	@Autowired
+	private BusinessShengChanDingDanMingXiMapper shengChanDingDanMingXiMapper;
+	public Double getGdNum(String scddlineid){
+		Double sumGdNum = mapper.getSumNum(scddlineid);
+		if(sumGdNum==null){
+			sumGdNum = 0.0;
+		}
+		Double scNum = shengChanDingDanMingXiMapper.getScNum(scddlineid);
+		return scNum-sumGdNum;
+	}
+
+	@Transactional(readOnly = false)
+	public void xiafa(String ids){
+		Arrays.asList(ids.split(",")).forEach(id->{
+			mapper.updateSatus(id,"已下发");
+		});
+	}
+	@Transactional(readOnly = false)
+	public void chehui(String ids){
+		Arrays.asList(ids.split(",")).forEach(id->{
+			mapper.updateSatus(id,"未下发");
+		});
+	}
 }

@@ -151,6 +151,7 @@ layout("/include/_dialog.html"){
 						<th><font color="red">*</font>数量</th>
 						<th><font color="red">*</font>开工日期</th>
 						<th><font color="red">*</font>完工日期</th>
+						<th><font color="red">*</font>批号</th>
 						<th><font color="red">*</font>生产部门</th>
 						<th><font color="red">*</font>状态</th>
 						<th width="10">&nbsp;</th>
@@ -220,6 +221,9 @@ layout("/include/_dialog.html"){
                                 <span class="input-group-text btn-custom border text-white"><i class="ti-calendar"></i></span>
                             </div>
                         </div>
+					</td>
+					<td>
+						<input id="businessShengChanDingDanMingXiList{{idx}}_batchno"  name="businessShengChanDingDanMingXiList[{{idx}}].batchno" type="text" value="{{row.batchno}}"    class="form-control required"/>
 					</td>
 					<td>
 						<#treeselect id="businessShengChanDingDanMingXiList{{idx}}_dept" name="businessShengChanDingDanMingXiList[{{idx}}].dept.id" value="{{row.dept.id}}" labelName="businessShengChanDingDanMingXiList[{{idx}}].dept.name" labelValue="{{row.dept.name}}"

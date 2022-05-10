@@ -22,6 +22,7 @@ public class BusinessJiHuaGongDan extends DataEntity<BusinessJiHuaGongDan> {
 	private String code;		// 单号
 	private BusinessShengChanDingDan dd;		// 生产订单号
 	private String orderno;		// 生产订单行号
+	private String batchno;		// 生产批号
 	private String cinvcode;		// 存货编码
 	private String cinvname;		// 存货名称
 	private String cinvstd;		// 规格型号
@@ -70,7 +71,16 @@ public class BusinessJiHuaGongDan extends DataEntity<BusinessJiHuaGongDan> {
 	public void setOrderno(String orderno) {
 		this.orderno = orderno;
 	}
-	
+
+	public String getBatchno() {
+		return batchno;
+	}
+
+	public BusinessJiHuaGongDan setBatchno(String batchno) {
+		this.batchno = batchno;
+		return this;
+	}
+
 	@ExcelField(title="存货编码", align=2, sort=10)
 	public String getCinvcode() {
 		return cinvcode;

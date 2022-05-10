@@ -125,6 +125,7 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 			jiHuaGongDan.setCode(code+"001");
 			jiHuaGongDan.setRoute(roteMain);
 			jiHuaGongDan.setDept(mingXi.getDept());
+			jiHuaGongDan.setBatchno(mingXi.getBatchno());
 			jiHuaGongDan.setDd(mingXi.getP());
 			jiHuaGongDan.setCinvcode(mingXi.getCinv().getCode());
 			jiHuaGongDan.setOrderno(mingXi.getNo().toString());
@@ -155,6 +156,7 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 				jiHuaGongDan.setCode(code+getcode(idx));
 				jiHuaGongDan.setRoute(roteMain);
 				jiHuaGongDan.setDept(mingXi.getDept());
+				jiHuaGongDan.setBatchno(mingXi.getBatchno());
 				jiHuaGongDan.setDd(mingXi.getP());
 				jiHuaGongDan.setCinvcode(mingXi.getCinv().getCode());
 				jiHuaGongDan.setOrderno(mingXi.getNo().toString());
@@ -186,6 +188,7 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 				jiHuaGongDan.setCode(code+getcode(idx));
 				jiHuaGongDan.setRoute(roteMain);
 				jiHuaGongDan.setDept(mingXi.getDept());
+				jiHuaGongDan.setBatchno(mingXi.getBatchno());
 				jiHuaGongDan.setDd(mingXi.getP());
 				jiHuaGongDan.setCinvcode(mingXi.getCinv().getCode());
 				jiHuaGongDan.setOrderno(mingXi.getNo().toString());
