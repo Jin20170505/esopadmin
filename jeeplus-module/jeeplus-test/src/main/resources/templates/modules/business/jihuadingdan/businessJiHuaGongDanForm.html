@@ -81,7 +81,17 @@ layout("/include/_dialog.html"){
 			$('#enddate').val(item.enddate);
 			$('#scnum').val(item.num);
 			$('#deptId').val(item.dept.id);
-			$('#deptName').val(item.dept.name)
+			$('#deptName').val(item.dept.name);
+			jp.get("${ctx}/base/route/baseRoteMain/getRouteVersionByCinvCode?cinvcode="+item.cinv.code,function (rs){
+				if(rs.success){
+					var version = rs.body.version;
+					if(version){
+						$('#routeId').val(version.id);
+						$('#routeName').val(version.version);
+						addRounte(version.id)
+					}
+				}
+			});
 		}
 		// 工单数量
 		function gdnumChange(){
@@ -105,8 +115,12 @@ layout("/include/_dialog.html"){
 		}
 		function routecallback(items,tagid){
 			var item = items[0];
+			addRounte(item.id)
+		}
+
+		function addRounte(versionId){
 			var num = $('#gdnum').val();
-			jp.get("${ctx}/base/route/baseRoteMain/getRoutes?rid="+item.id,function (rs){
+			jp.get("${ctx}/base/route/baseRoteMain/getRoutes?rid="+versionId,function (rs){
 				if(rs.success){
 					var routes = rs.body.routes;
 					if(routes){

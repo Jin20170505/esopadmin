@@ -86,6 +86,22 @@ public class BaseRoteMainController extends BaseController {
 		return json;
 	}
 
+
+	@ResponseBody
+	@RequestMapping("getRouteVersionByCinvCode")
+	public AjaxJson getRouteVersionByCinvCode(String cinvcode){
+		AjaxJson json = new AjaxJson();
+		try {
+			json.put("version",baseRoteMainService.getRouteVersionByCinvCode(cinvcode));
+			json.setMsg("success");
+			json.setSuccess(true);
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setSuccess(false);
+			json.setMsg("查询失败");
+		}
+		return json;
+	}
 		/**
 	 * 工艺路线列表数据
 	 */
