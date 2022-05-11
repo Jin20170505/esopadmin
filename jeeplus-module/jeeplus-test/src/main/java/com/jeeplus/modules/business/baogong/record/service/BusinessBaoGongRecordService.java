@@ -42,5 +42,10 @@ public class BusinessBaoGongRecordService extends CrudService<BusinessBaoGongRec
 	public void delete(BusinessBaoGongRecord businessBaoGongRecord) {
 		super.delete(businessBaoGongRecord);
 	}
-	
+
+	// 报工
+	@Transactional(readOnly = false)
+	public void baogong(String bgid,String bghid,String remarks,String opcode,String opname,Double flnum,Double fgnum,Double bhgnum,Double hgnum){
+
+	}
 }

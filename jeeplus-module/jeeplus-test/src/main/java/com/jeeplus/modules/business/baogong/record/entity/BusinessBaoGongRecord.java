@@ -17,9 +17,13 @@ public class BusinessBaoGongRecord extends DataEntity<BusinessBaoGongRecord> {
 	
 	private static final long serialVersionUID = 1L;
 	private Date bgdate;		// 报工时间
+	private String bgid;	// 报工ID
 	private String bgcode;		// 报工单号
+	private String planid;	// 计划工单ID
 	private String ordercode;		// 生产订单号
+	private String lineid;	// 生产订单行ID
 	private String orderline;		// 生产订单行号
+	private String bghid;	// 报工行ID
 	private String site;		// 工序名称
 	private String username;		// 姓名
 	private Double gdnum;		// 工单数量
@@ -29,6 +33,7 @@ public class BusinessBaoGongRecord extends DataEntity<BusinessBaoGongRecord> {
 	private Double fgnum;		// 返工数量
 	private Double bhgnum;		// 不合格数量
 	private Double hgnum;		// 合格数量
+	private String unit;	// 计量单位
 	private Date beginBgdate;		// 开始 报工时间
 	private Date endBgdate;		// 结束 报工时间
 	
@@ -173,5 +178,49 @@ public class BusinessBaoGongRecord extends DataEntity<BusinessBaoGongRecord> {
 	public void setEndBgdate(Date endBgdate) {
 		this.endBgdate = endBgdate;
 	}
-		
+
+	public String getBgid() {
+		return bgid;
+	}
+
+	public BusinessBaoGongRecord setBgid(String bgid) {
+		this.bgid = bgid;
+		return this;
+	}
+
+	public String getPlanid() {
+		return planid;
+	}
+
+	public BusinessBaoGongRecord setPlanid(String planid) {
+		this.planid = planid;
+		return this;
+	}
+
+	public String getLineid() {
+		return lineid;
+	}
+
+	public BusinessBaoGongRecord setLineid(String lineid) {
+		this.lineid = lineid;
+		return this;
+	}
+
+	public String getBghid() {
+		return bghid;
+	}
+
+	public BusinessBaoGongRecord setBghid(String bghid) {
+		this.bghid = bghid;
+		return this;
+	}
+	@ExcelField(title="计量单位", align=2, sort=28)
+	public String getUnit() {
+		return unit;
+	}
+
+	public BusinessBaoGongRecord setUnit(String unit) {
+		this.unit = unit;
+		return this;
+	}
 }

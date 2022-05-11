@@ -5,6 +5,7 @@ package com.jeeplus.modules.business.baogong.order.service;
 
 import java.util.List;
 
+import com.jeeplus.modules.api.bean.baogong.BaoGongBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -78,4 +79,12 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 	public String getQrCode(String id){
 		return mapper.getQrCodeById(id);
 	}
+
+	// 根据报工单号 获取 报工信息
+	public BaoGongBean getBaoGongInfo(String bgcode){
+		BaoGongBean bean = new BaoGongBean();
+
+		return bean;
+	}
+
 }

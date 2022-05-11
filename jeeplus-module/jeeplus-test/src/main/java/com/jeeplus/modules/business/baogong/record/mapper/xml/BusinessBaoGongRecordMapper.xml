@@ -28,8 +28,6 @@
 	<sql id="businessBaoGongRecordJoins">
 		
 	</sql>
-	
-    
 	<select id="get" resultType="BusinessBaoGongRecord" >
 		SELECT 
 			<include refid="businessBaoGongRecordColumns"/>
@@ -97,10 +95,10 @@
 			update_date,
 			del_flag,
 			bgdate,
-			bgcode,
-			ordercode,
-			orderline,
-			site,
+			bgcode,bgid,
+			ordercode,planid,
+			orderline,lineid,
+			site,bghid,
 			username,
 			gdnum,
 			doingnum,
@@ -108,7 +106,7 @@
 			gfnum,
 			fgnum,
 			bhgnum,
-			hgnum,
+			hgnum,unit,
 			remarks
 		) VALUES (
 			#{id},
@@ -118,10 +116,10 @@
 			#{updateDate},
 			#{delFlag},
 			#{bgdate},
-			#{bgcode},
-			#{ordercode},
-			#{orderline},
-			#{site},
+			#{bgcode},#{bgid},
+			#{ordercode},#{planid},
+			#{orderline},#{lineid},
+			#{site},#{bghid},
 			#{username},
 			#{gdnum},
 			#{doingnum},
@@ -129,7 +127,7 @@
 			#{gfnum},
 			#{fgnum},
 			#{bhgnum},
-			#{hgnum},
+			#{hgnum},#{unit},
 			#{remarks}
 		)
 	</insert>
