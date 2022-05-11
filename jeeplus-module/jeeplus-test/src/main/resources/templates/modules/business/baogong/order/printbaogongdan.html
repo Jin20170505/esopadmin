@@ -1,0 +1,98 @@
+<%
+layout("/include/_container.html", {title:"打印", parent:"报工单"}){
+%>
+<style type="text/css">
+    @media print {
+        #print{
+            display: none;
+        }
+    }
+    #print{
+        width: 100px;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+    }
+    #qrcode{
+        display: block;
+        width: 200px;
+        height: 200px;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+</style>
+<div class="white-box">
+    <a id="print" class="btn btn-custom waves-effect w-xs waves-light" onclick="window.print();">
+        <i class="fa fa-print"></i> 打印
+    </a>
+    <img id="qrcode" src="${ctx}/business/baogong/order/businessBaoGongOrder/img/${order.id!}"/>
+    <h3 style="text-align: center;line-height: 200px;">报工单</h3>
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <th>生产订单号</th>
+            <td>${order.ordercode!}</td>
+            <th>行号</th>
+            <td>${order.orderline!}</td>
+            <th>生产部门</th>
+            <td>${order.deptName!}</td>
+        </tr>
+        <tr>
+            <th>计划单号</th>
+            <td>${order.plancode!}</td>
+            <th>数量</th>
+            <td>${order.num!}</td>
+            <th>备注</th>
+            <td>${order.remarks!}</td>
+        </tr>
+        <tr>
+            <th>存货编码</th>
+            <td>${order.cinvcode!}</td>
+            <th>存货名称</th>
+            <td>${order.cinvname!}</td>
+            <th>存货规格</th>
+            <td>${order.cinvstd!}</td>
+        </tr>
+        <tr>
+            <th>开始日期</th>
+            <td>${order.startdate!}</td>
+            <th>结束日期</th>
+            <td>${order.enddate!}</td>
+            <th>生产批号</th>
+            <td>${order.batchno!}</td>
+        </tr>
+        </tbody>
+    </table>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>工作站</th>
+                <th>操作人</th>
+                <th>操作人姓名</th>
+                <th>班组</th>
+            </tr>
+        </thead>
+        <tbody id="itemList">
+
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var data = ${fn.toJson(order.businessBaoGongOrderMingXiList)};
+        var htm = '';
+        for (var i=0; i<data.length; i++){
+            htm =  `<tr>
+                        <td>`+data[0].no+`</td>
+                        <td>`+data[0].site+`</td>
+                        <td>`+data[0].opcode+`</td>
+                        <td>`+data[0].opname+`</td>
+                        <td>`+data[0].classgroup+`</td>
+                    </tr>`;
+        }
+        $('#itemList').html(htm);
+    });
+</script>
+<% } %>

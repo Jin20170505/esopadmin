@@ -74,4 +74,8 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		Integer rownum = mapper.hasScOrderFromPlan(planid);
 		return rownum!=null;
 	}
+	
+	public String getQrCode(String id){
+		return mapper.getQrCodeById(id);
+	}
 }

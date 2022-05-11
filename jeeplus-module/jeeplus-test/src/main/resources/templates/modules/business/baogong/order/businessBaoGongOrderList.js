@@ -256,7 +256,8 @@ $(document).ready(function() {
 }
     // 打印报工单
     function printbgd(){
-
+        var rid = getIdSelections();
+        jp.windowOpen('${ctx}/business/baogong/order/businessBaoGongOrder/goToPrint?rid='+rid,"报工单--打印",window.screen.height,window.screen.width);
     }
 	//获取选中行
   function getIdSelections() {

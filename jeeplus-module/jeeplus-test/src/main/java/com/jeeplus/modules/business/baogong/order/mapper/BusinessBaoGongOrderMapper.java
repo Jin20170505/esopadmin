@@ -20,4 +20,7 @@ public interface BusinessBaoGongOrderMapper extends BaseMapper<BusinessBaoGongOr
 
     @Select("select 1 from business_baogao_order where planid = #{planid}")
     Integer hasScOrderFromPlan(@Param("planid") String planid);
+
+    @Select("select qrcode from business_baogao_order where id=#{id}")
+    String getQrCodeById(@Param("id") String id);
 }

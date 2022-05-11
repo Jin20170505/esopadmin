@@ -52,6 +52,9 @@ public class BusinessBaoGongOrderMingXi extends DataEntity<BusinessBaoGongOrderM
 	}
 
 	public void setSite(String site) {
+		if(site==null){
+			site ="";
+		}
 		this.site = site;
 	}
 	
@@ -61,6 +64,9 @@ public class BusinessBaoGongOrderMingXi extends DataEntity<BusinessBaoGongOrderM
 	}
 
 	public void setOpname(String opname) {
+		if(opname==null){
+			opname ="";
+		}
 		this.opname = opname;
 	}
 	
@@ -70,6 +76,9 @@ public class BusinessBaoGongOrderMingXi extends DataEntity<BusinessBaoGongOrderM
 	}
 
 	public void setOpcode(String opcode) {
+		if(opcode==null){
+			opcode ="";
+		}
 		this.opcode = opcode;
 	}
 	
@@ -113,6 +122,9 @@ public class BusinessBaoGongOrderMingXi extends DataEntity<BusinessBaoGongOrderM
 	}
 
 	public BusinessBaoGongOrderMingXi setClassgroup(String classgroup) {
+		if(classgroup==null){
+			classgroup ="";
+		}
 		this.classgroup = classgroup;
 		return this;
 	}

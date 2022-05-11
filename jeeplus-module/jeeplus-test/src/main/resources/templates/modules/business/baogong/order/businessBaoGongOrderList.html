@@ -68,7 +68,7 @@ layout("/include/_container.html", {title:"列表", parent:"报工单"}){
 				<% } %>
 		<% if(shiro.hasPermission("business:baogong:order:businessBaoGongOrder:print") ){ %>
 					    <button id="print" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="printbgd()">
-			            	打印报工单
+							<i class="fa fa-print"></i> 打印报工单
 			        	</button>
 		<% } %>
 

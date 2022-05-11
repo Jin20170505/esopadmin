@@ -3,13 +3,19 @@
  */
 package com.jeeplus.modules.business.baogong.order.web;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
+import com.jeeplus.common.utils.QRCodeUtil;
+import com.jeeplus.modules.sys.utils.FileKit;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +62,31 @@ public class BusinessBaoGongOrderController extends BaseController {
 		}
 		return entity;
 	}
-	
+
+	@RequestMapping("goToPrint")
+	public String goToPrint(String rid,Model model){
+		BusinessBaoGongOrder order = businessBaoGongOrderService.get(rid);
+		model.addAttribute("order",order);
+		return "modules/business/baogong/order/printbaogongdan";
+	}
+	@RequestMapping("/img/{rid}")
+	public void getImage(@PathVariable("rid") String rid, HttpServletResponse response) throws IOException {
+		response.reset();
+		response.setContentType("image/jpg");
+		ServletOutputStream out = null;
+		try{
+			String qrcode = businessBaoGongOrderService.getQrCode(rid);
+			out = response.getOutputStream();
+			QRCodeUtil.encode(qrcode,out);
+			out.flush();
+		}catch (Exception e){
+			e.printStackTrace();
+		}finally {
+			if(out!=null){
+				out.close();
+			}
+		}
+	}
 	/**
 	 * 报工单列表页面
 	 */
@@ -71,7 +101,6 @@ public class BusinessBaoGongOrderController extends BaseController {
 	 * 报工单列表数据
 	 */
 	@ResponseBody
-	@RequiresPermissions("business:baogong:order:businessBaoGongOrder:list")
 	@RequestMapping(value = "data")
 	public Map<String, Object> data(BusinessBaoGongOrder businessBaoGongOrder, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<BusinessBaoGongOrder> page = businessBaoGongOrderService.findPage(new Page<BusinessBaoGongOrder>(request, response), businessBaoGongOrder); 
