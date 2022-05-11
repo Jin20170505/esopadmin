@@ -69,5 +69,9 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		super.delete(businessBaoGongOrder);
 		businessBaoGongOrderMingXiMapper.delete(new BusinessBaoGongOrderMingXi(businessBaoGongOrder));
 	}
-	
+
+	public boolean hasScOrderFromPlan(String planid){
+		Integer rownum = mapper.hasScOrderFromPlan(planid);
+		return rownum!=null;
+	}
 }

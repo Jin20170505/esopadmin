@@ -6,6 +6,10 @@ package com.jeeplus.modules.business.jihuadingdan.service;
 import java.util.Arrays;
 import java.util.List;
 
+import com.jeeplus.common.utils.DateUtils;
+import com.jeeplus.modules.business.baogong.order.entity.BusinessBaoGongOrder;
+import com.jeeplus.modules.business.baogong.order.entity.BusinessBaoGongOrderMingXi;
+import com.jeeplus.modules.business.baogong.order.service.BusinessBaoGongOrderService;
 import com.jeeplus.modules.business.shengchan.dingdan.mapper.BusinessShengChanDingDanMingXiMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -92,15 +96,63 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 	}
 
 	@Transactional(readOnly = false)
-	public void xiafa(String ids){
-		Arrays.asList(ids.split(",")).forEach(id->{
-			mapper.updateSatus(id,"已下发");
-		});
+	public void xiafa(String id){
+		//TODO 检查是否可以下发
+		mapper.updateSatus(id,"已下发");
 	}
 	@Transactional(readOnly = false)
-	public void chehui(String ids){
-		Arrays.asList(ids.split(",")).forEach(id->{
-			mapper.updateSatus(id,"未下发");
+	public void chehui(String id){
+		//TODO 检查是否可以回撤
+		mapper.updateSatus(id,"未下发");
+	}
+	/**  生成 报工单 **/
+	@Autowired
+	private BusinessBaoGongOrderService businessBaoGongOrderService;
+	@Transactional(readOnly = false)
+	public void shengchengbaogongdan(String id){
+		boolean flag = businessBaoGongOrderService.hasScOrderFromPlan(id);
+		if(flag){
+			throw new RuntimeException("该计划工单以生成报工单。请勿多次生成.");
+		}
+		BusinessJiHuaGongDan jiHuaGongDan = get(id);
+		if("未下发".equals(jiHuaGongDan.getStatus())){
+			throw new RuntimeException("该计划工单的状态：未下发.不可生成。请审核后再操作");
+		}
+		BusinessBaoGongOrder order = new BusinessBaoGongOrder();
+		StringBuffer sb = new StringBuffer("{");
+		order.setBatchno(jiHuaGongDan.getBatchno());
+		sb.append("\"batchno\":\"").append(order.getBatchno()).append("\",");
+		order.setOrderlineid(jiHuaGongDan.getDd().getId());
+		order.setOrderline(jiHuaGongDan.getOrderno());
+		order.setOrdercode(jiHuaGongDan.getDd().getCode());
+		sb.append("\"sccode\":\"").append(order.getOrdercode()).append("\",");
+		sb.append("\"lineno\":\"").append(order.getOrderline()).append("\",");
+		order.setPlanid(jiHuaGongDan.getId());
+		order.setPlancode(jiHuaGongDan.getCode());
+		sb.append("\"plancode\":\"").append(order.getPlancode()).append("\",");
+		order.setDept(jiHuaGongDan.getDept().getId());
+		order.setDeptName(jiHuaGongDan.getDept().getName());
+		order.setCinvcode(jiHuaGongDan.getCinvcode());
+		order.setCinvname(jiHuaGongDan.getCinvname());
+		order.setCinvstd(jiHuaGongDan.getCinvstd());
+		order.setStartdate(jiHuaGongDan.getStartdate());
+		order.setEnddate(jiHuaGongDan.getEnddate());
+		order.setNum(jiHuaGongDan.getGdnum());
+		sb.append("\"num\":\"").append(order.getNum()).append("\",");
+		String code = "BGD"+ DateUtils.getDate("yyyyMMddHHmmss");
+		order.setBgcode(code);
+		sb.append("\"bgcode\":\"").append(order.getBgcode()).append("\"");
+		sb.append("}");
+		order.setQrcode(sb.toString());
+		// 子表
+		jiHuaGongDan.getBusinessJiHuaGongDanMingXiList().forEach(mx->{
+			BusinessBaoGongOrderMingXi xi = new BusinessBaoGongOrderMingXi();
+			xi.setClassgroup(mx.getClassgroup().getName());
+			xi.setNo(mx.getNo());xi.setNum(mx.getNum());xi.setSite(mx.getSite().getName());
+			xi.setComplete("0");xi.setOpcode(mx.getUserno());xi.setOpname(mx.getUsername());
+			xi.setId("");xi.setDelFlag("0");
+			order.getBusinessBaoGongOrderMingXiList().add(xi);
 		});
+		businessBaoGongOrderService.save(order);
 	}
 }

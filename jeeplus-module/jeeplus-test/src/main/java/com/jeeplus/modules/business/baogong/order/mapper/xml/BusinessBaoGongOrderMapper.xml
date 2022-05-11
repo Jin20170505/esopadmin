@@ -9,16 +9,21 @@
 		a.update_by AS "updateBy.id",
 		a.update_date AS "updateDate",
 		a.del_flag AS "delFlag",
+		a.orderlineid	as "orderlineid",
 		a.ordercode AS "ordercode",
+		a.batchno as "batchno",
 		a.orderline AS "orderline",
 		a.plancode AS "plancode",
+		a.planid as "planid",
 		a.dept AS "dept",
+		a.deptname AS "deptName",
 		a.cinvcode AS "cinvcode",
 		a.cinvname AS "cinvname",
 		a.cinvstd AS "cinvstd",
 		a.num AS "num",
-		a.start_date AS "start_date",
-		a.end_date AS "end_date",
+		a.start_date AS "startdate",
+		a.end_date AS "enddate",
+		a.qrcode as "qrcode",
 		a.bgcode AS "bgcode",
 		a.complate AS "complate",
 		a.remarks AS "remarks"
@@ -63,7 +68,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.update_date DESC
+				ORDER BY a.bgcode DESC
 			</otherwise>
 		</choose>
 	</select>
@@ -95,10 +100,14 @@
 			update_by,
 			update_date,
 			del_flag,
+		    orderlineid,
 			ordercode,
+		    batchno,
 			orderline,
+			planid,
 			plancode,
 			dept,
+			deptname,
 			cinvcode,
 			cinvname,
 			cinvstd,
@@ -106,6 +115,7 @@
 			start_date,
 			end_date,
 			bgcode,
+		    qrcode,
 			complate,
 			remarks
 		) VALUES (
@@ -115,17 +125,22 @@
 			#{updateBy.id},
 			#{updateDate},
 			#{delFlag},
+			#{orderlineid},
 			#{ordercode},
+			#{batchno},
 			#{orderline},
+			#{planid},
 			#{plancode},
 			#{dept},
+			#{deptName},
 			#{cinvcode},
 			#{cinvname},
 			#{cinvstd},
 			#{num},
-			#{start_date},
-			#{end_date},
+			#{startdate},
+			#{enddate},
 			#{bgcode},
+			#{qrcode},
 			#{complate},
 			#{remarks}
 		)
@@ -135,17 +150,22 @@
 		UPDATE business_baogao_order SET 	
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
+			orderlineid = #{orderlineid},
 			ordercode = #{ordercode},
+			batchno = #{batchno},
 			orderline = #{orderline},
+			planid = #{planid},
 			plancode = #{plancode},
 			dept = #{dept},
+			deptname = #{deptName},
 			cinvcode = #{cinvcode},
 			cinvname = #{cinvname},
 			cinvstd = #{cinvstd},
 			num = #{num},
-			start_date = #{start_date},
-			end_date = #{end_date},
+			start_date = #{startdate},
+			end_date = #{enddate},
 			bgcode = #{bgcode},
+			qrcode = #{qrcode},
 			complate = #{complate},
 			remarks = #{remarks}
 		WHERE id = #{id}

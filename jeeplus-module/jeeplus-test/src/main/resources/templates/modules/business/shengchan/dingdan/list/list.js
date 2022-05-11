@@ -168,6 +168,7 @@
     jp.get('${ctx}/business/shengchan/dingdan/businessShengChanDingDan/doPlan?rid='+rid+'&num='+num,function (rs){
         if(rs.success){
           jp.toastr_success(rs.msg);
+          refresh();
         }else{
           jp.toastr_error(rs.msg);
         }

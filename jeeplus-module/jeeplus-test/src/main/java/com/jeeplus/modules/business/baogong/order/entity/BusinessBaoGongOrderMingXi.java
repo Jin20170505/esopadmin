@@ -22,6 +22,7 @@ public class BusinessBaoGongOrderMingXi extends DataEntity<BusinessBaoGongOrderM
 	private Double num;		// 加工数量
 	private String complete;		// 是否完成
 	private String qrcode;		// 二维码
+	private String classgroup;	// 班组
 	private BusinessBaoGongOrder pid;		// 报工单 父类
 	
 	public BusinessBaoGongOrderMingXi() {
@@ -106,5 +107,13 @@ public class BusinessBaoGongOrderMingXi extends DataEntity<BusinessBaoGongOrderM
 	public void setPid(BusinessBaoGongOrder pid) {
 		this.pid = pid;
 	}
-	
+
+	public String getClassgroup() {
+		return classgroup;
+	}
+
+	public BusinessBaoGongOrderMingXi setClassgroup(String classgroup) {
+		this.classgroup = classgroup;
+		return this;
+	}
 }

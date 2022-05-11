@@ -106,10 +106,10 @@ $(document).ready(function() {
 		       
 		    }
 			,{
-		        field: 'dept',
+		        field: 'deptName',
 		        title: '生产部门',
 		        sortable: true,
-		        sortName: 'dept'
+		        sortName: 'deptname'
 		       
 		    }
 			,{
@@ -141,17 +141,17 @@ $(document).ready(function() {
 		       
 		    }
 			,{
-		        field: 'start_date',
+		        field: 'startdate',
 		        title: '开始日期',
 		        sortable: true,
-		        sortName: 'start_date'
+		        sortName: 'startdate'
 		       
 		    }
 			,{
-		        field: 'end_date',
+		        field: 'enddate',
 		        title: '结束日期',
 		        sortable: true,
-		        sortName: 'end_date'
+		        sortName: 'enddate'
 		       
 		    }
 		     ]
@@ -220,9 +220,39 @@ $(document).ready(function() {
 
 		
 	});
+
     // 生成报工单
     function shengchengbaogongdan(){
-
+    top.layer.open({
+        type: 2,
+        area: ['90%', '90%'],
+        title:"计划工单---选择",
+        auto:false,
+        name:'friend',
+        content: "${ctx}/tag/gridselect?url="+encodeURIComponent("${ctx}/business/jihuadingdan/businessJiHuaGongDan/data?status=已下发")+"&fieldLabels="+encodeURIComponent("单号|生产订单号|生产订单行号|生产批号|存货编码|存货名称|规格型号|计量单位|开始日期|结束日期|生产数量|工单数量|生产部门")+"&fieldKeys="+encodeURIComponent("code|dd.code|orderno|batchno|cinvcode|cinvname|cinvstd|unit|startdate|enddate|scnum|gdnum|dept.name")+"&searchLabels="+encodeURIComponent("单号|批号")+"&searchKeys="+encodeURIComponent("code|batchno")+"&isMultiSelected=false",
+        btn: ['确定', '关闭'],
+        yes: function(index, layero){
+            var iframeWin = layero.find('iframe')[0].contentWindow; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+            var items = iframeWin.getSelections();
+            if(items == ""){
+                jp.warning("必须选择一条数据!");
+                return;
+            }
+            var index =jp.loading();
+            jp.get("${ctx}/business/jihuadingdan/businessJiHuaGongDan/shengchengbaogongdan?rids=" + items[0].id, function(data){
+                if(data.success){
+                    refresh();
+                    jp.toastr_success(data.msg);
+                }else{
+                    jp.toastr_error(data.msg);
+                }
+                jp.close(index);
+            })
+            top.layer.close(index);//关闭对话框。
+        },
+        cancel: function(index){
+        }
+    });
 }
     // 打印报工单
     function printbgd(){
@@ -324,10 +354,8 @@ $(document).ready(function() {
 								<th>工作站</th>
 								<th>操作人</th>
 								<th>员工编号</th>
+								<th>班组</th>
 								<th>加工数量</th>
-								<th>是否完成</th>
-								<th>二维码</th>
-								<th>报工单</th>
 							</tr>
 						</thead>
 						<tbody id="businessBaoGongOrderChild-{{idx}}-1-List">
@@ -353,16 +381,10 @@ $(document).ready(function() {
 						{{row.opcode}}
 					</td>
 					<td>
+						{{row.classgroup}}
+					</td>
+					<td>
 						{{row.num}}
-					</td>
-					<td>
-						{{row.complete}}
-					</td>
-					<td>
-						{{row.qrcode}}
-					</td>
-					<td>
-						{{row.pid.id}}
 					</td>
 				</tr>//-->
 	</script>

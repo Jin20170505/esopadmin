@@ -5,6 +5,7 @@ package com.jeeplus.modules.business.jihuadingdan.web;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -83,8 +84,19 @@ public class BusinessJiHuaGongDanController extends BaseController {
 	public AjaxJson xiafa(String ids){
 		AjaxJson json = new AjaxJson();
 		try {
-			businessJiHuaGongDanService.xiafa(ids);
-			json.setMsg("操作成功");
+			List<String> idList = Arrays.asList(ids.split(","));
+			StringBuilder sb = new StringBuilder();
+			for (String id:idList){
+				try{
+					businessJiHuaGongDanService.xiafa(id);
+				}catch (Exception e){
+					sb.append(e.getMessage());
+				}
+			}
+			if(sb.length()>0){
+				sb.insert(0,"失败原因：");
+			}
+			json.setMsg("操作成功,"+sb.toString());
 			json.setSuccess(true);
 		}catch (Exception e){
 			e.printStackTrace();
@@ -99,8 +111,19 @@ public class BusinessJiHuaGongDanController extends BaseController {
 	public AjaxJson chehui(String ids){
 		AjaxJson json = new AjaxJson();
 		try {
-			businessJiHuaGongDanService.chehui(ids);
-			json.setMsg("操作成功");
+			List<String> idList = Arrays.asList(ids.split(","));
+			StringBuilder sb = new StringBuilder();
+			for (String id:idList){
+				try{
+					businessJiHuaGongDanService.chehui(id);
+				}catch (Exception e){
+					sb.append(e.getMessage());
+				}
+			}
+			if(sb.length()>0){
+				sb.insert(0,"失败原因：");
+			}
+			json.setMsg("操作成功,"+sb.toString());
 			json.setSuccess(true);
 		}catch (Exception e){
 			e.printStackTrace();
@@ -109,13 +132,30 @@ public class BusinessJiHuaGongDanController extends BaseController {
 		}
 		return json;
 	}
-
+	// 生成报工单
+	@ResponseBody
+	@RequestMapping("shengchengbaogongdan")
+	public AjaxJson shengchengbaogongdan(String rids){
+		AjaxJson json = new AjaxJson();
+		try {
+			List<String> idArray = Arrays.asList(rids.split(","));
+			for(String id:idArray){
+				businessJiHuaGongDanService.shengchengbaogongdan(id);
+			}
+			json.setSuccess(true);
+			json.setMsg("操作成功.");
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setSuccess(false);
+			json.setMsg("操作失败,原因:"+e.getMessage());
+		}
+		return json;
+	}
 
 		/**
 	 * 计划工单列表数据
 	 */
 	@ResponseBody
-	@RequiresPermissions("business:jihuadingdan:businessJiHuaGongDan:list")
 	@RequestMapping(value = "data")
 	public Map<String, Object> data(BusinessJiHuaGongDan businessJiHuaGongDan, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<BusinessJiHuaGongDan> page = businessJiHuaGongDanService.findPage(new Page<BusinessJiHuaGongDan>(request, response), businessJiHuaGongDan); 

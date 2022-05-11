@@ -16,18 +16,23 @@ import com.jeeplus.common.utils.excel.annotation.ExcelField;
 public class BusinessBaoGongOrder extends DataEntity<BusinessBaoGongOrder> {
 	
 	private static final long serialVersionUID = 1L;
+	private String orderlineid;		// 生成订单行ID
 	private String ordercode;		// 生产订单号
+	private String batchno;		// 批号
 	private String orderline;		// 行号
 	private String plancode;		// 计划单号
-	private String dept;		// 生产部门
+	private String planid;	// 计划ID
+	private String dept;		// 生产部门ID
+	private String deptName;	// 生产部门名称
 	private String cinvcode;		// 存货编码
 	private String cinvname;		// 存货名称
 	private String cinvstd;		// 规格型号
 	private Double num;		// 数量
-	private String start_date;		// 开始日期
-	private String end_date;		// 结束日期
+	private String startdate;		// 开始日期
+	private String enddate;		// 结束日期
 	private String bgcode;		// 报工单号
 	private String complate;		// 是否完成
+	private String qrcode;		// 二维码内容
 	private List<BusinessBaoGongOrderMingXi> businessBaoGongOrderMingXiList = Lists.newArrayList();		// 子表列表
 	
 	public BusinessBaoGongOrder() {
@@ -109,25 +114,34 @@ public class BusinessBaoGongOrder extends DataEntity<BusinessBaoGongOrder> {
 	public void setNum(Double num) {
 		this.num = num;
 	}
-	
-	@ExcelField(title="开始日期", align=2, sort=14)
-	public String getStart_date() {
-		return start_date;
+
+	public String getStartdate() {
+		return startdate;
 	}
 
-	public void setStart_date(String start_date) {
-		this.start_date = start_date;
-	}
-	
-	@ExcelField(title="结束日期", align=2, sort=15)
-	public String getEnd_date() {
-		return end_date;
+	public BusinessBaoGongOrder setStartdate(String startdate) {
+		this.startdate = startdate;
+		return this;
 	}
 
-	public void setEnd_date(String end_date) {
-		this.end_date = end_date;
+	public String getEnddate() {
+		return enddate;
 	}
-	
+
+	public BusinessBaoGongOrder setEnddate(String enddate) {
+		this.enddate = enddate;
+		return this;
+	}
+
+	public String getQrcode() {
+		return qrcode;
+	}
+
+	public BusinessBaoGongOrder setQrcode(String qrcode) {
+		this.qrcode = qrcode;
+		return this;
+	}
+
 	@ExcelField(title="报工单号", align=2, sort=16)
 	public String getBgcode() {
 		return bgcode;
@@ -152,5 +166,41 @@ public class BusinessBaoGongOrder extends DataEntity<BusinessBaoGongOrder> {
 
 	public void setBusinessBaoGongOrderMingXiList(List<BusinessBaoGongOrderMingXi> businessBaoGongOrderMingXiList) {
 		this.businessBaoGongOrderMingXiList = businessBaoGongOrderMingXiList;
+	}
+
+	public String getOrderlineid() {
+		return orderlineid;
+	}
+
+	public BusinessBaoGongOrder setOrderlineid(String orderlineid) {
+		this.orderlineid = orderlineid;
+		return this;
+	}
+
+	public String getBatchno() {
+		return batchno;
+	}
+
+	public BusinessBaoGongOrder setBatchno(String batchno) {
+		this.batchno = batchno;
+		return this;
+	}
+
+	public String getPlanid() {
+		return planid;
+	}
+
+	public BusinessBaoGongOrder setPlanid(String planid) {
+		this.planid = planid;
+		return this;
+	}
+
+	public String getDeptName() {
+		return deptName;
+	}
+
+	public BusinessBaoGongOrder setDeptName(String deptName) {
+		this.deptName = deptName;
+		return this;
 	}
 }

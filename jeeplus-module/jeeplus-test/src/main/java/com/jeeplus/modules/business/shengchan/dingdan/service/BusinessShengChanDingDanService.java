@@ -91,11 +91,13 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 	}
 	@Transactional(readOnly = false)
 	public void shenhe(String ids){
+		//TODO 是否可以审核 开立
 		Arrays.asList(ids.split(",")).forEach(id->businessShengChanDingDanMingXiMapper.shenhe(id));
 	}
 
 	@Transactional(readOnly = false)
 	public void fanshen(String ids){
+		//TODO 检查是否可以反审
 		Arrays.asList(ids.split(",")).forEach(id->businessShengChanDingDanMingXiMapper.fanshen(id));
 	}
 	@Transactional(readOnly = false)

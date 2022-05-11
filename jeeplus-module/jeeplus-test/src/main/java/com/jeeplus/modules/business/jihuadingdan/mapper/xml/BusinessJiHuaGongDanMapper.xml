@@ -52,6 +52,12 @@
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
+			<if test="batchno != null and batchno != ''">
+				and a.batchno = #{batchno}
+			</if>
+			<if test="status != null and status != ''">
+				and a.status = #{status}
+			</if>
 			<if test="code != null and code != ''">
 				AND a.code LIKE
 				    <if test="_databaseId == 'postgre'">'%'||#{code}||'%'</if>
@@ -65,7 +71,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.update_date DESC
+				ORDER BY a.code DESC
 			</otherwise>
 		</choose>
 	</select>

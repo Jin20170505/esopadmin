@@ -321,8 +321,22 @@ function chehui(){
 	 })
 }
 // 生成报工单
-function shengchengbaogongdan(){
-
+function shengchengbaogongdan(ids){
+     if(!ids){
+          ids = getIdSelections();
+     }
+	 jp.confirm('确认要生成报工单吗？', function(){
+		var index =jp.loading();
+		jp.get("${ctx}/business/jihuadingdan/businessJiHuaGongDan/shengchengbaogongdan?rids=" + ids, function(data){
+				if(data.success){
+					refresh();
+					jp.toastr_success(data.msg);
+				}else{
+					jp.toastr_error(data.msg);
+				}
+				jp.close(index);
+			})
+	 })
 }
 	//获取选中行
   function getIdSelections() {
@@ -347,7 +361,6 @@ function shengchengbaogongdan(){
 				}
 				jp.close(index);
 			})
-
 	 })
   }
 

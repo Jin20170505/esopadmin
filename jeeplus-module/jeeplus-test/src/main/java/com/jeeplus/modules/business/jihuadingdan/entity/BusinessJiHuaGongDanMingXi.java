@@ -99,6 +99,9 @@ public class BusinessJiHuaGongDanMingXi extends DataEntity<BusinessJiHuaGongDanM
 	
 	@ExcelField(title="班组", fieldType=BaseClassGroup.class, value="classgroup.name", align=2, sort=12)
 	public BaseClassGroup getClassgroup() {
+		if(classgroup == null){
+			classgroup = new BaseClassGroup();
+		}
 		return classgroup;
 	}
 
