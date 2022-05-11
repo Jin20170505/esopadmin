@@ -138,6 +138,7 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 		order.setStartdate(jiHuaGongDan.getStartdate());
 		order.setEnddate(jiHuaGongDan.getEnddate());
 		order.setNum(jiHuaGongDan.getGdnum());
+		order.setUnit(jiHuaGongDan.getUnit());
 		sb.append("\"num\":\"").append(order.getNum()).append("\",");
 		String code = "BGD"+ DateUtils.getDate("yyyyMMddHHmmss");
 		order.setBgcode(code);

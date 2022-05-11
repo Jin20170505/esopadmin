@@ -28,6 +28,7 @@ public class BusinessBaoGongOrder extends DataEntity<BusinessBaoGongOrder> {
 	private String cinvname;		// 存货名称
 	private String cinvstd;		// 规格型号
 	private Double num;		// 数量
+	private String unit;	// 计量单位
 	private String startdate;		// 开始日期
 	private String enddate;		// 结束日期
 	private String bgcode;		// 报工单号
@@ -201,6 +202,15 @@ public class BusinessBaoGongOrder extends DataEntity<BusinessBaoGongOrder> {
 
 	public BusinessBaoGongOrder setDeptName(String deptName) {
 		this.deptName = deptName;
+		return this;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public BusinessBaoGongOrder setUnit(String unit) {
+		this.unit = unit;
 		return this;
 	}
 }

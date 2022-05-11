@@ -43,8 +43,8 @@ layout("/include/_container.html", {title:"打印", parent:"报工单"}){
             <td>${order.plancode!}</td>
             <th>数量</th>
             <td>${order.num!}</td>
-            <th>备注</th>
-            <td>${order.remarks!}</td>
+            <th>计量单位</th>
+            <td>${order.unit!}</td>
         </tr>
         <tr>
             <th>存货编码</th>
@@ -61,6 +61,10 @@ layout("/include/_container.html", {title:"打印", parent:"报工单"}){
             <td>${order.enddate!}</td>
             <th>生产批号</th>
             <td>${order.batchno!}</td>
+        </tr>
+        <tr>
+            <th>备注</th>
+            <td colspan="5">${order.remarks!}</td>
         </tr>
         </tbody>
     </table>
