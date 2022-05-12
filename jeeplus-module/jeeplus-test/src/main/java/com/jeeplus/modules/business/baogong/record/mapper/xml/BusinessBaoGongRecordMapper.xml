@@ -14,6 +14,9 @@
 		a.ordercode AS "ordercode",
 		a.orderline AS "orderline",
 		a.site AS "site",
+		a.cinvcode as "cinvcode",
+		a.cinvname as "cinvname",
+		a.cinvstd as "cinvstd",
 		a.username AS "username",
 		a.gdnum AS "gdnum",
 		a.doingnum AS "doingnum",
@@ -28,6 +31,14 @@
 	<sql id="businessBaoGongRecordJoins">
 		
 	</sql>
+
+	<select id="getDoneSumNum" resultType="Double">
+		select sum(hgnum) from business_baogong_record where bgid=#{bgid}
+		 <if test="bghid!=null and bghid!=''">
+			 and bghid=#{bghid}
+		 </if>
+	</select>
+
 	<select id="get" resultType="BusinessBaoGongRecord" >
 		SELECT 
 			<include refid="businessBaoGongRecordColumns"/>
@@ -106,7 +117,7 @@
 			gfnum,
 			fgnum,
 			bhgnum,
-			hgnum,unit,
+			hgnum,unit,cinvcode,cinvname,cinvstd,
 			remarks
 		) VALUES (
 			#{id},
@@ -127,7 +138,7 @@
 			#{gfnum},
 			#{fgnum},
 			#{bhgnum},
-			#{hgnum},#{unit},
+			#{hgnum},#{unit},#{cinvcode},#{cinvname},#{cinvstd},
 			#{remarks}
 		)
 	</insert>

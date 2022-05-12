@@ -22,8 +22,6 @@
 	</sql>
 	
 	<sql id="businessBaoGongOrderMingXiJoins">
-		
-			LEFT JOIN business_baogao_order b ON b.id = a.pid
 	</sql>
 	
     
@@ -45,6 +43,9 @@
 			${dataScope}
 			<if test="pid != null and pid.id != null and pid.id != ''">
 				AND a.pid = #{pid.id}
+			</if>
+			<if test="complete!=null and complete !=''">
+				and a.complete = #{complete}
 			</if>
 		</where>
 		<choose>

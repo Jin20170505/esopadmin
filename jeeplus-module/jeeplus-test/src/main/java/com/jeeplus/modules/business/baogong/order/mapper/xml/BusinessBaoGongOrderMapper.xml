@@ -33,7 +33,14 @@
 	<sql id="businessBaoGongOrderJoins">
 		
 	</sql>
-	
+
+	<select id="getByCode" resultType="BusinessBaoGongOrder">
+		SELECT
+		<include refid="businessBaoGongOrderColumns"/>
+		FROM business_baogao_order a
+		<include refid="businessBaoGongOrderJoins"/>
+		WHERE a.bgcode = #{code} limit 1;
+	</select>
     
 	<select id="get" resultType="BusinessBaoGongOrder" >
 		SELECT 

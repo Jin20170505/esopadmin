@@ -3,9 +3,12 @@
  */
 package com.jeeplus.modules.business.baogong.order.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.jeeplus.modules.api.bean.baogong.BaoGongBean;
+import com.jeeplus.modules.api.bean.baogong.BaoGongItem;
+import com.jeeplus.modules.business.baogong.record.service.BusinessBaoGongRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,13 +31,50 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 
 	@Autowired
 	private BusinessBaoGongOrderMingXiMapper businessBaoGongOrderMingXiMapper;
-	
+	@Autowired
+	private BusinessBaoGongRecordService businessBaoGongRecordService;
+
 	public BusinessBaoGongOrder get(String id) {
 		BusinessBaoGongOrder businessBaoGongOrder = super.get(id);
 		businessBaoGongOrder.setBusinessBaoGongOrderMingXiList(businessBaoGongOrderMingXiMapper.findList(new BusinessBaoGongOrderMingXi(businessBaoGongOrder)));
 		return businessBaoGongOrder;
 	}
-	
+	// 用于 报工
+	public BusinessBaoGongOrder getBaoGongInfo(String bgid,String bghid,String bgcode){
+		BusinessBaoGongOrder order = null;
+		if(StringUtils.isNotEmpty(bgid)){
+			order = super.get(bgid);
+			order.getBusinessBaoGongOrderMingXiList().add(businessBaoGongOrderMingXiMapper.get(bghid));
+		}else {
+			order = mapper.getByCode(bgcode);
+			if(order==null){
+				return null;
+			}else {
+				findDoingBaoGaoItem(order,order.getId(),order.getNum());
+			}
+		}
+		return order;
+	}
+
+	public void findDoingBaoGaoItem(BusinessBaoGongOrder order,String bgid,double gdnum){
+		BusinessBaoGongOrderMingXi mingXi = new BusinessBaoGongOrderMingXi();
+		mingXi.setComplete("0");
+		mingXi.setPid(new BusinessBaoGongOrder(bgid));
+		List<BusinessBaoGongOrderMingXi> mingXis = businessBaoGongOrderMingXiMapper.findList(mingXi);
+		if(mingXis==null || mingXis.isEmpty()){
+			double donenum = businessBaoGongRecordService.getDoneSumNum(bgid,null);
+			order.setDelFlag(donenum+"");
+			return ;
+		}
+		mingXis.forEach(m->{
+			double donenum = businessBaoGongRecordService.getDoneSumNum(bgid,m.getId());
+			m.setNum(gdnum-donenum);
+		});
+		order.setBusinessBaoGongOrderMingXiList(mingXis);
+	}
+
+
+
 	public List<BusinessBaoGongOrder> findList(BusinessBaoGongOrder businessBaoGongOrder) {
 		return super.findList(businessBaoGongOrder);
 	}
@@ -82,9 +122,34 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 
 	// 根据报工单号 获取 报工信息
 	public BaoGongBean getBaoGongInfo(String bgcode){
+		BusinessBaoGongOrder order = getBaoGongInfo(null,null,bgcode);
+		if(order==null){
+			throw new RuntimeException("没有找到对应的报工单.");
+		}
+		if("1".equals(order.getComplate())){
+			throw new RuntimeException("此单已完成.");
+		}
 		BaoGongBean bean = new BaoGongBean();
-
+		bean.setBgcode(order.getBgcode()).setBgid(order.getId()).setGdnum(order.getNum()).setSccode(order.getOrdercode()).setScline(order.getOrderline());
+		bean.setCinvcode(order.getCinvcode()).setCinvname(order.getCinvname()).setCinvstd(order.getCinvstd());
+		order.getBusinessBaoGongOrderMingXiList().forEach(m->{
+			BaoGongItem item = new BaoGongItem();
+			item.setBghid(m.getId()).setSite(m.getSite()).setDbnum(m.getNum());
+			bean.getBaoGongItems().add(item);
+		});
 		return bean;
 	}
 
+	@Transactional(readOnly = false)
+	public void completeBg(String hid){
+		businessBaoGongOrderMingXiMapper.completeBg(hid);
+	}
+
+	public void complete(String bgid,Double gdnum){
+		double donenum = businessBaoGongRecordService.getDoneSumNum(bgid,null);
+		if(donenum>=gdnum){
+			mapper.completeBg(bgid);
+		}
+
+	}
 }

@@ -33,6 +33,9 @@ public class BusinessBaoGongRecord extends DataEntity<BusinessBaoGongRecord> {
 	private Double fgnum;		// 返工数量
 	private Double bhgnum;		// 不合格数量
 	private Double hgnum;		// 合格数量
+	private String cinvcode;	// 存货编码
+	private String cinvname;	// 存货名称
+	private String cinvstd;		// 规格型号
 	private String unit;	// 计量单位
 	private Date beginBgdate;		// 开始 报工时间
 	private Date endBgdate;		// 结束 报工时间
@@ -221,6 +224,33 @@ public class BusinessBaoGongRecord extends DataEntity<BusinessBaoGongRecord> {
 
 	public BusinessBaoGongRecord setUnit(String unit) {
 		this.unit = unit;
+		return this;
+	}
+
+	public String getCinvcode() {
+		return cinvcode;
+	}
+
+	public BusinessBaoGongRecord setCinvcode(String cinvcode) {
+		this.cinvcode = cinvcode;
+		return this;
+	}
+
+	public String getCinvname() {
+		return cinvname;
+	}
+
+	public BusinessBaoGongRecord setCinvname(String cinvname) {
+		this.cinvname = cinvname;
+		return this;
+	}
+
+	public String getCinvstd() {
+		return cinvstd;
+	}
+
+	public BusinessBaoGongRecord setCinvstd(String cinvstd) {
+		this.cinvstd = cinvstd;
 		return this;
 	}
 }

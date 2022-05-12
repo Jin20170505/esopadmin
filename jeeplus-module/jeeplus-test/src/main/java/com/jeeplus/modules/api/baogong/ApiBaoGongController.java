@@ -39,19 +39,20 @@ public class ApiBaoGongController {
      * @param bgid 报工单ID
      * @param bghid 报工单行ID
      * @param remarks 备注
-     * @param opcode 操作人工号
+     * @param userid 操作人id
      * @param opname 操作人名称
      * @param flnum 废料数量
      * @param fgnum 返工数量
      * @param bhgnum 不合格数量
      * @param hgnum 合格数量
+     * @param complete 1：待报工数量 = 合格数量
      * @return
      */
     @RequestMapping("do")
-    public AjaxJson baogong(String bgid,String bghid,String remarks,String opcode,String opname,Double flnum,Double fgnum,Double bhgnum,Double hgnum){
+    public AjaxJson baogong(String bgid,String bghid,String remarks,String userid,String opname,Double flnum,Double fgnum,Double bhgnum,Double hgnum,String complete){
         AjaxJson json = new AjaxJson();
         try{
-            businessBaoGongRecordService.baogong(bgid,bghid, remarks, opcode, opname, flnum, fgnum, bhgnum, hgnum);
+            businessBaoGongRecordService.baogong(bgid,bghid, remarks, userid, opname, flnum, fgnum, bhgnum, hgnum,complete);
             json.setSuccess(true);
             json.setMsg("报工成功。");
         }catch (Exception e){
