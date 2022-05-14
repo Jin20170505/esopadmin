@@ -1,0 +1,93 @@
+<%
+layout("/include/_dialog.html"){
+%>
+	<script type="text/javascript">
+
+		$(document).ready(function() {
+				        $('#startdate').datetimepicker({
+				 format:'Y-m-d H:i'
+		    });
+	        $('#enddate').datetimepicker({
+				 format:'Y-m-d H:i'
+		    });
+		});
+
+		function save() {
+            var isValidate = jp.validateForm('#inputForm');//校验表单
+            if(!isValidate){
+                return false;
+			}else{
+                var index = jp.loading();
+                jp.post("${ctx}/business/nengyuan/air/businessNengYuanAir/save",$('#inputForm').serialize(),function(data){
+                    if(data.success){
+                        jp.getParent().refresh();
+                        var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                        parent.layer.close(dialogIndex);
+                        jp.toastr_success(data.msg)
+
+                    }else{
+                        jp.toastr_error(data.msg);
+                    }
+                    jp.close(index);
+                })
+			}
+
+        }
+	</script>
+<form id="inputForm"  method="post"  class="form-horizontal p-15">
+    <input type="hidden" name="id" value="${businessNengYuanAir.id!}"/>
+    <table class="table table-bordered">
+       <tbody>
+            <tr>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>设备号：</label></td>
+                <td class="width-35">
+                    <input name="sbcode" value="${businessNengYuanAir.sbcode!}"    class="form-control required"/>
+            </td>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>设备名称：</label></td>
+                <td class="width-35">
+                    <input name="sbname" value="${businessNengYuanAir.sbname!}"    class="form-control required"/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>所属部门：</label></td>
+                <td class="width-35">
+                    <#treeselect id="dept" name="dept.id" value="${businessNengYuanAir.dept.id!}" labelName="dept.name" labelValue="${businessNengYuanAir.dept.name!}"
+                        title="部门" url="/sys/office/treeData?type=2" class="form-control required" allowClear="true" notAllowSelectParent="true"/>
+            </td>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>开始日期：</label></td>
+                <td class="width-35">
+                    <div class="input-group">
+                        <input readonly="" id="startdate"  name="startdate"  placeholder="请选择日期" class="form-control   required"   value="${fn.formatDate(businessNengYuanAir.startdate!, 'yyyy-MM-dd HH:mm:ss')}">
+                        <div class="input-group-append">
+                            <span class="input-group-text btn-custom border text-white"><i class="ti-calendar"></i></span>
+                        </div>
+                    </div>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>结束日期：</label></td>
+                <td class="width-35">
+                    <div class="input-group">
+                        <input readonly="" id="enddate"  name="enddate"  placeholder="请选择日期" class="form-control   required"   value="${fn.formatDate(businessNengYuanAir.enddate!, 'yyyy-MM-dd HH:mm:ss')}">
+                        <div class="input-group-append">
+                            <span class="input-group-text btn-custom border text-white"><i class="ti-calendar"></i></span>
+                        </div>
+                    </div>
+            </td>
+                <td class="width-15 active"><label class="pull-right">倍数：</label></td>
+                <td class="width-35">
+                    <input name="beishu" value="${businessNengYuanAir.beishu!}"    class="form-control  isFloatGteZero"/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">数量：</label></td>
+                <td class="width-35">
+                    <input name="num" value="${businessNengYuanAir.num!}"    class="form-control  isFloatGteZero"/>
+            </td>
+                <td class="width-15 active"></td>
+                <td class="width-35" ></td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<% } %>

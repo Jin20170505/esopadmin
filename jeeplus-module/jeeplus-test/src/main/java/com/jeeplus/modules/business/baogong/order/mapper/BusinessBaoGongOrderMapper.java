@@ -27,6 +27,6 @@ public interface BusinessBaoGongOrderMapper extends BaseMapper<BusinessBaoGongOr
     @Select("select qrcode from business_baogao_order where id=#{id}")
     String getQrCodeById(@Param("id") String id);
 
-    @Update("update business_baogao_order set complete = '1' where id = #{id}")
+    @Update("update business_baogao_order set complate = '1' where id = #{id}")
     void completeBg(@Param("id") String id);
 }

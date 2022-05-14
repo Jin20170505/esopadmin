@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.business.nengyuan.air.mapper.BusinessNengYuanAirMapper">
+    
+	<sql id="businessNengYuanAirColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.sbcode AS "sbcode",
+		a.sbname AS "sbname",
+		a.dept AS "dept.id",
+		a.start_date AS "startdate",
+		a.end_date AS "enddate",
+		a.beishu AS "beishu",
+		a.num AS "num",
+		c.name AS "createBy.name",
+		u.name AS "updateBy.name",
+		dept.name AS "dept.name"
+	</sql>
+	<sql id="businessNengYuanAirJoins">
+		left join sys_user c on c.id = a.create_by
+		left join sys_user u on u.id = a.update_by
+		LEFT JOIN sys_office dept ON dept.id = a.dept
+	</sql>
+	
+    
+	<select id="get" resultType="BusinessNengYuanAir" >
+		SELECT 
+			<include refid="businessNengYuanAirColumns"/>
+		FROM business_nengyuan_air a
+		<include refid="businessNengYuanAirJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BusinessNengYuanAir" >
+		SELECT 
+			<include refid="businessNengYuanAirColumns"/>
+		FROM business_nengyuan_air a
+		<include refid="businessNengYuanAirJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="sbcode != null and sbcode != ''">
+				AND a.sbcode = #{sbcode}
+			</if>
+			<if test="sbname != null and sbname != ''">
+				AND a.sbname LIKE
+				    <if test="_databaseId == 'postgre'">'%'||#{sbname}||'%'</if>
+					<if test="_databaseId == 'oracle'">'%'||#{sbname}||'%'</if>
+					<if test="_databaseId == 'mssql'">'%'+#{sbname}+'%'</if>
+					<if test="_databaseId == 'mysql'">concat('%',#{sbname},'%')</if>
+			</if>
+			<if test="dept != null and dept.id != null and dept.id != ''">
+				AND a.dept = #{dept.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BusinessNengYuanAir" >
+		SELECT 
+			<include refid="businessNengYuanAirColumns"/>
+		FROM business_nengyuan_air a
+		<include refid="businessNengYuanAirJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO business_nengyuan_air(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			sbcode,
+			sbname,
+			dept,
+			start_date,
+			end_date,
+			beishu,
+			num
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{sbcode},
+			#{sbname},
+			#{dept.id},
+			#{startdate},
+			#{enddate},
+			#{beishu},
+			#{num}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE business_nengyuan_air SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			sbcode = #{sbcode},
+			sbname = #{sbname},
+			dept = #{dept.id},
+			start_date = #{startdate},
+			end_date = #{enddate},
+			beishu = #{beishu},
+			num = #{num}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM business_nengyuan_air
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE business_nengyuan_air SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="BusinessNengYuanAir" statementType="STATEMENT">
+		select * FROM business_nengyuan_air  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

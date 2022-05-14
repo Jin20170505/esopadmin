@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.business.chuku.lingliao.mapper.BusinessChuKuLingLiaoMapper">
+    
+	<sql id="businessChuKuLingLiaoColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.code AS "code",
+		a.sccode AS "sccode",
+		a.cinvcode AS "cinvcode",
+		a.cinvname AS "cinvname",
+		a.cinvstd AS "cinvstd",
+		a.num AS "num",
+		a.unit AS "unit",
+		a.cangku AS "ck.id",
+		a.bgid AS "bgid",
+		a.bgcode AS "bgcode",
+		a.sych AS "sych",
+		a.remarks AS "remarks",
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+		ck.name AS "ck.name"
+	</sql>
+	
+	<sql id="businessChuKuLingLiaoJoins">
+		
+		LEFT JOIN base_cangku ck ON ck.id = a.cangku
+	</sql>
+	
+    
+	<select id="get" resultType="BusinessChuKuLingLiao" >
+		SELECT 
+			<include refid="businessChuKuLingLiaoColumns"/>
+		FROM business_chuku_lingliao a
+		<include refid="businessChuKuLingLiaoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BusinessChuKuLingLiao" >
+		SELECT 
+			<include refid="businessChuKuLingLiaoColumns"/>
+		FROM business_chuku_lingliao a
+		<include refid="businessChuKuLingLiaoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="sccode != null and sccode != ''">
+				AND a.sccode = #{sccode}
+			</if>
+			<if test="cinvcode != null and cinvcode != ''">
+				AND a.cinvcode = #{cinvcode}
+			</if>
+			<if test="cinvname != null and cinvname != ''">
+				AND a.cinvname LIKE
+				    <if test="_databaseId == 'postgre'">'%'||#{cinvname}||'%'</if>
+					<if test="_databaseId == 'oracle'">'%'||#{cinvname}||'%'</if>
+					<if test="_databaseId == 'mssql'">'%'+#{cinvname}+'%'</if>
+					<if test="_databaseId == 'mysql'">concat('%',#{cinvname},'%')</if>
+			</if>
+			<if test="cinvstd != null and cinvstd != ''">
+				AND a.cinvstd = #{cinvstd}
+			</if>
+			<if test="ck != null and ck.id != null and ck.id != ''">
+				AND a.cangku = #{ck.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BusinessChuKuLingLiao" >
+		SELECT 
+			<include refid="businessChuKuLingLiaoColumns"/>
+		FROM business_chuku_lingliao a
+		<include refid="businessChuKuLingLiaoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO business_chuku_lingliao(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+			code,
+			sccode,
+			cinvcode,
+			cinvname,
+			cinvstd,
+			num,
+			unit,
+			cangku,
+			bgid,
+			bgcode,
+			sych,
+			remarks
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag},
+			#{code},
+			#{sccode},
+			#{cinvcode},
+			#{cinvname},
+			#{cinvstd},
+			#{num},
+			#{unit},
+			#{ck.id},
+			#{bgid},
+			#{bgcode},
+			#{sych},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE business_chuku_lingliao SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			code = #{code},
+			sccode = #{sccode},
+			cinvcode = #{cinvcode},
+			cinvname = #{cinvname},
+			cinvstd = #{cinvstd},
+			num = #{num},
+			unit = #{unit},
+			cangku = #{ck.id},
+			bgid = #{bgid},
+			bgcode = #{bgcode},
+			sych = #{sych},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM business_chuku_lingliao
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE business_chuku_lingliao SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="BusinessChuKuLingLiao" statementType="STATEMENT">
+		select * FROM business_chuku_lingliao  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

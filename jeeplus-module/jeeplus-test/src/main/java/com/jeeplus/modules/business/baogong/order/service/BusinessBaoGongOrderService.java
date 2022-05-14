@@ -8,7 +8,9 @@ import java.util.List;
 
 import com.jeeplus.modules.api.bean.baogong.BaoGongBean;
 import com.jeeplus.modules.api.bean.baogong.BaoGongItem;
+import com.jeeplus.modules.api.bean.ruku.ProductRuKuBean;
 import com.jeeplus.modules.business.baogong.record.service.BusinessBaoGongRecordService;
+import com.jeeplus.modules.business.ruku.product.mapper.BusinessRuKuProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,9 +74,6 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		});
 		order.setBusinessBaoGongOrderMingXiList(mingXis);
 	}
-
-
-
 	public List<BusinessBaoGongOrder> findList(BusinessBaoGongOrder businessBaoGongOrder) {
 		return super.findList(businessBaoGongOrder);
 	}
@@ -120,6 +119,34 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		return mapper.getQrCodeById(id);
 	}
 
+	@Autowired
+	private BusinessRuKuProductMapper businessRuKuProductMapper;
+
+	public ProductRuKuBean getRuKuInfo(String bgcode){
+		BusinessBaoGongOrder order = mapper.getByCode(bgcode);
+		if(order==null){
+			throw new RuntimeException("没有找到对应的报工单.");
+		}
+		if("0".equals(order.getComplate())){
+			throw new RuntimeException("此报工单未报工完成.");
+		}
+		Double rukunum = businessRuKuProductMapper.getRuKuNumByBgid(order.getId());
+		if(rukunum==null){
+			rukunum = 0.0;
+		}
+		if(order.getNum()<=rukunum){
+			throw new RuntimeException("此报工单入库数量已满,无法入库。");
+		}
+		ProductRuKuBean bean = new ProductRuKuBean();
+		bean.setBatchno(order.getBatchno()).setBgcode(order.getBgcode()).setUnit(order.getUnit()).setBgid(order.getId())
+		.setCinvcode(order.getCinvcode()).setCinvname(order.getCinvname()).setCinvstd(order.getCinvstd()).setSccode(order.getOrdercode())
+		.setScline(order.getOrderline());
+		bean.setNum(order.getNum()-rukunum);
+		return bean;
+	}
+
+
+
 	// 根据报工单号 获取 报工信息
 	public BaoGongBean getBaoGongInfo(String bgcode){
 		BusinessBaoGongOrder order = getBaoGongInfo(null,null,bgcode);
@@ -132,6 +159,10 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		BaoGongBean bean = new BaoGongBean();
 		bean.setBgcode(order.getBgcode()).setBgid(order.getId()).setGdnum(order.getNum()).setSccode(order.getOrdercode()).setScline(order.getOrderline());
 		bean.setCinvcode(order.getCinvcode()).setCinvname(order.getCinvname()).setCinvstd(order.getCinvstd());
+		if(order.getBusinessBaoGongOrderMingXiList()==null || order.getBusinessBaoGongOrderMingXiList().isEmpty()){
+			bean.setSynum(Double.valueOf(order.getDelFlag()));
+			return  bean;
+		}
 		order.getBusinessBaoGongOrderMingXiList().forEach(m->{
 			BaoGongItem item = new BaoGongItem();
 			item.setBghid(m.getId()).setSite(m.getSite()).setDbnum(m.getNum());

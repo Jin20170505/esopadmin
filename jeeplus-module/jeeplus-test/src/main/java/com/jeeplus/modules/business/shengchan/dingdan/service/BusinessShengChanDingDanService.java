@@ -45,7 +45,11 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 		businessShengChanDingDan.setBusinessShengChanDingDanMingXiList(businessShengChanDingDanMingXiMapper.findList(new BusinessShengChanDingDanMingXi(businessShengChanDingDan)));
 		return businessShengChanDingDan;
 	}
-	
+
+	public BusinessShengChanDingDanMingXi getMxId(String xmid){
+		return businessShengChanDingDanMingXiMapper.get(xmid);
+	}
+
 	public List<BusinessShengChanDingDan> findList(BusinessShengChanDingDan businessShengChanDingDan) {
 		return super.findList(businessShengChanDingDan);
 	}

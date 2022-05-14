@@ -12,7 +12,7 @@ public class BaoGongBean {
     private String cinvcode;
     private String cinvname;
     private String cinvstd;
-
+    private Double synum; // 无工艺路线时，使用的待报数量
     private List<BaoGongItem> baoGongItems = new ArrayList<>();
     public String getBgid() {
         return bgid;
@@ -92,6 +92,15 @@ public class BaoGongBean {
 
     public BaoGongBean setBaoGongItems(List<BaoGongItem> baoGongItems) {
         this.baoGongItems = baoGongItems;
+        return this;
+    }
+
+    public Double getSynum() {
+        return synum;
+    }
+
+    public BaoGongBean setSynum(Double synum) {
+        this.synum = synum;
         return this;
     }
 }

@@ -1,0 +1,212 @@
+<%
+layout("/include/_dialog.html"){
+%>
+	<script type="text/javascript">
+
+		$(document).ready(function() {
+						});
+
+		function save() {
+            var isValidate = jp.validateForm('#inputForm');//校验表单
+            if(!isValidate){
+                return false;
+			}else{
+                var index = jp.loading();
+                jp.post("${ctx}/business/ruku/product/businessRuKuProduct/save",$('#inputForm').serialize(),function(data){
+                    if(data.success){
+                        jp.getParent().refresh();
+                        var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                        parent.layer.close(dialogIndex);
+                        jp.toastr_success(data.msg)
+
+                    }else{
+                        jp.toastr_error(data.msg);
+                    }
+                    jp.close(index);
+                })
+			}
+
+        }
+
+		function addRow(list, idx, tpl, row){
+			$(list).append(Mustache.render(tpl, {
+				idx: idx, delBtn: true, row: row
+			}));
+			$(list+idx).find("select").each(function(){
+				$(this).val($(this).attr("data-value"));
+			});
+			$(list+idx).find("input[type='checkbox'], input[type='radio']").each(function(){
+				var ss = $(this).attr("data-value").split(',');
+				for (var i=0; i<ss.length; i++){
+					if($(this).val() == ss[i]){
+						$(this).attr("checked","checked");
+					}
+				}
+			});
+			$(list+idx).find(".jp-calendar-picker-input").each(function(){
+				 $(this).datetimepicker({
+					 format:'Y-m-d H:i'
+			    });
+			});
+		}
+		function delRow(obj, prefix){
+			var id = $(prefix+"_id");
+			var delFlag = $(prefix+"_delFlag");
+			if (id.val() == ""){
+				$(obj).parent().parent().remove();
+			}else if(delFlag.val() == "0"){
+				delFlag.val("1");
+				$(obj).html("&divide;").attr("title", "撤销删除");
+				$(obj).parent().parent().addClass("error");
+			}else if(delFlag.val() == "1"){
+				delFlag.val("0");
+				$(obj).html("&times;").attr("title", "删除");
+				$(obj).parent().parent().removeClass("error");
+			}
+		}
+	</script>
+<form id="inputForm"  method="post"  class="form-horizontal p-15">
+		<input type="hidden" name="id" value="${businessRuKuProduct.id!}"/>
+		<table class="table table-bordered">
+		   <tbody>
+				<tr>
+					<td class="width-15 active"><label class="pull-right">入库单号：</label></td>
+					<td class="width-35">
+						<input name="code" value="${businessRuKuProduct.code!}"    class="form-control "/>
+				</td>
+					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>生产订单号：</label></td>
+					<td class="width-35">
+						<input name="sccode" value="${businessRuKuProduct.sccode!}"    class="form-control required"/>
+				</td>
+				</tr>
+				<tr>
+					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>存货编码：</label></td>
+					<td class="width-35">
+						<input name="cinvcode" value="${businessRuKuProduct.cinvcode!}"    class="form-control required"/>
+				</td>
+					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>存货名称：</label></td>
+					<td class="width-35">
+						<input name="cinvname" value="${businessRuKuProduct.cinvname!}"    class="form-control required"/>
+				</td>
+				</tr>
+				<tr>
+					<td class="width-15 active"><label class="pull-right">规格型号：</label></td>
+					<td class="width-35">
+						<input name="cinvstd" value="${businessRuKuProduct.cinvstd!}"    class="form-control "/>
+				</td>
+					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>生产批号：</label></td>
+					<td class="width-35">
+						<input name="batchno" value="${businessRuKuProduct.batchno!}"    class="form-control required"/>
+				</td>
+				</tr>
+				<tr>
+					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>仓库：</label></td>
+					<td class="width-35">
+						<#gridselect url="${ctx}/base/cangku/baseCangKu/data" id="cangku" name="cangku.id" value="${businessRuKuProduct.cangku.id!}" labelName="cangku.name" labelValue="${businessRuKuProduct.cangku.name!}"
+							 title="选择仓库" class="form-control required" fieldLabels="编码|名称|所属工厂" fieldKeys="code|name|factory.name" searchLabels="编码|名称" searchKeys="code|name" />
+				</td>
+					<td class="width-15 active"><label class="pull-right">备注信息：</label></td>
+					<td class="width-35">
+						<input name="remarks" value="${businessRuKuProduct.remarks!}"    class="form-control "/>
+				</td>
+				</tr>
+		 	</tbody>
+		</table>
+			<div class="card card-tabs">
+            <div class="card-heading  pb-0">
+                <ul class="nav nav-pills float-left" role="tablist">
+				<li class="nav-item">
+					<a data-toggle="tab" class="nav-link show active" role="tab" href="#tab-1" aria-expanded="true">产成品入库单明细：</a>
+                </li>
+            </ul>
+            </div>
+            <div class="card-body">
+		    <div class="tab-content">
+			<div id="tab-1" class="tab-pane fade active show">
+			<a class="btn btn-white btn-sm m-b-5" onclick="addRow('#businessRuKuProductMxList', businessRuKuProductMxRowIdx, businessRuKuProductMxTpl);businessRuKuProductMxRowIdx = businessRuKuProductMxRowIdx + 1;" title="新增"><i class="fa fa-plus"></i> 新增</a>
+			<table class="table table-striped table-bordered table-condensed">
+				<thead>
+					<tr>
+						<th class="hide"></th>
+						<th><font color="red">*</font>生产订单行号</th>
+						<th><font color="red">*</font>产品编码</th>
+						<th><font color="red">*</font>产品名称</th>
+						<th><font color="red">*</font>规格型号</th>
+						<th><font color="red">*</font>数量</th>
+						<th><font color="red">*</font>单位</th>
+						<th><font color="red">*</font>货位</th>
+						<th>备注信息</th>
+						<th width="10">&nbsp;</th>
+					</tr>
+				</thead>
+				<tbody id="businessRuKuProductMxList">
+				</tbody>
+			</table>
+			<script type="text/template" id="businessRuKuProductMxTpl">//<!--
+				<tr id="businessRuKuProductMxList{{idx}}">
+					<td class="hide">
+						<input id="businessRuKuProductMxList{{idx}}_id" name="businessRuKuProductMxList[{{idx}}].id" type="hidden" value="{{row.id}}"/>
+						<input id="businessRuKuProductMxList{{idx}}_delFlag" name="businessRuKuProductMxList[{{idx}}].delFlag" type="hidden" value="0"/>
+					</td>
+					
+					<td>
+						<input id="businessRuKuProductMxList{{idx}}_linecode" name="businessRuKuProductMxList[{{idx}}].linecode" type="text" value="{{row.linecode}}"    class="form-control required"/>
+					</td>
+					
+					
+					<td>
+						<input id="businessRuKuProductMxList{{idx}}_cinvcode" name="businessRuKuProductMxList[{{idx}}].cinvcode" type="text" value="{{row.cinvcode}}"    class="form-control required"/>
+					</td>
+					
+					
+					<td>
+						<input id="businessRuKuProductMxList{{idx}}_cinvname" name="businessRuKuProductMxList[{{idx}}].cinvname" type="text" value="{{row.cinvname}}"    class="form-control required"/>
+					</td>
+					
+					
+					<td>
+						<input id="businessRuKuProductMxList{{idx}}_cinvstd" name="businessRuKuProductMxList[{{idx}}].cinvstd" type="text" value="{{row.cinvstd}}"    class="form-control required"/>
+					</td>
+					
+					
+					<td>
+						<input id="businessRuKuProductMxList{{idx}}_num" name="businessRuKuProductMxList[{{idx}}].num" type="text" value="{{row.num}}"    class="form-control required"/>
+					</td>
+					
+					
+					<td>
+						<input id="businessRuKuProductMxList{{idx}}_unit" name="businessRuKuProductMxList[{{idx}}].unit" type="text" value="{{row.unit}}"    class="form-control required"/>
+					</td>
+					
+					
+					<td>
+						<#gridselect url="${ctx}/base/huowei/baseHuoWei/data" id="businessRuKuProductMxList{{idx}}_huowei" name="businessRuKuProductMxList[{{idx}}].huowei.id" value="{{row.huowei.id}}" labelName="businessRuKuProductMxList{{idx}}.huowei.name" labelValue="{{row.huowei.name}}"
+							 title="选择货位" class="form-control  required" fieldLabels="编号|名称|仓库" fieldKeys="code|name|ck.name" searchLabels="编号|名称" searchKeys="code|name" />
+					</td>
+					
+					
+					<td>
+						<input id="businessRuKuProductMxList{{idx}}_remarks" name="businessRuKuProductMxList[{{idx}}].remarks" type="text" value="{{row.remarks}}"    class="form-control "/>
+					</td>
+					
+					<td class="text-center" width="10">
+						{{#delBtn}}<span class="close" onclick="delRow(this, '#businessRuKuProductMxList{{idx}}')" title="删除">&times;</span>{{/delBtn}}
+					</td>
+				</tr>//-->
+			</script>
+			<script type="text/javascript">
+				var businessRuKuProductMxRowIdx = 0, businessRuKuProductMxTpl = $("#businessRuKuProductMxTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
+				$(document).ready(function() {
+					var data = ${fn.toJson(businessRuKuProduct.businessRuKuProductMxList)};
+					for (var i=0; i<data.length; i++){
+						addRow('#businessRuKuProductMxList', businessRuKuProductMxRowIdx, businessRuKuProductMxTpl, data[i]);
+						businessRuKuProductMxRowIdx = businessRuKuProductMxRowIdx + 1;
+					}
+				});
+			</script>
+			</div>
+		</div>
+		</div>
+		</div>
+		</form>
+<% } %>

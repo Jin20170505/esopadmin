@@ -14,6 +14,7 @@ public class ApiBaoGongController {
     private BusinessBaoGongOrderService businessBaoGongOrderService;
     @Autowired
     private BusinessBaoGongRecordService businessBaoGongRecordService;
+
     /**
      * 扫报工二维码 查询报工信息
      * @param bgcode 报工单号
@@ -41,18 +42,20 @@ public class ApiBaoGongController {
      * @param remarks 备注
      * @param userid 操作人id
      * @param opname 操作人名称
+     * @param dbnum 待报数量
      * @param flnum 废料数量
      * @param fgnum 返工数量
+     * @param gfnum 工废数量
      * @param bhgnum 不合格数量
      * @param hgnum 合格数量
      * @param complete 1：待报工数量 = 合格数量
      * @return
      */
     @RequestMapping("do")
-    public AjaxJson baogong(String bgid,String bghid,String remarks,String userid,String opname,Double flnum,Double fgnum,Double bhgnum,Double hgnum,String complete){
+    public AjaxJson baogong(String bgid,String bghid,String remarks,String userid,String opname,Double dbnum,Double flnum,Double fgnum,Double gfnum,Double bhgnum,Double hgnum,String complete){
         AjaxJson json = new AjaxJson();
         try{
-            businessBaoGongRecordService.baogong(bgid,bghid, remarks, userid, opname, flnum, fgnum, bhgnum, hgnum,complete);
+            businessBaoGongRecordService.baogong(bgid,bghid, remarks, userid, opname,dbnum, flnum, fgnum,gfnum, bhgnum, hgnum,complete);
             json.setSuccess(true);
             json.setMsg("报工成功。");
         }catch (Exception e){

@@ -15,56 +15,54 @@ layout("/include/_container.html", {title:"打印", parent:"报工单"}){
     }
     #qrcode{
         display: block;
-        width: 200px;
-        height: 200px;
-        position: absolute;
-        top: 10px;
-        right: 10px;
+        width: 140px;
+        height: 140px;
     }
 </style>
 <div class="white-box">
     <a id="print" class="btn btn-custom waves-effect w-xs waves-light" onclick="window.print();">
         <i class="fa fa-print"></i> 打印
     </a>
-    <img id="qrcode" src="${ctx}/business/baogong/order/businessBaoGongOrder/img/${order.id!}"/>
-    <h3 style="text-align: center;line-height: 200px;">报工单</h3>
+
+    <h3 style="text-align: center;">报工单</h3>
     <table class="table table-bordered">
         <tbody>
         <tr>
+            <th>报工单号</th>
+            <td>${order.ordercode!}</td>
             <th>生产订单号</th>
             <td>${order.ordercode!}</td>
             <th>行号</th>
             <td>${order.orderline!}</td>
-            <th>生产部门</th>
-            <td>${order.deptName!}</td>
-        </tr>
-        <tr>
-            <th>计划单号</th>
-            <td>${order.plancode!}</td>
-            <th>数量</th>
-            <td>${order.num!}</td>
-            <th>计量单位</th>
-            <td>${order.unit!}</td>
         </tr>
         <tr>
             <th>存货编码</th>
             <td>${order.cinvcode!}</td>
             <th>存货名称</th>
-            <td>${order.cinvname!}</td>
-            <th>存货规格</th>
-            <td>${order.cinvstd!}</td>
+            <td colspan="3">${order.cinvname!}</td>
+        </tr>
+        <tr>
+            <th>工单数量</th>
+            <td>${order.num!}</td>
+            <th>计量单位</th>
+            <td>${order.unit!}</td>
+            <td colspan="3" rowspan="4"><img id="qrcode" src="${ctx}/business/baogong/order/businessBaoGongOrder/img/${order.id!}"/></td>
         </tr>
         <tr>
             <th>开始日期</th>
             <td>${order.startdate!}</td>
             <th>结束日期</th>
             <td>${order.enddate!}</td>
+        </tr>
+        <tr>
+            <th>生产部门</th>
+            <td>${order.deptName!}</td>
             <th>生产批号</th>
             <td>${order.batchno!}</td>
         </tr>
         <tr>
             <th>备注</th>
-            <td colspan="5">${order.remarks!}</td>
+            <td colspan="3">${order.remarks!}</td>
         </tr>
         </tbody>
     </table>
@@ -72,10 +70,10 @@ layout("/include/_container.html", {title:"打印", parent:"报工单"}){
         <thead>
             <tr>
                 <th>序号</th>
-                <th>工作站</th>
-                <th>操作人</th>
-                <th>操作人姓名</th>
-                <th>班组</th>
+                <th>工序名称</th>
+                <th>工号</th>
+                <th>姓名</th>
+                <th>备注</th>
             </tr>
         </thead>
         <tbody id="itemList">
@@ -93,7 +91,7 @@ layout("/include/_container.html", {title:"打印", parent:"报工单"}){
                         <td>`+data[0].site+`</td>
                         <td>`+data[0].opcode+`</td>
                         <td>`+data[0].opname+`</td>
-                        <td>`+data[0].classgroup+`</td>
+                        <td></td>
                     </tr>`;
         }
         $('#itemList').html(htm);

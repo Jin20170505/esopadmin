@@ -276,21 +276,21 @@ $(document).ready(function() {
 
    //新增表单页面
  function add() {
-     jp.openSaveDialog('新增生产订单', "${ctx}/business/shengchan/dingdan/businessShengChanDingDan/form/add",'90%', '90%');
+     jp.openSaveDialog('新增生产订单', "${ctx}/business/shengchan/dingdan/businessShengChanDingDan/form/add",'100%', '100%');
  }
   //编辑表单页面
   function edit(id){
       if(!id){
           id = getIdSelections();
       }
-	  jp.openSaveDialog('编辑生产订单', "${ctx}/business/shengchan/dingdan/businessShengChanDingDan/form/edit?id="+id,'90%', '90%');
+	  jp.openSaveDialog('编辑生产订单', "${ctx}/business/shengchan/dingdan/businessShengChanDingDan/form/edit?id="+id,'100%', '100%');
   }
   //查看表单页面
   function view(id) {
       if(!id){
           id = getIdSelections();
       }
-      jp.openViewDialog('查看生产订单', "${ctx}/business/shengchan/dingdan/businessShengChanDingDan/form/view?id="+id,'90%', '90%');
+      jp.openViewDialog('查看生产订单', "${ctx}/business/shengchan/dingdan/businessShengChanDingDan/form/view?id="+id,'100%', '100%');
   }
  //子表展示
 		   

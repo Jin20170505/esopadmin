@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.business.ruku.product.mapper.BusinessRuKuProductMxMapper">
+    
+	<sql id="businessRuKuProductMxColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.pid AS "p.id",
+		a.linecode AS "linecode",
+		a.cinvoce AS "cinvcode",
+		a.cinvname AS "cinvname",
+		a.cinvstd AS "cinvstd",
+		a.num AS "num",
+		a.unit AS "unit",
+		a.huowei AS "huowei.id",
+		a.remarks AS "remarks",
+		a.sych AS "sych",
+		a.schid AS "schid",
+		huowei.name AS "huowei.name"
+	</sql>
+	
+	<sql id="businessRuKuProductMxJoins">
+		
+			LEFT JOIN business_ruku_product b ON b.id = a.pid
+		LEFT JOIN base_huowei huowei ON huowei.id = a.huowei
+	</sql>
+	
+    
+	<select id="get" resultType="BusinessRuKuProductMx" >
+		SELECT 
+			<include refid="businessRuKuProductMxColumns"/>
+		FROM business_ruku_product_mx a
+		<include refid="businessRuKuProductMxJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BusinessRuKuProductMx" >
+		SELECT 
+			<include refid="businessRuKuProductMxColumns"/>
+		FROM business_ruku_product_mx a
+		<include refid="businessRuKuProductMxJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="p != null and p.id != null and p.id != ''">
+				AND a.pid = #{p.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BusinessRuKuProductMx" >
+		SELECT 
+			<include refid="businessRuKuProductMxColumns"/>
+		FROM business_ruku_product_mx a
+		<include refid="businessRuKuProductMxJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO business_ruku_product_mx(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+			pid,
+			linecode,
+			cinvoce,
+			cinvname,
+			cinvstd,
+			num,
+			unit,
+			huowei,
+			remarks,
+			sych,
+			schid
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag},
+			#{p.id},
+			#{linecode},
+			#{cinvcode},
+			#{cinvname},
+			#{cinvstd},
+			#{num},
+			#{unit},
+			#{huowei.id},
+			#{remarks},
+			#{sych},
+			#{schid}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE business_ruku_product_mx SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			pid = #{p.id},
+			linecode = #{linecode},
+			cinvoce = #{cinvcode},
+			cinvname = #{cinvname},
+			cinvstd = #{cinvstd},
+			num = #{num},
+			unit = #{unit},
+			huowei = #{huowei.id},
+			remarks = #{remarks},
+			sych = #{sych},
+			schid = #{schid}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM business_ruku_product_mx
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE pid = #{p.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE business_ruku_product_mx SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE pid = #{p.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="BusinessRuKuProductMx" statementType="STATEMENT">
+		select * FROM business_ruku_product_mx  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

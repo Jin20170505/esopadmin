@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.business.ruku.product.mapper.BusinessRuKuProductMapper">
+    
+	<sql id="businessRuKuProductColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.code AS "code",
+		a.sccode AS "sccode",
+		a.cinvcode AS "cinvcode",
+		a.cinvname AS "cinvname",
+		a.cinvstd AS "cinvstd",
+		a.batchno AS "batchno",
+		a.cangku AS "cangku.id",
+		a.remarks AS "remarks",
+		a.bgid AS "bgid",
+		a.bgcode AS "bgcode",
+		a.sych AS "sych",
+		cangku.name AS "cangku.name"
+	</sql>
+	
+	<sql id="businessRuKuProductJoins">
+		LEFT JOIN base_cangku cangku ON cangku.id = a.cangku
+	</sql>
+	
+    
+	<select id="get" resultType="BusinessRuKuProduct" >
+		SELECT 
+			<include refid="businessRuKuProductColumns"/>
+		FROM business_ruku_product a
+		<include refid="businessRuKuProductJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BusinessRuKuProduct" >
+		SELECT 
+			<include refid="businessRuKuProductColumns"/>
+		FROM business_ruku_product a
+		<include refid="businessRuKuProductJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="sccode != null and sccode != ''">
+				AND a.sccode = #{sccode}
+			</if>
+			<if test="cinvcode != null and cinvcode != ''">
+				AND a.cinvcode = #{cinvcode}
+			</if>
+			<if test="cinvname != null and cinvname != ''">
+				AND a.cinvname LIKE
+				    <if test="_databaseId == 'postgre'">'%'||#{cinvname}||'%'</if>
+					<if test="_databaseId == 'oracle'">'%'||#{cinvname}||'%'</if>
+					<if test="_databaseId == 'mssql'">'%'+#{cinvname}+'%'</if>
+					<if test="_databaseId == 'mysql'">concat('%',#{cinvname},'%')</if>
+			</if>
+			<if test="batchno != null and batchno != ''">
+				AND a.batchno = #{batchno}
+			</if>
+			<if test="cangku != null and cangku.id != null and cangku.id != ''">
+				AND a.cangku = #{cangku.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BusinessRuKuProduct" >
+		SELECT 
+			<include refid="businessRuKuProductColumns"/>
+		FROM business_ruku_product a
+		<include refid="businessRuKuProductJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO business_ruku_product(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+			code,
+			sccode,
+			cinvcode,
+			cinvname,
+			cinvstd,
+			batchno,
+			cangku,
+			remarks,
+			bgid,
+			bgcode,num,
+			sych
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag},
+			#{code},
+			#{sccode},
+			#{cinvcode},
+			#{cinvname},
+			#{cinvstd},
+			#{batchno},
+			#{cangku.id},
+			#{remarks},
+			#{bgid},
+			#{bgcode},#{num},
+			#{sych}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE business_ruku_product SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			code = #{code},
+			sccode = #{sccode},
+			cinvcode = #{cinvcode},
+			cinvname = #{cinvname},
+			cinvstd = #{cinvstd},
+			batchno = #{batchno},
+			cangku = #{cangku.id},
+			remarks = #{remarks},
+			bgid = #{bgid},
+			bgcode = #{bgcode},
+			sych = #{sych}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM business_ruku_product
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE business_ruku_product SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="BusinessRuKuProduct" statementType="STATEMENT">
+		select * FROM business_ruku_product  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

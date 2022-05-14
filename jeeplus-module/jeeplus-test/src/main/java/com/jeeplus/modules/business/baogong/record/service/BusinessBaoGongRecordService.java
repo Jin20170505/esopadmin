@@ -12,6 +12,7 @@ import com.jeeplus.modules.business.baogong.order.entity.BusinessBaoGongOrderMin
 import com.jeeplus.modules.business.baogong.order.service.BusinessBaoGongOrderService;
 import com.jeeplus.modules.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +29,8 @@ import com.jeeplus.modules.business.baogong.record.mapper.BusinessBaoGongRecordM
 @Transactional(readOnly = true)
 public class BusinessBaoGongRecordService extends CrudService<BusinessBaoGongRecordMapper, BusinessBaoGongRecord> {
 	@Autowired
-	private BusinessBaoGongOrderService businessBaoGongOrderService;
+	@Lazy
+	private BusinessBaoGongOrderService baoGongOrderService;
 
 	public BusinessBaoGongRecord get(String id) {
 		return super.get(id);
@@ -62,8 +64,8 @@ public class BusinessBaoGongRecordService extends CrudService<BusinessBaoGongRec
 
 	// 报工
 	@Transactional(readOnly = false)
-	public void baogong(String bgid,String bghid,String remarks,String userid,String opname,Double lfnum,Double fgnum,Double bhgnum,Double hgnum,String complete){
-		BusinessBaoGongOrder order = businessBaoGongOrderService.getBaoGongInfo(bgid,bghid,null);
+	public void baogong(String bgid,String bghid,String remarks,String userid,String opname,Double dbnum,Double lfnum,Double fgnum,Double gfnum,Double bhgnum,Double hgnum,String complete){
+		BusinessBaoGongOrder order = baoGongOrderService.getBaoGongInfo(bgid,bghid,null);
 		BusinessBaoGongOrderMingXi mingXi = order.getBusinessBaoGongOrderMingXiList().get(0);
 		if(mingXi==null){
 			mingXi = new BusinessBaoGongOrderMingXi();
@@ -75,6 +77,7 @@ public class BusinessBaoGongRecordService extends CrudService<BusinessBaoGongRec
 		record.setBghid(bghid);
 		record.setBhgnum(bhgnum);
 		record.setUsername(opname);
+		record.setDoingnum(dbnum);
 		record.setCinvcode(order.getCinvcode());
 		record.setCinvname(order.getCinvname());
 		record.setCinvstd(order.getCinvstd());
@@ -82,23 +85,24 @@ public class BusinessBaoGongRecordService extends CrudService<BusinessBaoGongRec
 		record.setOrdercode(order.getOrdercode());
 		record.setOrderline(order.getOrderline());
 		record.setRemarks(remarks);
+		record.setGdnum(order.getNum());
 		record.setFgnum(fgnum);
+		record.setGfnum(gfnum);
 		record.setLfnum(lfnum);
 		record.setHgnum(hgnum);
 		record.setSite(mingXi.getSite());
-		record.setBghid(mingXi.getId());
 		record.setPlanid(order.getPlanid());
 		record.setLineid(order.getOrderlineid());
 		record.setUnit(order.getUnit());
 		if("1".equals(complete)){
 			if(StringUtils.isEmpty(bghid)){
 			}else {
-				businessBaoGongOrderService.completeBg(bghid);
+				baoGongOrderService.completeBg(bghid);
 			}
 		}
 		record.preInsert();
 		record.setCreateBy(new User(userid));
 		mapper.insert(record);
-		businessBaoGongOrderService.complete(order.getId(),order.getNum());
+		baoGongOrderService.complete(order.getId(),order.getNum());
 	}
 }
