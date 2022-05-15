@@ -18,6 +18,7 @@
 		a.cangku AS "cangku.id",
 		a.remarks AS "remarks",
 		a.bgid AS "bgid",
+		a.num as "num",
 		a.bgcode AS "bgcode",
 		a.sych AS "sych",
 		cangku.name AS "cangku.name"

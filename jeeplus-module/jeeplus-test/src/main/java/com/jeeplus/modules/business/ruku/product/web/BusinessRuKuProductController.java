@@ -4,7 +4,9 @@
 package com.jeeplus.modules.business.ruku.product.web;
 
 import java.io.UnsupportedEncodingException;
+import java.math.RoundingMode;
 import java.net.URLDecoder;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
+import com.jeeplus.modules.business.ruku.product.entity.BusinessRuKuProductMx;
+import com.jeeplus.modules.business.ruku.product.entity.ProductTagBean;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,11 +62,28 @@ public class BusinessRuKuProductController extends BaseController {
 		}
 		return entity;
 	}
-	
+	@RequestMapping("goToTagPrint")
+	public String goToTagPrint(String rid,Integer num,Model model){
+		BusinessRuKuProduct bean = businessRuKuProductService.get(rid);
+		if(num==null){
+			num=1;
+		}
+		if(bean.getBusinessRuKuProductMxList()==null || bean.getBusinessRuKuProductMxList().isEmpty()){
+			throw new RuntimeException("入库明细缺失，无法打印。");
+		}
+		BusinessRuKuProductMx mx = bean.getBusinessRuKuProductMxList().get(0);
+		ProductTagBean tagBean = new ProductTagBean();
+		DecimalFormat df = new DecimalFormat("0.00");
+		df.setRoundingMode(RoundingMode.HALF_UP);
+		tagBean.setCinvcode(mx.getCinvcode()).setCinvname(mx.getCinvname()).setCinvstd(mx.getCinvstd())
+		.setNumunit(df.format(bean.getNum()/num).replaceAll(".00"," ")+mx.getUnit())
+		.setDate(DateUtils.getDate("YYYY/MM/dd"));
+		model.addAttribute("bean", tagBean);
+		return "modules/business/ruku/product/tagprint";
+	}
 	/**
 	 * 产成品入库列表页面
 	 */
-	@RequiresPermissions("business:ruku:product:businessRuKuProduct:list")
 	@RequestMapping(value = {"list", ""})
 	public String list(BusinessRuKuProduct businessRuKuProduct, Model model) {
 		model.addAttribute("businessRuKuProduct", businessRuKuProduct);
@@ -73,7 +94,6 @@ public class BusinessRuKuProductController extends BaseController {
 	 * 产成品入库列表数据
 	 */
 	@ResponseBody
-	@RequiresPermissions("business:ruku:product:businessRuKuProduct:list")
 	@RequestMapping(value = "data")
 	public Map<String, Object> data(BusinessRuKuProduct businessRuKuProduct, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<BusinessRuKuProduct> page = businessRuKuProductService.findPage(new Page<BusinessRuKuProduct>(request, response), businessRuKuProduct); 

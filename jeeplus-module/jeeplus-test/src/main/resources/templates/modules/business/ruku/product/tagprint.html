@@ -1,0 +1,46 @@
+<%
+layout("/include/_container.html", {title:"打印", parent:"报工单"}){
+%>
+<style type="text/css">
+    @media print {
+        #print{
+            display: none;
+        }
+    }
+    #print{
+        width: 100px;
+        position: fixed;
+        bottom: 10px;
+        left: 150px;
+    }
+    .white-box,body,html{
+        width: 400px;
+        height: 200px;
+    }
+</style>
+<div class="white-box">
+    <a id="print" class="btn btn-custom waves-effect w-xs waves-light" onclick="window.print();">
+        <i class="fa fa-print"></i> 打印
+    </a>
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <th width="100px">产品名称</th>
+            <td>${bean.cinvname!}</td>
+        </tr>
+        <tr>
+            <th>规格型号</th>
+            <td>${bean.cinvstd!}</td>
+        </tr>
+        <tr>
+            <th>数量</th>
+            <td>${bean.numunit!}</td>
+        </tr>
+        <tr>
+            <th>日期</th>
+            <td>${bean.date!}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<% } %>

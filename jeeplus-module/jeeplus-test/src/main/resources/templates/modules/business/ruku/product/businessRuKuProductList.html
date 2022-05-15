@@ -60,35 +60,49 @@ layout("/include/_container.html", {title:"列表", parent:"产成品入库"}){
 	<!-- 工具栏 -->
 	<div id="toolbar">
 			 <% if(shiro.hasPermission("business:ruku:product:businessRuKuProduct:add") ){ %>
-			 	<button id="add" class="btn btn-custom waves-effect w-xs waves-light" onclick="add()">
-					<i class="fa fa-plus"></i> 新建
-				</button>
+<!--			 	<button id="add" class="btn btn-custom waves-effect w-xs waves-light" onclick="add()">-->
+<!--					<i class="fa fa-plus"></i> 新建-->
+<!--				</button>-->
 			<% } %>
 			 <% if(shiro.hasPermission("business:ruku:product:businessRuKuProduct:edit") ){ %>
-			    <button id="edit" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="edit()">
-	            	<i class="fa fa-edit"></i> 修改
-	        	</button>
+<!--			    <button id="edit" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="edit()">-->
+<!--	            	<i class="fa fa-edit"></i> 修改-->
+<!--	        	</button>-->
 			<% } %>
 			 <% if(shiro.hasPermission("business:ruku:product:businessRuKuProduct:del") ){ %>
-				<button id="remove" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="del()">
-	            	<i class="fa fa-remove"></i> 删除
-	        	</button>
+<!--				<button id="remove" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="del()">-->
+<!--	            	<i class="fa fa-remove"></i> 删除-->
+<!--	        	</button>-->
 			<% } %>
 			 <% if(shiro.hasPermission("business:ruku:product:businessRuKuProduct:import") ){ %>
-				<button id="import"  class="btn btn-white waves-effect w-xs waves-light" >
-					<i class="fa fa-upload"></i> 导入
-				</button>
+<!--				<button id="import"  class="btn btn-white waves-effect w-xs waves-light" >-->
+<!--					<i class="fa fa-upload"></i> 导入-->
+<!--				</button>-->
 			<% } %>
 			 <% if(shiro.hasPermission("business:ruku:product:businessRuKuProduct:export") ){ %>
-	        	<button id="export" class="btn btn-white waves-effect w-xs waves-light">
-					<i class="fa fa-download"></i> 导出
-				</button>
+<!--	        	<button id="export" class="btn btn-white waves-effect w-xs waves-light">-->
+<!--					<i class="fa fa-download"></i> 导出-->
+<!--				</button>-->
 			 <% } %>
+		<button id="print" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="printbq()">
+			<i class="fa fa-print"></i> 打印标签
+		</button>
 		    </div>
 		
 	<!-- 表格 -->
 	<table id="businessRuKuProductTable" class="table-bordered"   data-toolbar="#toolbar"></table>
 	</div>
 
+<div id="baonumform" class="form-horizontal p-15" style="display: none;">
+	<table class="table table-bordered">
+		<tbody>
+		<tr>
+			<td class="width-15 active"><label class="pull-right">包装数量（包数）：</label></td>
+			<td class="width-35">
+				<input name="num" id="num" value="1" type="number"   class="form-control "/>
+			</td>
+		</tr>
+	</table>
+</div>
 	<% include("businessRuKuProductList.js"){} %>
 	<% } %>

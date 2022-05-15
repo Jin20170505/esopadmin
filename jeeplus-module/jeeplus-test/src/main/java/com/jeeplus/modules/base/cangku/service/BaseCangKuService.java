@@ -3,9 +3,10 @@
  */
 package com.jeeplus.modules.base.cangku.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import com.beust.jcommander.internal.Lists;
+import com.google.common.collect.Lists;
 import com.jeeplus.modules.api.bean.ckandhw.CkBean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,9 +50,9 @@ public class BaseCangKuService extends CrudService<BaseCangKuMapper, BaseCangKu>
 	public List<CkBean> findAllCk(){
 		List<BaseCangKu> cangKus = mapper.findAllCk();
 		if(cangKus==null||cangKus.isEmpty()){
-			return Lists.newArrayList(0);
+			return new ArrayList<>(0);
 		}
-		List<CkBean> ckBeans = Lists.newArrayList(cangKus.size());
+		List<CkBean> ckBeans = new ArrayList<>(cangKus.size());
 		cangKus.forEach(d->{
 			CkBean ckBean = new CkBean();
 			ckBean.setValue(d.getId()).setText(d.getName()+"("+d.getFactory().getName()+")");
