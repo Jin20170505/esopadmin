@@ -1,0 +1,103 @@
+<%
+layout("/include/_container.html", {title:"打印", parent:"报工单"}){
+%>
+<style type="text/css">
+    @media print {
+        #print{
+            display: none;
+        }
+    }
+    #print{
+        width: 100px;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+    }
+    #qrcode{
+        display: block;
+        width: 140px;
+        height: 140px;
+    }
+</style>
+<div class="white-box">
+    <a id="print" class="btn btn-custom waves-effect w-xs waves-light" onclick="window.print();">
+        <i class="fa fa-print"></i> 打印
+    </a>
+    <h3 style="text-align: center;">备料单</h3>
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <th>生产订单号</th>
+            <td>${hmx.p.code!}</td>
+            <th>行号</th>
+            <td>${hmx.no!}</td>
+            <th>生产部门</th>
+            <td>${hmx.dept.name!}</td>
+        </tr>
+        <tr>
+            <th>产品编码</th>
+            <td>${hmx.cinv.code!}</td>
+            <th>产品名称</th>
+            <td colspan="3">${hmx.cinvname!}</td>
+        </tr>
+        <tr>
+            <th>数量</th>
+            <td>${hmx.num!}</td>
+            <th>计量单位</th>
+            <td>${hmx.unit!}</td>
+            <td colspan="3" rowspan="4"><img id="qrcode" src="${ctx}/qrcode/qr/${hmx.id!}"/></td>
+        </tr>
+        <tr>
+            <th>开始日期</th>
+            <td>${hmx.startdate!}</td>
+            <th>结束日期</th>
+            <td>${hmx.enddate!}</td>
+        </tr>
+        <tr>
+            <th>生产批号</th>
+            <td>${hmx.batchno!}</td>
+            <th>规格型号</th>
+            <td>${hmx.std!}</td>
+        </tr>
+        <tr>
+            <th>备注</th>
+            <td colspan="3">${hmx.remarks!}</td>
+        </tr>
+        </tbody>
+    </table>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>序号</th>
+            <th>存货编码</th>
+            <th>存货名称</th>
+            <th>规格型号</th>
+            <th>数量</th>
+            <th>单位</th>
+            <th>条码</th>
+        </tr>
+        </thead>
+        <tbody id="itemList">
+
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var data = ${fn.toJson(boms)};
+        var htm = '';
+        for (var i=0; i<data.length; i++){
+            htm +=  `<tr>
+                        <td style="vertical-align:middle;">`+data[i].no+`</td>
+                        <td style="vertical-align:middle;">`+data[i].cinvcode+`</td>
+                        <td style="vertical-align:middle;">`+data[i].cinvname+`</td>
+                        <td style="vertical-align:middle;">`+data[i].cinvstd+`</td>
+                        <td style="vertical-align:middle;">`+data[i].num+`</td>
+                        <td style="vertical-align:middle;">`+data[i].unitname+`</td>
+                        <td><img width="80" height="40" src="${ctx}/qrcode/barcode/`+data[i].id+`"/></td>
+                    </tr>`;
+        }
+        $('#itemList').html(htm);
+    });
+</script>
+<% } %>

@@ -13,9 +13,15 @@ public class ApiLingLiaoChuKuController {
 
 
     @RequestMapping("findLingLiaoDanInfo")
-    public AjaxJson findLingLiaoDanInfo(){
+    public AjaxJson findLingLiaoDanInfo(String bgcode){
         AjaxJson json = new AjaxJson();
+        try {
 
+        }catch (Exception e){
+            e.printStackTrace();
+            json.setMsg("查询失败,失败原因："+e.getMessage());
+            json.setSuccess(false);
+        }
         return json;
     }
 

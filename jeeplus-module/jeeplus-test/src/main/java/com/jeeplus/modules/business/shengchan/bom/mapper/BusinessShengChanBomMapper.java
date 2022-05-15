@@ -3,6 +3,8 @@
  */
 package com.jeeplus.modules.business.shengchan.bom.mapper;
 
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import com.jeeplus.core.persistence.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,5 +18,7 @@ import com.jeeplus.modules.business.shengchan.bom.entity.BusinessShengChanBom;
 @Mapper
 @Repository
 public interface BusinessShengChanBomMapper extends BaseMapper<BusinessShengChanBom> {
-	
+
+    @Delete("delete from business_shengchan_bom where schid = #{schid}")
+    void deleteBySchid(@Param("schid") String schid);
 }

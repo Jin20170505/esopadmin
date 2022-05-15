@@ -11,6 +11,8 @@ import com.jeeplus.core.persistence.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import com.jeeplus.modules.business.baogong.order.entity.BusinessBaoGongOrder;
 
+import java.util.List;
+
 /**
  * 报工单MAPPER接口
  * @author Jin
@@ -29,4 +31,7 @@ public interface BusinessBaoGongOrderMapper extends BaseMapper<BusinessBaoGongOr
 
     @Update("update business_baogao_order set complate = '1' where id = #{id}")
     void completeBg(@Param("id") String id);
+
+    @Select("select complete from business_baogong_order_mingxi where pid = #{bgid}")
+    List<String> findCompleteStatusByBgid(@Param("bgid") String bgid);
 }

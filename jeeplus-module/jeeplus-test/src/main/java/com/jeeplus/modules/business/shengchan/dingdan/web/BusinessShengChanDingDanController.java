@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
+import com.jeeplus.modules.business.shengchan.bom.entity.BusinessShengChanBom;
+import com.jeeplus.modules.business.shengchan.bom.service.BusinessShengChanDingdanMxService;
 import com.jeeplus.modules.business.shengchan.dingdan.entity.BusinessShengChanDingDanMingXi;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -70,6 +72,18 @@ public class BusinessShengChanDingDanController extends BaseController {
 	@RequestMapping("goToList")
 	public String goToList(){
 		return "modules/business/shengchan/dingdan/list/list";
+	}
+
+	@Autowired
+	private BusinessShengChanDingdanMxService businessShengChanDingdanMxService;
+
+	@RequestMapping("goToBeiLiaoPrint")
+	public String goToBeiLiaoPrint(String rid,Model model){
+		BusinessShengChanDingDanMingXi mingXi = businessShengChanDingDanService.getMxId(rid);
+		model.addAttribute("hmx",mingXi);
+		List<BusinessShengChanBom> boms = businessShengChanDingdanMxService.findBomList(rid);
+		model.addAttribute("boms",boms);
+		return "modules/business/shengchan/dingdan/list/beiliaoprint";
 	}
 
 		/**

@@ -34,6 +34,9 @@ layout("/include/_container.html", {title:"明细列表", parent:"生产订单"}
             生成计划工单
         </button>
         <% } %>
+        <button id="print" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="printbl()">
+            <i class="fa fa-print"></i> 打印备料单
+        </button>
     </div>
     <!-- 表格 -->
     <table id="table" class="table-bordered"   data-toolbar="#toolbar"></table>

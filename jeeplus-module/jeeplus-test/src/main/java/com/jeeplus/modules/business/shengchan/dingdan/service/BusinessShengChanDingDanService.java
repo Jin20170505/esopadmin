@@ -14,6 +14,7 @@ import com.jeeplus.modules.base.route.service.BaseRoteMainService;
 import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDan;
 import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDanMingXi;
 import com.jeeplus.modules.business.jihuadingdan.service.BusinessJiHuaGongDanService;
+import com.jeeplus.modules.business.shengchan.bom.mapper.BusinessShengChanBomMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,7 +65,8 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 		return page;
 	}
 
-
+	@Autowired
+	private BusinessShengChanBomMapper businessShengChanBomMapper;
 	@Transactional(readOnly = false)
 	public void save(BusinessShengChanDingDan businessShengChanDingDan) {
 		super.save(businessShengChanDingDan);
@@ -84,6 +86,7 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 				}
 			}else{
 				businessShengChanDingDanMingXiMapper.delete(businessShengChanDingDanMingXi);
+				businessShengChanBomMapper.deleteBySchid(businessShengChanDingDanMingXi.getId());
 			}
 		}
 	}
@@ -91,6 +94,12 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 	@Transactional(readOnly = false)
 	public void delete(BusinessShengChanDingDan businessShengChanDingDan) {
 		super.delete(businessShengChanDingDan);
+		List<String> ids = businessShengChanDingDanMingXiMapper.findIdsByPid(businessShengChanDingDan.getId());
+		if(ids!=null || ids.isEmpty()){
+			ids.forEach(id->{
+				businessShengChanBomMapper.deleteBySchid(id);
+			});
+		}
 		businessShengChanDingDanMingXiMapper.delete(new BusinessShengChanDingDanMingXi(businessShengChanDingDan));
 	}
 	@Transactional(readOnly = false)

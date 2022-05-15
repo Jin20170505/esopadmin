@@ -116,7 +116,7 @@
     $('#table').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
             $('#remove').prop('disabled', ! $('#table').bootstrapTable('getSelections').length);
-            $('#jihua').prop('disabled', $('#table').bootstrapTable('getSelections').length!=1);
+            $('#jihua,#print').prop('disabled', $('#table').bootstrapTable('getSelections').length!=1);
         });
 
     $("#search").click("click", function() {// 绑定查询按扭
@@ -137,7 +137,11 @@
             return row.id
         });
     }
-
+  // 打印备料单
+  function printbl(){
+  var rid = getIdSelections();
+  jp.windowOpen('${ctx}/business/shengchan/dingdan/businessShengChanDingDan/goToBeiLiaoPrint?rid='+rid,"备料单--打印",window.screen.height,window.screen.width);
+}
     // 生成计划工单
     function jihua(){
       var rid = getIdSelections();

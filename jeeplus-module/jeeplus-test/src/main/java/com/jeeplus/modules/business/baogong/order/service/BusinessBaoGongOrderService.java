@@ -5,6 +5,7 @@ package com.jeeplus.modules.business.baogong.order.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.jeeplus.modules.api.bean.baogong.BaoGongBean;
 import com.jeeplus.modules.api.bean.baogong.BaoGongItem;
@@ -175,12 +176,23 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 	public void completeBg(String hid){
 		businessBaoGongOrderMingXiMapper.completeBg(hid);
 	}
-
+	// 工单完成判断
 	public void complete(String bgid,Double gdnum){
-		double donenum = businessBaoGongRecordService.getDoneSumNum(bgid,null);
-		if(donenum>=gdnum){
-			mapper.completeBg(bgid);
-		}
+		// 工序是否存在未完成的
+		List<String> completeids = mapper.findCompleteStatusByBgid(bgid);
+		if(completeids==null && completeids.isEmpty()){
+			// 如果没有工序则查询下报工数量与工单数量
+			double donenum = businessBaoGongRecordService.getDoneSumNum(bgid,null);
+			if(donenum>=gdnum){
+				mapper.completeBg(bgid);
+			}
+		}else {
+			long n = completeids.stream().filter(s->"0".equals(s)).count();
+			if(n>0){
 
+			}else {
+				mapper.completeBg(bgid);
+			}
+		}
 	}
 }

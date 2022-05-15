@@ -86,11 +86,11 @@ layout("/include/_container.html", {title:"打印", parent:"报工单"}){
         var data = ${fn.toJson(order.businessBaoGongOrderMingXiList)};
         var htm = '';
         for (var i=0; i<data.length; i++){
-            htm =  `<tr>
-                        <td>`+data[0].no+`</td>
-                        <td>`+data[0].site+`</td>
-                        <td>`+data[0].opcode+`</td>
-                        <td>`+data[0].opname+`</td>
+            htm +=  `<tr>
+                        <td>`+data[i].no+`</td>
+                        <td>`+data[i].site+`</td>
+                        <td>`+data[i].opcode+`</td>
+                        <td>`+data[i].opname+`</td>
                         <td></td>
                     </tr>`;
         }
