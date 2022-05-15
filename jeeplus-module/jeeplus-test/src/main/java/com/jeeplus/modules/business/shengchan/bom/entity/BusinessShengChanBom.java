@@ -30,6 +30,7 @@ public class BusinessShengChanBom extends DataEntity<BusinessShengChanBom> {
 	private Double baseqtyn;		// 基本用量_分子
 	private Double baseqtyd;		// 基本用量_分母
 	private Double auxbaseqtyn;		// 辅助基本用量
+	private String isdaochong;	// 是否倒冲
 	
 	public BusinessShengChanBom() {
 		super();
@@ -173,5 +174,13 @@ public class BusinessShengChanBom extends DataEntity<BusinessShengChanBom> {
 	public void setAuxbaseqtyn(Double auxbaseqtyn) {
 		this.auxbaseqtyn = auxbaseqtyn;
 	}
-	
+
+	public String getIsdaochong() {
+		return isdaochong;
+	}
+
+	public BusinessShengChanBom setIsdaochong(String isdaochong) {
+		this.isdaochong = isdaochong;
+		return this;
+	}
 }

@@ -24,6 +24,7 @@
 		a.rate AS "rate",
 		a.baseqtyn AS "baseqtyn",
 		a.baseqtyd AS "baseqtyd",
+		a.isdaochong as "isdaochong",
 		a.auxbaseqtyn AS "auxbaseqtyn"
 	</sql>
 	
@@ -102,7 +103,7 @@
 			unitname,
 			rate,
 			baseqtyn,
-			baseqtyd,
+			baseqtyd,isdaochong,
 			auxbaseqtyn
 		) VALUES (
 			#{id},
@@ -125,7 +126,7 @@
 			#{unitname},
 			#{rate},
 			#{baseqtyn},
-			#{baseqtyd},
+			#{baseqtyd},#{isdaochong},
 			#{auxbaseqtyn}
 		)
 	</insert>
@@ -149,6 +150,7 @@
 			rate = #{rate},
 			baseqtyn = #{baseqtyn},
 			baseqtyd = #{baseqtyd},
+			isdaochong = #{isdaochong},
 			auxbaseqtyn = #{auxbaseqtyn}
 		WHERE id = #{id}
 	</update>

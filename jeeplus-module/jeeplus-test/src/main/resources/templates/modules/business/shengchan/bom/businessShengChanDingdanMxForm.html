@@ -125,7 +125,7 @@ layout("/include/_dialog.html"){
 				<thead>
 					<tr>
 						<th class="hide"></th>
-						<th>子件行号</th>
+						<th>行号</th>
 						<th>数量</th>
 						<th>已领数量</th>
 						<th>存货编码</th>
@@ -138,6 +138,7 @@ layout("/include/_dialog.html"){
 						<th>基本用量_分子</th>
 						<th>基本用量_分母</th>
 						<th>辅助基本用量</th>
+						<th width="80">是否倒冲</th>
 						<th>备注信息</th>
 						<th width="10">&nbsp;</th>
 					</tr>
@@ -213,6 +214,13 @@ layout("/include/_dialog.html"){
 					
 					<td>
 						<input id="businessShengChanBomList{{idx}}_auxbaseqtyn" name="businessShengChanBomList[{{idx}}].auxbaseqtyn" type="text" value="{{row.auxbaseqtyn}}"    class="form-control "/>
+					</td>
+
+					<td>
+					<select id="businessShengChanBomList{{idx}}_isdaochong" name="businessShengChanBomList[{{idx}}].isdaochong" data-value="{{row.isdaochong}}" class="form-control m-b">
+							<option value="0">否</option>
+							<option value="1">是</option>
+						</select>
 					</td>
 					<td>
 						<input id="businessShengChanBomList{{idx}}_remarks" name="businessShengChanBomList[{{idx}}].remarks" type="text" value="{{row.remarks}}"    class="form-control "/>
