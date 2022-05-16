@@ -10,6 +10,8 @@ import com.jeeplus.common.utils.DateUtils;
 import com.jeeplus.modules.business.baogong.order.entity.BusinessBaoGongOrder;
 import com.jeeplus.modules.business.baogong.order.entity.BusinessBaoGongOrderMingXi;
 import com.jeeplus.modules.business.baogong.order.service.BusinessBaoGongOrderService;
+import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDanBom;
+import com.jeeplus.modules.business.jihuadingdan.mapper.BusinessJiHuaGongDanBomMapper;
 import com.jeeplus.modules.business.shengchan.dingdan.mapper.BusinessShengChanDingDanMingXiMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,10 +35,13 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 
 	@Autowired
 	private BusinessJiHuaGongDanMingXiMapper businessJiHuaGongDanMingXiMapper;
-	
+	@Autowired
+	private BusinessJiHuaGongDanBomMapper businessJiHuaGongDanBomMapper;
+
 	public BusinessJiHuaGongDan get(String id) {
 		BusinessJiHuaGongDan businessJiHuaGongDan = super.get(id);
 		businessJiHuaGongDan.setBusinessJiHuaGongDanMingXiList(businessJiHuaGongDanMingXiMapper.findList(new BusinessJiHuaGongDanMingXi(businessJiHuaGongDan)));
+		businessJiHuaGongDan.setBusinessJiHuaGongDanBomList(businessJiHuaGongDanBomMapper.findList(new BusinessJiHuaGongDanBom(businessJiHuaGongDan)));
 		return businessJiHuaGongDan;
 	}
 	
@@ -73,14 +78,25 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 				businessJiHuaGongDanMingXiMapper.delete(businessJiHuaGongDanMingXi);
 			}
 		}
-	}
-
-	private boolean enabledelete(List<BusinessJiHuaGongDanMingXi> list){
-		long l = list.stream().filter(d->StringUtils.isNotEmpty(d.getId())).count();
-		if(l==0){
-			return true;
+		for (BusinessJiHuaGongDanBom businessJiHuaGongDanBom : businessJiHuaGongDan.getBusinessJiHuaGongDanBomList()){
+			if (businessJiHuaGongDanBom.getId() == null){
+				continue;
+			}
+			if (BusinessJiHuaGongDanMingXi.DEL_FLAG_NORMAL.equals(businessJiHuaGongDanBom.getDelFlag())){
+				if (StringUtils.isBlank(businessJiHuaGongDanBom.getId())){
+					businessJiHuaGongDanBom.setP(businessJiHuaGongDan);
+					businessJiHuaGongDanBom.preInsert();
+					businessJiHuaGongDanBomMapper.insert(businessJiHuaGongDanBom);
+				}else{
+					businessJiHuaGongDanBom.setP(businessJiHuaGongDan);
+					businessJiHuaGongDanBom.preUpdate();
+					businessJiHuaGongDanBomMapper.update(businessJiHuaGongDanBom);
+				}
+			}else{
+				businessJiHuaGongDanBomMapper.delete(businessJiHuaGongDanBom);
+			}
 		}
-		return false;
+
 	}
 
 
@@ -88,6 +104,7 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 	public void delete(BusinessJiHuaGongDan businessJiHuaGongDan) {
 		super.delete(businessJiHuaGongDan);
 		businessJiHuaGongDanMingXiMapper.delete(new BusinessJiHuaGongDanMingXi(businessJiHuaGongDan));
+		businessJiHuaGongDanBomMapper.delete(new BusinessJiHuaGongDanBom(businessJiHuaGongDan));
 	}
 
 	public Boolean hasScddLineid(String lineid){

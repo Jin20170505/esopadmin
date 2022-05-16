@@ -36,7 +36,17 @@ public class BusinessJiHuaGongDan extends DataEntity<BusinessJiHuaGongDan> {
 	private Office dept;		// 生产部门
 	private String status;		// 状态
 	private List<BusinessJiHuaGongDanMingXi> businessJiHuaGongDanMingXiList = Lists.newArrayList();		// 子表列表
-	
+	private List<BusinessJiHuaGongDanBom> businessJiHuaGongDanBomList  = Lists.newArrayList(); // 子件
+
+	public List<BusinessJiHuaGongDanBom> getBusinessJiHuaGongDanBomList() {
+		return businessJiHuaGongDanBomList;
+	}
+
+	public BusinessJiHuaGongDan setBusinessJiHuaGongDanBomList(List<BusinessJiHuaGongDanBom> businessJiHuaGongDanBomList) {
+		this.businessJiHuaGongDanBomList = businessJiHuaGongDanBomList;
+		return this;
+	}
+
 	public BusinessJiHuaGongDan() {
 		super();
 	}

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.business.jihuadingdan.mapper.BusinessJiHuaGongDanBomMapper">
+
+    <sql id="BusinessJiHuaGongDanBomColumns">
+        a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.pid AS "pid",
+		a.no AS "no",
+		a.num AS "num",
+		a.donenum AS "donenum",
+		a.cinvcode AS "cinvcode",
+		a.cinvname AS "cinvname",
+		a.cinvstd AS "cinvstd",
+		a.producttype AS "producttype",
+		a.unitcode AS "unitcode",
+		a.unitname AS "unitname",
+		a.rate AS "rate",
+		a.baseqtyn AS "baseqtyn",
+		a.baseqtyd AS "baseqtyd",
+		a.isdaochong as "isdaochong",
+		a.auxbaseqtyn AS "auxbaseqtyn"
+    </sql>
+
+    <sql id="BusinessJiHuaGongDanBomJoins">
+    </sql>
+
+
+    <select id="get" resultType="BusinessJiHuaGongDanBom" >
+        SELECT
+        <include refid="BusinessJiHuaGongDanBomColumns"/>
+        FROM business_jihua_gongdan_bom a
+        <include refid="BusinessJiHuaGongDanBomJoins"/>
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="findList" resultType="BusinessJiHuaGongDanBom" >
+        SELECT
+        <include refid="BusinessJiHuaGongDanBomColumns"/>
+        FROM business_jihua_gongdan_bom a
+        <include refid="BusinessJiHuaGongDanBomJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            ${dataScope}
+            <if test="p != null and p.id!=null and p.id != ''">
+                AND a.pid = #{p.id}
+            </if>
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.no ASC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findAllList" resultType="BusinessJiHuaGongDanBom" >
+        SELECT
+        <include refid="BusinessJiHuaGongDanBomColumns"/>
+        FROM business_jihua_gongdan_bom a
+        <include refid="BusinessJiHuaGongDanBomJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            ${dataScope}
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.no ASC
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insert">
+        INSERT INTO business_jihua_gongdan_bom(
+            id,
+            create_by,
+            create_date,
+            update_by,
+            update_date,
+            remarks,
+            del_flag,
+            pid,
+            no,
+            num,
+            donenum,
+            cinvcode,
+            cinvname,
+            cinvstd,
+            producttype,
+            unitcode,
+            unitname,
+            rate,
+            baseqtyn,
+            baseqtyd,isdaochong,
+            auxbaseqtyn
+        ) VALUES (
+                     #{id},
+                     #{createBy.id},
+                     #{createDate},
+                     #{updateBy.id},
+                     #{updateDate},
+                     #{remarks},
+                     #{delFlag},
+                     #{p.id},
+                     #{no},
+                     #{num},
+                     #{donenum},
+                     #{cinvcode},
+                     #{cinvname},
+                     #{cinvstd},
+                     #{producttype},
+                     #{unitcode},
+                     #{unitname},
+                     #{rate},
+                     #{baseqtyn},
+                     #{baseqtyd},#{isdaochong},
+                     #{auxbaseqtyn}
+                 )
+    </insert>
+
+    <update id="update">
+        UPDATE business_jihua_gongdan_bom SET
+                                          update_by = #{updateBy.id},
+                                          update_date = #{updateDate},
+                                          remarks = #{remarks},
+                                          no = #{no},
+                                          num = #{num},
+                                          donenum = #{donenum},
+                                          cinvcode = #{cinvcode},
+                                          cinvname = #{cinvname},
+                                          cinvstd = #{cinvstd},
+                                          producttype = #{producttype},
+                                          unitcode = #{unitcode},
+                                          unitname = #{unitname},
+                                          rate = #{rate},
+                                          baseqtyn = #{baseqtyn},
+                                          baseqtyd = #{baseqtyd},
+                                          isdaochong = #{isdaochong},
+                                          auxbaseqtyn = #{auxbaseqtyn}
+        WHERE id = #{id}
+    </update>
+
+
+    <!--物理删除-->
+    <update id="delete">
+        DELETE FROM business_jihua_gongdan_bom
+        <choose>
+            <when test="id !=null and id != ''">
+                WHERE id = #{id}
+            </when>
+            <otherwise>
+                WHERE pid = #{pid}
+            </otherwise>
+        </choose>
+    </update>
+
+    <!--逻辑删除-->
+    <update id="deleteByLogic">
+        UPDATE business_jihua_gongdan_bom SET
+        del_flag = #{DEL_FLAG_DELETE}
+        <choose>
+            <when test="id !=null and id != ''">
+                WHERE id = #{id}
+            </when>
+            <otherwise>
+                WHERE pid = #{pid}
+            </otherwise>
+        </choose>
+    </update>
+
+
+    <!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+    <select id="findUniqueByProperty" resultType="BusinessJiHuaGongDanBom" statementType="STATEMENT">
+        select * FROM business_jihua_gongdan_bom  where ${propertyName} = '${value}'
+    </select>
+
+</mapper>
