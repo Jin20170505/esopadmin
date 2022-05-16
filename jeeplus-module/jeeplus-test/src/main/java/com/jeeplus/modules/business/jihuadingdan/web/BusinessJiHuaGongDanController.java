@@ -49,10 +49,10 @@ public class BusinessJiHuaGongDanController extends BaseController {
 	private BusinessJiHuaGongDanService businessJiHuaGongDanService;
 	
 	@ModelAttribute
-	public BusinessJiHuaGongDan get(@RequestParam(required=false) String id) {
+	public BusinessJiHuaGongDan get(@RequestParam(required=false) String mid) {
 		BusinessJiHuaGongDan entity = null;
-		if (StringUtils.isNotBlank(id)){
-			entity = businessJiHuaGongDanService.get(id);
+		if (StringUtils.isNotBlank(mid)){
+			entity = businessJiHuaGongDanService.get(mid);
 		}
 		if (entity == null){
 			entity = new BusinessJiHuaGongDan();
@@ -171,6 +171,9 @@ public class BusinessJiHuaGongDanController extends BaseController {
 	@RequestMapping(value = "form/{mode}")
 	public String form(@PathVariable String mode, BusinessJiHuaGongDan businessJiHuaGongDan, Model model) {
 		model.addAttribute("mode", mode);
+		if(StringUtils.isNotEmpty(businessJiHuaGongDan.getId())){
+			businessJiHuaGongDan = businessJiHuaGongDanService.get(businessJiHuaGongDan.getId());
+		}
 		model.addAttribute("businessJiHuaGongDan", businessJiHuaGongDan);
 		return "modules/business/jihuadingdan/businessJiHuaGongDanForm";
 	}
@@ -191,6 +194,9 @@ public class BusinessJiHuaGongDanController extends BaseController {
 			j.setSuccess(false);
 			j.setMsg(errMsg);
 			return j;
+		}
+		if(StringUtils.isNotEmpty(businessJiHuaGongDan.getId())){
+			businessJiHuaGongDanService.deleteMx(businessJiHuaGongDan.getId());
 		}
 		//新增或编辑表单保存
 		businessJiHuaGongDanService.save(businessJiHuaGongDan);//保存

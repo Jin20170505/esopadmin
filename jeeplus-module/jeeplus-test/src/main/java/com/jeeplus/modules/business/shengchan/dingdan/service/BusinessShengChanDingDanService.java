@@ -8,13 +8,20 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 import com.jeeplus.common.utils.DateUtils;
+import com.jeeplus.modules.api.bean.beiliao.BeiLiaoBean;
+import com.jeeplus.modules.api.bean.beiliao.BeiLiaoItem;
 import com.jeeplus.modules.base.route.entity.BaseRoteMain;
 import com.jeeplus.modules.base.route.entity.BaseRoute;
 import com.jeeplus.modules.base.route.service.BaseRoteMainService;
 import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDan;
 import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDanMingXi;
 import com.jeeplus.modules.business.jihuadingdan.service.BusinessJiHuaGongDanService;
+import com.jeeplus.modules.business.shengchan.beiliao.entity.BusinessShengChanBeiLiao;
+import com.jeeplus.modules.business.shengchan.beiliao.entity.BusinessShengChanBeiLiaoMx;
+import com.jeeplus.modules.business.shengchan.beiliao.service.BusinessShengChanBeiLiaoService;
+import com.jeeplus.modules.business.shengchan.bom.entity.BusinessShengChanBom;
 import com.jeeplus.modules.business.shengchan.bom.mapper.BusinessShengChanBomMapper;
+import com.jeeplus.modules.business.shengchan.bom.service.BusinessShengChanDingdanMxService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,14 +48,63 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 	private BusinessJiHuaGongDanService businessJiHuaGongDanService;
 	@Autowired
 	private BaseRoteMainService baseRoteMainService;
+	@Autowired
+	private BusinessShengChanDingdanMxService businessShengChanDingdanMxService;
+
 	public BusinessShengChanDingDan get(String id) {
 		BusinessShengChanDingDan businessShengChanDingDan = super.get(id);
-		businessShengChanDingDan.setBusinessShengChanDingDanMingXiList(businessShengChanDingDanMingXiMapper.findList(new BusinessShengChanDingDanMingXi(businessShengChanDingDan)));
+		businessShengChanDingDan.setBusinessShengChanDingDanMingXiList(businessShengChanDingDanMingXiMapper
+				.findList(new BusinessShengChanDingDanMingXi(businessShengChanDingDan)));
 		return businessShengChanDingDan;
 	}
 
 	public BusinessShengChanDingDanMingXi getMxId(String xmid){
 		return businessShengChanDingDanMingXiMapper.get(xmid);
+	}
+
+
+	public BeiLiaoBean getBeiLiaoInfo(String schid){
+		BusinessShengChanDingDanMingXi mx = businessShengChanDingDanMingXiMapper.get(schid);
+		BeiLiaoBean bean = new BeiLiaoBean();
+		bean.setCinvcode(mx.getCinv().getCode());
+		bean.setSchid(schid).setUnit(mx.getUnit());
+		bean.setCinvname(mx.getCinvname()).setCinvstd(mx.getStd()).setRemarks(mx.getRemarks()).
+				setNum(mx.getNum()).setSccode(mx.getP().getCode()).setScline(mx.getNo()+"");
+		List<BusinessShengChanBom> boms = businessShengChanDingdanMxService.findBomList(schid);
+		if(boms!=null){
+			boms.forEach(d->{
+				BeiLiaoItem item = new BeiLiaoItem();
+				item.setCinvcode(d.getCinvcode()).setCinvname(d.getCinvname()).setCinvstd(d.getCinvstd()).setNo(d.getNo())
+						.setNum(d.getNum()).setUnit(d.getUnitname());
+				bean.getBeiLiaoItems().add(item);
+			});
+		}
+		return bean;
+	}
+
+	@Autowired
+	private BusinessShengChanBeiLiaoService businessShengChanBeiLiaoService;
+	@Transactional(readOnly = false)
+	public void sureBeiLiao(String schid){
+		BusinessShengChanDingDanMingXi mx = businessShengChanDingDanMingXiMapper.get(schid);
+		BusinessShengChanBeiLiao beiLiao = new BusinessShengChanBeiLiao();
+		beiLiao.setCinvstd(mx.getStd());beiLiao.setCinvcode(mx.getCinv().getCode());
+		beiLiao.setCinvname(mx.getCinvname());beiLiao.setDept(mx.getDept());
+		beiLiao.setNum(mx.getNum());beiLiao.setSchid(schid);beiLiao.setSccode(mx.getP().getCode());
+		beiLiao.setScid(mx.getP().getId());beiLiao.setScline(mx.getNo()+"");
+		beiLiao.setUnit(mx.getUnit());
+		List<BusinessShengChanBom> boms = businessShengChanDingdanMxService.findBomList(schid);
+		if(boms!=null){
+			boms.forEach(d->{
+				BusinessShengChanBeiLiaoMx b=new BusinessShengChanBeiLiaoMx();
+				b.setId("");b.setDelFlag("0");
+				b.setCinvcode(d.getCinvcode());b.setCinvname(d.getCinvname());
+				b.setCinvstd(d.getCinvstd());b.setNo(Integer.valueOf(d.getNo()));
+				b.setNum(d.getNum());b.setUnit(d.getUnitname());
+				beiLiao.getBusinessShengChanBeiLiaoMxList().add(b);
+			});
+		}
+		businessShengChanBeiLiaoService.save(beiLiao);
 	}
 
 	public List<BusinessShengChanDingDan> findList(BusinessShengChanDingDan businessShengChanDingDan) {
@@ -59,7 +115,8 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 		return super.findPage(page, businessShengChanDingDan);
 	}
 
-	public Page<BusinessShengChanDingDanMingXi> findPage(Page<BusinessShengChanDingDanMingXi> page,BusinessShengChanDingDanMingXi businessShengChanDingDanMingXi){
+	public Page<BusinessShengChanDingDanMingXi> findPage(Page<BusinessShengChanDingDanMingXi> page,
+														 BusinessShengChanDingDanMingXi businessShengChanDingDanMingXi){
 		businessShengChanDingDanMingXi.setPage(page);
 		page.setList(businessShengChanDingDanMingXiMapper.findShengChanDingDanMingXi(businessShengChanDingDanMingXi));
 		return page;
@@ -70,7 +127,8 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 	@Transactional(readOnly = false)
 	public void save(BusinessShengChanDingDan businessShengChanDingDan) {
 		super.save(businessShengChanDingDan);
-		for (BusinessShengChanDingDanMingXi businessShengChanDingDanMingXi : businessShengChanDingDan.getBusinessShengChanDingDanMingXiList()){
+		for (BusinessShengChanDingDanMingXi businessShengChanDingDanMingXi :
+				businessShengChanDingDan.getBusinessShengChanDingDanMingXiList()){
 			if (businessShengChanDingDanMingXi.getId() == null){
 				continue;
 			}

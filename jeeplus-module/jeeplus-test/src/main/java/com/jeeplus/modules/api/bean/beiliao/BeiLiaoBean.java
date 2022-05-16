@@ -1,11 +1,12 @@
-package com.jeeplus.modules.api.bean.chuku;
+package com.jeeplus.modules.api.bean.beiliao;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * 领料出库 材料出库
+ * 备料
  */
-public class LingLiaoBean {
-    private String bgid;
-    private String bgcode;
+public class BeiLiaoBean {
     private String schid;
     private String sccode;
     private String scline;
@@ -13,24 +14,15 @@ public class LingLiaoBean {
     private String cinvname;
     private String cinvstd;
     private Double num;
+    private String unit;
     private String remarks;
-    private Double gdnum;
-
-    public String getBgid() {
-        return bgid;
+    private List<BeiLiaoItem> beiLiaoItems=new ArrayList<>();
+    public String getUnit() {
+        return unit;
     }
 
-    public LingLiaoBean setBgid(String bgid) {
-        this.bgid = bgid;
-        return this;
-    }
-
-    public String getBgcode() {
-        return bgcode;
-    }
-
-    public LingLiaoBean setBgcode(String bgcode) {
-        this.bgcode = bgcode;
+    public BeiLiaoBean setUnit(String unit) {
+        this.unit = unit;
         return this;
     }
 
@@ -38,7 +30,7 @@ public class LingLiaoBean {
         return schid;
     }
 
-    public LingLiaoBean setSchid(String schid) {
+    public BeiLiaoBean setSchid(String schid) {
         this.schid = schid;
         return this;
     }
@@ -47,7 +39,7 @@ public class LingLiaoBean {
         return sccode;
     }
 
-    public LingLiaoBean setSccode(String sccode) {
+    public BeiLiaoBean setSccode(String sccode) {
         this.sccode = sccode;
         return this;
     }
@@ -56,7 +48,7 @@ public class LingLiaoBean {
         return scline;
     }
 
-    public LingLiaoBean setScline(String scline) {
+    public BeiLiaoBean setScline(String scline) {
         this.scline = scline;
         return this;
     }
@@ -65,7 +57,7 @@ public class LingLiaoBean {
         return cinvcode;
     }
 
-    public LingLiaoBean setCinvcode(String cinvcode) {
+    public BeiLiaoBean setCinvcode(String cinvcode) {
         this.cinvcode = cinvcode;
         return this;
     }
@@ -74,7 +66,7 @@ public class LingLiaoBean {
         return cinvname;
     }
 
-    public LingLiaoBean setCinvname(String cinvname) {
+    public BeiLiaoBean setCinvname(String cinvname) {
         this.cinvname = cinvname;
         return this;
     }
@@ -83,7 +75,7 @@ public class LingLiaoBean {
         return cinvstd;
     }
 
-    public LingLiaoBean setCinvstd(String cinvstd) {
+    public BeiLiaoBean setCinvstd(String cinvstd) {
         this.cinvstd = cinvstd;
         return this;
     }
@@ -92,7 +84,7 @@ public class LingLiaoBean {
         return num;
     }
 
-    public LingLiaoBean setNum(Double num) {
+    public BeiLiaoBean setNum(Double num) {
         this.num = num;
         return this;
     }
@@ -101,17 +93,17 @@ public class LingLiaoBean {
         return remarks;
     }
 
-    public LingLiaoBean setRemarks(String remarks) {
+    public BeiLiaoBean setRemarks(String remarks) {
         this.remarks = remarks;
         return this;
     }
 
-    public Double getGdnum() {
-        return gdnum;
+    public List<BeiLiaoItem> getBeiLiaoItems() {
+        return beiLiaoItems;
     }
 
-    public LingLiaoBean setGdnum(Double gdnum) {
-        this.gdnum = gdnum;
+    public BeiLiaoBean setBeiLiaoItems(List<BeiLiaoItem> beiLiaoItems) {
+        this.beiLiaoItems = beiLiaoItems;
         return this;
     }
 }

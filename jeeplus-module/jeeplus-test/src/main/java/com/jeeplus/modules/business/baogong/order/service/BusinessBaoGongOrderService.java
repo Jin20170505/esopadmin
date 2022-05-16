@@ -10,6 +10,7 @@ import java.util.Optional;
 import com.jeeplus.modules.api.bean.baogong.BaoGongBean;
 import com.jeeplus.modules.api.bean.baogong.BaoGongItem;
 import com.jeeplus.modules.api.bean.ruku.ProductRuKuBean;
+import com.jeeplus.modules.api.bean.zhijian.ZhiJianBean;
 import com.jeeplus.modules.business.baogong.record.service.BusinessBaoGongRecordService;
 import com.jeeplus.modules.business.ruku.product.mapper.BusinessRuKuProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,6 +123,18 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 
 	@Autowired
 	private BusinessRuKuProductMapper businessRuKuProductMapper;
+
+	public ZhiJianBean getZhiJianInfo(String bgcode){
+		BusinessBaoGongOrder order = mapper.getByCode(bgcode);
+		if(order==null){
+			throw new RuntimeException("没有找到对应的报工单.");
+		}
+		ZhiJianBean bean = new ZhiJianBean();
+		bean.setBatchno(order.getBatchno()).setBgcode(order.getBgcode()).setUnit(order.getUnit()).setBgid(order.getId())
+				.setCinvcode(order.getCinvcode()).setCinvname(order.getCinvname()).setCinvstd(order.getCinvstd()).setSccode(order.getOrdercode())
+				.setScline(order.getOrderline());
+		return bean;
+	}
 
 	public ProductRuKuBean getRuKuInfo(String bgcode){
 		BusinessBaoGongOrder order = mapper.getByCode(bgcode);

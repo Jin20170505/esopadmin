@@ -47,12 +47,13 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 	public Page<BusinessJiHuaGongDan> findPage(Page<BusinessJiHuaGongDan> page, BusinessJiHuaGongDan businessJiHuaGongDan) {
 		return super.findPage(page, businessJiHuaGongDan);
 	}
-	
+	@Transactional(readOnly = false)
+	public void deleteMx(String pid){
+		businessJiHuaGongDanMingXiMapper.delete(new BusinessJiHuaGongDanMingXi(new BusinessJiHuaGongDan(pid)));
+	}
+
 	@Transactional(readOnly = false)
 	public void save(BusinessJiHuaGongDan businessJiHuaGongDan) {
-		if(StringUtils.isNotEmpty(businessJiHuaGongDan.getId())){
-			businessJiHuaGongDanMingXiMapper.delete(new BusinessJiHuaGongDanMingXi(businessJiHuaGongDan));
-		}
 		super.save(businessJiHuaGongDan);
 		for (BusinessJiHuaGongDanMingXi businessJiHuaGongDanMingXi : businessJiHuaGongDan.getBusinessJiHuaGongDanMingXiList()){
 			if (businessJiHuaGongDanMingXi.getId() == null){
@@ -73,7 +74,16 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 			}
 		}
 	}
-	
+
+	private boolean enabledelete(List<BusinessJiHuaGongDanMingXi> list){
+		long l = list.stream().filter(d->StringUtils.isNotEmpty(d.getId())).count();
+		if(l==0){
+			return true;
+		}
+		return false;
+	}
+
+
 	@Transactional(readOnly = false)
 	public void delete(BusinessJiHuaGongDan businessJiHuaGongDan) {
 		super.delete(businessJiHuaGongDan);
