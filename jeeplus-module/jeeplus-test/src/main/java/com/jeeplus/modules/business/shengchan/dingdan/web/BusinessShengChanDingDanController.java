@@ -3,6 +3,7 @@
  */
 package com.jeeplus.modules.business.shengchan.dingdan.web;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -116,11 +117,37 @@ public class BusinessShengChanDingDanController extends BaseController {
 		return "modules/business/shengchan/dingdan/businessShengChanDingDanForm";
 	}
 	@ResponseBody
-	@RequestMapping("doPlan")
-	public AjaxJson doPlan(String rid,int num){
+	@RequestMapping("chaidan")
+	public AjaxJson chaidan(String rid,int num){
 		AjaxJson json = new AjaxJson();
 		try {
-			businessShengChanDingDanService.doPlan(rid,num);
+			businessShengChanDingDanService.chaidan(rid,num);
+			json.setMsg("生成成功");
+			json.setSuccess(true);
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setSuccess(false);
+			json.setMsg("生成失败,原因："+e.getMessage());
+		}
+		return json;
+	}
+	@ResponseBody
+	@RequestMapping("doPlan")
+	public AjaxJson doPlan(String rids){
+		AjaxJson json = new AjaxJson();
+		StringBuffer sb  = new StringBuffer();
+		try {
+			Arrays.asList(rids.split(",")).forEach(rid->{
+				String rs =businessShengChanDingDanService.doPlan(rid);
+				if(rs.length()>1){
+					sb.append(rs).append("\n");
+				}
+			});
+			if(sb.length()>1){
+				json.setMsg("生成失败的有："+sb.toString());
+				json.setSuccess(false);
+				return json;
+			}
 			json.setMsg("生成成功");
 			json.setSuccess(true);
 		}catch (Exception e){

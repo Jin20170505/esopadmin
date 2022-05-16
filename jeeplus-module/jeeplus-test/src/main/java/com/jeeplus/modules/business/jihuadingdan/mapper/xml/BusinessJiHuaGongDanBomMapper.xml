@@ -89,7 +89,7 @@
             update_date,
             remarks,
             del_flag,
-            pid,
+            pid,scyid,
             no,
             num,
             donenum,
@@ -111,7 +111,7 @@
                      #{updateDate},
                      #{remarks},
                      #{delFlag},
-                     #{p.id},
+                     #{p.id},#{scyid},
                      #{no},
                      #{num},
                      #{donenum},
@@ -159,7 +159,7 @@
                 WHERE id = #{id}
             </when>
             <otherwise>
-                WHERE pid = #{pid}
+                WHERE pid = #{p.id}
             </otherwise>
         </choose>
     </update>
@@ -173,7 +173,7 @@
                 WHERE id = #{id}
             </when>
             <otherwise>
-                WHERE pid = #{pid}
+                WHERE pid = #{p.id}
             </otherwise>
         </choose>
     </update>

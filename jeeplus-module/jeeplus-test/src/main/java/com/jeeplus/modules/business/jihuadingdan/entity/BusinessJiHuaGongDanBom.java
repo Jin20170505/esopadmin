@@ -19,6 +19,7 @@ public class BusinessJiHuaGongDanBom extends DataEntity<BusinessJiHuaGongDanBom>
 
 	private static final long serialVersionUID = 1L;
 	private BusinessJiHuaGongDan p;		// 计划工单 父类
+	private String scyid; // 生产子件ID
 	private Integer no;		// 子件行号
 	private Double num;		// 数量
 	private Double donenum;		// 已领数量
@@ -56,6 +57,15 @@ public class BusinessJiHuaGongDanBom extends DataEntity<BusinessJiHuaGongDanBom>
 
 	public static long getSerialVersionUID() {
 		return serialVersionUID;
+	}
+
+	public String getScyid() {
+		return scyid;
+	}
+
+	public BusinessJiHuaGongDanBom setScyid(String scyid) {
+		this.scyid = scyid;
+		return this;
 	}
 
 	public Integer getNo() {

@@ -115,8 +115,8 @@
 
     $('#table').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
-            $('#remove').prop('disabled', ! $('#table').bootstrapTable('getSelections').length);
-            $('#jihua,#print').prop('disabled', $('#table').bootstrapTable('getSelections').length!=1);
+            $('#remove,#jihua').prop('disabled', ! $('#table').bootstrapTable('getSelections').length);
+            $('#chaidan,#print').prop('disabled', $('#table').bootstrapTable('getSelections').length!=1);
         });
 
     $("#search").click("click", function() {// 绑定查询按扭
@@ -143,7 +143,24 @@
   jp.windowOpen('${ctx}/business/shengchan/dingdan/businessShengChanDingDan/goToBeiLiaoPrint?rid='+rid,"备料单--打印",window.screen.height,window.screen.width);
 }
     // 生成计划工单
-    function jihua(){
+  function jihua(){
+    var rid = getIdSelections();
+  jp.confirm('确认要生产计划单吗？', function(){
+  var index =jp.loading();
+  jp.post('${ctx}/business/shengchan/dingdan/businessShengChanDingDan/doPlan',{'rids':rid+""},function (rs){
+    if(rs.success){
+    jp.toastr_success(rs.msg);
+    refresh();
+  }else{
+    jp.toastr_error(rs.msg);
+  }
+    jp.close(index);
+  });
+})
+
+}
+  // 拆单
+    function chaidan(){
       var rid = getIdSelections();
       top.layer.open({
         type: 1,
@@ -159,7 +176,7 @@
             jp.warning("请输入数量");
             return false;
           }
-          doPlan(rid,num);
+          doChaidan(rid,num);
           top.layer.close(index);
         },
         cancel: function(index){
@@ -167,9 +184,9 @@
         }
       });
     }
-  function doPlan(rid,num){
+  function doChaidan(rid,num){
     var index  =  jp.loading('生成中...');
-    jp.get('${ctx}/business/shengchan/dingdan/businessShengChanDingDan/doPlan?rid='+rid+'&num='+num,function (rs){
+    jp.get('${ctx}/business/shengchan/dingdan/businessShengChanDingDan/chaidan?rid='+rid+'&num='+num,function (rs){
         if(rs.success){
           jp.toastr_success(rs.msg);
           refresh();
