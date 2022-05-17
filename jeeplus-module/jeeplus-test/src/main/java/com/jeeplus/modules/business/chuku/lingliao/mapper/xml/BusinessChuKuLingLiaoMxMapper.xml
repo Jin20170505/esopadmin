@@ -10,28 +10,19 @@
 		a.update_date AS "updateDate",
 		a.del_flag AS "delFlag",
 		a.pid AS "p.id",
-		a.sclinecode AS "sclinecode",
+		a.no AS "no",
 		a.cinvcode AS "cinvcode",
 		a.cinvname AS "cinvname",
+		a.cinvstd as "cinvstd",
 		a.gdnum AS "gdnum",
 		a.cknum AS "cknum",
+		a.unit AS "unit",
 		a.huowei AS "huowei.id",
 		a.xcnum AS "xcnum",
 		a.remarks AS "remarks",
-		a.schid AS "schid",
+		a.jhbomid AS "jhbomid",
+		a.scbomid AS "scbomid",
 		a.sych AS "sych",
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
 		huowei.name AS "huowei.name"
 	</sql>
 	
@@ -67,7 +58,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.create_date ASC
+				ORDER BY a.no ASC
 			</otherwise>
 		</choose>
 	</select>
@@ -100,15 +91,16 @@
 			update_date,
 			del_flag,
 			pid,
-			sclinecode,
+			no,
 			cinvcode,
 			cinvname,
+			cinvstd,
 			gdnum,
 			cknum,
 			huowei,
 			xcnum,
-			remarks,
-			schid,
+			remarks,unit,jhbomid,
+			scbomid,
 			sych
 		) VALUES (
 			#{id},
@@ -118,15 +110,16 @@
 			#{updateDate},
 			#{delFlag},
 			#{p.id},
-			#{sclinecode},
+			#{no},
 			#{cinvcode},
 			#{cinvname},
+			#{cinvstd},
 			#{gdnum},
 			#{cknum},
 			#{huowei.id},
 			#{xcnum},
-			#{remarks},
-			#{schid},
+			#{remarks},#{unit},#{jhbomid},
+			#{scbomid},
 			#{sych}
 		)
 	</insert>
@@ -136,7 +129,7 @@
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
 			pid = #{p.id},
-			sclinecode = #{sclinecode},
+			no = #{no},
 			cinvcode = #{cinvcode},
 			cinvname = #{cinvname},
 			gdnum = #{gdnum},
@@ -144,7 +137,7 @@
 			huowei = #{huowei.id},
 			xcnum = #{xcnum},
 			remarks = #{remarks},
-			schid = #{schid},
+			scbomid = #{scbomid},
 			sych = #{sych}
 		WHERE id = #{id}
 	</update>

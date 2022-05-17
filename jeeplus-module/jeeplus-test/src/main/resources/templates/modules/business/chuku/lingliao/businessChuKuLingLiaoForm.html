@@ -111,10 +111,20 @@ layout("/include/_dialog.html"){
 				</td>
 				</tr>
 				<tr>
-					<td class="width-15 active"><label class="pull-right">报工ID：</label></td>
+					<td class="width-15 active"><label class="pull-right">报工单号：</label></td>
 					<td class="width-35">
-						<input name="bgid" value="${businessChuKuLingLiao.bgid!}"    class="form-control "/>
-				</td>
+						<input name="bgcode" value="${businessChuKuLingLiao.bgcode!}"    class="form-control "/>
+					</td>
+					<td class="width-15 active"><label class="pull-right">计划单号：</label></td>
+					<td class="width-35">
+						<input name="plancode" value="${businessChuKuLingLiao.plancode!}"    class="form-control "/>
+					</td>
+				</tr>
+				<tr>
+					<td class="width-15 active"><label class="pull-right">生产行号：</label></td>
+					<td class="width-35">
+						<input name="sclinecode" value="${businessChuKuLingLiao.sclinecode!}"    class="form-control "/>
+					</td>
 					<td class="width-15 active"><label class="pull-right">备注信息：</label></td>
 					<td class="width-35">
 						<textarea name="remarks" rows="4"    class="form-control ">${businessChuKuLingLiao.remarks!}</textarea>
@@ -138,13 +148,14 @@ layout("/include/_dialog.html"){
 				<thead>
 					<tr>
 						<th class="hide"></th>
-						<th><font color="red">*</font>生产行号</th>
+						<th><font color="red">*</font>行号</th>
 						<th><font color="red">*</font>存货编码</th>
 						<th><font color="red">*</font>存货名称</th>
 						<th><font color="red">*</font>工单数量</th>
 						<th><font color="red">*</font>出库数量</th>
 						<th><font color="red">*</font>货位</th>
 						<th><font color="red">*</font>现存量</th>
+						<th><font color="red">*</font>单位</th>
 						<th>备注信息</th>
 						<th width="10">&nbsp;</th>
 					</tr>
@@ -160,7 +171,7 @@ layout("/include/_dialog.html"){
 					</td>
 					
 					<td>
-						<input id="businessChuKuLingLiaoMxList{{idx}}_sclinecode" name="businessChuKuLingLiaoMxList[{{idx}}].sclinecode" type="text" value="{{row.sclinecode}}"    class="form-control required"/>
+						<input id="businessChuKuLingLiaoMxList{{idx}}_no" name="businessChuKuLingLiaoMxList[{{idx}}].no" type="text" value="{{row.no}}"    class="form-control required"/>
 					</td>
 					
 					
@@ -192,6 +203,10 @@ layout("/include/_dialog.html"){
 					
 					<td>
 						<input id="businessChuKuLingLiaoMxList{{idx}}_xcnum" name="businessChuKuLingLiaoMxList[{{idx}}].xcnum" type="text" value="{{row.xcnum}}"    class="form-control required"/>
+					</td>
+
+					<td>
+						<input id="businessChuKuLingLiaoMxList{{idx}}_unit" name="businessChuKuLingLiaoMxList[{{idx}}].unit" type="text" value="{{row.unit}}"    class="form-control required"/>
 					</td>
 					
 					

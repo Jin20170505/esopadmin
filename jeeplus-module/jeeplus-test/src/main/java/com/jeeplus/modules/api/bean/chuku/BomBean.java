@@ -3,9 +3,22 @@ package com.jeeplus.modules.api.bean.chuku;
 public class BomBean {
     private String bomid;
     private String remarks;
-    private Double gdnum;
-    private String cinvcode;
-    private String cinvname;
+    private Double num;
+    private Integer no; // 序号
+    private String cinvcode; // 存货编码
+    private String cinvname; // 存货名称
+    private String cinvstd;// 规格型号
+    private String scyid; // 生产bom子件ID
+    private String unit;
+
+    public Integer getNo() {
+        return no;
+    }
+
+    public BomBean setNo(Integer no) {
+        this.no = no;
+        return this;
+    }
 
     public String getBomid() {
         return bomid;
@@ -25,15 +38,6 @@ public class BomBean {
         return this;
     }
 
-    public Double getGdnum() {
-        return gdnum;
-    }
-
-    public BomBean setGdnum(Double gdnum) {
-        this.gdnum = gdnum;
-        return this;
-    }
-
     public String getCinvcode() {
         return cinvcode;
     }
@@ -49,6 +53,42 @@ public class BomBean {
 
     public BomBean setCinvname(String cinvname) {
         this.cinvname = cinvname;
+        return this;
+    }
+
+    public String getCinvstd() {
+        return cinvstd;
+    }
+
+    public BomBean setCinvstd(String cinvstd) {
+        this.cinvstd = cinvstd;
+        return this;
+    }
+
+    public String getScyid() {
+        return scyid;
+    }
+
+    public BomBean setScyid(String scyid) {
+        this.scyid = scyid;
+        return this;
+    }
+
+    public Double getNum() {
+        return num;
+    }
+
+    public BomBean setNum(Double num) {
+        this.num = num;
+        return this;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public BomBean setUnit(String unit) {
+        this.unit = unit;
         return this;
     }
 }

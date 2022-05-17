@@ -9,9 +9,15 @@ import java.util.Optional;
 
 import com.jeeplus.modules.api.bean.baogong.BaoGongBean;
 import com.jeeplus.modules.api.bean.baogong.BaoGongItem;
+import com.jeeplus.modules.api.bean.chuku.BomBean;
+import com.jeeplus.modules.api.bean.chuku.LingLiaoBean;
 import com.jeeplus.modules.api.bean.ruku.ProductRuKuBean;
 import com.jeeplus.modules.api.bean.zhijian.ZhiJianBean;
 import com.jeeplus.modules.business.baogong.record.service.BusinessBaoGongRecordService;
+import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDan;
+import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDanBom;
+import com.jeeplus.modules.business.jihuadingdan.mapper.BusinessJiHuaGongDanBomMapper;
+import com.jeeplus.modules.business.jihuadingdan.mapper.BusinessJiHuaGongDanMapper;
 import com.jeeplus.modules.business.ruku.product.mapper.BusinessRuKuProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,6 +49,37 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		businessBaoGongOrder.setBusinessBaoGongOrderMingXiList(businessBaoGongOrderMingXiMapper.findList(new BusinessBaoGongOrderMingXi(businessBaoGongOrder)));
 		return businessBaoGongOrder;
 	}
+
+	@Autowired
+	private BusinessJiHuaGongDanMapper businessJiHuaGongDanMapper;
+	@Autowired
+	private BusinessJiHuaGongDanBomMapper businessJiHuaGongDanBomMapper;
+	// 领料单
+	public LingLiaoBean getLingLiaoInfo(String bgcode){
+		BusinessBaoGongOrder order = mapper.getByCode(bgcode);
+		if(order==null){
+			throw new RuntimeException("没有找到对应的报工单.");
+		}
+		LingLiaoBean bean = new LingLiaoBean();
+		bean.setPlancode(order.getPlancode()).setPlanid(order.getPlanid()).setBgid(order.getId())
+				.setBgcode(bgcode);
+		List<BusinessJiHuaGongDanBom> boms = businessJiHuaGongDanBomMapper.findList(new BusinessJiHuaGongDanBom(new BusinessJiHuaGongDan(bean.getPlanid())));
+		if(boms==null || boms.isEmpty()){
+			throw new RuntimeException("无子件信息，请在计划工单中维护子件信息.");
+		}
+		BusinessJiHuaGongDan jihua = businessJiHuaGongDanMapper.get(bean.getPlanid());
+		bean.setCinvcode(jihua.getCinvcode()).setCinvname(jihua.getCinvname()).setCinvstd(jihua.getCinvstd())
+				.setNum(jihua.getGdnum()).setUnit(jihua.getUnit()).setRemarks(jihua.getRemarks());
+		bean.setSccode(order.getOrdercode()).setScline(order.getOrderline());
+		boms.forEach(d->{
+			BomBean b = new BomBean();
+			b.setNo(d.getNo()).setScyid(d.getScyid()).setBomid(d.getId()).setCinvcode(d.getCinvcode()).setCinvname(d.getCinvname()).setCinvstd(d.getCinvstd())
+					.setNum(d.getNum()).setUnit(d.getUnitname()).setRemarks(d.getRemarks());
+			bean.getBomList().add(b);
+		});
+		return bean;
+	}
+
 	// 用于 报工
 	public BusinessBaoGongOrder getBaoGongInfo(String bgid,String bghid,String bgcode){
 		BusinessBaoGongOrder order = null;

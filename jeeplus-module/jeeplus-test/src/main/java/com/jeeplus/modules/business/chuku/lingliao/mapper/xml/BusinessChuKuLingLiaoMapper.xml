@@ -11,6 +11,7 @@
 		a.del_flag AS "delFlag",
 		a.code AS "code",
 		a.sccode AS "sccode",
+		a.sclinecode AS "sclinecode",
 		a.cinvcode AS "cinvcode",
 		a.cinvname AS "cinvname",
 		a.cinvstd AS "cinvstd",
@@ -19,21 +20,10 @@
 		a.cangku AS "ck.id",
 		a.bgid AS "bgid",
 		a.bgcode AS "bgcode",
+		a.planid AS "planid",
+		a.plancode AS "plancode",
 		a.sych AS "sych",
 		a.remarks AS "remarks",
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
 		ck.name AS "ck.name"
 	</sql>
 	
@@ -120,7 +110,7 @@
 			update_date,
 			del_flag,
 			code,
-			sccode,
+			sccode,sclinecode,
 			cinvcode,
 			cinvname,
 			cinvstd,
@@ -129,6 +119,8 @@
 			cangku,
 			bgid,
 			bgcode,
+			planid,
+			plancode,
 			sych,
 			remarks
 		) VALUES (
@@ -139,7 +131,7 @@
 			#{updateDate},
 			#{delFlag},
 			#{code},
-			#{sccode},
+			#{sccode},#{sclinecode},
 			#{cinvcode},
 			#{cinvname},
 			#{cinvstd},
@@ -148,6 +140,8 @@
 			#{ck.id},
 			#{bgid},
 			#{bgcode},
+			#{planid},
+			#{plancode},
 			#{sych},
 			#{remarks}
 		)
@@ -159,6 +153,7 @@
 			update_date = #{updateDate},
 			code = #{code},
 			sccode = #{sccode},
+			sclinecode = #{sclinecode},
 			cinvcode = #{cinvcode},
 			cinvname = #{cinvname},
 			cinvstd = #{cinvstd},

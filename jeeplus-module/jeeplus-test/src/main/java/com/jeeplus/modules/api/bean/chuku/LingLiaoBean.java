@@ -1,21 +1,27 @@
 package com.jeeplus.modules.api.bean.chuku;
 
+import com.google.common.collect.Lists;
+
+import java.util.List;
+
 /**
  * 领料出库 材料出库
  */
 public class LingLiaoBean {
-    private String bgid;
-    private String bgcode;
-    private String schid;
-    private String sccode;
-    private String scline;
-    private String cinvcode;
-    private String cinvname;
-    private String cinvstd;
-    private Double num;
-    private String remarks;
-    private Double gdnum;
-
+    private String bgid; // 报工ID
+    private String bgcode; // 报工单号
+    private String planid; // 计划ID
+    private String plancode; // 计划单号
+    private String sccode; // 生产订单号
+    private String scline; // 生产订单行号
+    private String cinvcode; // 产品编码
+    private String cinvname;// 产品名称
+    private String cinvstd; // 规格型号
+    private Double num;// 数量
+    private String unit; // 单位
+    private String remarks;// 备注
+    // 子件列表
+    private List<BomBean> bomList = Lists.newArrayList();
     public String getBgid() {
         return bgid;
     }
@@ -34,30 +40,21 @@ public class LingLiaoBean {
         return this;
     }
 
-    public String getSchid() {
-        return schid;
+    public String getPlanid() {
+        return planid;
     }
 
-    public LingLiaoBean setSchid(String schid) {
-        this.schid = schid;
+    public LingLiaoBean setPlanid(String planid) {
+        this.planid = planid;
         return this;
     }
 
-    public String getSccode() {
-        return sccode;
+    public String getPlancode() {
+        return plancode;
     }
 
-    public LingLiaoBean setSccode(String sccode) {
-        this.sccode = sccode;
-        return this;
-    }
-
-    public String getScline() {
-        return scline;
-    }
-
-    public LingLiaoBean setScline(String scline) {
-        this.scline = scline;
+    public LingLiaoBean setPlancode(String plancode) {
+        this.plancode = plancode;
         return this;
     }
 
@@ -106,12 +103,39 @@ public class LingLiaoBean {
         return this;
     }
 
-    public Double getGdnum() {
-        return gdnum;
+    public String getUnit() {
+        return unit;
     }
 
-    public LingLiaoBean setGdnum(Double gdnum) {
-        this.gdnum = gdnum;
+    public LingLiaoBean setUnit(String unit) {
+        this.unit = unit;
+        return this;
+    }
+
+    public List<BomBean> getBomList() {
+        return bomList;
+    }
+
+    public LingLiaoBean setBomList(List<BomBean> bomList) {
+        this.bomList = bomList;
+        return this;
+    }
+
+    public String getSccode() {
+        return sccode;
+    }
+
+    public LingLiaoBean setSccode(String sccode) {
+        this.sccode = sccode;
+        return this;
+    }
+
+    public String getScline() {
+        return scline;
+    }
+
+    public LingLiaoBean setScline(String scline) {
+        this.scline = scline;
         return this;
     }
 }

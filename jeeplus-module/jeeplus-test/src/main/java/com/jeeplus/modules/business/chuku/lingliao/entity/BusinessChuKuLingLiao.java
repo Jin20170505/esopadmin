@@ -20,12 +20,15 @@ public class BusinessChuKuLingLiao extends DataEntity<BusinessChuKuLingLiao> {
 	private static final long serialVersionUID = 1L;
 	private String code;		// 单号
 	private String sccode;		// 生产订单号
+	private String sclinecode;		// 生产行号
 	private String cinvcode;		// 存货编码
 	private String cinvname;		// 存货名称
 	private String cinvstd;		// 规格型号
 	private Double num;		// 数量
 	private String unit;		// 单位
 	private BaseCangKu ck;		// 仓库
+	private String planid; // 计划工单id
+	private String plancode; // 计划单号
 	private String bgid;		// 报工ID
 	private String bgcode;		// 报工单号
 	private String sych;		// 是否同步
@@ -146,5 +149,32 @@ public class BusinessChuKuLingLiao extends DataEntity<BusinessChuKuLingLiao> {
 
 	public void setBusinessChuKuLingLiaoMxList(List<BusinessChuKuLingLiaoMx> businessChuKuLingLiaoMxList) {
 		this.businessChuKuLingLiaoMxList = businessChuKuLingLiaoMxList;
+	}
+
+	public String getSclinecode() {
+		return sclinecode;
+	}
+
+	public BusinessChuKuLingLiao setSclinecode(String sclinecode) {
+		this.sclinecode = sclinecode;
+		return this;
+	}
+
+	public String getPlanid() {
+		return planid;
+	}
+
+	public BusinessChuKuLingLiao setPlanid(String planid) {
+		this.planid = planid;
+		return this;
+	}
+
+	public String getPlancode() {
+		return plancode;
+	}
+
+	public BusinessChuKuLingLiao setPlancode(String plancode) {
+		this.plancode = plancode;
+		return this;
 	}
 }

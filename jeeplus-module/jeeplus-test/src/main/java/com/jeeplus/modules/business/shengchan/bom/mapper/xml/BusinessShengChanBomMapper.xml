@@ -140,7 +140,6 @@
 			scline = #{scline},
 			no = #{no},
 			num = #{num},
-			donenum = #{donenum},
 			cinvcode = #{cinvcode},
 			cinvname = #{cinvname},
 			cinvstd = #{cinvstd},

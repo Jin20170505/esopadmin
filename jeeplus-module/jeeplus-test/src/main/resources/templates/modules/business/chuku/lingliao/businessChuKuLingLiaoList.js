@@ -101,6 +101,27 @@ $(document).ready(function() {
 		        sortName: 'sccode'
 		       
 		    }
+    ,{
+    field: 'sclinecode',
+    title: '生产行号',
+    sortable: true,
+    sortName: 'sclinecode'
+
+    }
+    ,{
+    field: 'plancode',
+    title: '计划单号',
+    sortable: true,
+    sortName: 'plancode'
+
+    }
+    ,{
+    field: 'bgcode',
+    title: '报工单号',
+    sortable: true,
+    sortName: 'bgcode'
+
+    }
 			,{
 		        field: 'cinvcode',
 		        title: '存货编码',
@@ -340,7 +361,7 @@ $(document).ready(function() {
 						<table class="table table-bordered">
 						<thead>
 							<tr>
-								<th>生产行号</th>
+								<th>行号</th>
 								<th>存货编码</th>
 								<th>存货名称</th>
 								<th>工单数量</th>
@@ -361,7 +382,7 @@ $(document).ready(function() {
 	<script type="text/template" id="businessChuKuLingLiaoChild1Tpl">//<!--
 				<tr>
 					<td>
-						{{row.sclinecode}}
+						{{row.no}}
 					</td>
 					<td>
 						{{row.cinvcode}}

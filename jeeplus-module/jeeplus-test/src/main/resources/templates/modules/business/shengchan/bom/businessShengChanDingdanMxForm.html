@@ -127,7 +127,6 @@ layout("/include/_dialog.html"){
 						<th class="hide"></th>
 						<th>行号</th>
 						<th>数量</th>
-						<th>已领数量</th>
 						<th>存货编码</th>
 						<th>存货名称</th>
 						<th>规格型号</th>
@@ -160,12 +159,6 @@ layout("/include/_dialog.html"){
 					<td>
 						<input id="businessShengChanBomList{{idx}}_num" name="businessShengChanBomList[{{idx}}].num" type="text" value="{{row.num}}"    class="form-control "/>
 					</td>
-					
-					
-					<td>
-						<input id="businessShengChanBomList{{idx}}_donenum" name="businessShengChanBomList[{{idx}}].donenum" type="text" value="{{row.donenum}}"  readonly  class="form-control "/>
-					</td>
-					
 					
 					<td>
 						<input id="businessShengChanBomList{{idx}}_cinvcode" name="businessShengChanBomList[{{idx}}].cinvcode" type="text" value="{{row.cinvcode}}"    class="form-control "/>

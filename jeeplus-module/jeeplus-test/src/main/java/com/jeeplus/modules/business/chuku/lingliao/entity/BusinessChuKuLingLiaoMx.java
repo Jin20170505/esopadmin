@@ -18,14 +18,17 @@ public class BusinessChuKuLingLiaoMx extends DataEntity<BusinessChuKuLingLiaoMx>
 	
 	private static final long serialVersionUID = 1L;
 	private BusinessChuKuLingLiao p;		// 父键 父类
-	private String sclinecode;		// 生产行号
+	private Integer no; // 序号
 	private String cinvcode;		// 存货编码
 	private String cinvname;		// 存货名称
+	private String cinvstd;		// 规格型号
 	private Double gdnum;		// 工单数量
 	private Double cknum;		// 出库数量
+	private String unit; 	// 计量单位
 	private BaseHuoWei huowei;		// 货位
 	private Double xcnum;		// 现存量
-	private String schid;		// 生产行ID
+	private String jhbomid; // 计划子件ID
+	private String scbomid;		// 生产子件ID
 	private String sych;		// 是否同步
 	
 	public BusinessChuKuLingLiaoMx() {
@@ -47,16 +50,16 @@ public class BusinessChuKuLingLiaoMx extends DataEntity<BusinessChuKuLingLiaoMx>
 	public void setP(BusinessChuKuLingLiao p) {
 		this.p = p;
 	}
-	
-	@ExcelField(title="生产行号", align=2, sort=7)
-	public String getSclinecode() {
-		return sclinecode;
+
+	public String getCinvstd() {
+		return cinvstd;
 	}
 
-	public void setSclinecode(String sclinecode) {
-		this.sclinecode = sclinecode;
+	public BusinessChuKuLingLiaoMx setCinvstd(String cinvstd) {
+		this.cinvstd = cinvstd;
+		return this;
 	}
-	
+
 	@ExcelField(title="存货编码", align=2, sort=8)
 	public String getCinvcode() {
 		return cinvcode;
@@ -114,16 +117,16 @@ public class BusinessChuKuLingLiaoMx extends DataEntity<BusinessChuKuLingLiaoMx>
 	public void setXcnum(Double xcnum) {
 		this.xcnum = xcnum;
 	}
-	
-	@ExcelField(title="生产行ID", align=2, sort=15)
-	public String getSchid() {
-		return schid;
+
+	public String getScbomid() {
+		return scbomid;
 	}
 
-	public void setSchid(String schid) {
-		this.schid = schid;
+	public BusinessChuKuLingLiaoMx setScbomid(String scbomid) {
+		this.scbomid = scbomid;
+		return this;
 	}
-	
+
 	@ExcelField(title="是否同步", align=2, sort=16)
 	public String getSych() {
 		return sych;
@@ -132,5 +135,31 @@ public class BusinessChuKuLingLiaoMx extends DataEntity<BusinessChuKuLingLiaoMx>
 	public void setSych(String sych) {
 		this.sych = sych;
 	}
-	
+
+	public Integer getNo() {
+		return no;
+	}
+
+	public BusinessChuKuLingLiaoMx setNo(Integer no) {
+		this.no = no;
+		return this;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public BusinessChuKuLingLiaoMx setUnit(String unit) {
+		this.unit = unit;
+		return this;
+	}
+
+	public String getJhbomid() {
+		return jhbomid;
+	}
+
+	public BusinessChuKuLingLiaoMx setJhbomid(String jhbomid) {
+		this.jhbomid = jhbomid;
+		return this;
+	}
 }

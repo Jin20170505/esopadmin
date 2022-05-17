@@ -11,6 +11,7 @@
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
 		a.pid AS "pid",
+        a.scyid as "scyid",
 		a.no AS "no",
 		a.num AS "num",
 		a.donenum AS "donenum",
