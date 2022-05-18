@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.u8data.inventory.mapper.U8InventoryMapper">
+    <sql id="inventoryColumns">
+        a.cInvCCode as "cInvCCode",
+        a.cInvCName as  "cInvCName",
+        a.cInvCode as  "cInvCode",
+        a.cInvName as "cInvName",
+        a.cInvStd as "cInvStd",
+        a.cComUnitCode as "cComUnitCode",
+        a.cComUnitName as "cComUnitName",
+        a.cDefWareHouse as "cDefWareHouse",
+        a.cWhName as "cWhName",
+        a.bPropertyCheck as "bPropertyCheck",
+        a.bProxyForeign as "bProxyForeign",
+        a.dSDate as "dSDate",
+        a.dEDate as "dEDate"
+    </sql>
+    <sql id="inventoryJoins">
+
+    </sql>
+
+    <select id="findList" resultType="U8Inventory">
+        select
+            <include refid="inventoryColumns"/>
+        from YT_API_ERP_view_Inventory a
+        <include refid="inventoryJoins"/>
+    </select>
+
+    <select id="findTypes" resultType="com.jeeplus.modules.u8data.inventory.entity.U8InventoryClass">
+        select
+            a.cInvCCode as "cInvCCode",a.parentCode as "parentCode", a.cInvCName as "cInvCName",a.bInvCEnd as "bInvCEnd"
+        from YT_API_ERP_view_InventoryClass a
+    </select>
+</mapper>

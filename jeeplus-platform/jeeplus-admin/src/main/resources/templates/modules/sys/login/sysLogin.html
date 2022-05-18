@@ -6,13 +6,23 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="shortcut icon" href="${ctxStatic}/common/images/favicon.ico?v=1">
-
 	<title>${fn.getProductName()}</title>
 	<link href="${ctxStatic}/plugins/bootstrap4/bootstrap.min.css" rel="stylesheet" type="text/css" />
 	<link href="${ctxStatic}/plugins/fonts-icon/css/icons.css" rel="stylesheet" type="text/css" />
 	<link href="${ctxStatic}/common/css/${fn.getCookie(request,'theme') == null?fn.getDefaultTheme():fn.getCookie(request,'theme')}.css" id="theme" rel="stylesheet" type="text/css" />
-
-
+	<style type="text/css">
+		body{
+			position: fixed;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			background-image: url("${ctxStatic}/common/images/loginbgimg.jpeg");
+			background-repeat: no-repeat;
+			background-position:center center;
+			background-size: 100% 100%;
+		}
+	</style>
 </head>
 
 

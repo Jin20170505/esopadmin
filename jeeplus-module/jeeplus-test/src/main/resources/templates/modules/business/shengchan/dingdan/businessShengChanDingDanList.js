@@ -268,7 +268,9 @@ $(document).ready(function() {
 			})
 	 })
   }
-
+function sychu8(){
+	 jp.openSaveDialog('同步日期选择', "${ctx}/business/shengchan/dingdan/businessShengChanDingDan/goToDateSelect",'80%', '70%');
+}
     //刷新列表
   function refresh() {
       $('#businessShengChanDingDanTable').bootstrapTable('refresh');

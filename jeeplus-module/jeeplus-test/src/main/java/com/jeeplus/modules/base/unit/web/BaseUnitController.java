@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
+import com.jeeplus.modules.u8data.unit.entity.U8Unit;
+import com.jeeplus.modules.u8data.unit.service.U8UnitService;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +57,31 @@ public class BaseUnitController extends BaseController {
 			entity = new BaseUnit();
 		}
 		return entity;
+	}
+	@Autowired
+	private U8UnitService u8UnitService;
+
+	@ResponseBody
+	@RequestMapping("sychu8")
+	public AjaxJson sychU8(){
+		AjaxJson json = new AjaxJson();
+		try{
+			U8Unit unit = new U8Unit();
+			List<U8Unit> data = u8UnitService.findList(unit);
+			if(data==null){
+				json.setMsg("同步成功(u8数据空)");
+				json.setSuccess(true);
+				return json;
+			}
+			baseUnitService.sychU8(data);
+			json.setMsg("同步成功");
+			json.setSuccess(true);
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setSuccess(false);
+			json.setMsg("同步失败,原因："+e.getMessage());
+		}
+		return json;
 	}
 	
 	/**

@@ -34,4 +34,7 @@ public interface BusinessShengChanDingDanMingXiMapper extends BaseMapper<Busines
 	Double getScNum(@Param("id") String id);
 	@Select("select id from business_shengchan_dingdan_mingxi where  pid = #{pid}")
 	List<String> findIdsByPid(@Param("pid") String pid);
+
+	@Select("select 1 from business_shengchan_dingdan_mingxi where id = #{id}")
+	Integer hasById(@Param("id") String id);
 }

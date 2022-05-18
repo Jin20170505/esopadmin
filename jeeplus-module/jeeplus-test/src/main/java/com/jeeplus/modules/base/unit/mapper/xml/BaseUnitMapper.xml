@@ -9,6 +9,7 @@
 		a.update_date AS "updateDate",
 		a.del_flag AS "delFlag",
 		a.id AS "id",
+		a.code as "code",
 		a.name AS "name",
 		a.iseable AS "useable",
 		a.remarks AS "remarks"
@@ -37,9 +38,6 @@
 			${dataScope}
 			<if test="name != null and name != ''">
 				AND a.name LIKE
-				    <if test="_databaseId == 'postgre'">'%'||#{name}||'%'</if>
-					<if test="_databaseId == 'oracle'">'%'||#{name}||'%'</if>
-					<if test="_databaseId == 'mssql'">'%'+#{name}+'%'</if>
 					<if test="_databaseId == 'mysql'">concat('%',#{name},'%')</if>
 			</if>
 		</where>
@@ -79,6 +77,7 @@
 			update_by,
 			update_date,
 			del_flag,
+			code,
 			name,
 			iseable,
 			remarks
@@ -88,6 +87,7 @@
 			#{updateBy.id},
 			#{updateDate},
 			#{delFlag},
+		    #{code},
 			#{name},
 			#{useable},
 			#{remarks}
@@ -98,6 +98,7 @@
 		UPDATE base_unit SET 	
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
+		    code = #{code},
 			name = #{name},
 			iseable = #{useable},
 			remarks = #{remarks}

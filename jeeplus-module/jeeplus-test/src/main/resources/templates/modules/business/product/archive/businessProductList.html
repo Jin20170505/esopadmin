@@ -66,6 +66,9 @@ layout("/include/_container.html", {title:"列表", parent:"存货档案"}){
 	<!-- 工具栏 -->
 	<div id="toolbar">
 			 <% if(shiro.hasPermission("business:product:archive:businessProduct:add") ){ %>
+		<button  class="btn btn-custom waves-effect w-xs waves-light" onclick="sychu8()">
+			<i class="fa fa-plus"></i> U8同步
+		</button>
 			 	<button id="add" class="btn btn-custom waves-effect w-xs waves-light" onclick="add()">
 					<i class="fa fa-plus"></i> 新建
 				</button>

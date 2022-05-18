@@ -14,6 +14,10 @@ import javax.validation.ConstraintViolationException;
 import com.jeeplus.modules.business.shengchan.bom.entity.BusinessShengChanBom;
 import com.jeeplus.modules.business.shengchan.bom.service.BusinessShengChanDingdanMxService;
 import com.jeeplus.modules.business.shengchan.dingdan.entity.BusinessShengChanDingDanMingXi;
+import com.jeeplus.modules.u8data.morder.entity.U8Moallocate;
+import com.jeeplus.modules.u8data.morder.entity.U8Morder;
+import com.jeeplus.modules.u8data.morder.service.U8MoallocateService;
+import com.jeeplus.modules.u8data.morder.service.U8MorderService;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +64,63 @@ public class BusinessShengChanDingDanController extends BaseController {
 		}
 		return entity;
 	}
-	
+	@Autowired
+	private U8MorderService u8MorderService;
+	@ResponseBody
+	@RequestMapping("sychu8")
+	public AjaxJson sychU8(String start,String end){
+		AjaxJson json = new AjaxJson();
+		try{
+			U8Morder order = new U8Morder();
+			order.setStatus("3");
+			if(StringUtils.isNotEmpty(start)&&StringUtils.isNotEmpty(end)){
+				order.setStart(DateUtils.parseDate(start)).setEnd(DateUtils.parseDate(end));
+			}
+			List<U8Morder> data = u8MorderService.findList(order);
+			if(data==null){
+				json.setMsg("同步成功(u8数据空)");
+				json.setSuccess(true);
+				return json;
+			}
+			List<String> schids =businessShengChanDingDanService.sychu8(data);
+			schids.forEach(schid->sychU8bom(schid));
+			json.setSuccess(true);
+			json.setMsg("同步成功");
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setSuccess(false);
+			json.setMsg("同步失败,原因："+e.getMessage());
+		}
+		return json;
+	}
+	@Autowired
+	private U8MoallocateService u8MoallocateService;
+	@ResponseBody
+	@RequestMapping("sychu8bom")
+	public AjaxJson sychU8bom(String schid){
+		AjaxJson json = new AjaxJson();
+		try{
+			U8Moallocate moallocate = new U8Moallocate();
+			moallocate.setMoDId(schid);
+			List<U8Moallocate> data = u8MoallocateService.findList(moallocate);
+			if(data==null){
+				json.setMsg("同步成功(u8数据空)");
+				json.setSuccess(true);
+				return json;
+			}
+			businessShengChanDingdanMxService.deleteBom(schid);
+			businessShengChanDingdanMxService.sychU8bom(data);
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setMsg("同步失败,原因："+e.getMessage());
+		}
+		return json;
+	}
+
+	@RequestMapping("goToDateSelect")
+	public String goToDateSelect(){
+		return "modules/business/shengchan/dingdan/sync_daka";
+	}
 	/**
 	 * 生产订单列表页面
 	 */

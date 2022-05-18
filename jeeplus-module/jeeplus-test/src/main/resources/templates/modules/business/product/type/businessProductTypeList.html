@@ -7,7 +7,11 @@ layout("/include/_container.html", {title:"列表", parent:"存货分类"}){
 	<div id="toolbar">
 					 <% if(shiro.hasPermission("business:product:type:businessProductType:add") ){ %>
 						<button id="add" class="btn btn-custom waves-effect w-xs waves-light" onclick="add()"><i class="fa fa-plus"></i> 新建</button><!-- 增加按钮 -->
-					<% } %>
+		<button  class="btn btn-custom waves-effect w-xs waves-light" onclick="sychu8()">
+			<i class="fa fa-plus"></i> U8同步
+		</button>
+		<% } %>
+
 		            <button id="expandAllBtn"  class="btn btn-white waves-effect w-xs waves-light">展开/折叠 所有</button>			</div>
 			<table id="businessProductTypeTreeTable" class="table-bordered">
 			</table>

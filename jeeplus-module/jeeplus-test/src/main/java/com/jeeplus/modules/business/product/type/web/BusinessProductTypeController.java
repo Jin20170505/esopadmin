@@ -9,6 +9,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jeeplus.modules.u8data.inventory.entity.U8InventoryClass;
+import com.jeeplus.modules.u8data.inventory.service.U8InventoryService;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +52,30 @@ public class BusinessProductTypeController extends BaseController {
 		}
 		return entity;
 	}
-	
+
+	@Autowired
+	private U8InventoryService u8InventoryService;
+	@ResponseBody
+	@RequestMapping("sychu8")
+	public AjaxJson sychU8(){
+		AjaxJson json = new AjaxJson();
+		try{
+			List<U8InventoryClass> data = u8InventoryService.findTypes();
+			if(data==null){
+				json.setMsg("同步成功(u8数据空)");
+				json.setSuccess(true);
+				return json;
+			}
+			businessProductTypeService.sychu8(data);
+			json.setMsg("同步成功");
+			json.setSuccess(true);
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setSuccess(false);
+			json.setMsg("同步失败,原因："+e.getMessage());
+		}
+		return json;
+	}
 	/**
 	 * 存货分类树表页面
 	 */

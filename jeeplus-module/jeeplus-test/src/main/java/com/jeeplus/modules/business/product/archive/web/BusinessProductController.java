@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
+import com.jeeplus.modules.u8data.inventory.entity.U8Inventory;
+import com.jeeplus.modules.u8data.inventory.service.U8InventoryService;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +59,28 @@ public class BusinessProductController extends BaseController {
 		}
 		return entity;
 	}
-	
+	@Autowired
+	private U8InventoryService u8InventoryService;
+	@ResponseBody
+	@RequestMapping("sychu8")
+	public AjaxJson sychU8(){
+		AjaxJson json = new AjaxJson();
+		try{
+			U8Inventory u8Inventory = new U8Inventory();
+			List<U8Inventory> data = u8InventoryService.findList(u8Inventory);
+			if(data==null){
+				json.setMsg("同步成功(u8数据空)");
+				json.setSuccess(true);
+				return json;
+			}
+			businessProductService.sychu8(data);
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setSuccess(false);
+			json.setMsg("同步失败,原因："+e.getMessage());
+		}
+		return json;
+	}
 	/**
 	 * 存货档案列表页面
 	 */

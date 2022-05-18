@@ -3,8 +3,10 @@
  */
 package com.jeeplus.modules.business.shengchan.dingdan.service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import com.google.common.collect.Lists;
 import com.jeeplus.common.utils.DateUtils;
@@ -17,12 +19,16 @@ import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDan;
 import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDanBom;
 import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDanMingXi;
 import com.jeeplus.modules.business.jihuadingdan.service.BusinessJiHuaGongDanService;
+import com.jeeplus.modules.business.product.archive.entity.BusinessProduct;
 import com.jeeplus.modules.business.shengchan.beiliao.entity.BusinessShengChanBeiLiao;
 import com.jeeplus.modules.business.shengchan.beiliao.entity.BusinessShengChanBeiLiaoMx;
 import com.jeeplus.modules.business.shengchan.beiliao.service.BusinessShengChanBeiLiaoService;
 import com.jeeplus.modules.business.shengchan.bom.entity.BusinessShengChanBom;
 import com.jeeplus.modules.business.shengchan.bom.mapper.BusinessShengChanBomMapper;
 import com.jeeplus.modules.business.shengchan.bom.service.BusinessShengChanDingdanMxService;
+import com.jeeplus.modules.sys.entity.Office;
+import com.jeeplus.modules.u8data.morder.entity.U8Moallocate;
+import com.jeeplus.modules.u8data.morder.entity.U8Morder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -376,4 +382,70 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 			return num+"";
 		}
 	}
+
+
+
+	@Transactional(readOnly = false)
+	public List<String> sychu8(List<U8Morder> data){
+		List<BusinessShengChanDingDan> dingDans= new ArrayList<>();
+		data.forEach(d->{
+			BusinessShengChanDingDan dingDan = getShengChanDingDan(d.getMoCode(),dingDans);
+			Office dept = new Office(d.getCdepcode());
+			String startdate = DateUtils.formatDate(d.getStartdate());
+			String enddate = DateUtils.formatDate(d.getDueDate());
+			if(dingDan==null){
+				dingDan = new BusinessShengChanDingDan();
+				dingDan.setDept(dept);
+				dingDan.setCode(d.getMoCode());
+				dingDan.preInsert();
+				dingDan.setId(d.getMoId());
+				dingDan.setStartdate(startdate);
+				dingDan.setEnddate(enddate);
+				dingDans.add(dingDan);
+			}
+			BusinessShengChanDingDanMingXi mingXi = new BusinessShengChanDingDanMingXi();
+			mingXi.setBatchno(d.getMoLotCode());
+			mingXi.setCinv(new BusinessProduct(d.getCinvcode()));
+			mingXi.setCinvname(d.getCinvname());
+			mingXi.setStd(d.getCinvstd());
+			mingXi.setNo(d.getSortSeq());
+			mingXi.setStatus("开立");
+			mingXi.setNum(d.getQty());
+			mingXi.setRemarks(d.getRemark());
+			mingXi.setUnit(d.getcComUnitName());
+			mingXi.preInsert();
+			mingXi.setId(d.getModid());
+			mingXi.setCreateDate(d.getCreateTime());
+			dingDan.getBusinessShengChanDingDanMingXiList().add(mingXi);
+		});
+
+
+		return saveU8Data(dingDans);
+	}
+	@Transactional(readOnly = false)
+	public List<String> saveU8Data(List<BusinessShengChanDingDan> list){
+		List<String> rs = new ArrayList<>();
+		list.forEach(d->{
+			if(null == mapper.hasById(d.getId())){
+				mapper.insert(d);
+			}
+			d.getBusinessShengChanDingDanMingXiList().forEach(e->{
+				if(null==businessShengChanDingDanMingXiMapper.hasById(e.getId())){
+					businessShengChanDingDanMingXiMapper.insert(e);
+					rs.add(e.getId());
+				}
+			});
+		});
+		return  rs;
+	}
+
+
+	public BusinessShengChanDingDan getShengChanDingDan(String code,List<BusinessShengChanDingDan> list){
+		Optional<BusinessShengChanDingDan> optional = list.stream().filter(d->code.equals(d.getCode())).findAny();
+		if(optional.isPresent()){
+			return optional.get();
+		}
+		return null;
+	}
+
 }

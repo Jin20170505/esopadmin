@@ -21,4 +21,7 @@ public interface BusinessProductMapper extends BaseMapper<BusinessProduct> {
 
     @Select("select id from business_product where code = #{code}")
     String getIdByCode(@Param("code") String code);
+
+    @Select("select 1 from business_product where id = #{code} limit 1")
+    Integer hasByCode(@Param("code")String code);
 }

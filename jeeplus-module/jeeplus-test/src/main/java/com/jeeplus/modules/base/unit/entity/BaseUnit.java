@@ -14,6 +14,7 @@ import com.jeeplus.common.utils.excel.annotation.ExcelField;
 public class BaseUnit extends DataEntity<BaseUnit> {
 	
 	private static final long serialVersionUID = 1L;
+	private String code;  // 编号
 	private String name;		// 名称
 	private String useable;		// 是否可用
 	
@@ -24,6 +25,15 @@ public class BaseUnit extends DataEntity<BaseUnit> {
 
 	public BaseUnit(String id){
 		super(id);
+	}
+	@ExcelField(title="编码", align=2, sort=5)
+	public String getCode() {
+		return code;
+	}
+
+	public BaseUnit setCode(String code) {
+		this.code = code;
+		return this;
 	}
 
 	@ExcelField(title="名称", align=2, sort=6)

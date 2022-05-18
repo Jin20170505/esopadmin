@@ -33,22 +33,24 @@ layout("/include/_dialog.html"){
     <table class="table table-bordered">
        <tbody>
             <tr>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>编码：</label></td>
+                <td class="width-35">
+                    <input name="code" value="${baseUnit.code!}"    class="form-control required"/>
+                </td>
                 <td class="width-15 active"><label class="pull-right"><font color="red">*</font>名称：</label></td>
                 <td class="width-35">
                     <input name="name" value="${baseUnit.name!}"    class="form-control required"/>
             </td>
+            </tr>
+            <tr>
                 <td class="width-15 active"><label class="pull-right"><font color="red">*</font>是否可用：</label></td>
                 <td class="width-35">
                     <#radiobuttons path="useable" value="${baseUnit.useable!}" items="${fn.getDictList('yes_no')}" itemLabel="label" itemValue="value" class="required"/>
-            </td>
-            </tr>
-            <tr>
+                </td>
                 <td class="width-15 active"><label class="pull-right">备注信息：</label></td>
                 <td class="width-35">
                     <textarea name="remarks" rows="4"    class="form-control ">${baseUnit.remarks!}</textarea>
             </td>
-                <td class="width-15 active"></td>
-                <td class="width-35" ></td>
             </tr>
         </tbody>
     </table>

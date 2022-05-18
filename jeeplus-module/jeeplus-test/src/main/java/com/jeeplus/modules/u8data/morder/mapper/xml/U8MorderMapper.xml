@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.u8data.morder.mapper.U8MorderMapper">
+    <sql id="orderColumns">
+        a.moId as "moId",
+        a.moCode as  "moCode",
+        a.startdate as  "startdate",
+        a.dueDate as "dueDate",
+        a.cdepcode as "cdepcode",
+        a.cdepname as "cdepname",
+        a.createDate as "createTime",
+        a.modid as "modid",
+        a.sortSeq as "sortSeq",
+        a.MoLotCode as "moLotCode",
+        a.invcode as "cinvcode",
+        a.cInvName as "cinvname",
+        a.cinvstd as "cinvstd",
+        a.cComUnitCode as "cComUnitCode",
+        a.cComUnitName as "cComUnitName",
+        a.Remark as "remark",
+        a.qty as "qty",
+        a.qualifiedInQty as "qualifiedInQty",
+        a.status as "status"
+    </sql>
+    <sql id="orderJoins">
+
+    </sql>
+
+    <select id="findList" resultType="U8Inventory">
+        select
+        <include refid="orderColumns"/>
+        from YT_API_ERP_view_Morder a
+        <include refid="orderJoins"/>
+        <where>
+            <if test="status != null and status != ''">
+                and a.status = #{status}
+            </if>
+            <if test="start !=null and end != null">
+                and a.createDate between #{start}  and #{end}
+            </if>
+        </where>
+    </select>
+
+</mapper>

@@ -5,6 +5,7 @@ package com.jeeplus.modules.business.shengchan.bom.service;
 
 import java.util.List;
 
+import com.jeeplus.modules.u8data.morder.entity.U8Moallocate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,5 +77,37 @@ public class BusinessShengChanDingdanMxService extends CrudService<BusinessSheng
 		bom.setSchid(businessShengChanDingdanMx.getId());
 		businessShengChanBomMapper.delete(bom);
 	}
-	
+
+	@Transactional(readOnly = false)
+	public void deleteBom(String schid){
+		BusinessShengChanBom bom = new BusinessShengChanBom();
+		bom.setSchid(schid);
+		businessShengChanBomMapper.delete(bom);
+	}
+
+	@Transactional(readOnly = false)
+	public void sychU8bom(List<U8Moallocate> list){
+		list.forEach(d->{
+			BusinessShengChanBom businessShengChanBom = new BusinessShengChanBom();
+			businessShengChanBom.setSchid(d.getMoDId());
+			businessShengChanBom.setAuxbaseqtyn(d.getAuxBaseQtyN());
+			businessShengChanBom.setCinvcode(d.getInvcode());
+			businessShengChanBom.setCinvname(d.getCinvname());
+			businessShengChanBom.setCinvstd(d.getCinvstd());
+			businessShengChanBom.setRemarks(d.getRemark());
+			businessShengChanBom.setBaseqtyd(d.getBaseQtyD());
+			businessShengChanBom.setBaseqtyn(d.getBaseQtyN());
+			businessShengChanBom.setDonenum(d.getIssqty());
+			businessShengChanBom.setNum(d.getQty());
+			businessShengChanBom.setNo(d.getSortseq()+"");
+			businessShengChanBom.setUnitcode(d.getcComUnitCode());
+			businessShengChanBom.setUnitname(d.getcComUnitName());
+			businessShengChanBom.setProducttype(d.getProductType());
+			businessShengChanBom.setRate(d.getChangeRate());
+			businessShengChanBom.setIsdaochong("0");
+			businessShengChanBom.preInsert();
+			businessShengChanBom.setId(d.getAllocateId());
+			businessShengChanBomMapper.insert(businessShengChanBom);
+		});
+	}
 }

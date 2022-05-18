@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.u8data.morder.mapper.U8MoallocateMapper">
+    <sql id="oallocateColumns">
+        a.AllocateId as "allocateId",
+        a.MoDId as  "moDId",
+        a.sortseq as  "sortseq",
+        a.IssQty as "issQty",
+        a.InvCode as "invCode",
+        a.cinvname as "cinvname",
+        a.cinvstd as "cinvstd",
+        a.ProductType as "productType",
+        a.BaseQtyN as "baseQtyN",
+        a.BaseQtyD as "baseQtyD",
+        a.ChangeRate as "changeRate",
+        a.AuxBaseQtyN as "auxBaseQtyN",
+        a.cComUnitCode as "cComUnitCode",
+        a.cComUnitName as "cComUnitName",
+        a.Remark as "remark",
+        a.qty as "qty"
+    </sql>
+    <sql id="oallocateJoins">
+
+    </sql>
+
+    <select id="findList" resultType="U8Inventory">
+        select
+        <include refid="oallocateColumns"/>
+        from YT_API_ERP_view_mom_moallocate a
+        <include refid="oallocateJoins"/>
+        <where>
+            <if test="moDId != null and moDId != ''">
+                and a.MoDId = #{moDId}
+            </if>
+        </where>
+    </select>
+
+</mapper>

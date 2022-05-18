@@ -5,6 +5,8 @@ package com.jeeplus.modules.business.product.archive.service;
 
 import java.util.List;
 
+import com.jeeplus.modules.business.product.archive.entity.BusinessProductTypeOnlyRead;
+import com.jeeplus.modules.u8data.inventory.entity.U8Inventory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,5 +45,24 @@ public class BusinessProductService extends CrudService<BusinessProductMapper, B
 	public void delete(BusinessProduct businessProduct) {
 		super.delete(businessProduct);
 	}
-	
+
+	@Transactional(readOnly = false)
+	public void sychu8(List<U8Inventory> data){
+		data.forEach(d->{
+			Integer i = mapper.hasByCode(d.getcInvCode());
+			if(i==null){
+				BusinessProduct product = new BusinessProduct();
+				product.setCode(d.getcInvCode());
+				product.setName(d.getcInvName());
+				product.setUnit(d.getcComUnitName());
+				product.setSpecification(d.getcInvStd());
+				product.setType(new BusinessProductTypeOnlyRead(d.getcInvCCode()));
+				product.preInsert();
+				product.setId(d.getcInvCode());
+				mapper.insert(product);
+			}
+		});
+
+	}
+
 }

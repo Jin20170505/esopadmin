@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.u8data.unit.mapper.U8UnitMapper">
+    <sql id="unitColumns">
+        a.cGroupCode as "cGroupCode",
+        a.cGroupName as  "cGroupName",
+        a.iGroupType as  "iGroupType",
+        a.cComunitCode as "cComunitCode",
+        a.cComUnitName as "cComUnitName",
+        a.bMainUnit as "bMainUnit"
+    </sql>
+    <sql id="unitJoins">
+
+    </sql>
+
+    <select id="findList" resultType="U8Unit">
+        select
+            <include refid="unitColumns"/>
+        from YT_API_ERP_view_ComputationUnit a
+        <include refid="unitJoins"/>
+    </select>
+</mapper>

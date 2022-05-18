@@ -5,6 +5,7 @@ package com.jeeplus.modules.base.unit.service;
 
 import java.util.List;
 
+import com.jeeplus.modules.u8data.unit.entity.U8Unit;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,5 +43,19 @@ public class BaseUnitService extends CrudService<BaseUnitMapper, BaseUnit> {
 	public void delete(BaseUnit baseUnit) {
 		super.delete(baseUnit);
 	}
-	
+	@Transactional(readOnly = false)
+	public void sychU8(List<U8Unit> u8Units){
+		u8Units.forEach(unit -> {
+			Integer i = mapper.hasByCode(unit.getcComunitCode());
+			if(i!=null&& i==1){
+
+			}else {
+				BaseUnit u = new BaseUnit();
+				u.setCode(unit.getcComunitCode());
+				u.setName(unit.getcComUnitName());
+				u.setUseable("1");
+				save(u);
+			}
+		});
+	}
 }
