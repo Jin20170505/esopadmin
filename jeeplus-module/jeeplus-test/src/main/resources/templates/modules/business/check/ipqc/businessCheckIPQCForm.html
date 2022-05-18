@@ -4,7 +4,7 @@ layout("/include/_dialog.html"){
 	<script type="text/javascript">
 
 		$(document).ready(function() {
-				        $('#checkdate').datetimepicker({
+			$('#checkdate').datetimepicker({
 				 format:'Y-m-d H:i'
 		    });
 		});
@@ -29,6 +29,43 @@ layout("/include/_dialog.html"){
                 })
 			}
 
+        }
+
+        function addRow(list, idx, tpl, row){
+            $(list).append(Mustache.render(tpl, {
+                idx: idx, delBtn: true, row: row
+            }));
+            $(list+idx).find("select").each(function(){
+                $(this).val($(this).attr("data-value"));
+            });
+            $(list+idx).find("input[type='checkbox'], input[type='radio']").each(function(){
+                var ss = $(this).attr("data-value").split(',');
+                for (var i=0; i<ss.length; i++){
+                    if($(this).val() == ss[i]){
+                        $(this).attr("checked","checked");
+                    }
+                }
+            });
+            $(list+idx).find(".jp-calendar-picker-input").each(function(){
+                $(this).datetimepicker({
+                    format:'Y-m-d H:i'
+                });
+            });
+        }
+        function delRow(obj, prefix){
+            var id = $(prefix+"_id");
+            var delFlag = $(prefix+"_delFlag");
+            if (id.val() == ""){
+                $(obj).parent().parent().remove();
+            }else if(delFlag.val() == "0"){
+                delFlag.val("1");
+                $(obj).html("&divide;").attr("title", "撤销删除");
+                $(obj).parent().parent().addClass("error");
+            }else if(delFlag.val() == "1"){
+                delFlag.val("0");
+                $(obj).html("&times;").attr("title", "删除");
+                $(obj).parent().parent().removeClass("error");
+            }
         }
 	</script>
 <form id="inputForm"  method="post"  class="form-horizontal p-15">
@@ -100,5 +137,65 @@ layout("/include/_dialog.html"){
             </tr>
         </tbody>
     </table>
+    <div class="card card-tabs">
+        <div class="card-heading  pb-0">
+            <ul class="nav nav-pills float-left" role="tablist">
+                <li class="nav-item">
+                    <a data-toggle="tab" class="nav-link show active" role="tab" href="#tab-1" aria-expanded="true">附件列表：</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <div class="tab-content">
+                <div id="tab-1" class="tab-pane fade active show">
+                    <a class="btn btn-white btn-sm m-b-5" onclick="addRow('#businessCheckIPQCFileList', baseRouteRowIdx, baseRouteTpl);baseRouteRowIdx = baseRouteRowIdx + 1;" title="新增"><i class="fa fa-plus"></i> 新增</a>
+                    <table class="table table-striped table-bordered table-condensed">
+                        <thead>
+                        <tr>
+                            <th class="hide"></th>
+                            <th><font color="red">*</font>序号</th>
+                            <th>附件文件</th>
+                            <th>备注信息</th>
+                            <th width="10">&nbsp;</th>
+                        </tr>
+                        </thead>
+                        <tbody id="businessCheckIPQCFileList">
+                        </tbody>
+                    </table>
+                    <script type="text/template" id="baseRouteTpl">//<!--
+				<tr id="businessCheckIPQCFileList{{idx}}">
+					<td class="hide">
+						<input id="businessCheckIPQCFileList{{idx}}_id" name="businessCheckIPQCFileList[{{idx}}].id" type="hidden" value="{{row.id}}"/>
+						<input id="businessCheckIPQCFileList{{idx}}_delFlag" name="businessCheckIPQCFileList[{{idx}}].delFlag" type="hidden" value="0"/>
+					</td>
+					<td>
+						<input id="businessCheckIPQCFileList{{idx}}_no" name="businessCheckIPQCFileList[{{idx}}].no" type="text" value="{{row.no}}"    class="form-control required isIntGtZero"/>
+					</td>
+					<td>
+					    <#fileUpload id="businessCheckIPQCFileList{{idx}}_url"  name="businessCheckIPQCFileList[{{idx}}].url" class="form-control" value="{{row.url}}" type="file" uploadPath="/base/check/ipqc"/>
+					</td>
+					<td>
+						<input id="businessCheckIPQCFileList{{idx}}_remarks" name="businessCheckIPQCFileList[{{idx}}].remarks" type="text" value="{{row.remarks}}"    class="form-control "/>
+					</td>
+
+					<td class="text-center" width="10">
+						{{#delBtn}}<span class="close" onclick="delRow(this, '#businessCheckIPQCFileList{{idx}}')" title="删除">&times;</span>{{/delBtn}}
+					</td>
+				</tr>//-->
+                    </script>
+                    <script type="text/javascript">
+                        var baseRouteRowIdx = 0, baseRouteTpl = $("#baseRouteTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
+                        $(document).ready(function() {
+                            var data = ${fn.toJson(businessCheckIPQC.businessCheckIPQCFileList)};
+                            for (var i=0; i<data.length; i++){
+                                addRow('#businessCheckIPQCFileList', baseRouteRowIdx, baseRouteTpl, data[i]);
+                                baseRouteRowIdx = baseRouteRowIdx + 1;
+                            }
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
 </form>
 <% } %>

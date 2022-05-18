@@ -45,6 +45,7 @@
         <!--添加业务模块-->
         <module>jeeplus-module/jeeplus-test</module>
         <module>common-wx</module>
+        <module>u8</module>
     </modules>
 
 

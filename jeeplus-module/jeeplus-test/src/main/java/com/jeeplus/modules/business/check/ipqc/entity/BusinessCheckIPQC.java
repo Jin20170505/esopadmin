@@ -4,9 +4,12 @@
 package com.jeeplus.modules.business.check.ipqc.entity;
 
 import java.util.Date;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.validation.constraints.NotNull;
 
+import com.google.common.collect.Lists;
 import com.jeeplus.core.persistence.DataEntity;
 import com.jeeplus.common.utils.excel.annotation.ExcelField;
 
@@ -29,7 +32,17 @@ public class BusinessCheckIPQC extends DataEntity<BusinessCheckIPQC> {
 	private Double badnum;		// 不良品数量
 	private Date beginCheckdate;		// 开始 质检日期
 	private Date endCheckdate;		// 结束 质检日期
-	
+	private List<BusinessCheckIPQCFile> businessCheckIPQCFileList = Lists.newArrayList();
+
+	public List<BusinessCheckIPQCFile> getBusinessCheckIPQCFileList() {
+		return businessCheckIPQCFileList;
+	}
+
+	public BusinessCheckIPQC setBusinessCheckIPQCFileList(List<BusinessCheckIPQCFile> businessCheckIPQCFileList) {
+		this.businessCheckIPQCFileList = businessCheckIPQCFileList;
+		return this;
+	}
+
 	public BusinessCheckIPQC() {
 		super();
 	}
