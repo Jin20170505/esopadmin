@@ -29,7 +29,7 @@
 
     <select id="findTypes" resultType="com.jeeplus.modules.u8data.inventory.entity.U8InventoryClass">
         select
-            a.cInvCCode as "cInvCCode",a.parentCode as "parentCode", a.cInvCName as "cInvCName",a.bInvCEnd as "bInvCEnd"
+            a.cInvCCode as "cInvCCode",a.cInvCCode1 as "parentCode", a.cInvCName as "cInvCName",a.bInvCEnd as "bInvCEnd"
         from YT_API_ERP_view_InventoryClass a
     </select>
 </mapper>

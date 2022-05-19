@@ -23,7 +23,7 @@
 
     </sql>
 
-    <select id="findList" resultType="U8Inventory">
+    <select id="findList" resultType="U8Moallocate">
         select
         <include refid="oallocateColumns"/>
         from YT_API_ERP_view_mom_moallocate a

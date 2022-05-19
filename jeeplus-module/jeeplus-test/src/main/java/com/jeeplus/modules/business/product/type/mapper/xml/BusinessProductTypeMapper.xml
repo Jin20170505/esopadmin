@@ -58,18 +58,10 @@
 				AND a.code = #{code}
 			</if>
 			<if test="name != null and name != ''">
-				AND a.name LIKE
-				    <if test="_databaseId == 'postgre'">'%'||#{name}||'%'</if>
-					<if test="_databaseId == 'oracle'">'%'||#{name}||'%'</if>
-					<if test="_databaseId == 'mssql'">'%'+#{name}+'%'</if>
-					<if test="_databaseId == 'mysql'">concat('%',#{name},'%')</if>
+				AND a.name LIKE concat('%',#{name},'%')
 			</if>
 			<if test="parentIds != null and parentIds != ''">
-				AND a.parent_ids LIKE
-				    <if test="_databaseId == 'postgre'">'%'||#{parentIds}||'%'</if>
-					<if test="_databaseId == 'oracle'">'%'||#{parentIds}||'%'</if>
-					<if test="_databaseId == 'mssql'">'%'+#{parentIds}+'%'</if>
-					<if test="_databaseId == 'mysql'">concat('%',#{parentIds},'%')</if>
+				AND a.parent_ids LIKE concat('%',#{parentIds},'%')
 			</if>
 		</where>
 		ORDER BY a.sort ASC
@@ -162,11 +154,7 @@
 	<!--物理删除-->
 	<update id="delete">
 		DELETE FROM business_product_type
-		WHERE id = #{id} OR parent_ids LIKE
-		<if test="_databaseId == 'postgre'">'%,'||#{id}||',%'</if>
-		<if test="_databaseId == 'oracle'">'%,'||#{id}||',%'</if>
-		<if test="_databaseId == 'mssql'">'%,'+#{id}+',%'</if>
-        <if test="_databaseId == 'mysql'">CONCAT('%,', #{id}, ',%')</if>
+		WHERE id = #{id} OR parent_ids LIKE CONCAT('%,', #{id}, ',%')
 	</update>
 	
 	<!--逻辑删除-->

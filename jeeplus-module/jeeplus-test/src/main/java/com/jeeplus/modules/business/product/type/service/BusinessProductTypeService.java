@@ -54,6 +54,7 @@ public class BusinessProductTypeService extends TreeService<BusinessProductTypeM
 				type.setIdType(t.getcInvCCode());
 				type.setParent(new BusinessProductType(t.getParentCode()));
 				type.preInsert();
+				type.setId(t.getcInvCCode());
 				mapper.insert(type);
 			}
 		});

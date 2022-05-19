@@ -26,7 +26,7 @@
 
     </sql>
 
-    <select id="findList" resultType="U8Inventory">
+    <select id="findList" resultType="U8Morder">
         select
         <include refid="orderColumns"/>
         from YT_API_ERP_view_Morder a

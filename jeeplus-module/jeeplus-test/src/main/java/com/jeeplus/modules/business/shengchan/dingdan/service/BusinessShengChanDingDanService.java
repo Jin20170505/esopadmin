@@ -405,14 +405,21 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 			}
 			BusinessShengChanDingDanMingXi mingXi = new BusinessShengChanDingDanMingXi();
 			mingXi.setBatchno(d.getMoLotCode());
-			mingXi.setCinv(new BusinessProduct(d.getCinvcode()));
+			BusinessProduct product = new BusinessProduct();
+			product.setCode(d.getCinvcode());
+			mingXi.setCinv(product);
 			mingXi.setCinvname(d.getCinvname());
 			mingXi.setStd(d.getCinvstd());
 			mingXi.setNo(d.getSortSeq());
+			mingXi.setDept(dept);
 			mingXi.setStatus("开立");
 			mingXi.setNum(d.getQty());
 			mingXi.setRemarks(d.getRemark());
 			mingXi.setUnit(d.getcComUnitName());
+			mingXi.setStartdate(startdate);
+			mingXi.setEnddate(enddate);
+			mingXi.setType(d.getMoClass());
+			mingXi.setP(dingDan);
 			mingXi.preInsert();
 			mingXi.setId(d.getModid());
 			mingXi.setCreateDate(d.getCreateTime());

@@ -1,5 +1,7 @@
 package com.jeeplus.modules.u8data.inventory.entity;
 
+import com.jeeplus.common.utils.StringUtils;
+
 /**
  * 存货大类
  */
@@ -28,6 +30,9 @@ public class U8InventoryClass {
     }
 
     public String getParentCode() {
+        if(StringUtils.isEmpty(parentCode)){
+            parentCode="0";
+        }
         return parentCode;
     }
 
