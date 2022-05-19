@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.business.faliao.mapper.BusinessFaLiaoMapper">
+    
+	<sql id="businessFaLiaoColumns">
+		a.id AS "id",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.code AS "code",
+		a.from_ck AS "fromck.id",
+		a.to_ck AS "tock.id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		fromck.name AS "fromck.name",
+				
+		tock.name AS "tock.name",
+				
+		createBy.name AS "createBy.name"
+	</sql>
+	
+	<sql id="businessFaLiaoJoins">
+		
+		LEFT JOIN base_cangku fromck ON fromck.id = a.from_ck
+		LEFT JOIN base_cangku tock ON tock.id = a.to_ck
+		LEFT JOIN sys_user createBy ON createBy.id = a.create_by
+	</sql>
+	
+    
+	<select id="get" resultType="BusinessFaLiao" >
+		SELECT 
+			<include refid="businessFaLiaoColumns"/>
+		FROM business_faliao a
+		<include refid="businessFaLiaoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BusinessFaLiao" >
+		SELECT 
+			<include refid="businessFaLiaoColumns"/>
+		FROM business_faliao a
+		<include refid="businessFaLiaoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="fromck != null and fromck.id != null and fromck.id != ''">
+				AND a.from_ck = #{fromck.id}
+			</if>
+			<if test="tock != null and tock.id != null and tock.id != ''">
+				AND a.to_ck = #{tock.id}
+			</if>
+			<if test="createBy != null and createBy.id != null and createBy.id != ''">
+				AND a.create_by = #{createBy.id}
+			</if>
+			<if test="beginCreateDate != null and endCreateDate != null ">
+				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BusinessFaLiao" >
+		SELECT 
+			<include refid="businessFaLiaoColumns"/>
+		FROM business_faliao a
+		<include refid="businessFaLiaoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO business_faliao(
+			id,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			code,
+			from_ck,
+			to_ck,
+			create_by,
+			create_date
+		) VALUES (
+			#{id},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{code},
+			#{fromck.id},
+			#{tock.id},
+			#{createBy.id},
+			#{createDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE business_faliao SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			code = #{code},
+			from_ck = #{fromck.id},
+			to_ck = #{tock.id}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM business_faliao
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE business_faliao SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="BusinessFaLiao" statementType="STATEMENT">
+		select * FROM business_faliao  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>
