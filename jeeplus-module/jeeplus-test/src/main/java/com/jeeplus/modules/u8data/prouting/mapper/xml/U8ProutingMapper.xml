@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.u8data.prouting.mapper.U8ProutingMapper">
+    <sql id="proutingColumns">
+        a.PRoutingId as "proutingid",
+        a.auxUnitCode as  "auxUnitCode",
+        a.status as "status",
+        a.cInvCode as "cinvcode",
+        a.cInvName as "cinvname",
+        a.cInvStd as "cinvstd",
+        a.rountingType as "rountingType",
+        a.versionDesc as "versionDesc",
+        a.version as "version",
+        a.ChangeRate as "changeRate",
+        a.versionEffDate as "versionEffDate",
+        a.versionEndDate as "versionEndDate",
+        a.identCode as "identCode",
+        a.identDesc as "identDesc"
+    </sql>
+    <sql id="proutingJoins">
+
+    </sql>
+
+    <select id="findList" resultType="U8Prouting">
+        select
+        <include refid="proutingColumns"/>
+        from YT_API_ERP_view_sfc_prouting a
+        <include refid="proutingJoins"/>
+        <where>
+            <if test="status != null and status != ''">
+                and a.status = #{status}
+            </if>
+        </where>
+    </select>
+
+</mapper>

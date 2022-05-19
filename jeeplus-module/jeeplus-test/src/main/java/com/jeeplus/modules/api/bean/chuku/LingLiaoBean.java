@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import java.util.List;
 
 /**
- * 领料出库 材料出库
+ * 材料出库出库 材料出库
  */
 public class LingLiaoBean {
     private String bgid; // 报工ID

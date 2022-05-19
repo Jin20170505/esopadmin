@@ -37,7 +37,7 @@ import com.jeeplus.modules.business.faliao.entity.BusinessFaLiao;
 import com.jeeplus.modules.business.faliao.service.BusinessFaLiaoService;
 
 /**
- * 发料单Controller
+ * 调拨单Controller
  * @author Jin
  */
 @Controller
@@ -60,7 +60,7 @@ public class BusinessFaLiaoController extends BaseController {
 	}
 	
 	/**
-	 * 发料单列表页面
+	 * 调拨单列表页面
 	 */
 	@RequiresPermissions("business:faliao:businessFaLiao:list")
 	@RequestMapping(value = {"list", ""})
@@ -70,7 +70,7 @@ public class BusinessFaLiaoController extends BaseController {
 	}
 	
 		/**
-	 * 发料单列表数据
+	 * 调拨单列表数据
 	 */
 	@ResponseBody
 	@RequiresPermissions("business:faliao:businessFaLiao:list")
@@ -81,7 +81,7 @@ public class BusinessFaLiaoController extends BaseController {
 	}
 
 	/**
-	 * 查看，增加，编辑发料单表单页面
+	 * 查看，增加，编辑调拨单表单页面
 	 * params:
 	 * 	mode: add, edit, view, 代表三种模式的页面
 	 */
@@ -94,7 +94,7 @@ public class BusinessFaLiaoController extends BaseController {
 	}
 
 	/**
-	 * 保存发料单
+	 * 保存调拨单
 	 */
 	@ResponseBody
 	@RequiresPermissions(value={"business:faliao:businessFaLiao:add","business:faliao:businessFaLiao:edit"},logical=Logical.OR)
@@ -113,13 +113,13 @@ public class BusinessFaLiaoController extends BaseController {
 		//新增或编辑表单保存
 		businessFaLiaoService.save(businessFaLiao);//保存
 		j.setSuccess(true);
-		j.setMsg("保存发料单成功");
+		j.setMsg("保存调拨单成功");
 		return j;
 	}
 
 	
 	/**
-	 * 批量删除发料单
+	 * 批量删除调拨单
 	 */
 	@ResponseBody
 	@RequiresPermissions("business:faliao:businessFaLiao:del")
@@ -130,7 +130,7 @@ public class BusinessFaLiaoController extends BaseController {
 		for(String id : idArray){
 			businessFaLiaoService.delete(businessFaLiaoService.get(id));
 		}
-		j.setMsg("删除发料单成功");
+		j.setMsg("删除调拨单成功");
 		return j;
 	}
 	
@@ -143,13 +143,13 @@ public class BusinessFaLiaoController extends BaseController {
     public AjaxJson exportFile(BusinessFaLiao businessFaLiao, HttpServletRequest request, HttpServletResponse response) {
 		AjaxJson j = new AjaxJson();
 		try {
-            String fileName = "发料单"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
+            String fileName = "调拨单"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
             Page<BusinessFaLiao> page = businessFaLiaoService.findPage(new Page<BusinessFaLiao>(request, response, -1), businessFaLiao);
-    		new ExportExcel("发料单", BusinessFaLiao.class).setDataList(page.getList()).write(response, fileName).dispose();
+    		new ExportExcel("调拨单", BusinessFaLiao.class).setDataList(page.getList()).write(response, fileName).dispose();
     		return null;
 		} catch (Exception e) {
 			j.setSuccess(false);
-			j.setMsg("导出发料单记录失败！失败信息："+e.getMessage());
+			j.setMsg("导出调拨单记录失败！失败信息："+e.getMessage());
 		}
 			return j;
     }
@@ -187,18 +187,18 @@ public class BusinessFaLiaoController extends BaseController {
 				}
 			}
 			if (failureNum>0){
-				failureMsg.insert(0, "，失败 "+failureNum+" 条发料单记录。");
+				failureMsg.insert(0, "，失败 "+failureNum+" 条调拨单记录。");
 			}
-			j.setMsg( "已成功导入 "+successNum+" 条发料单记录"+failureMsg);
+			j.setMsg( "已成功导入 "+successNum+" 条调拨单记录"+failureMsg);
 		} catch (Exception e) {
 			j.setSuccess(false);
-			j.setMsg("导入发料单失败！失败信息："+e.getMessage());
+			j.setMsg("导入调拨单失败！失败信息："+e.getMessage());
 		}
 		return j;
     }
 	
 	/**
-	 * 下载导入发料单数据模板
+	 * 下载导入调拨单数据模板
 	 */
 	@ResponseBody
 	@RequiresPermissions("business:faliao:businessFaLiao:import")
@@ -206,9 +206,9 @@ public class BusinessFaLiaoController extends BaseController {
      public AjaxJson importFileTemplate(HttpServletResponse response) {
 		AjaxJson j = new AjaxJson();
 		try {
-            String fileName = "发料单数据导入模板.xlsx";
+            String fileName = "调拨单数据导入模板.xlsx";
     		List<BusinessFaLiao> list = Lists.newArrayList(); 
-    		new ExportExcel("发料单数据", BusinessFaLiao.class, 1).setDataList(list).write(response, fileName).dispose();
+    		new ExportExcel("调拨单数据", BusinessFaLiao.class, 1).setDataList(list).write(response, fileName).dispose();
     		return null;
 		} catch (Exception e) {
 			j.setSuccess(false);

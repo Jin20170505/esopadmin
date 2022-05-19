@@ -37,7 +37,7 @@ import com.jeeplus.modules.business.chuku.lingliao.entity.BusinessChuKuLingLiao;
 import com.jeeplus.modules.business.chuku.lingliao.service.BusinessChuKuLingLiaoService;
 
 /**
- * 领料单Controller
+ * 材料出库单Controller
  * @author Jin
  */
 @Controller
@@ -60,7 +60,7 @@ public class BusinessChuKuLingLiaoController extends BaseController {
 	}
 	
 	/**
-	 * 领料单列表页面
+	 * 材料出库单列表页面
 	 */
 	@RequiresPermissions("business:chuku:lingliao:businessChuKuLingLiao:list")
 	@RequestMapping(value = {"list", ""})
@@ -70,7 +70,7 @@ public class BusinessChuKuLingLiaoController extends BaseController {
 	}
 	
 		/**
-	 * 领料单列表数据
+	 * 材料出库单列表数据
 	 */
 	@ResponseBody
 	@RequiresPermissions("business:chuku:lingliao:businessChuKuLingLiao:list")
@@ -81,7 +81,7 @@ public class BusinessChuKuLingLiaoController extends BaseController {
 	}
 
 	/**
-	 * 查看，增加，编辑领料单表单页面
+	 * 查看，增加，编辑材料出库单表单页面
 	 * params:
 	 * 	mode: add, edit, view, 代表三种模式的页面
 	 */
@@ -94,7 +94,7 @@ public class BusinessChuKuLingLiaoController extends BaseController {
 	}
 
 	/**
-	 * 保存领料单
+	 * 保存材料出库单
 	 */
 	@ResponseBody
 	@RequiresPermissions(value={"business:chuku:lingliao:businessChuKuLingLiao:add","business:chuku:lingliao:businessChuKuLingLiao:edit"},logical=Logical.OR)
@@ -113,13 +113,13 @@ public class BusinessChuKuLingLiaoController extends BaseController {
 		//新增或编辑表单保存
 		businessChuKuLingLiaoService.save(businessChuKuLingLiao);//保存
 		j.setSuccess(true);
-		j.setMsg("保存领料单成功");
+		j.setMsg("保存材料出库单成功");
 		return j;
 	}
 
 	
 	/**
-	 * 批量删除领料单
+	 * 批量删除材料出库单
 	 */
 	@ResponseBody
 	@RequiresPermissions("business:chuku:lingliao:businessChuKuLingLiao:del")
@@ -130,7 +130,7 @@ public class BusinessChuKuLingLiaoController extends BaseController {
 		for(String id : idArray){
 			businessChuKuLingLiaoService.delete(businessChuKuLingLiaoService.get(id));
 		}
-		j.setMsg("删除领料单成功");
+		j.setMsg("删除材料出库单成功");
 		return j;
 	}
 	
@@ -143,13 +143,13 @@ public class BusinessChuKuLingLiaoController extends BaseController {
     public AjaxJson exportFile(BusinessChuKuLingLiao businessChuKuLingLiao, HttpServletRequest request, HttpServletResponse response) {
 		AjaxJson j = new AjaxJson();
 		try {
-            String fileName = "领料单"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
+            String fileName = "材料出库单"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
             Page<BusinessChuKuLingLiao> page = businessChuKuLingLiaoService.findPage(new Page<BusinessChuKuLingLiao>(request, response, -1), businessChuKuLingLiao);
-    		new ExportExcel("领料单", BusinessChuKuLingLiao.class).setDataList(page.getList()).write(response, fileName).dispose();
+    		new ExportExcel("材料出库单", BusinessChuKuLingLiao.class).setDataList(page.getList()).write(response, fileName).dispose();
     		return null;
 		} catch (Exception e) {
 			j.setSuccess(false);
-			j.setMsg("导出领料单记录失败！失败信息："+e.getMessage());
+			j.setMsg("导出材料出库单记录失败！失败信息："+e.getMessage());
 		}
 			return j;
     }
@@ -187,18 +187,18 @@ public class BusinessChuKuLingLiaoController extends BaseController {
 				}
 			}
 			if (failureNum>0){
-				failureMsg.insert(0, "，失败 "+failureNum+" 条领料单记录。");
+				failureMsg.insert(0, "，失败 "+failureNum+" 条材料出库单记录。");
 			}
-			j.setMsg( "已成功导入 "+successNum+" 条领料单记录"+failureMsg);
+			j.setMsg( "已成功导入 "+successNum+" 条材料出库单记录"+failureMsg);
 		} catch (Exception e) {
 			j.setSuccess(false);
-			j.setMsg("导入领料单失败！失败信息："+e.getMessage());
+			j.setMsg("导入材料出库单失败！失败信息："+e.getMessage());
 		}
 		return j;
     }
 	
 	/**
-	 * 下载导入领料单数据模板
+	 * 下载导入材料出库单数据模板
 	 */
 	@ResponseBody
 	@RequiresPermissions("business:chuku:lingliao:businessChuKuLingLiao:import")
@@ -206,9 +206,9 @@ public class BusinessChuKuLingLiaoController extends BaseController {
      public AjaxJson importFileTemplate(HttpServletResponse response) {
 		AjaxJson j = new AjaxJson();
 		try {
-            String fileName = "领料单数据导入模板.xlsx";
+            String fileName = "材料出库单数据导入模板.xlsx";
     		List<BusinessChuKuLingLiao> list = Lists.newArrayList(); 
-    		new ExportExcel("领料单数据", BusinessChuKuLingLiao.class, 1).setDataList(list).write(response, fileName).dispose();
+    		new ExportExcel("材料出库单数据", BusinessChuKuLingLiao.class, 1).setDataList(list).write(response, fileName).dispose();
     		return null;
 		} catch (Exception e) {
 			j.setSuccess(false);

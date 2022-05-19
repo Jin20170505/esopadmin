@@ -5,6 +5,11 @@ package com.jeeplus.modules.base.route.service;
 
 import java.util.List;
 
+import com.google.common.collect.Lists;
+import com.jeeplus.modules.base.site.entity.BaseSite;
+import com.jeeplus.modules.business.product.archive.entity.BusinessProduct;
+import com.jeeplus.modules.u8data.prouting.entity.U8Prouting;
+import com.jeeplus.modules.u8data.prouting.entity.U8ProutingDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -83,4 +88,32 @@ public class BaseRoteMainService extends CrudService<BaseRoteMainMapper, BaseRot
 	public BaseRoteMain getRouteVersionByCinvCode(String cinvcode){
 		return mapper.getRouteVersionByCinvCode(cinvcode);
 	}
+
+	@Transactional(readOnly = false)
+    public void sychU8(List<U8Prouting> data, List<U8ProutingDetail> details) {
+		data.stream().filter(d->null==mapper.hasById(d.getProutingid())).forEach(d->{
+			BaseRoteMain m = new BaseRoteMain();
+			m.preInsert();
+			m.setId(d.getProutingid());
+			m.setCode(d.getCinvcode());
+			BusinessProduct product = new BusinessProduct();
+			product.setName(d.getCinvname());
+			m.setProduct(product);
+			m.setVersion(d.getVersion());
+			m.setStd(d.getCinvstd());
+			m.setEnable("0");
+			m.setCode(d.getCinvcode());
+			mapper.insert(m);
+		});
+
+		details.stream().filter(d->null==baseRouteMapper.hasById(d.getProutingDId())).forEach(d->{
+			BaseRoute r = new BaseRoute();
+			r.preInsert();
+			r.setId(d.getProutingDId());
+			r.setNo(d.getOpSeq());
+			r.setP(new BaseRoteMain(d.getProutingId()));
+			r.setSite(new BaseSite(d.getOperationId()));
+			baseRouteMapper.insert(r);
+		});
+    }
 }

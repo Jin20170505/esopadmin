@@ -29,7 +29,6 @@ public class BaseRoute extends DataEntity<BaseRoute> {
 	
 	public BaseRoute() {
 		super();
-		this.setIdType(IDTYPE_AUTO);
 	}
 
 	public BaseRoute(String id){

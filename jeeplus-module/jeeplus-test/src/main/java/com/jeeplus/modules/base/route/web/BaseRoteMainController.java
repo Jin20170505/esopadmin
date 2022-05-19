@@ -13,6 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
 import com.jeeplus.modules.base.route.entity.BaseRoute;
+import com.jeeplus.modules.u8data.prouting.entity.U8Prouting;
+import com.jeeplus.modules.u8data.prouting.entity.U8ProutingDetail;
+import com.jeeplus.modules.u8data.prouting.service.U8ProutingService;
+import com.jeeplus.modules.u8data.unit.entity.U8Unit;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +73,36 @@ public class BaseRoteMainController extends BaseController {
 		model.addAttribute("baseRoteMain", baseRoteMain);
 		return "modules/base/route/baseRoteMainList";
 	}
+	@Autowired
+	private U8ProutingService u8ProutingService;
 
+	@ResponseBody
+	@RequestMapping("sychu8")
+	public AjaxJson sychU8(){
+		AjaxJson json = new AjaxJson();
+		try{
+			U8Prouting prouting = new U8Prouting();
+			List<U8Prouting> data = u8ProutingService.findList(prouting);
+			if(data==null){
+				json.setMsg("同步成功(u8数据空)");
+				json.setSuccess(true);
+				return json;
+			}
+			U8ProutingDetail detail = new U8ProutingDetail();
+			List<U8ProutingDetail> details = u8ProutingService.findDetailList(detail);
+			if(details==null){
+				details = Lists.newArrayList();
+			}
+			baseRoteMainService.sychU8(data,details);
+			json.setMsg("同步成功");
+			json.setSuccess(true);
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setSuccess(false);
+			json.setMsg("同步失败,原因："+e.getMessage());
+		}
+		return json;
+	}
 	@ResponseBody
 	@RequestMapping("findVersion")
 	public AjaxJson findVersion(String productid){

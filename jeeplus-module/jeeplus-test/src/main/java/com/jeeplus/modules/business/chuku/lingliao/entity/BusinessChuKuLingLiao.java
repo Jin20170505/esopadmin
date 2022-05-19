@@ -12,7 +12,7 @@ import com.jeeplus.core.persistence.DataEntity;
 import com.jeeplus.common.utils.excel.annotation.ExcelField;
 
 /**
- * 领料单Entity
+ * 材料出库单Entity
  * @author Jin
  */
 public class BusinessChuKuLingLiao extends DataEntity<BusinessChuKuLingLiao> {

@@ -24,7 +24,7 @@ import com.jeeplus.modules.business.chuku.lingliao.entity.BusinessChuKuLingLiaoM
 import com.jeeplus.modules.business.chuku.lingliao.mapper.BusinessChuKuLingLiaoMxMapper;
 
 /**
- * 领料单Service
+ * 材料出库单Service
  * @author Jin
  */
 @Service

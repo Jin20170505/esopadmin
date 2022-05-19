@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 领料单 出库
+ * 材料出库单 出库
  */
 @RestController
 @RequestMapping("api/chuku/lingliao")
@@ -44,10 +44,10 @@ public class ApiLingLiaoChuKuController {
             businessChuKuLingLiaoService.lingliao(bgid,bgcode,sccode,scline,plancode, planid,
                     cinvcode,cinvname,cinvstd,unit,num,ckid,remarks, userid,mxJson);
             json.setSuccess(true);
-            json.setMsg("领料成功。");
+            json.setMsg("材料出库成功。");
         }catch (Exception e){
             e.printStackTrace();
-            json.setMsg("领料失败.原因："+e.getMessage());
+            json.setMsg("材料出库失败.原因："+e.getMessage());
             json.setSuccess(false);
         }
         return json;

@@ -54,7 +54,7 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 	private BusinessJiHuaGongDanMapper businessJiHuaGongDanMapper;
 	@Autowired
 	private BusinessJiHuaGongDanBomMapper businessJiHuaGongDanBomMapper;
-	// 领料单
+	// 材料出库单
 	public LingLiaoBean getLingLiaoInfo(String bgcode){
 		BusinessBaoGongOrder order = mapper.getByCode(bgcode);
 		if(order==null){

@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.jeeplus.modules.business.faliao.entity.BusinessFaLiaoMx;
 
 /**
- * 发料明细MAPPER接口
+ * 调拨明细MAPPER接口
  * @author Jin
  * @version 2022-05-19
  */

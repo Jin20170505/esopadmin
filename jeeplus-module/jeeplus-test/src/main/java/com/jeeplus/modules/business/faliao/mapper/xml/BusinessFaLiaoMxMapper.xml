@@ -18,12 +18,13 @@
 		a.scdate AS "scdate",
 		a.num AS "num",
 		a.unit AS "unit",
-		a.pid AS "pid.id"
+		a.huowei AS "huowei.id",
+		a.pid AS "pid.id",
+		huowei.name AS "huowei.name"
 	</sql>
 	
 	<sql id="businessFaLiaoMxJoins">
-		
-			LEFT JOIN business_faliao b ON b.id = a.pid
+		LEFT JOIN base_huowei huowei ON huowei.id = a.huowei
 	</sql>
 	
     
@@ -93,6 +94,7 @@
 			scdate,
 			num,
 			unit,
+			huowei,
 			pid
 		) VALUES (
 			#{id},
@@ -110,6 +112,7 @@
 			#{scdate},
 			#{num},
 			#{unit},
+			#{huowei.id},
 			#{pid.id}
 		)
 	</insert>
@@ -126,6 +129,7 @@
 			batchno = #{batchno},
 			scdate = #{scdate},
 			num = #{num},
+			huowei = #{huowei.id},
 			unit = #{unit}
 		WHERE id = #{id}
 	</update>

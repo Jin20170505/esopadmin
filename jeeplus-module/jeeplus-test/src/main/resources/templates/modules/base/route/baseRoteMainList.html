@@ -50,6 +50,9 @@ layout("/include/_container.html", {title:"列表", parent:"工艺路线"}){
 	<!-- 工具栏 -->
 	<div id="toolbar">
 			 <% if(shiro.hasPermission("base:route:baseRoteMain:add") ){ %>
+				<button  class="btn btn-custom waves-effect w-xs waves-light" onclick="sychu8()">
+					<i class="fa fa-plus"></i> U8同步
+				</button>
 			 	<button id="add" class="btn btn-custom waves-effect w-xs waves-light" onclick="add()">
 					<i class="fa fa-plus"></i> 新建
 				</button>

@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 调拨单
+ */
 @RestController
 @RequestMapping("api/faliao")
 public class ApiFaLiaoController {
@@ -18,11 +21,11 @@ public class ApiFaLiaoController {
         try{
             businessFaLiaoService.faliao(userid, fromck, tock, mxJson);
             json.setSuccess(true);
-            json.setMsg("领料成功。");
+            json.setMsg("调拨成功。");
         }catch (Exception e){
             e.printStackTrace();
             json.setSuccess(false);
-            json.setMsg("领料失败，原因："+e.getMessage());
+            json.setMsg("调拨失败，原因："+e.getMessage());
         }
         return json;
     }

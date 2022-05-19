@@ -23,7 +23,7 @@ import com.jeeplus.modules.business.faliao.entity.BusinessFaLiaoMx;
 import com.jeeplus.modules.business.faliao.mapper.BusinessFaLiaoMxMapper;
 
 /**
- * 发料单Service
+ * 调拨单Service
  * @author Jin
  */
 @Service

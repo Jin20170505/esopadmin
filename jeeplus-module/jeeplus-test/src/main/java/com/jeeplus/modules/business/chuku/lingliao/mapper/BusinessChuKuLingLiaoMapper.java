@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.jeeplus.modules.business.chuku.lingliao.entity.BusinessChuKuLingLiao;
 
 /**
- * 领料单MAPPER接口
+ * 材料出库单MAPPER接口
  * @author Jin
  */
 @Mapper

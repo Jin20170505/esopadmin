@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.u8data.prouting.mapper.U8ProutingDetailMapper">
+    <sql id="proutingColumns">
+        a.PRoutingDId as "proutingDId",
+        a.PRoutingId as  "proutingId",
+        a.opSeq as  "opSeq",
+        a.operationId as "operationId",
+        a.description as "description",
+        a.wcId as "wcId",
+        a.effBegDate as "effBegDate",
+        a.effEndDate as "effEndDate",
+        a.subFlag as "subFlag",
+        a.lastFlag as "lastFlag",
+        a.define25 as "define25",
+        a.define26 as "define26",
+        a.feeFlag as "feeFlag",
+        a.bfflag as "bfflag",
+        a.changeRate as "changeRate",
+        a.splitFlag as "splitFlag",
+        a.planSubFlag as "planSubFlag",
+        a.deliveryDays as "deliveryDays",
+        a.reportFlag as "reportFlag",
+        a.auxUnitCode as "auxUnitCode"
+    </sql>
+    <sql id="proutingJoins">
+
+    </sql>
+
+    <select id="findList" resultType="U8ProutingDetail">
+        select
+        <include refid="proutingColumns"/>
+        from YT_API_ERP_view_sfc_proutingdetail a
+        <include refid="proutingJoins"/>
+        <where>
+            <if test="proutingId != null and proutingId != ''">
+                and a.PRoutingId = #{proutingId}
+            </if>
+        </where>
+    </select>
+
+</mapper>

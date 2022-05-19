@@ -76,6 +76,7 @@
 	
 	<insert id="insert">
 		INSERT INTO base_route(
+		                       id,
 			create_by,
 			create_date,
 			update_by,
@@ -89,6 +90,7 @@
 			pid,
 			remarks
 		) VALUES (
+		          #{id},
 			#{createBy.id},
 			#{createDate},
 			#{updateBy.id},

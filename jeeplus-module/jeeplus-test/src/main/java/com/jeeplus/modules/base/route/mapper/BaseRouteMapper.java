@@ -3,6 +3,8 @@
  */
 package com.jeeplus.modules.base.route.mapper;
 
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 import com.jeeplus.core.persistence.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,5 +18,7 @@ import com.jeeplus.modules.base.route.entity.BaseRoute;
 @Mapper
 @Repository
 public interface BaseRouteMapper extends BaseMapper<BaseRoute> {
-	
+
+    @Select("select 1 from base_route  where id = #{id}")
+    Integer hasById(@Param("id") String id);
 }

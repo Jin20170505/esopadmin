@@ -281,7 +281,7 @@ $(document).ready(function() {
      if(!ids){
           ids = getIdSelections();
      }
-	 jp.confirm('确认要删除该领料单记录吗？', function(){
+	 jp.confirm('确认要删除该材料出库单记录吗？', function(){
 		var index =jp.loading();
 		jp.get("${ctx}/business/chuku/lingliao/businessChuKuLingLiao/delete?ids=" + ids, function(data){
 				if(data.success){
@@ -304,21 +304,21 @@ $(document).ready(function() {
 
    //新增表单页面
  function add() {
-     jp.openSaveDialog('新增领料单', "${ctx}/business/chuku/lingliao/businessChuKuLingLiao/form/add",'90%', '90%');
+     jp.openSaveDialog('新增材料出库单', "${ctx}/business/chuku/lingliao/businessChuKuLingLiao/form/add",'90%', '90%');
  }
   //编辑表单页面
   function edit(id){
       if(!id){
           id = getIdSelections();
       }
-	  jp.openSaveDialog('编辑领料单', "${ctx}/business/chuku/lingliao/businessChuKuLingLiao/form/edit?id="+id,'90%', '90%');
+	  jp.openSaveDialog('编辑材料出库单', "${ctx}/business/chuku/lingliao/businessChuKuLingLiao/form/edit?id="+id,'90%', '90%');
   }
   //查看表单页面
   function view(id) {
       if(!id){
           id = getIdSelections();
       }
-      jp.openViewDialog('查看领料单', "${ctx}/business/chuku/lingliao/businessChuKuLingLiao/form/view?id="+id,'90%', '90%');
+      jp.openViewDialog('查看材料出库单', "${ctx}/business/chuku/lingliao/businessChuKuLingLiao/form/view?id="+id,'90%', '90%');
   }
  //子表展示
 		   
@@ -352,7 +352,7 @@ $(document).ready(function() {
 	<div class="card card-tabs">
 	<div class="card-heading  pb-0">
 	    <ul class="nav nav-pills float-left" role="tablist">
-				<li class="nav-item"><a data-toggle="tab" class="nav-link show active" href="#tab-{{idx}}-1" aria-expanded="true">领料单明细</a></li>
+				<li class="nav-item"><a data-toggle="tab" class="nav-link show active" href="#tab-{{idx}}-1" aria-expanded="true">材料出库单明细</a></li>
 		</ul>
 		</div>
 		<div class="card-body">

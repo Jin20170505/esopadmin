@@ -72,7 +72,7 @@ $(document).ready(function() {
 		    }
 			,{
 		        field: 'code',
-		        title: '发料单号',
+		        title: '调拨单号',
 		        sortable: true,
 		        sortName: 'code'
 		        ,formatter:function(value, row , index){
@@ -110,14 +110,14 @@ $(document).ready(function() {
 		    }
 			,{
 		        field: 'createBy.name',
-		        title: '发料人',
+		        title: '调拨人',
 		        sortable: true,
 		        sortName: 'createBy.name'
 		       
 		    }
 			,{
 		        field: 'createDate',
-		        title: '发料时间',
+		        title: '调拨时间',
 		        sortable: true,
 		        sortName: 'createDate'
 		       
@@ -237,7 +237,7 @@ $(document).ready(function() {
      if(!ids){
           ids = getIdSelections();
      }
-	 jp.confirm('确认要删除该发料单记录吗？', function(){
+	 jp.confirm('确认要删除该调拨单记录吗？', function(){
 		var index =jp.loading();
 		jp.get("${ctx}/business/faliao/businessFaLiao/delete?ids=" + ids, function(data){
 				if(data.success){
@@ -260,21 +260,21 @@ $(document).ready(function() {
 
    //新增表单页面
  function add() {
-     jp.openSaveDialog('新增发料单', "${ctx}/business/faliao/businessFaLiao/form/add",'800px', '500px');
+     jp.openSaveDialog('新增调拨单', "${ctx}/business/faliao/businessFaLiao/form/add",'800px', '500px');
  }
   //编辑表单页面
   function edit(id){
       if(!id){
           id = getIdSelections();
       }
-	  jp.openSaveDialog('编辑发料单', "${ctx}/business/faliao/businessFaLiao/form/edit?id="+id,'800px', '500px');
+	  jp.openSaveDialog('编辑调拨单', "${ctx}/business/faliao/businessFaLiao/form/edit?id="+id,'800px', '500px');
   }
   //查看表单页面
   function view(id) {
       if(!id){
           id = getIdSelections();
       }
-      jp.openViewDialog('查看发料单', "${ctx}/business/faliao/businessFaLiao/form/view?id="+id,'800px', '500px');
+      jp.openViewDialog('查看调拨单', "${ctx}/business/faliao/businessFaLiao/form/view?id="+id,'800px', '500px');
   }
  //子表展示
 		   
@@ -308,7 +308,7 @@ $(document).ready(function() {
 	<div class="card card-tabs">
 	<div class="card-heading  pb-0">
 	    <ul class="nav nav-pills float-left" role="tablist">
-				<li class="nav-item"><a data-toggle="tab" class="nav-link show active" href="#tab-{{idx}}-1" aria-expanded="true">发料明细</a></li>
+				<li class="nav-item"><a data-toggle="tab" class="nav-link show active" href="#tab-{{idx}}-1" aria-expanded="true">调拨明细</a></li>
 		</ul>
 		</div>
 		<div class="card-body">
@@ -325,6 +325,7 @@ $(document).ready(function() {
 								<th>生产日期</th>
 								<th>数量</th>
 								<th>单位</th>
+                                <th>货位</th>
 							</tr>
 						</thead>
 						<tbody id="businessFaLiaoChild-{{idx}}-1-List">
@@ -361,5 +362,8 @@ $(document).ready(function() {
 					<td>
 						{{row.unit}}
 					</td>
+                    <td>
+                    {{row.huowei.name}}
+                    </td>
 				</tr>//-->
 	</script>

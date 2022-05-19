@@ -257,6 +257,21 @@ $(document).ready(function() {
 	 })
   }
 
+function sychu8(){
+    jp.confirm('确认同步U8数据吗？', function(){
+		var index =jp.loading();
+		jp.get("${ctx}/base/route/baseRoteMain/sychu8", function(data){
+				if(data.success){
+					refresh();
+					jp.toastr_success(data.msg);
+				}else{
+					jp.toastr_error(data.msg);
+				}
+				jp.close(index);
+			})
+
+	 })
+}
 
     //刷新列表
   function refresh() {

@@ -1,5 +1,5 @@
 <%
-layout("/include/_container.html", {title:"列表", parent:"发料单"}){
+layout("/include/_container.html", {title:"列表", parent:"调拨单"}){
 %>
     <!-- 文件上传 -->
     <div id="import-collapse" class="collapse white-box m-b-5">
@@ -24,7 +24,7 @@ layout("/include/_container.html", {title:"列表", parent:"发料单"}){
         </a>
         <form id="searchForm" class="form-inline">
 			 <div class="form-group m-b-10 m-r-10">
-				<label class="m-r-10" title="发料单号：">发料单号：</label>
+				<label class="m-r-10" title="调拨单号：">调拨单号：</label>
 				<input name="code"  maxlength="64"  class=" form-control"/>
 			</div>
 			 <div class="form-group m-b-10 m-r-10">
@@ -38,12 +38,12 @@ layout("/include/_container.html", {title:"列表", parent:"发料单"}){
 							 title="选择目标仓库" class="form-control " fieldLabels="编码|名称" fieldKeys="code|namme" searchLabels="编码|名称" searchKeys="code|namme"/>
 			</div>
 			 <div class="form-group m-b-10 m-r-10">
-				<label class="m-r-10" title="发料人：">发料人：</label>
+				<label class="m-r-10" title="调拨人：">调拨人：</label>
 				<#userselect id="createBy" name="createBy.id"  labelName="createBy.name" labelValue=""
 							    class="form-control"  allowClear="true"/>
 			</div>
 			 <div class="form-group m-b-10 m-r-10">
-				<label class="m-r-10" title="发料时间：">发料时间：</label>
+				<label class="m-r-10" title="调拨时间：">调拨时间：</label>
 				<div class="input-daterange input-group" id="createDate">
                     <input type="text" class="form-control" id="beginCreateDate" name="beginCreateDate">
                     <span class="input-group-text btn-custom border text-white">to</span>

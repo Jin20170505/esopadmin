@@ -6,9 +6,10 @@ package com.jeeplus.modules.business.faliao.entity;
 
 import com.jeeplus.core.persistence.DataEntity;
 import com.jeeplus.common.utils.excel.annotation.ExcelField;
+import com.jeeplus.modules.base.huowei.entity.BaseHuoWei;
 
 /**
- * 发料明细Entity
+ * 调拨明细Entity
  * @author Jin
  * @version 2022-05-19
  */
@@ -23,6 +24,7 @@ public class BusinessFaLiaoMx extends DataEntity<BusinessFaLiaoMx> {
 	private String scdate;		// 生产日期
 	private Double num;		// 数量
 	private String unit;		// 单位
+	private BaseHuoWei huowei; // 货位
 	private BusinessFaLiao pid;		// 父键 父类
 	
 	public BusinessFaLiaoMx() {
@@ -116,5 +118,13 @@ public class BusinessFaLiaoMx extends DataEntity<BusinessFaLiaoMx> {
 	public void setPid(BusinessFaLiao pid) {
 		this.pid = pid;
 	}
-	
+
+	public BaseHuoWei getHuowei() {
+		return huowei;
+	}
+
+	public BusinessFaLiaoMx setHuowei(BaseHuoWei huowei) {
+		this.huowei = huowei;
+		return this;
+	}
 }

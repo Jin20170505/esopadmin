@@ -10,7 +10,7 @@ import com.jeeplus.core.persistence.DataEntity;
 import com.jeeplus.common.utils.excel.annotation.ExcelField;
 
 /**
- * 领料单明细Entity
+ * 材料出库单明细Entity
  * @author Jin
  * @version 2022-05-13
  */
