@@ -69,7 +69,7 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 			logger.debug("login submit, active session size: {}, username: {}", activeSessionSize, token.getUsername());
 		}
 		if(activeSessionSize>onlinemax){
-			throw new AuthenticationException("msg:超出登陆并发数(10)，请稍后操作.");
+			// throw new AuthenticationException("msg:超出登陆并发数(10)，请稍后操作.");
 		}
 		// 校验登录验证码
 		if ( LoginController.isValidateCodeLogin(token.getUsername(), false, false)){
