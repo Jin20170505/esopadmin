@@ -43,5 +43,16 @@
             <artifactId>jeeplus-bpm</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.jeeplus</groupId>
+            <artifactId>u8</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jeeplus</groupId>
+            <artifactId>u8</artifactId>
+            <version>6.0</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 </project>

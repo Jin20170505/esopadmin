@@ -97,8 +97,7 @@ public class BusinessChuKuLingLiaoMx extends DataEntity<BusinessChuKuLingLiaoMx>
 	public void setCknum(Double cknum) {
 		this.cknum = cknum;
 	}
-	
-	@NotNull(message="货位不能为空")
+
 	@ExcelField(title="货位", fieldType=BaseHuoWei.class, value="huowei.name", align=2, sort=12)
 	public BaseHuoWei getHuowei() {
 		return huowei;
@@ -107,8 +106,7 @@ public class BusinessChuKuLingLiaoMx extends DataEntity<BusinessChuKuLingLiaoMx>
 	public void setHuowei(BaseHuoWei huowei) {
 		this.huowei = huowei;
 	}
-	
-	@NotNull(message="现存量不能为空")
+
 	@ExcelField(title="现存量", align=2, sort=13)
 	public Double getXcnum() {
 		return xcnum;

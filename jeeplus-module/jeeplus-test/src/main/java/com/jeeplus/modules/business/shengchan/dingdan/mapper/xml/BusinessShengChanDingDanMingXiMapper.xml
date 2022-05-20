@@ -32,6 +32,15 @@
 		LEFT JOIN sys_office dept ON dept.id = a.dept
 	</sql>
 
+	<select id="getInfo" resultType="BusinessShengChanDingDanMingXi">
+		select
+			p.code as "p.code",
+			a.no AS "no"
+		FROM business_shengchan_dingdan_mingxi a
+		left join business_shengchan_dingdan p on p.id = a.pid
+		where a.id = #{id}
+	</select>
+
 	<select id="findShengChanDingDanMingXi" resultType="BusinessShengChanDingDanMingXi">
 		select a.id as "id",a.batchno as "batchno",a.no AS "no",a.cinv_code AS "cinv.code",a.cinv_name AS "cinvname",a.std AS "std",a.unit AS "unit",a.num AS "num",a.start_date AS "startdate",
 			   a.end_date AS "enddate",p.code as "p.code",a.dept AS "dept.id",dept.name AS "dept.name",a.status as "status"

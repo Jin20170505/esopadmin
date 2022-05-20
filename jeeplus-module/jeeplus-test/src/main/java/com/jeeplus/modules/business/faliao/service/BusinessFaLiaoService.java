@@ -3,14 +3,23 @@
  */
 package com.jeeplus.modules.business.faliao.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.jeeplus.common.utils.DateUtils;
 import com.jeeplus.modules.base.cangku.entity.BaseCangKu;
+import com.jeeplus.modules.base.cangku.mapper.BaseCangKuMapper;
 import com.jeeplus.modules.base.huowei.entity.BaseHuoWei;
+import com.jeeplus.modules.base.huowei.mapper.BaseHuoWeiMapper;
 import com.jeeplus.modules.sys.entity.User;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.jeeplus.u8.webservice.U8Post;
+import org.jeeplus.u8.webservice.U8Url;
+import org.jeeplus.u8.webservice.YT_Tran;
+import org.jeeplus.u8.webservice.YT_Trans;
+import org.jeeplus.u8.webservice.entity.U8WebServiceResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,6 +84,11 @@ public class BusinessFaLiaoService extends CrudService<BusinessFaLiaoMapper, Bus
 		super.delete(businessFaLiao);
 		businessFaLiaoMxMapper.delete(new BusinessFaLiaoMx(businessFaLiao));
 	}
+	@Autowired
+	private BaseCangKuMapper cangKuMapper;
+	@Autowired
+	private BaseHuoWeiMapper huoWeiMapper;
+
 	@Transactional(readOnly = false)
 	public void faliao(String userid,String fromck,String tock,String mxJson){
 		BusinessFaLiao businessFaLiao = new BusinessFaLiao();
@@ -86,6 +100,7 @@ public class BusinessFaLiaoService extends CrudService<BusinessFaLiaoMapper, Bus
 		mapper.insert(businessFaLiao);
 		JSONObject json = JSONObject.fromObject(mxJson);
 		JSONArray jsonArray = json.getJSONArray("list");
+		List<BusinessFaLiaoMx>  mxes = new ArrayList<>();
 		jsonArray.forEach(j->{
 			JSONObject o = JSONObject.fromObject(j);
 			BusinessFaLiaoMx mx = new BusinessFaLiaoMx();
@@ -99,8 +114,41 @@ public class BusinessFaLiaoService extends CrudService<BusinessFaLiaoMapper, Bus
 			mx.setBatchno(o.optString("batchno"));
 			mx.setScdate(o.optString("scdate"));
 			mx.setHuowei(new BaseHuoWei(o.optString("hwid")));
+			mxes.add(mx);
 			mx.preInsert();
 			businessFaLiaoMxMapper.insert(mx);
 		});
+		try {
+			String ockcdoe = cangKuMapper.getCodeById(fromck);
+			String tckcode = cangKuMapper.getCodeById(tock);
+			//TODO 调拨单
+			YT_Tran tr = new YT_Tran();
+			tr.setcTVCode(businessFaLiao.getCode());
+			tr.setdTVDate(DateUtils.getDate());
+			tr.setcOWhCode(ockcdoe);
+			tr.setcIWhCode(tckcode);
+			tr.setcIRdCode("15");
+			tr.setcORdCode("25");
+			List<YT_Trans> trans = Lists.newArrayList();
+			mxes.forEach(d->{
+				String hwcode = huoWeiMapper.getCodeById(d.getHuowei().getId());
+				YT_Trans t = new YT_Trans();
+				t.setcInvCode(d.getCinvcode());
+				t.setiTVQuantity(d.getNo()+"");
+				t.setIrowno(d.getNo()+"");
+				t.setdMadeDate(d.getScdate());
+				t.setcTVBatch(d.getBatchno());
+				t.setCoutposcode(hwcode);
+				trans.add(t);
+			});
+			tr.setTrans(trans);
+			U8WebServiceResult rs = U8Post.TranPost(tr, U8Url.URL);
+			if("1".equals(rs.getCount())){
+				throw new RuntimeException(rs.getMessage());
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new RuntimeException("数据传U8出错，原因："+e.getMessage());
+		}
 	}
 }

@@ -37,4 +37,6 @@ public interface BusinessShengChanDingDanMingXiMapper extends BaseMapper<Busines
 
 	@Select("select 1 from business_shengchan_dingdan_mingxi where id = #{id}")
 	Integer hasById(@Param("id") String id);
+
+	BusinessShengChanDingDanMingXi getInfo(@Param("id") String id);
 }
