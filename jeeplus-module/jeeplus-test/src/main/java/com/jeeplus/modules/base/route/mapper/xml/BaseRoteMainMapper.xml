@@ -8,16 +8,18 @@
 		a.update_by AS "updateBy.id",
 		a.del_flag AS "delFlag",
 		a.code AS "code",
-		a.product_id AS "product.name",
+		a.product_id AS "product.id",
 		a.std AS "std",
 		a.version AS "version",
 		a.enable AS "enable",
 		a.remarks AS "remarks",
 		a.create_date AS "createDate",
-		a.update_date AS "updateDate"
+		a.update_date AS "updateDate",
+		product.name AS "product.name"
 	</sql>
 	
 	<sql id="baseRoteMainJoins">
+		LEFT JOIN business_product product ON product.id = a.product_id
 	</sql>
 	
     
@@ -102,7 +104,7 @@
 			#{updateBy.id},
 			#{delFlag},
 			#{code},
-			#{product.name},
+			#{product.id},
 			#{std},
 			#{version},
 			#{enable},
@@ -116,7 +118,7 @@
 		UPDATE base_route_main SET 	
 			update_by = #{updateBy.id},
 			code = #{code},
-			product_id = #{product.name},
+			product_id = #{product.id},
 			std = #{std},
 			version = #{version},
 			enable = #{enable},

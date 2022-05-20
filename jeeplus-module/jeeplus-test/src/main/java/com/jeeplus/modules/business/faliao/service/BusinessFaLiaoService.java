@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.jeeplus.common.utils.DateUtils;
 import com.jeeplus.modules.base.cangku.entity.BaseCangKu;
+import com.jeeplus.modules.base.huowei.entity.BaseHuoWei;
 import com.jeeplus.modules.sys.entity.User;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -97,6 +98,7 @@ public class BusinessFaLiaoService extends CrudService<BusinessFaLiaoMapper, Bus
 			mx.setUnit(o.optString("unit"));
 			mx.setBatchno(o.optString("batchno"));
 			mx.setScdate(o.optString("scdate"));
+			mx.setHuowei(new BaseHuoWei(o.optString("hwid")));
 			mx.preInsert();
 			businessFaLiaoMxMapper.insert(mx);
 		});

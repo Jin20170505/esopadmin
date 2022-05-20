@@ -260,21 +260,21 @@ $(document).ready(function() {
 
    //新增表单页面
  function add() {
-     jp.openSaveDialog('新增调拨单', "${ctx}/business/faliao/businessFaLiao/form/add",'800px', '500px');
+     jp.openSaveDialog('新增调拨单', "${ctx}/business/faliao/businessFaLiao/form/add",'90%', '80%');
  }
   //编辑表单页面
   function edit(id){
       if(!id){
           id = getIdSelections();
       }
-	  jp.openSaveDialog('编辑调拨单', "${ctx}/business/faliao/businessFaLiao/form/edit?id="+id,'800px', '500px');
+	  jp.openSaveDialog('编辑调拨单', "${ctx}/business/faliao/businessFaLiao/form/edit?id="+id,'90%', '80%');
   }
   //查看表单页面
   function view(id) {
       if(!id){
           id = getIdSelections();
       }
-      jp.openViewDialog('查看调拨单', "${ctx}/business/faliao/businessFaLiao/form/view?id="+id,'800px', '500px');
+      jp.openViewDialog('查看调拨单', "${ctx}/business/faliao/businessFaLiao/form/view?id="+id,'90%', '80%');
   }
  //子表展示
 		   

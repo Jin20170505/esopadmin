@@ -97,7 +97,7 @@ public class BaseRoteMainService extends CrudService<BaseRoteMainMapper, BaseRot
 			m.setId(d.getProutingid());
 			m.setCode(d.getCinvcode());
 			BusinessProduct product = new BusinessProduct();
-			product.setName(d.getCinvname());
+			product.setId(d.getCinvcode());
 			m.setProduct(product);
 			m.setVersion(d.getVersion());
 			m.setStd(d.getCinvstd());
