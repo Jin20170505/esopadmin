@@ -1,8 +1,7 @@
 // U8 WebService 接口
 package org.jeeplus.u8.webservice;
 
-import com.alibaba.fastjson.JSON;
-import com.beust.jcommander.internal.Lists;
+import com.google.common.collect.Lists;
 import com.jeeplus.common.utils.StringUtils;
 import net.sf.json.JSONObject;
 import org.apache.commons.io.IOUtils;
