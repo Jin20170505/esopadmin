@@ -13,7 +13,7 @@ layout("/include/_container.html", {title:"打印", parent:"报工单"}){
         top: 20px;
         left: 10px;
     }
-    #qrcode{
+    .qrcode{
         display: block;
         width: 140px;
         height: 140px;
@@ -30,37 +30,55 @@ layout("/include/_container.html", {title:"打印", parent:"报工单"}){
         font-size: 20px;
     }
 </style>
-<div class="white-box">
-    <a id="print" class="btn btn-custom waves-effect w-xs waves-light" onclick="window.print();">
-        <i class="fa fa-print"></i> 打印
-    </a>
-    <table class="table table-bordered" style="width: 500px">
+<a id="print" class="btn btn-custom waves-effect w-xs waves-light" onclick="window.print();">
+    <i class="fa fa-print"></i> 打印
+</a>
+<div class="white-box" id="tabs">
+</div>
+
+<script type="text/template" id="MxTpl">//<!--
+<table class="table table-bordered" style="width: 500px">
         <tbody>
         <tr>
             <th colspan="2" width="250px">QiLianShan 存货条码</th>
-            <th colspan="2" rowspan="2" width="150px"><img id="qrcode" src="${ctx}/qrcode/qr/${bean.qrcode!}"/></th>
+            <th colspan="2" rowspan="2" width="150px"><img class="qrcode" src="${ctx}/qrcode/qr/{{bean.qrcode}}"/></th>
         </tr>
         <tr>
             <th width="100px">存货编码</th>
-            <td width="150px">${bean.cinvcode!}</td>
+            <td width="150px">{{bean.cinvcode}}</td>
         </tr>
 
         <tr>
             <th>存货名称</th>
-            <td colspan="3" style="vertical-align: top;text-align: left;font-size: 16px;">${bean.cinvname!}</td>
+            <td colspan="3" style="vertical-align: top;text-align: left;font-size: 16px;">{{bean.cinvname}}</td>
         </tr>
         <tr>
             <th>批次号</th>
-            <td>${bean.batchno!}</td>
+            <td>{{bean.batchno}}</td>
             <th colspan="2">数量</th>
         </tr>
         <tr>
             <th>生产日期</th>
-            <td>${bean.date!}</td>
-            <td width="75px">${bean.num!}</td>
-            <td width="75px">${bean.unit!}</td>
+            <td>{{bean.date}}</td>
+            <td width="75px">{{bean.num}}</td>
+            <td width="75px">{{bean.unit}}</td>
         </tr>
         </tbody>
     </table>
-</div>
+				//-->
+</script>
+<script type="text/javascript">
+    var tpl = $("#MxTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
+    $(document).ready(function() {
+        var data = ${fn.toJson(beans)};
+        for (var i=0; i<data.length; i++){
+            add('#tabs', tpl, data[i]);
+        }
+    });
+    function add(list,tpl,row){
+        $(list).append(Mustache.render(tpl, {
+             bean: row
+        }));
+    }
+</script>
 <% } %>
