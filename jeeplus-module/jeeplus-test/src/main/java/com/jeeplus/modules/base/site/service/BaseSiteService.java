@@ -5,6 +5,7 @@ package com.jeeplus.modules.base.site.service;
 
 import java.util.List;
 
+import com.jeeplus.modules.u8data.operation.entity.U8Operation;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,5 +50,17 @@ public class BaseSiteService extends CrudService<BaseSiteMapper, BaseSite> {
 	 */
 	public List<BaseSite> findAllSites(){
 		return mapper.findAllSites();
+	}
+
+	@Transactional(readOnly = false)
+	public void sychU8(List<U8Operation> data) {
+		data.forEach(d->{
+			BaseSite site = new BaseSite();
+			site.preInsert();
+			site.setId(d.getOperationid());
+			site.setName(d.getDescription());
+			site.setCode(d.getOpCode());
+			mapper.insert(site);
+		});
 	}
 }

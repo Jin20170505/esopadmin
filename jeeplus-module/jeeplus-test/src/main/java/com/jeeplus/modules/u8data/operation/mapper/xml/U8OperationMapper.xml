@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.u8data.operation.mapper.U8OperationMapper">
+    <sql id="operationColumns">
+        a.operationId as "operationid",
+        a.opCode as  "opCode",
+        a.description as "description",
+        a.remark as "remark",
+        a.BFFlag as "bffFlag",
+        a.feeFlag as "feeFlag",
+        a.reportFlag as "reportFlag"
+    </sql>
+    <sql id="operationJoins">
+
+    </sql>
+
+    <select id="findList" resultType="U8Operation">
+        select
+        <include refid="operationColumns"/>
+        from YT_API_ERP_view_sfc_operation a
+        <include refid="operationJoins"/>
+    </select>
+
+</mapper>

@@ -12,6 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
+import com.jeeplus.modules.u8data.operation.entity.U8Operation;
+import com.jeeplus.modules.u8data.operation.service.U8OperationService;
+import com.jeeplus.modules.u8data.unit.entity.U8Unit;
+import com.jeeplus.modules.u8data.unit.service.U8UnitService;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +62,31 @@ public class BaseSiteController extends BaseController {
 		}
 		return entity;
 	}
-	
+	@Autowired
+	private U8OperationService u8OperationService;
+
+	@ResponseBody
+	@RequestMapping("sychu8")
+	public AjaxJson sychU8(){
+		AjaxJson json = new AjaxJson();
+		try{
+			U8Operation unit = new U8Operation();
+			List<U8Operation> data = u8OperationService.findList(unit);
+			if(data==null){
+				json.setMsg("同步成功(u8数据空)");
+				json.setSuccess(true);
+				return json;
+			}
+			baseSiteService.sychU8(data);
+			json.setMsg("同步成功");
+			json.setSuccess(true);
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setSuccess(false);
+			json.setMsg("同步失败,原因："+e.getMessage());
+		}
+		return json;
+	}
 	/**
 	 * 工作站列表页面
 	 */
