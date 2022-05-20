@@ -23,7 +23,7 @@ public class BusinessRuKuProduct extends DataEntity<BusinessRuKuProduct> {
 	private String cinvcode;		// 存货编码
 	private String cinvname;		// 存货名称
 	private String cinvstd;		// 规格型号
-	private String batchno;		// 生产批号
+	private String batchno;		// 批号
 	private BaseCangKu cangku;		// 仓库
 	private String bgid;		// 报工ID
 	private Double num;  // 数量

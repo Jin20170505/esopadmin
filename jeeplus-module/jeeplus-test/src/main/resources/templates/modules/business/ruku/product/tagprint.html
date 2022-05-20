@@ -10,35 +10,55 @@ layout("/include/_container.html", {title:"打印", parent:"报工单"}){
     #print{
         width: 100px;
         position: fixed;
-        bottom: 10px;
-        left: 150px;
+        top: 20px;
+        left: 10px;
     }
-    .white-box,body,html{
-        width: 400px;
-        height: 200px;
+    #qrcode{
+        display: block;
+        width: 140px;
+        height: 140px;
+    }
+    .table-bordered th{
+        text-align: center;
+        vertical-align: middle;
+        font-size: 27px;
+        height: 70px;
+    }
+    .table-bordered td{
+        text-align: center;
+        vertical-align: middle;
+        font-size: 20px;
     }
 </style>
 <div class="white-box">
     <a id="print" class="btn btn-custom waves-effect w-xs waves-light" onclick="window.print();">
         <i class="fa fa-print"></i> 打印
     </a>
-    <table class="table table-bordered">
+    <table class="table table-bordered" style="width: 500px">
         <tbody>
         <tr>
-            <th width="100px">产品名称</th>
-            <td>${bean.cinvname!}</td>
+            <th colspan="2" width="250px">QiLianShan 存货条码</th>
+            <th colspan="2" rowspan="2" width="150px"><img id="qrcode" src="${ctx}/qrcode/qr/${bean.qrcode!}"/></th>
         </tr>
         <tr>
-            <th>规格型号</th>
-            <td>${bean.cinvstd!}</td>
+            <th width="100px">存货编码</th>
+            <td width="150px">${bean.cinvcode!}</td>
+        </tr>
+
+        <tr>
+            <th>存货名称</th>
+            <td colspan="3" style="vertical-align: top;text-align: left;font-size: 16px;">${bean.cinvname!}</td>
         </tr>
         <tr>
-            <th>数量</th>
-            <td>${bean.numunit!}</td>
+            <th>批次号</th>
+            <td>${bean.batchno!}</td>
+            <th colspan="2">数量</th>
         </tr>
         <tr>
-            <th>日期</th>
+            <th>生产日期</th>
             <td>${bean.date!}</td>
+            <td width="75px">${bean.num!}</td>
+            <td width="75px">${bean.unit!}</td>
         </tr>
         </tbody>
     </table>

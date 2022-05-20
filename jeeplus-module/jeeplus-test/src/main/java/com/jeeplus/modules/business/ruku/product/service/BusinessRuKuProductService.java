@@ -17,6 +17,7 @@ import com.jeeplus.modules.business.shengchan.dingdan.entity.BusinessShengChanDi
 import com.jeeplus.modules.business.shengchan.dingdan.mapper.BusinessShengChanDingDanMingXiMapper;
 import com.jeeplus.modules.sys.entity.User;
 import com.jeeplus.modules.sys.utils.UserUtils;
+import net.sf.json.JSONObject;
 import org.jeeplus.u8.webservice.U8Post;
 import org.jeeplus.u8.webservice.U8Url;
 import org.jeeplus.u8.webservice.YT_Rd10;
@@ -84,6 +85,23 @@ public class BusinessRuKuProductService extends CrudService<BusinessRuKuProductM
 		super.delete(businessRuKuProduct);
 		businessRuKuProductMxMapper.delete(new BusinessRuKuProductMx(businessRuKuProduct));
 	}
+
+	public String getBatchno(String ymd){
+		String batchno = mapper.getMaxBatchno(ymd);
+		if(batchno==null){
+			return ymd+"001";
+		}
+		String no = batchno.substring("yyyymmdd".length());
+		int nx = Integer.valueOf(no) +1;
+		if(nx<10){
+			return ymd + "00"+nx;
+		}else if(nx<100){
+			return ymd + "0"+ nx;
+		}else {
+			return ymd + nx;
+		}
+	}
+
 	@Autowired
 	private BusinessBaoGongOrderService businessBaoGongOrderService;
 
@@ -101,7 +119,7 @@ public class BusinessRuKuProductService extends CrudService<BusinessRuKuProductM
 		}
 		BusinessRuKuProduct product = new BusinessRuKuProduct();
 		BusinessRuKuProductMx mx = new BusinessRuKuProductMx();
-		product.setBatchno(order.getBatchno());
+		product.setBatchno(getBatchno(DateUtils.getDate()));
 		product.setBgcode(order.getBgcode());
 		product.setBgid(order.getId());
 		product.setCangku(new BaseCangKu(ckid));
@@ -162,9 +180,13 @@ public class BusinessRuKuProductService extends CrudService<BusinessRuKuProductM
 			}
 			rd10s.add(r);
 			rd10.setRd10s(rd10s);
-			U8WebServiceResult rs = U8Post.Rd10Post(rd10, U8Url.URL);
-			if("1".equals(rs.getCount())){
-				throw new RuntimeException(rs.getMessage());
+			String rs = U8Post.Rd10Post(rd10, U8Url.URL);
+			if(StringUtils.isEmpty(rs)){
+				throw new RuntimeException("数据传U8出错,未有返回值。");
+			}
+			JSONObject rsjson = JSONObject.fromObject(rs);
+			if("1".equals(rsjson.optString("count"))){
+				throw new RuntimeException(rsjson.optString("message"));
 			}
 		}catch (Exception e){
 			e.printStackTrace();

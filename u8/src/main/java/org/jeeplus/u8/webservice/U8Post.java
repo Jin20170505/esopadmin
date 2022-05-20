@@ -5,19 +5,20 @@ import com.google.common.collect.Lists;
 import com.jeeplus.common.utils.StringUtils;
 import net.sf.json.JSONObject;
 import org.apache.commons.io.IOUtils;
-import org.jeeplus.u8.webservice.entity.U8WebServiceResult;
-
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class U8Post {
 
-    public static U8WebServiceResult Rd10Post(YT_Rd10 rd10,String posturl) throws Exception
+    public static String Rd10Post(YT_Rd10 rd10,String posturl) throws Exception
     {
         Map<String,Object> param = new LinkedHashMap<String, Object>();
         param.put("cBusType",rd10.getcBusType());
@@ -88,17 +89,58 @@ public class U8Post {
             input.close();
         }
         System.out.println("请求返回报文：" + result);
-        U8WebServiceResult rs = new U8WebServiceResult();
-        int i = result.indexOf("<YTTransVouchResult>") + "<YTTransVouchResult>".length();
-        int j = result.indexOf("</YTTransVouchResult>");
-        result = result.substring(i,j);
-        JSONObject json = JSONObject.fromObject(result);
-        rs.setCount(json.getString("count"));
-        rs.setMessage(json.getString("message"));
-        return rs;
+        String getjson =  responseWeb(result,"YTRdrecord10Result");
+        return getjson;
     }
 
-    public static U8WebServiceResult Rd11Post(YT_Rd11 rd11, String posturl) throws Exception
+    public static String responseWeb(String response,String respon)
+    {
+        //创建Reader对象
+        SAXReader reader = new SAXReader();
+        //加载xml
+        Document document = null;
+        Map<String, String> request = new HashMap();
+        try {
+            //获取数据流
+            InputStream is = new ByteArrayInputStream(response.getBytes());
+            document = reader.read(is);
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+        //获取根节点
+        Element rootElement = document.getRootElement();
+        Iterator iterator = rootElement.elementIterator();
+        String ss = "1";
+        List<String> s = new ArrayList<>();
+        while (iterator.hasNext())
+        {
+            request = new HashMap();
+            Element stu = (Element) iterator.next();
+            //判断节点是否为Result 如果不是则向下遍历
+            while (!stu.getName().equals(respon))
+            {
+                if (stu.elementIterator().hasNext()) {
+                    stu = (Element) stu.elementIterator().next();
+                }else {
+                    ss = "";
+                    break;
+                }
+             }
+            if(ss != "")
+            {
+                String rs = stu.getText();
+                return rs;
+            }
+        }
+        return "";
+    }
+
+    public static void main(String[] args) {
+        // TODO Auto-generated method stub
+        String s = "<?xml version=\"1.0\" encoding=\"utf-8\"?><soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"><soap:Body><YTRdrecord10Response xmlns=\"http://tempuri.org/\"><YTRdrecord10Result>{\"count\":\"0\",\"message\":\"产品入库单同步成功\",\"id\":\"CPRK20220520222221\"}</YTRdrecord10Result></YTRdrecord10Response></soap:Body></soap:Envelope>";
+    }
+
+    public static String Rd11Post(YT_Rd11 rd11, String posturl) throws Exception
     {
         Map<String,Object> param = new LinkedHashMap<String, Object>();
         param.put("cBusType",rd11.getcBusType());
@@ -164,17 +206,11 @@ public class U8Post {
             input.close();
         }
         System.out.println("请求返回报文：" + result);
-        U8WebServiceResult rs = new U8WebServiceResult();
-        int i = result.indexOf("<YTTransVouchResult>") + "<YTTransVouchResult>".length();
-        int j = result.indexOf("</YTTransVouchResult>");
-        result = result.substring(i,j);
-        JSONObject json = JSONObject.fromObject(result);
-        rs.setCount(json.getString("count"));
-        rs.setMessage(json.getString("message"));
-        return rs;
+        String getjson =  responseWeb(result,"YTRdrecord11Result");
+        return getjson;
     }
 
-    public static U8WebServiceResult TranPost(YT_Tran tr,String posturl) throws Exception
+    public static String TranPost(YT_Tran tr,String posturl) throws Exception
     {
         Map<String,Object> param = new LinkedHashMap<String, Object>();
         param.put("cTVCode",tr.getcTVCode());
@@ -241,105 +277,10 @@ public class U8Post {
             input.close();
         }
         System.out.println("请求返回报文：" + result);
-        U8WebServiceResult rs = new U8WebServiceResult();
-        int i = result.indexOf("<YTTransVouchResult>") + "<YTTransVouchResult>".length();
-        int j = result.indexOf("</YTTransVouchResult>");
-        result = result.substring(i,j);
-        JSONObject json = JSONObject.fromObject(result);
-        rs.setCount(json.getString("count"));
-        rs.setMessage(json.getString("message"));
-        return rs;
+        String getjson =  responseWeb(result,"YTTransVouchResult");
+        return getjson;
     }
 
-    public static void main(String[] args) {
 
-        //调拨单调用
-        /*YT_Tran tran = new YT_Tran();
-        tran.setcTVCode("cs001");
-        tran.setdTVDate("2022-05-19");
-        tran.setcOWhCode("01");
-        tran.setcIWhCode("02");
-        tran.setcIRdCode("15");
-        tran.setcORdCode("25");
-        tran.setcTVMemo("测试");
-
-        List<YT_Trans> trans = Lists.newArrayList();
-        YT_Trans tr = new YT_Trans();
-        tr.setCbMemo("测试");
-        tr.setcInvCode("C690000019");
-        tr.setiTVQuantity("1");
-        tr.setcTVBatch("220520010");
-        tr.setCoutposcode("A-04-01-01");
-        tr.setIrowno("1");
-        tr.setdMadeDate("2022-05-22");
-        trans.add(tr);
-        tran.setTrans(trans);
-        try {
-            TranPost(tran,"http://localhost:57820/U8ToService.asmx");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
-
-        //材料出库单调用
-        YT_Rd11 rd11 = new YT_Rd11();
-        rd11.setcBusType("领料");
-        rd11.setcSource("生产订单");
-        rd11.setcWhCode("01");
-        rd11.setdDate("2022-05-20");
-        rd11.setcCode("cs004");
-        rd11.setcRdcode("21");
-        rd11.setcDepCode("");
-        rd11.setcMemo("测试");
-        rd11.setcMaker("demo");
-
-        List<YT_Rds11> rds11 = Lists.newArrayList();
-        YT_Rds11 rd1 = new YT_Rds11();
-        rd1.setcInvCode("D210000003");
-        rd1.setiQuantity("1");
-        rd1.setCmocode("SC2205200002");
-        rd1.setInvcode("C060000085");
-        rd1.setImoseq("1");
-        rd1.setIopseq("60");
-        rds11.add(rd1);
-        rd11.setRd11s(rds11);
-        try {
-            Rd11Post(rd11,"http://localhost:57820/U8ToService.asmx");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        //产成品入库单调用
-
-        /*YT_Rd10 rd10 = new YT_Rd10();
-        rd10.setcBusType("成品入库");
-        rd10.setcSource("生产订单");
-        rd10.setcWhCode("08");
-        rd10.setdDate("2022-05-20");
-        rd10.setcCode("cs001");
-        rd10.setcRdcode("13");
-        rd10.setcDepCode("09020206");
-        rd10.setcMemo("测试");
-        rd10.setcMaker("demo");
-
-        List<YT_Rds10> rds10 = Lists.newArrayList();
-        YT_Rds10 rd2 = new YT_Rds10();
-
-        rd2.setcInvCode("C380000013");
-        rd2.setiQuantity("1");
-        rd2.setcPosition("A-04-01-01");
-        rd2.setIrowno("1");
-        rd2.setCmocode("11");
-        rd2.setImoseq("10");
-        rd2.setCbMemo("10");
-        rd2.setdMadeDate("10");
-        rd2.setBatch("1");
-        rds10.add(rd2);
-        rd10.setRd10s(rds10);
-        try {
-            Rd10Post(rd10,"http://localhost:57820/U8ToService.asmx");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
-    }
 
 }

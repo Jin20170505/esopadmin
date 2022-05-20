@@ -110,7 +110,7 @@ $(document).ready(function() {
 		    }
 			,{
 		        field: 'batchno',
-		        title: '生产批号',
+		        title: '批号',
 		        sortable: true,
 		        sortName: 'batchno'
 		       
@@ -241,7 +241,7 @@ $(document).ready(function() {
     }
 
     function doPrint(rid,num){
-    jp.windowOpen('${ctx}/business/ruku/product/businessRuKuProduct/goToTagPrint?rid='+rid+'&num='+num,"产品标签--打印",400,300);
+    jp.windowOpen('${ctx}/business/ruku/product/businessRuKuProduct/goToTagPrint?rid='+rid+'&num='+num,"产品标签--打印",1200,1200);
 }
   //删除
   function del(ids){

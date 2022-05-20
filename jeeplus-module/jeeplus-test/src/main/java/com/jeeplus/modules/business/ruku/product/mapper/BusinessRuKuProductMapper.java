@@ -19,4 +19,6 @@ import com.jeeplus.modules.business.ruku.product.entity.BusinessRuKuProduct;
 public interface BusinessRuKuProductMapper extends BaseMapper<BusinessRuKuProduct> {
 	@Select("select sum(num) from business_ruku_product where bgid = #{bgid}")
     Double getRuKuNumByBgid(@Param("bgid") String bgid);
+	
+	String getMaxBatchno(@Param("ymd") String yyyymmdd);
 }

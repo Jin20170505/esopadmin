@@ -36,7 +36,9 @@
 		<include refid="businessRuKuProductJoins"/>
 		WHERE a.id = #{id}
 	</select>
-	
+	<select id="getMaxBatchno" resultType="String">
+		select max(batchno) from business_ruku_product where batchno like concat(#{ymd},'%')
+	</select>
 	<select id="findList" resultType="BusinessRuKuProduct" >
 		SELECT 
 			<include refid="businessRuKuProductColumns"/>
@@ -55,11 +57,7 @@
 				AND a.cinvcode = #{cinvcode}
 			</if>
 			<if test="cinvname != null and cinvname != ''">
-				AND a.cinvname LIKE
-				    <if test="_databaseId == 'postgre'">'%'||#{cinvname}||'%'</if>
-					<if test="_databaseId == 'oracle'">'%'||#{cinvname}||'%'</if>
-					<if test="_databaseId == 'mssql'">'%'+#{cinvname}+'%'</if>
-					<if test="_databaseId == 'mysql'">concat('%',#{cinvname},'%')</if>
+				AND a.cinvname LIKE concat('%',#{cinvname},'%')
 			</if>
 			<if test="batchno != null and batchno != ''">
 				AND a.batchno = #{batchno}

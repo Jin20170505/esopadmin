@@ -4,11 +4,32 @@ package com.jeeplus.modules.business.ruku.product.entity;
  * 标签·打印
  */
 public class ProductTagBean {
+    private String batchno;
+    private String qrcode;
     private String cinvcode;
     private String cinvname;
     private String cinvstd;
-    private String numunit;
+    private String num;
+    private String unit;
     private String date;
+
+    public String getBatchno() {
+        return batchno;
+    }
+
+    public ProductTagBean setBatchno(String batchno) {
+        this.batchno = batchno;
+        return this;
+    }
+
+    public String getQrcode() {
+        return qrcode;
+    }
+
+    public ProductTagBean setQrcode(String qrcode) {
+        this.qrcode = qrcode;
+        return this;
+    }
 
     public String getCinvcode() {
         return cinvcode;
@@ -37,12 +58,21 @@ public class ProductTagBean {
         return this;
     }
 
-    public String getNumunit() {
-        return numunit;
+    public String getNum() {
+        return num;
     }
 
-    public ProductTagBean setNumunit(String numunit) {
-        this.numunit = numunit;
+    public ProductTagBean setNum(String num) {
+        this.num = num;
+        return this;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public ProductTagBean setUnit(String unit) {
+        this.unit = unit;
         return this;
     }
 

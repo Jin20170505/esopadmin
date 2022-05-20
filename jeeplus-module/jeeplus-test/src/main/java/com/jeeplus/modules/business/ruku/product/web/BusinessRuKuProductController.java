@@ -72,13 +72,29 @@ public class BusinessRuKuProductController extends BaseController {
 			throw new RuntimeException("入库明细缺失，无法打印。");
 		}
 		BusinessRuKuProductMx mx = bean.getBusinessRuKuProductMxList().get(0);
-		ProductTagBean tagBean = new ProductTagBean();
-		DecimalFormat df = new DecimalFormat("0.00");
-		df.setRoundingMode(RoundingMode.HALF_UP);
-		tagBean.setCinvcode(mx.getCinvcode()).setCinvname(mx.getCinvname()).setCinvstd(mx.getCinvstd())
-		.setNumunit(df.format(bean.getNum()/num).replaceAll(".00"," ")+mx.getUnit())
-		.setDate(DateUtils.getDate("YYYY/MM/dd"));
-		model.addAttribute("bean", tagBean);
+		List<ProductTagBean> tagBeans = Lists.newArrayList();
+		double gdnum = bean.getNum();
+		while (gdnum>num){
+			ProductTagBean tagBean = new ProductTagBean();
+			tagBean.setBatchno(bean.getBatchno()).setCinvcode(mx.getCinvcode()).setCinvname(mx.getCinvname()).setCinvstd(mx.getCinvstd())
+					.setNum(num+"").setUnit(mx.getUnit())
+					.setDate(DateUtils.getDate("YYYY-MM-dd"));
+			String qr = "'cinvcode':'"+tagBean.getCinvcode()+"','cinvcodename':'"+tagBean.getCinvname()+"','batchno':'"+tagBean.getBatchno()+"','date':'"+tagBean.getDate()+"','num':'"+tagBean.getNum()+"','unit':'"+tagBean.getUnit()+"'";
+			tagBean.setQrcode(qr);
+			tagBeans.add(tagBean);
+			gdnum = gdnum - num;
+		}
+		if(gdnum>0.0001){
+			ProductTagBean tagBean = new ProductTagBean();
+			tagBean.setBatchno(bean.getBatchno()).setCinvcode(mx.getCinvcode()).setCinvname(mx.getCinvname()).setCinvstd(mx.getCinvstd())
+					.setNum(gdnum+"").setUnit(mx.getUnit())
+					.setDate(DateUtils.getDate("YYYY-MM-dd"));
+			String qr = "'cinvcode':'"+tagBean.getCinvcode()+"','cinvcodename':'"+tagBean.getCinvname()+"','batchno':'"+tagBean.getBatchno()+"','date':'"+tagBean.getDate()+"','num':'"+tagBean.getNum()+"','unit':'"+tagBean.getUnit()+"'";
+			tagBean.setQrcode(qr);
+			tagBeans.add(tagBean);
+		}
+
+		model.addAttribute("beans", tagBeans);
 		return "modules/business/ruku/product/tagprint";
 	}
 	/**

@@ -134,7 +134,7 @@ public class BusinessFaLiaoService extends CrudService<BusinessFaLiaoMapper, Bus
 				String hwcode = huoWeiMapper.getCodeById(d.getHuowei().getId());
 				YT_Trans t = new YT_Trans();
 				t.setcInvCode(d.getCinvcode());
-				t.setiTVQuantity(d.getNo()+"");
+				t.setiTVQuantity(d.getNum()+"");
 				t.setIrowno(d.getNo()+"");
 				t.setdMadeDate(d.getScdate());
 				t.setcTVBatch(d.getBatchno());
@@ -142,9 +142,13 @@ public class BusinessFaLiaoService extends CrudService<BusinessFaLiaoMapper, Bus
 				trans.add(t);
 			});
 			tr.setTrans(trans);
-			U8WebServiceResult rs = U8Post.TranPost(tr, U8Url.URL);
-			if("1".equals(rs.getCount())){
-				throw new RuntimeException(rs.getMessage());
+			String rs = U8Post.TranPost(tr, U8Url.URL);
+			if(StringUtils.isEmpty(rs)){
+				throw new RuntimeException("数据传U8出错,未有返回值。");
+			}
+			JSONObject rsjson = JSONObject.fromObject(rs);
+			if("1".equals(rsjson.optString("count"))){
+				throw new RuntimeException(rsjson.optString("message"));
 			}
 		}catch (Exception e){
 			e.printStackTrace();
