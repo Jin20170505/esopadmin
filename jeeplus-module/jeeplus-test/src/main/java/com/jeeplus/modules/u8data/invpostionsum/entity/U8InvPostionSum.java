@@ -1,5 +1,6 @@
 package com.jeeplus.modules.u8data.invpostionsum.entity;
 
+import com.jeeplus.common.utils.StringUtils;
 import com.jeeplus.core.persistence.DataEntity;
 
 public class U8InvPostionSum extends DataEntity<U8InvPostionSum> {
@@ -104,6 +105,9 @@ public class U8InvPostionSum extends DataEntity<U8InvPostionSum> {
     }
 
     public String getdMadeDate() {
+        if(StringUtils.isNotEmpty(dMadeDate)){
+            dMadeDate = dMadeDate.split(" ")[0];
+        }
         return dMadeDate;
     }
 
@@ -140,6 +144,9 @@ public class U8InvPostionSum extends DataEntity<U8InvPostionSum> {
     }
 
     public String getdVDate() {
+        if(StringUtils.isNotEmpty(dVDate)){
+            dVDate = dVDate.split(" ")[0];
+        }
         return dVDate;
     }
 

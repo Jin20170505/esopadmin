@@ -24,7 +24,9 @@ public class ApiInvPostionSumController {
             sum.setCinvcode(cinvcode);
             List<U8InvPostionSum> list =  u8InvPostionSumService.findList(sum);
             if(list==null){
-                list = new ArrayList<>(0);
+                json.setSuccess(false);
+                json.setMsg("未查询到存货编码为："+cinvcode+"的数据。");
+                return json;
             }
             double sumnum = list.stream().mapToDouble(U8InvPostionSum::getIquantity).sum();
             json.put("sum",sumnum);

@@ -10,10 +10,10 @@
         a.cInvCCode as "cinvtype",
         a.iQuantity as "iquantity",
         a.cBatch as "cbatch",
-        a.dMadeDate as "dMadeDate",
-        a.iMassDate as "iMassDate",
         a.cMassUnit as "cMassUnit",
         a.iMassDates as "iMassDates",
+        a.dMadeDate as "dMadeDate",
+        a.iMassDate as "iMassDate",
         a.dVDate as "dVDate",
         a.cExpirationdate as "cExpirationdate",
         a.cPosCode as "cPosCode"
@@ -21,14 +21,15 @@
     <sql id="sumJoins">
 
     </sql>
-
+    <!--
+         -->
     <select id="findList" resultType="U8InvPostionSum">
         select
         <include refid="sumColumns"/>
         from YT_API_ERP_view_InvPositionSum a
         <include refid="sumJoins"/>
         <where>
-            <if test="vinvcode != null and cinvcode != '' ">
+            <if test="cinvcode != null and cinvcode != '' ">
                 and a.cInvCode = #{cinvcode}
             </if>
         </where>
