@@ -3,17 +3,21 @@
  */
 package com.jeeplus.modules.business.baogong.order.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
+import com.jeeplus.common.utils.StringUtils;
+import com.jeeplus.core.persistence.Page;
+import com.jeeplus.core.service.CrudService;
 import com.jeeplus.modules.api.bean.baogong.BaoGongBean;
 import com.jeeplus.modules.api.bean.baogong.BaoGongItem;
 import com.jeeplus.modules.api.bean.chuku.BomBean;
 import com.jeeplus.modules.api.bean.chuku.LingLiaoBean;
 import com.jeeplus.modules.api.bean.ruku.ProductRuKuBean;
 import com.jeeplus.modules.api.bean.zhijian.ZhiJianBean;
+import com.jeeplus.modules.business.baogong.order.entity.BusinessBaoGongOrder;
+import com.jeeplus.modules.business.baogong.order.entity.BusinessBaoGongOrderMingXi;
+import com.jeeplus.modules.business.baogong.order.mapper.BusinessBaoGongOrderMapper;
+import com.jeeplus.modules.business.baogong.order.mapper.BusinessBaoGongOrderMingXiMapper;
 import com.jeeplus.modules.business.baogong.record.service.BusinessBaoGongRecordService;
+import com.jeeplus.modules.business.chuku.lingliao.mapper.BusinessChuKuLingLiaoMapper;
 import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDan;
 import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDanBom;
 import com.jeeplus.modules.business.jihuadingdan.mapper.BusinessJiHuaGongDanBomMapper;
@@ -23,13 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jeeplus.core.persistence.Page;
-import com.jeeplus.core.service.CrudService;
-import com.jeeplus.common.utils.StringUtils;
-import com.jeeplus.modules.business.baogong.order.entity.BusinessBaoGongOrder;
-import com.jeeplus.modules.business.baogong.order.mapper.BusinessBaoGongOrderMapper;
-import com.jeeplus.modules.business.baogong.order.entity.BusinessBaoGongOrderMingXi;
-import com.jeeplus.modules.business.baogong.order.mapper.BusinessBaoGongOrderMingXiMapper;
+import java.util.List;
 
 /**
  * 报工单Service
@@ -196,7 +194,8 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		return bean;
 	}
 
-
+	@Autowired
+	private BusinessChuKuLingLiaoMapper businessChuKuLingLiaoMapper;
 
 	// 根据报工单号 获取 报工信息
 	public BaoGongBean getBaoGongInfo(String bgcode){
@@ -206,6 +205,10 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		}
 		if("1".equals(order.getComplate())){
 			throw new RuntimeException("此单已完成.");
+		}
+		Integer i = businessChuKuLingLiaoMapper.isDoneLingLiao(order.getId());
+		if(i==null){
+			throw new RuntimeException("还未领料，请先进行领料再报工.");
 		}
 		BaoGongBean bean = new BaoGongBean();
 		bean.setBgcode(order.getBgcode()).setBgid(order.getId()).setGdnum(order.getNum()).setSccode(order.getOrdercode()).setScline(order.getOrderline());

@@ -408,7 +408,7 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 				dingDan.setId(d.getMoId());
 				dingDan.setStartdate(startdate);
 				dingDan.setEnddate(enddate);
-				dingDan.setStatus("已审核");
+				dingDan.setStatus("未审核");
 				dingDans.add(dingDan);
 			}
 			BusinessShengChanDingDanMingXi mingXi = new BusinessShengChanDingDanMingXi();
@@ -420,7 +420,7 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 			mingXi.setStd(d.getCinvstd());
 			mingXi.setNo(d.getSortSeq());
 			mingXi.setDept(dept);
-			mingXi.setStatus("开立");
+			mingXi.setStatus("锁定");
 			mingXi.setNum(d.getQty());
 			mingXi.setRemarks(d.getRemark());
 			mingXi.setUnit(d.getcComUnitName());
