@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
+import com.google.common.collect.Maps;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,11 +64,16 @@ public class BusinessJiHuaGongDanController extends BaseController {
 	/**
 	 * 计划工单列表页面
 	 */
-	@RequiresPermissions("business:jihuadingdan:businessJiHuaGongDan:list")
 	@RequestMapping(value = {"list", ""})
 	public String list(BusinessJiHuaGongDan businessJiHuaGongDan, Model model) {
 		model.addAttribute("businessJiHuaGongDan", businessJiHuaGongDan);
 		return "modules/business/jihuadingdan/businessJiHuaGongDanList";
+	}
+
+	@RequestMapping(value = "xiafalist")
+	public String xialist(BusinessJiHuaGongDan businessJiHuaGongDan, Model model) {
+		model.addAttribute("businessJiHuaGongDan", businessJiHuaGongDan);
+		return "modules/business/jihuadingdan/xiafa/businessJiHuaGongDanList";
 	}
 
 	@ResponseBody
@@ -167,7 +173,6 @@ public class BusinessJiHuaGongDanController extends BaseController {
 	 * params:
 	 * 	mode: add, edit, view, 代表三种模式的页面
 	 */
-	@RequiresPermissions(value={"business:jihuadingdan:businessJiHuaGongDan:view","business:jihuadingdan:businessJiHuaGongDan:add","business:jihuadingdan:businessJiHuaGongDan:edit"},logical=Logical.OR)
 	@RequestMapping(value = "form/{mode}")
 	public String form(@PathVariable String mode, BusinessJiHuaGongDan businessJiHuaGongDan, Model model) {
 		model.addAttribute("mode", mode);
@@ -304,6 +309,27 @@ public class BusinessJiHuaGongDanController extends BaseController {
 		}
 		return j;
     }
-	
+	@RequestMapping("treeData")
+	@ResponseBody
+	public List<Map<String, Object>> treeData(@RequestParam(required=false) String extId, HttpServletResponse response) {
+		List<Map<String, Object>> mapList = Lists.newArrayList();
+		Map<String, Object> map = Maps.newHashMap();
+		map.put("id", "未生成");
+		map.put("text", "未生成");
+		map.put("parent", "#");
+		Map<String, Object> state = Maps.newHashMap();
+		state.put("opened", true);
+		map.put("state", state);
+		mapList.add(map);
+		Map<String, Object> map1 = Maps.newHashMap();
+		map1.put("id", "已生成");
+		map1.put("text","已生成");
+		map1.put("parent", "#");
+		Map<String, Object> state1 = Maps.newHashMap();
+		state1.put("opened", true);
+		map1.put("state", state1);
+		mapList.add(map1);
+		return mapList;
+	}
 
 }

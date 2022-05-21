@@ -1,4 +1,51 @@
 <script>
+
+    $(document).ready(function() {
+    var to = false;
+    $('#search_q').keyup(function () {
+    if(to) { clearTimeout(to); }
+    to = setTimeout(function () {
+    var v = $('#search_q').val();
+    $('#businessProductTypeOnlyReadjsTree').jstree(true).search(v);
+}, 250);
+});
+    $('#businessProductTypeOnlyReadjsTree').jstree({
+    'core' : {
+    "multiple": false,
+    "animation": 0,
+    "themes": {"icons": true, "stripes": false},
+    'data' : {
+    "url" : "${ctx}//business/jihuadingdan/businessJiHuaGongDan/treeData",
+    "dataType" : "json"
+}
+},
+    "conditionalselect" : function (node, event) {
+    return false;
+},
+    'plugins': ['types', 'wholerow', "search"],
+    "types": {
+    "default": {
+    "icon": "fa fa-folder text-custom"
+},
+    "file": {
+    "icon": "fa fa-file text-success"
+}
+}
+
+}).bind("activate_node.jstree", function (obj, e) {
+    var node = $('#businessProductTypeOnlyReadjsTree').jstree(true).get_selected(true)[0];
+    var opt = {
+    silent: true,
+    query:{
+    'isshengcheng':node.id
+}
+};
+    $("#isshengcheng").val(node.id);
+    $('#businessJiHuaGongDanTable').bootstrapTable('refresh',opt);
+}).on('loaded.jstree', function() {
+    $("#businessProductTypeOnlyReadjsTree").jstree('open_all');
+});
+});
 $(document).ready(function() {
 	$('#businessJiHuaGongDanTable').bootstrapTable({
 		 
@@ -60,7 +107,7 @@ $(document).ready(function() {
                	if(params.sort && params.order){
                     searchParam.orderBy = params.sort+ " "+  params.order;
 				}
-                   searchParam.status = '未下发';
+               	searchParam.status = '已下发';
 			    return searchParam;
                },
                onShowSearch: function () {
@@ -192,37 +239,6 @@ $(document).ready(function() {
 		        sortName: 'status'
 		       
 		    }
-			,{
-			   field: 'operate',
-			   title: '操作',
-			   align: 'center',
-			   class: 'text-nowrap',
-			   events: {
-				   'click .view': function (e, value, row, index) {
-					   view(row.id);
-				   },
-				   'click .edit': function (e, value, row, index) {
-					   edit(row.id)
-				   },
-				   'click .del': function (e, value, row, index) {
-					   del(row.id);
-
-				   }
-			   },
-			   formatter:  function operateFormatter(value, row, index) {
-				   return [
-					<% if(shiro.hasPermission("business:jihuadingdan:businessJiHuaGongDan:view")){ %>
-					   '<a class="view btn btn-icon waves-effect waves-light btn-custom btn-xs m-r-5"> <i class="fa fa-search"></i></a>',
-				   <% } %>
-				   <% if(shiro.hasPermission("business:jihuadingdan:businessJiHuaGongDan:edit")){ %>
-					   '<a class="edit btn btn-icon waves-effect waves-light btn-success btn-xs m-r-5"> <i class="fa fa-pencil"></i></a>',
-				   <% } %>
-				   <% if(shiro.hasPermission("business:jihuadingdan:businessJiHuaGongDan:del")){ %>
-					   '<a class="del btn btn-icon waves-effect waves-light btn-danger btn-xs"> <i class="fa fa-trash-o"></a>'
-				   <% } %>
-				   ].join('');
-			   }
-		   }
 		     ]
 		
 		});
@@ -287,13 +303,13 @@ $(document).ready(function() {
 		  refresh();
 		});
 
-
   $('#startdate').datetimepicker({
   format:'Y-m-d'
 });
   $('#enddate').datetimepicker({
   format:'Y-m-d'
 });
+		
 	});
    // 下发
 function xiafa(){

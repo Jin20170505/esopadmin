@@ -28,4 +28,7 @@ public interface BusinessJiHuaGongDanMapper extends BaseMapper<BusinessJiHuaGong
 
     @Update("update business_jihua_gongdan set status = #{status} where id = #{id}")
     void updateSatus(@Param("id") String id,@Param("status") String status);
+
+    @Update("update business_jihua_gongdan set isshengcheng = #{isshengcheng} where id = #{id}")
+    void updateisshengcheng(@Param("id") String id,@Param("isshengcheng") String isshengcheng);
 }

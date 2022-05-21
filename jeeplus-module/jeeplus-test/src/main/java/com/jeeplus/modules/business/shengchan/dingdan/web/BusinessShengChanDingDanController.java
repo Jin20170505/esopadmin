@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
+import com.google.common.collect.Maps;
+import com.jeeplus.modules.business.product.archive.entity.BusinessProductTypeOnlyRead;
 import com.jeeplus.modules.business.shengchan.bom.entity.BusinessShengChanBom;
 import com.jeeplus.modules.business.shengchan.bom.service.BusinessShengChanDingdanMxService;
 import com.jeeplus.modules.business.shengchan.dingdan.entity.BusinessShengChanDingDanMingXi;
@@ -124,11 +126,16 @@ public class BusinessShengChanDingDanController extends BaseController {
 	/**
 	 * 生产订单列表页面
 	 */
-	@RequiresPermissions("business:shengchan:dingdan:businessShengChanDingDan:list")
 	@RequestMapping(value = {"list", ""})
 	public String list(BusinessShengChanDingDan businessShengChanDingDan, Model model) {
 		model.addAttribute("businessShengChanDingDan", businessShengChanDingDan);
 		return "modules/business/shengchan/dingdan/businessShengChanDingDanList";
+	}
+
+	@RequestMapping(value = "approvedlist")
+	public String approvedlist(BusinessShengChanDingDan businessShengChanDingDan,Model model) {
+		model.addAttribute("businessShengChanDingDan", businessShengChanDingDan);
+		return "modules/business/shengchan/dingdan/approved/businessShengChanDingDanList";
 	}
 	@RequestMapping("goToList")
 	public String goToList(){
@@ -169,7 +176,6 @@ public class BusinessShengChanDingDanController extends BaseController {
 	 * params:
 	 * 	mode: add, edit, view, 代表三种模式的页面
 	 */
-	@RequiresPermissions(value={"business:shengchan:dingdan:businessShengChanDingDan:view","business:shengchan:dingdan:businessShengChanDingDan:add","business:shengchan:dingdan:businessShengChanDingDan:edit"},logical=Logical.OR)
 	@RequestMapping(value = "form/{mode}")
 	public String form(@PathVariable String mode, BusinessShengChanDingDan businessShengChanDingDan, Model model) {
 		model.addAttribute("mode", mode);
@@ -370,6 +376,26 @@ public class BusinessShengChanDingDanController extends BaseController {
 		}
 		return j;
     }
-	
-
+    @RequestMapping("treeData")
+	@ResponseBody
+	public List<Map<String, Object>> treeData(@RequestParam(required=false) String extId, HttpServletResponse response) {
+		List<Map<String, Object>> mapList = Lists.newArrayList();
+		Map<String, Object> map = Maps.newHashMap();
+		map.put("id", "未拆单");
+		map.put("text", "未拆单");
+		map.put("parent", "#");
+		Map<String, Object> state = Maps.newHashMap();
+		state.put("opened", true);
+		map.put("state", state);
+		mapList.add(map);
+		Map<String, Object> map1 = Maps.newHashMap();
+		map1.put("id", "已拆单");
+		map1.put("text","已拆单");
+		map1.put("parent", "#");
+		Map<String, Object> state1 = Maps.newHashMap();
+		state1.put("opened", true);
+		map1.put("state", state1);
+		mapList.add(map1);
+		return mapList;
+	}
 }

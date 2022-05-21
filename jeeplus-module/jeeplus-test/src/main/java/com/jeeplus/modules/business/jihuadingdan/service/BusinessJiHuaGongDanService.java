@@ -181,6 +181,7 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 			xi.setId("");xi.setDelFlag("0");
 			order.getBusinessBaoGongOrderMingXiList().add(xi);
 		});
+		mapper.updateisshengcheng(id,"已生成");
 		businessBaoGongOrderService.save(order);
 	}
 }

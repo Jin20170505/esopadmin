@@ -1,4 +1,50 @@
 <script>
+  $(document).ready(function() {
+  var to = false;
+  $('#search_q').keyup(function () {
+  if(to) { clearTimeout(to); }
+  to = setTimeout(function () {
+  var v = $('#search_q').val();
+  $('#businessProductTypeOnlyReadjsTree').jstree(true).search(v);
+}, 250);
+});
+  $('#businessProductTypeOnlyReadjsTree').jstree({
+  'core' : {
+  "multiple": false,
+  "animation": 0,
+  "themes": {"icons": true, "stripes": false},
+  'data' : {
+  "url" : "${ctx}/business/shengchan/dingdan/businessShengChanDingDan/treeData",
+  "dataType" : "json"
+}
+},
+  "conditionalselect" : function (node, event) {
+  return false;
+},
+  'plugins': ['types', 'wholerow', "search"],
+  "types": {
+  "default": {
+  "icon": "fa fa-folder text-custom"
+},
+  "file": {
+  "icon": "fa fa-file text-success"
+}
+}
+
+}).bind("activate_node.jstree", function (obj, e) {
+  var node = $('#businessProductTypeOnlyReadjsTree').jstree(true).get_selected(true)[0];
+  var opt = {
+  silent: true,
+  query:{
+  'ischaidan':node.text
+}
+};
+  $("#ischaidan").val(node.text);
+  $('#table').bootstrapTable('refresh',opt);
+}).on('loaded.jstree', function() {
+  $("#businessProductTypeOnlyReadjsTree").jstree('open_all');
+});
+});
     $(document).ready(function() {
     $('#table').bootstrapTable({
         //请求方法
@@ -108,6 +154,10 @@
                 field: 'dept.name',
                 title: '生产部门'
             }
+          ,{
+            field: 'ischaidan',
+            title: '是否拆单'
+          }
     ]
 
 });
@@ -129,6 +179,13 @@
 		  $("#searchForm  .select-item").html("");
 		  refresh();
 		});
+
+  $('#startdate').datetimepicker({
+  format:'Y-m-d'
+});
+  $('#enddate').datetimepicker({
+  format:'Y-m-d'
+});
 	});
 
 	//获取选中行

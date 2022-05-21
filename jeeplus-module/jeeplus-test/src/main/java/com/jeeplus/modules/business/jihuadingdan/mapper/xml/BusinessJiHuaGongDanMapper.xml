@@ -19,6 +19,7 @@
 		a.cinvname AS "cinvname",
 		a.cinvstd AS "cinvstd",
 		a.unit AS "unit",
+		a.isshengcheng as "isshengcheng",
 		a.routeid as "route.id",
 		a.version as "route.version",
 		a.start_date AS "startdate",
@@ -52,18 +53,30 @@
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
-			<if test="batchno != null and batchno != ''">
-				and a.batchno = #{batchno}
+
+			<if test="dept != null and dept.id != null and dept.id != ''">
+				AND a.dept = #{dept.id}
+			</if>
+			<if test="cinvcode != null  and cinvcode != ''">
+				AND a.cinv_code = #{cinvcode}
+			</if>
+			<if test="cinvname != null  and cinvname != ''">
+				AND a.cinv_name like concat('%',#{cinvname},'%')
+			</if>
+			<if test="enddate!=null and enddate !=''">
+				and a.end_date = #{enddate}
+			</if>
+			<if test="startdate!=null and startdate !='' ">
+				and a.start_date = #{startdate}
 			</if>
 			<if test="status != null and status != ''">
 				and a.status = #{status}
 			</if>
+			<if test="isshengcheng != null and isshengcheng != ''">
+				and a.isshengcheng = #{isshengcheng}
+			</if>
 			<if test="code != null and code != ''">
-				AND a.code LIKE
-				    <if test="_databaseId == 'postgre'">'%'||#{code}||'%'</if>
-					<if test="_databaseId == 'oracle'">'%'||#{code}||'%'</if>
-					<if test="_databaseId == 'mssql'">'%'+#{code}+'%'</if>
-					<if test="_databaseId == 'mysql'">concat('%',#{code},'%')</if>
+				AND a.code LIKE concat('%',#{code},'%')
 			</if>
 		</where>
 		<choose>
@@ -71,7 +84,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.code DESC
+				ORDER BY a.start_date asc
 			</otherwise>
 		</choose>
 	</select>
@@ -118,7 +131,7 @@
 			scnum,
 			gdnum,
 			synum,
-			dept,
+			dept,isshengcheng,
 			status
 		) VALUES (
 			#{id},
@@ -142,7 +155,7 @@
 			#{scnum},
 			#{gdnum},
 			#{synum},
-			#{dept.id},
+			#{dept.id},'未生成',
 			#{status}
 		)
 	</insert>

@@ -43,37 +43,9 @@ layout("/include/_container.html", {title:"列表", parent:"生产订单"}){
 
 	<!-- 工具栏 -->
 	<div id="toolbar">
-			 <% if(shiro.hasPermission("business:shengchan:dingdan:businessShengChanDingDan:add") ){ %>
-		<button  class="btn btn-custom waves-effect w-xs waves-light" onclick="sychu8()">
-		<i class="fa fa-plus"></i> ERP同步
-	</button>
-			 	<button id="add" class="btn btn-custom waves-effect w-xs waves-light" onclick="add()">
-					<i class="fa fa-plus"></i> 新建
-				</button>
-			<% } %>
-			 <% if(shiro.hasPermission("business:shengchan:dingdan:businessShengChanDingDan:edit") ){ %>
-			    <button id="edit" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="edit()">
-	            	<i class="fa fa-edit"></i> 修改
-	        	</button>
-			<% } %>
-			 <% if(shiro.hasPermission("business:shengchan:dingdan:businessShengChanDingDan:del") ){ %>
-				<button id="remove" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="del()">
-	            	<i class="fa fa-remove"></i> 删除
-	        	</button>
-			<% } %>
-			 <% if(shiro.hasPermission("business:shengchan:dingdan:businessShengChanDingDan:import") ){ %>
-<!--				<button id="import"  class="btn btn-white waves-effect w-xs waves-light" >-->
-<!--					<i class="fa fa-upload"></i> 导入-->
-<!--				</button>-->
-			<% } %>
-			 <% if(shiro.hasPermission("business:shengchan:dingdan:businessShengChanDingDan:export") ){ %>
-<!--	        	<button id="export" class="btn btn-white waves-effect w-xs waves-light">-->
-<!--					<i class="fa fa-download"></i> 导出-->
-<!--				</button>-->
-			 <% } %>
 		<% if(shiro.hasPermission("business:shengchan:dingdan:businessShengChanDingDan:shenhe") ){ %>
-		<button id="shenhe" class="btn btn-custom waves-effect w-xs waves-light" disabled onclick="shenhe()">
-			审核
+		<button id="fanshen" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="shenhe()">
+			反审
 		</button>
 		<% } %>
 		    </div>

@@ -1,6 +1,22 @@
 <%
 layout("/include/_container.html", {title:"列表", parent:"计划工单"}){
-%>
+%><div class="row">
+	<div class="col-sm-3 col-md-2 p-r-5">
+		<div class="white-box" style="height: 794px;">
+			<div>
+				<div style="width: calc(100% - 50px);float: left">
+					<div class="input-group">
+					<span class="input-group-prepend">
+						<button type="button" class="btn btn-sm waves-effect waves-light btn-custom"><i class="fa fa-search"></i></button>
+					</span>
+						<input type="text" class="form-control input-sm" id="search_q" placeholder="查找...">
+					</div>
+				</div>
+			</div>
+			<div id="businessProductTypeOnlyReadjsTree"></div>
+		</div>
+	</div>
+	<div class="col-sm-9 col-md-10" style="padding-left: 0px">
     <!-- 文件上传 -->
     <div id="import-collapse" class="collapse white-box m-b-5">
         <a class="jp-ti-close close close" onclick="$('#import-collapse').fadeToggle()">
@@ -55,6 +71,10 @@ layout("/include/_container.html", {title:"列表", parent:"计划工单"}){
 				<#treeselect id="dept" name="dept.id"  labelName="dept.name"
 				title="部门" url="/sys/office/treeData?type=2" class="form-control" allowClear="true" notAllowSelectParent="true"/>
 			</div>
+			<div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="生产单号：">是否生成报工单：</label>
+				<input name="isshengcheng" id="isshengcheng"  maxlength="64"  class=" form-control"/>
+			</div>
 		    <div class="form-group m-b-10 m-r-10">
                 <a  id="search" class="btn  btn-custom waves-effect waves-light m-l-10 btn-md btn-rounded"><i class="fa fa-search"></i> 查询</a>
                 <a  id="reset" class="btn  btn-custom waves-effect waves-light m-l-10 btn-md btn-rounded" ><i class="fa fa-refresh"></i> 重置</a>
@@ -66,41 +86,21 @@ layout("/include/_container.html", {title:"列表", parent:"计划工单"}){
 
 	<!-- 工具栏 -->
 	<div id="toolbar">
-			 <% if(shiro.hasPermission("business:jihuadingdan:businessJiHuaGongDan:add") ){ %>
-			 	<button id="add" class="btn btn-custom waves-effect w-xs waves-light" onclick="add()">
-					<i class="fa fa-plus"></i> 新建
-				</button>
-			<% } %>
-			 <% if(shiro.hasPermission("business:jihuadingdan:businessJiHuaGongDan:edit") ){ %>
-			    <button id="edit" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="edit()">
-	            	<i class="fa fa-edit"></i> 修改
-	        	</button>
-			<% } %>
-			 <% if(shiro.hasPermission("business:jihuadingdan:businessJiHuaGongDan:del") ){ %>
-				<button id="remove" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="del()">
-	            	<i class="fa fa-remove"></i> 删除
-	        	</button>
-			<% } %>
-			 <% if(shiro.hasPermission("business:jihuadingdan:businessJiHuaGongDan:import") ){ %>
-<!--				<button id="import"  class="btn btn-white waves-effect w-xs waves-light" >-->
-<!--					<i class="fa fa-upload"></i> 导入-->
-<!--				</button>-->
-			<% } %>
-			 <% if(shiro.hasPermission("business:jihuadingdan:businessJiHuaGongDan:export") ){ %>
-<!--	        	<button id="export" class="btn btn-white waves-effect w-xs waves-light">-->
-<!--					<i class="fa fa-download"></i> 导出-->
-<!--				</button>-->
-			 <% } %>
-			<% if(shiro.hasPermission("business:jihuadingdan:businessJiHuaGongDan:shenhe") ){ %>
-			<button id="xiafa" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="xiafa()">
-				下发
-			</button>
-			<% } %>
+		<% if(shiro.hasPermission("business:jihuadingdan:businessJiHuaGongDan:shenhe") ){ %>
+		<button id="chehui" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="chehui()">
+			撤回
+		</button>
+		<% } %>
+		<% if(shiro.hasPermission("business:jihuadingdan:businessJiHuaGongDan:shengchengbaogongdan") ){ %>
+		<button id="shengchengbaogongdan" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="shengchengbaogongdan()">
+			生成报工单
+		</button>
+		<% } %>
 		    </div>
 		
 	<!-- 表格 -->
 	<table id="businessJiHuaGongDanTable" class="table-bordered"   data-toolbar="#toolbar"></table>
 	</div>
-
+	</div>
 	<% include("businessJiHuaGongDanList.js"){} %>
 	<% } %>
