@@ -119,7 +119,7 @@ public class BusinessRuKuProductService extends CrudService<BusinessRuKuProductM
 		}
 		BusinessRuKuProduct product = new BusinessRuKuProduct();
 		BusinessRuKuProductMx mx = new BusinessRuKuProductMx();
-		product.setBatchno(getBatchno(DateUtils.getDate("yyyyMMdd")));
+		product.setBatchno(getBatchno(DateUtils.getDate("yyMMdd")));
 		product.setBgcode(order.getBgcode());
 		product.setBgid(order.getId());
 		product.setCangku(new BaseCangKu(ckid));
