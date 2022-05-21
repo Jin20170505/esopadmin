@@ -32,6 +32,7 @@ public class BusinessBaoGongOrder extends DataEntity<BusinessBaoGongOrder> {
 	private String startdate;		// 开始日期
 	private String enddate;		// 结束日期
 	private String bgcode;		// 报工单号
+	private String isprint; // 是否打印
 	private String complate;		// 是否完成
 	private String qrcode;		// 二维码内容
 	private List<BusinessBaoGongOrderMingXi> businessBaoGongOrderMingXiList = Lists.newArrayList();		// 子表列表
@@ -42,6 +43,15 @@ public class BusinessBaoGongOrder extends DataEntity<BusinessBaoGongOrder> {
 
 	public BusinessBaoGongOrder(String id){
 		super(id);
+	}
+
+	public String getIsprint() {
+		return isprint;
+	}
+
+	public BusinessBaoGongOrder setIsprint(String isprint) {
+		this.isprint = isprint;
+		return this;
 	}
 
 	@ExcelField(title="生产订单号", align=2, sort=6)

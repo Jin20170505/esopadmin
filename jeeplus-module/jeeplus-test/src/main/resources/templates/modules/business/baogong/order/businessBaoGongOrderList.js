@@ -154,6 +154,13 @@ $(document).ready(function() {
 		        sortName: 'enddate'
 		       
 		    }
+                   ,{
+                       field: 'isprint',
+                       title: '是否打印',
+                       sortable: true,
+                       sortName: 'isprint'
+
+                   }
 		     ]
 		
 		});
@@ -218,7 +225,13 @@ $(document).ready(function() {
 		  refresh();
 		});
 
-		
+
+    $('#startdate').datetimepicker({
+    format:'Y-m-d'
+});
+    $('#enddate').datetimepicker({
+    format:'Y-m-d'
+});
 	});
 
     // 生成报工单

@@ -58,10 +58,10 @@
 				AND a.dept = #{dept.id}
 			</if>
 			<if test="cinvcode != null  and cinvcode != ''">
-				AND a.cinv_code = #{cinvcode}
+				AND a.cinvcode = #{cinvcode}
 			</if>
 			<if test="cinvname != null  and cinvname != ''">
-				AND a.cinv_name like concat('%',#{cinvname},'%')
+				AND a.cinvname like concat('%',#{cinvname},'%')
 			</if>
 			<if test="enddate!=null and enddate !=''">
 				and a.end_date = #{enddate}

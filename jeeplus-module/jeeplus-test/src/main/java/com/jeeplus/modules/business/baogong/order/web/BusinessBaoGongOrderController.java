@@ -160,6 +160,18 @@ public class BusinessBaoGongOrderController extends BaseController {
 		j.setMsg("删除报工单成功");
 		return j;
 	}
+
+	@ResponseBody
+	@RequestMapping(value = "print")
+	public AjaxJson print(String ids) {
+		AjaxJson j = new AjaxJson();
+		String idArray[] =ids.split(",");
+		for(String id : idArray){
+			businessBaoGongOrderService.print(id);
+		}
+		j.setMsg("删除报工单成功");
+		return j;
+	}
 	
 	/**
 	 * 导出excel文件

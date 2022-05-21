@@ -245,4 +245,9 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 			}
 		}
 	}
+
+	@Transactional(readOnly = false)
+	public void print(String id){
+		mapper.print(id);
+	}
 }

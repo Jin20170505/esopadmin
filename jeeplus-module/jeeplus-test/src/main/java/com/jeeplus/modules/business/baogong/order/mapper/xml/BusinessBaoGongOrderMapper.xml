@@ -26,6 +26,7 @@
 		a.end_date AS "enddate",
 		a.qrcode as "qrcode",
 		a.bgcode AS "bgcode",
+		a.isprint as "isprint",
 		a.complate AS "complate",
 		a.remarks AS "remarks"
 	</sql>
@@ -70,6 +71,21 @@
 			<if test="bgcode != null and bgcode != ''">
 				AND a.bgcode = #{bgcode}
 			</if>
+			<if test="cinvcode != null  and cinvcode != ''">
+				AND a.cinvcode = #{cinvcode}
+			</if>
+			<if test="cinvname != null  and cinvname != ''">
+				AND a.cinvname like concat('%',#{cinvname},'%')
+			</if>
+			<if test="enddate!=null and enddate !=''">
+				and a.end_date = #{enddate}
+			</if>
+			<if test="startdate!=null and startdate !='' ">
+				and a.start_date = #{startdate}
+			</if>
+			<if test="isprint!=null and isprint !=''">
+				and a.isprint = #{isprint}
+			</if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
@@ -102,7 +118,7 @@
 	
 	<insert id="insert">
 		INSERT INTO business_baogao_order(
-			id,
+			id,isprint,
 			create_by,
 			create_date,
 			update_by,
@@ -127,7 +143,7 @@
 			complate,
 			remarks
 		) VALUES (
-			#{id},
+			#{id},'未打印',
 			#{createBy.id},
 			#{createDate},
 			#{updateBy.id},
