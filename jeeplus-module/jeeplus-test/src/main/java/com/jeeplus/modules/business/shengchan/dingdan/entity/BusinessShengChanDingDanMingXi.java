@@ -22,6 +22,7 @@ public class BusinessShengChanDingDanMingXi extends DataEntity<BusinessShengChan
 	private BusinessShengChanDingDan p;		// 生产订单 父类
 	private Office dept; // 生产部门
 	private Integer no;		// 行号
+	private String cinvcode;
 	private BusinessProduct cinv;		// 存货编码
 	private String cinvname;		// 存货名称
 	private String std;		// 存货规格型号
@@ -31,8 +32,27 @@ public class BusinessShengChanDingDanMingXi extends DataEntity<BusinessShengChan
 	private String enddate;		// 完工日期
 	private String batchno; // 批号
 	private String type;
-	private String status;
-	
+	private String status; // 锁定 开立
+	private String ischaidan; // 是否拆单
+
+	public String getIschaidan() {
+		return ischaidan;
+	}
+
+	public BusinessShengChanDingDanMingXi setIschaidan(String ischaidan) {
+		this.ischaidan = ischaidan;
+		return this;
+	}
+
+	public String getCinvcode() {
+		return cinvcode;
+	}
+
+	public BusinessShengChanDingDanMingXi setCinvcode(String cinvcode) {
+		this.cinvcode = cinvcode;
+		return this;
+	}
+
 	public BusinessShengChanDingDanMingXi() {
 		super();
 	}

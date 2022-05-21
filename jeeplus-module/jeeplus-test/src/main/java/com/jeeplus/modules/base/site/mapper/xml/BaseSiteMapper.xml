@@ -60,11 +60,7 @@
 				AND a.line_id = #{line.id}
 			</if>
 			<if test="name != null and name != ''">
-				AND a.name LIKE
-				    <if test="_databaseId == 'postgre'">'%'||#{name}||'%'</if>
-					<if test="_databaseId == 'oracle'">'%'||#{name}||'%'</if>
-					<if test="_databaseId == 'mssql'">'%'+#{name}+'%'</if>
-					<if test="_databaseId == 'mysql'">concat('%',#{name},'%')</if>
+				AND a.name LIKE concat('%',#{name},'%')
 			</if>
 		</where>
 		<choose>
@@ -98,6 +94,7 @@
 	
 	<insert id="insert">
 		INSERT INTO base_site(
+		                      id,
 			create_by,
 			create_date,
 			update_by,
@@ -109,6 +106,7 @@
 			name,
 			remarks
 		) VALUES (
+		          #{id},
 			#{createBy.id},
 			#{createDate},
 			#{updateBy.id},

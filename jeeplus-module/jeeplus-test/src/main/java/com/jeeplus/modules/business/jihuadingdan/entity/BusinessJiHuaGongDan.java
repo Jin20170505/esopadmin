@@ -35,6 +35,7 @@ public class BusinessJiHuaGongDan extends DataEntity<BusinessJiHuaGongDan> {
 	private Double synum;		// 剩余数量
 	private Office dept;		// 生产部门
 	private String status;		// 状态
+	private String isshengcheng;// 是否生成报工单
 	private List<BusinessJiHuaGongDanMingXi> businessJiHuaGongDanMingXiList = Lists.newArrayList();		// 子表列表
 	private List<BusinessJiHuaGongDanBom> businessJiHuaGongDanBomList  = Lists.newArrayList(); // 子件
 
@@ -205,5 +206,14 @@ public class BusinessJiHuaGongDan extends DataEntity<BusinessJiHuaGongDan> {
 
 	public void setBusinessJiHuaGongDanMingXiList(List<BusinessJiHuaGongDanMingXi> businessJiHuaGongDanMingXiList) {
 		this.businessJiHuaGongDanMingXiList = businessJiHuaGongDanMingXiList;
+	}
+
+	public String getIsshengcheng() {
+		return isshengcheng;
+	}
+
+	public BusinessJiHuaGongDan setIsshengcheng(String isshengcheng) {
+		this.isshengcheng = isshengcheng;
+		return this;
 	}
 }

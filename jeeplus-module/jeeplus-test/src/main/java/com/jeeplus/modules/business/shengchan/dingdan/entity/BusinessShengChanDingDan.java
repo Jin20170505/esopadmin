@@ -22,6 +22,7 @@ public class BusinessShengChanDingDan extends DataEntity<BusinessShengChanDingDa
 	private Office dept;		// 生产部门
 	private String startdate;	// 开工日期
 	private String enddate;	// 完工日期
+	private String status; // 审核状态
 	private List<BusinessShengChanDingDanMingXi> businessShengChanDingDanMingXiList = Lists.newArrayList();		// 子表列表
 	
 	public BusinessShengChanDingDan() {
@@ -75,5 +76,14 @@ public class BusinessShengChanDingDan extends DataEntity<BusinessShengChanDingDa
 
 	public void setBusinessShengChanDingDanMingXiList(List<BusinessShengChanDingDanMingXi> businessShengChanDingDanMingXiList) {
 		this.businessShengChanDingDanMingXiList = businessShengChanDingDanMingXiList;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public BusinessShengChanDingDan setStatus(String status) {
+		this.status = status;
+		return this;
 	}
 }

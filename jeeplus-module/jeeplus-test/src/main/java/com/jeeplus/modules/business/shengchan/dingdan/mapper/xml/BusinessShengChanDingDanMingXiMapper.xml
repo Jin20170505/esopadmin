@@ -23,6 +23,7 @@
 		a.start_date AS "startdate",
 		a.end_date AS "enddate",
 		a.batchno as "batchno",
+		a.ischaidan as "ischaidan",
 		p.code as "p.code",
 		dept.name AS "dept.name"
 	</sql>
@@ -56,11 +57,17 @@
 			<if test="dept != null and dept.id != null and dept.id != ''">
 				AND a.dept = #{dept.id}
 			</if>
-			<if test="batchno != null  and batchno != ''">
-				AND a.batchno = #{batchno}
+			<if test="cinvcode != null  and cinvcode != ''">
+				AND a.cinv_code = #{cinvcode}
 			</if>
-			<if test="status!=null and status !=''">
-				and a.status = #{status}
+			<if test="cinvname != null  and cinvname != ''">
+				AND a.cinv_name like concat('%',#{cinvname},'%')
+			</if>
+			<if test="enddate!=null and enddate !=''">
+				and a.end_date = #{enddate}
+			</if>
+			<if test="startdate!=null and startdate !='' ">
+				and a.start_date = #{startdate}
 			</if>
 		</where>
 		<choose>
@@ -68,7 +75,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY p.code desc,a.no ASC
+				ORDER BY a.start_date asc,p.code asc,a.no ASC
 			</otherwise>
 		</choose>
 	</select>
@@ -124,7 +131,7 @@
 	
 	<insert id="insert">
 		INSERT INTO business_shengchan_dingdan_mingxi(
-			id,
+			id,ischaidan,
 			create_by,
 			create_date,
 			update_by,
@@ -141,7 +148,7 @@
 			start_date,
 			end_date,dept,type,status
 		) VALUES (
-			#{id},
+			#{id},'未拆单',
 			#{createBy.id},
 			#{createDate},
 			#{updateBy.id},

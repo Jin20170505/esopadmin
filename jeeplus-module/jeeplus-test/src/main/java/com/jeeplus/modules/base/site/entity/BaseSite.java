@@ -26,7 +26,6 @@ public class BaseSite extends DataEntity<BaseSite> {
 	
 	public BaseSite() {
 		super();
-		this.setIdType(IDTYPE_AUTO);
 	}
 
 	public BaseSite(String id){

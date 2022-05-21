@@ -170,13 +170,19 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 	@Transactional(readOnly = false)
 	public void shenhe(String ids){
 		//TODO 是否可以审核 开立
-		Arrays.asList(ids.split(",")).forEach(id->businessShengChanDingDanMingXiMapper.shenhe(id));
+		Arrays.asList(ids.split(",")).forEach(id->{
+			businessShengChanDingDanMingXiMapper.shenhe(id);
+			mapper.updateStatus(id,"已审核");
+		});
 	}
 
 	@Transactional(readOnly = false)
 	public void fanshen(String ids){
 		//TODO 检查是否可以反审
-		Arrays.asList(ids.split(",")).forEach(id->businessShengChanDingDanMingXiMapper.fanshen(id));
+		Arrays.asList(ids.split(",")).forEach(id->{
+			businessShengChanDingDanMingXiMapper.fanshen(id);
+			mapper.updateStatus(id,"未审核");
+		});
 	}
 	@Transactional(readOnly = false)
 	public String doPlan(String rid){
@@ -370,6 +376,7 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 				jiHuaGongDans.add(jiHuaGongDan);
 			}
 		}
+		businessShengChanDingDanMingXiMapper.updateChaidan(rid);
 		jiHuaGongDans.forEach(d->businessJiHuaGongDanService.save(d));
 	}
 
@@ -401,6 +408,7 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 				dingDan.setId(d.getMoId());
 				dingDan.setStartdate(startdate);
 				dingDan.setEnddate(enddate);
+				dingDan.setStatus("已审核");
 				dingDans.add(dingDan);
 			}
 			BusinessShengChanDingDanMingXi mingXi = new BusinessShengChanDingDanMingXi();

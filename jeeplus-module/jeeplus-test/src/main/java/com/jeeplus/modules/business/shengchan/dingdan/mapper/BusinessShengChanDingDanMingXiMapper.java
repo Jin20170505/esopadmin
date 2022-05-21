@@ -39,4 +39,7 @@ public interface BusinessShengChanDingDanMingXiMapper extends BaseMapper<Busines
 	Integer hasById(@Param("id") String id);
 
 	BusinessShengChanDingDanMingXi getInfo(@Param("id") String id);
+
+	@Update("update business_shengchan_dingdan_mingxi set ischaidan = '已拆单' where id = #{id}")
+	void updateChaidan(@Param("id") String id);
 }

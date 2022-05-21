@@ -10,6 +10,7 @@
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
+		a.status as "status",
 		a.code AS "code",
 		a.dept AS "dept.id",
 		a.startdate as "startdate",
@@ -40,6 +41,9 @@
 			${dataScope}
 			<if test="code != null and code != ''">
 				AND a.code = #{code}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
 			</if>
 			<if test="dept != null and dept.id != null and dept.id != ''">
 				AND a.dept = #{dept.id}
@@ -82,7 +86,7 @@
 			update_by,
 			update_date,
 			remarks,
-			del_flag,
+			del_flag,status,
 			code,startdate,enddate,
 			dept
 		) VALUES (
@@ -92,7 +96,7 @@
 			#{updateBy.id},
 			#{updateDate},
 			#{remarks},
-			#{delFlag},
+			#{delFlag},#{status},
 			#{code},#{startdate},#{enddate},
 			#{dept.id}
 		)

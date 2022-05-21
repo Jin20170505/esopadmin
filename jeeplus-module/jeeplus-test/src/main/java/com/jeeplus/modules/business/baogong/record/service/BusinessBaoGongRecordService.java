@@ -70,6 +70,11 @@ public class BusinessBaoGongRecordService extends CrudService<BusinessBaoGongRec
 		if(mingXi==null){
 			mingXi = new BusinessBaoGongOrderMingXi();
 		}
+		double donenum = getDoneSumNum(bgid,null);
+		double sum = donenum + hgnum;
+		if(sum>order.getNum()){
+			throw new RuntimeException("报工数量超出工单数量");
+		}
 		BusinessBaoGongRecord record = new BusinessBaoGongRecord();
 		record.setBgdate(new Date());
 		record.setBgcode(order.getBgcode());
