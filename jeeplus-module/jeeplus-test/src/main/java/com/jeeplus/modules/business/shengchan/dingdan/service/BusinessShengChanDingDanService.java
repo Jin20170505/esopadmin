@@ -236,19 +236,19 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 		});
 		jiHuaGongDans.add(jiHuaGongDan);
 		// 子件
-		bom(mingXi,jiHuaGongDan);
+		bom(mingXi,jiHuaGongDan,1);
 		jiHuaGongDans.forEach(d->businessJiHuaGongDanService.save(d));
 		return "";
 	}
-	public void bom(BusinessShengChanDingDanMingXi mx,BusinessJiHuaGongDan jiHuaGongDan) {
+	public void bom(BusinessShengChanDingDanMingXi mx,BusinessJiHuaGongDan jiHuaGongDan,double r) {
 		List<BusinessShengChanBom> boms = businessShengChanDingdanMxService.findBomList(mx.getId());
 		if(boms!=null){
 			boms.forEach(d->{
 				BusinessJiHuaGongDanBom b = new BusinessJiHuaGongDanBom();
 				b.setId("");b.setDelFlag("0");
 				b.setScyid(d.getId()).setCinvcode(d.getCinvcode()).setCinvname(d.getCinvname()).setCinvstd(d.getCinvstd()).setNo(Integer.valueOf(d.getNo()))
-						.setAuxbaseqtyn(d.getAuxbaseqtyn()).setBaseqtyd(d.getBaseqtyd()).setIsdaochong(d.getIsdaochong()).setNum(d.getNum())
-						.setDonenum(d.getDonenum()).setBaseqtyn(d.getBaseqtyn()).setProducttype(d.getProducttype()).setUnitcode(d.getUnitcode())
+						.setAuxbaseqtyn(d.getAuxbaseqtyn()).setBaseqtyd(d.getBaseqtyd()).setIsdaochong(d.getIsdaochong()).setNum(d.getNum()*r)
+						.setDonenum(0.00).setBaseqtyn(d.getBaseqtyn()).setProducttype(d.getProducttype()).setUnitcode(d.getUnitcode())
 				.setUnitname(d.getUnitname()).setRemarks(d.getRemarks());
 				jiHuaGongDan.getBusinessJiHuaGongDanBomList().add(b);
 			});
@@ -306,9 +306,11 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 				mx.setNum(jiHuaGongDan.getGdnum());
 				jiHuaGongDan.getBusinessJiHuaGongDanMingXiList().add(mx);
 			});
+			bom(mingXi,jiHuaGongDan,1);
 			jiHuaGongDans.add(jiHuaGongDan);
 		}else {
 			int idx =1;
+			double s = sum;
 			while (sum>num){
 				BusinessJiHuaGongDan jiHuaGongDan = new BusinessJiHuaGongDan();
 				jiHuaGongDan.setCode(code+getcode(idx));
@@ -338,7 +340,7 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 					jiHuaGongDan.getBusinessJiHuaGongDanMingXiList().add(mx);
 				});
 				// 子件
-				bom(mingXi,jiHuaGongDan);
+				bom(mingXi,jiHuaGongDan,num/s);
 				jiHuaGongDans.add(jiHuaGongDan);
 				sum = sum -num;
 				idx++;
@@ -372,7 +374,7 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 					jiHuaGongDan.getBusinessJiHuaGongDanMingXiList().add(mx);
 				});
 				// 子件
-				bom(mingXi,jiHuaGongDan);
+				bom(mingXi,jiHuaGongDan,sum/s);
 				jiHuaGongDans.add(jiHuaGongDan);
 			}
 		}

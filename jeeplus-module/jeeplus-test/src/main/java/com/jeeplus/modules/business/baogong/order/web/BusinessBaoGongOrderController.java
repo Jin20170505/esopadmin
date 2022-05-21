@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
+import com.google.common.collect.Maps;
 import com.jeeplus.common.utils.QRCodeUtil;
 import com.jeeplus.modules.sys.utils.FileKit;
 import org.apache.shiro.authz.annotation.Logical;
@@ -255,6 +256,26 @@ public class BusinessBaoGongOrderController extends BaseController {
 		}
 		return j;
     }
-	
-
+	@RequestMapping("treeData")
+	@ResponseBody
+	public List<Map<String, Object>> treeData(@RequestParam(required=false) String extId, HttpServletResponse response) {
+		List<Map<String, Object>> mapList = Lists.newArrayList();
+		Map<String, Object> map = Maps.newHashMap();
+		map.put("id", "未打印");
+		map.put("text", "未打印");
+		map.put("parent", "#");
+		Map<String, Object> state = Maps.newHashMap();
+		state.put("opened", true);
+		map.put("state", state);
+		mapList.add(map);
+		Map<String, Object> map1 = Maps.newHashMap();
+		map1.put("id", "已打印");
+		map1.put("text","已打印");
+		map1.put("parent", "#");
+		Map<String, Object> state1 = Maps.newHashMap();
+		state1.put("opened", true);
+		map1.put("state", state1);
+		mapList.add(map1);
+		return mapList;
+	}
 }

@@ -143,7 +143,7 @@ layout("/include/_dialog.html"){
 					<tr>
 						<th class="hide"></th>
 						<th width="80"><font color="red">*</font>行号</th>
-						<th width="100"><font color="red">*</font>类型</th>
+						<th width="100">类型</th>
 						<th><font color="red">*</font>存货编码</th>
 						<th>存货名称</th>
 						<th>存货规格型号</th>
@@ -151,7 +151,7 @@ layout("/include/_dialog.html"){
 						<th><font color="red">*</font>数量</th>
 						<th><font color="red">*</font>开工日期</th>
 						<th><font color="red">*</font>完工日期</th>
-						<th><font color="red">*</font>批号</th>
+						<th>批号</th>
 						<th><font color="red">*</font>生产部门</th>
 						<th><font color="red">*</font>状态</th>
 						<th width="80">子件</th>
@@ -171,7 +171,7 @@ layout("/include/_dialog.html"){
 						<input id="businessShengChanDingDanMingXiList{{idx}}_no" name="businessShengChanDingDanMingXiList[{{idx}}].no" type="text" value="{{row.no}}"    class="form-control no required"/>
 					</td>
 					<td>
-					<select id="businessShengChanDingDanMingXiList{{idx}}_type" name="businessShengChanDingDanMingXiList[{{idx}}].type" data-value="{{row.type}}" class="form-control m-b required">
+					<select id="businessShengChanDingDanMingXiList{{idx}}_type" name="businessShengChanDingDanMingXiList[{{idx}}].type" data-value="{{row.type}}" class="form-control m-b">
 							<% for(dict in fn.getDictList('shengchan_type') ){ %>
 								<option value="${dict.value}">${dict.label}</option>
 							<% } %>
@@ -224,7 +224,7 @@ layout("/include/_dialog.html"){
                         </div>
 					</td>
 					<td>
-						<input id="businessShengChanDingDanMingXiList{{idx}}_batchno"  name="businessShengChanDingDanMingXiList[{{idx}}].batchno" type="text" value="{{row.batchno}}"    class="form-control required"/>
+						<input id="businessShengChanDingDanMingXiList{{idx}}_batchno"  name="businessShengChanDingDanMingXiList[{{idx}}].batchno" type="text" value="{{row.batchno}}"    class="form-control"/>
 					</td>
 					<td>
 						<#treeselect id="businessShengChanDingDanMingXiList{{idx}}_dept" name="businessShengChanDingDanMingXiList[{{idx}}].dept.id" value="{{row.dept.id}}" labelName="businessShengChanDingDanMingXiList[{{idx}}].dept.name" labelValue="{{row.dept.name}}"

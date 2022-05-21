@@ -21,7 +21,7 @@ layout("/include/_container.html", {title:"打印", parent:"报工单"}){
     .table-bordered th{
         text-align: center;
         vertical-align: middle;
-        font-size: 27px;
+        font-size: 24px;
         height: 70px;
     }
     .table-bordered td{
@@ -29,6 +29,8 @@ layout("/include/_container.html", {title:"打印", parent:"报工单"}){
         vertical-align: middle;
         font-size: 20px;
     }
+    .pageSeparator{visibility:hidden; page-break-before:always; overflow:hidden; height:0px;}
+    /** 1cm = 32px   7*5 = 224 * 160*/
 </style>
 <a id="print" class="btn btn-custom waves-effect w-xs waves-light" onclick="window.print();">
     <i class="fa fa-print"></i> 打印
@@ -37,7 +39,7 @@ layout("/include/_container.html", {title:"打印", parent:"报工单"}){
 </div>
 
 <script type="text/template" id="MxTpl">//<!--
-<table class="table table-bordered" style="width: 500px">
+<table class="table table-bordered" style="min-width: 500px">
         <tbody>
         <tr>
             <th colspan="2" width="250px">QiLianShan 存货条码</th>
@@ -65,6 +67,7 @@ layout("/include/_container.html", {title:"打印", parent:"报工单"}){
         </tr>
         </tbody>
     </table>
+    <div class="pageSeparator"></div>
 				//-->
 </script>
 <script type="text/javascript">
