@@ -92,7 +92,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.bgcode DESC
+				ORDER BY a.start_date asc
 			</otherwise>
 		</choose>
 	</select>
