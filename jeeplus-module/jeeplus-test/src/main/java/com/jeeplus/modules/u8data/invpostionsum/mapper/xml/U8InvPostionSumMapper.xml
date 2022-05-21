@@ -33,6 +33,7 @@
                 and a.cInvCode = #{cinvcode}
             </if>
         </where>
+        order by a.dVDate asc
     </select>
 
 </mapper>
