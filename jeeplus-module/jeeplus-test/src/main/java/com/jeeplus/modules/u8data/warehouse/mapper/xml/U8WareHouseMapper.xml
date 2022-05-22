@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.u8data.warehouse.mapper.U8WareHouseMapper">
+    <sql id="houseColumns">
+    a.dModifyDate AS  "dModifyDate",
+    a.bProxyWh AS "bProxyWh",
+    a.dWhEndDate AS "dWhEndDate",
+    a.cWhCode AS "cWhCode",
+    a.cWhName AS "cWhName",
+    a.cWhAddress AS "cWhAddress",
+    a.cWhPhone AS "cWhPhone",
+    a.cWhPerson AS "cWhPerson",
+    a.bWhPos AS "bWhPos",
+    a.iFrequency AS "iFrequency",
+    a.cFrequency AS "cFrequency"
+    </sql>
+    <sql id="houseJoins">
+
+    </sql>
+
+    <select id="findList" resultType="U8WareHouse">
+        select
+        <include refid="houseColumns"/>
+        from YT_API_ERP_view_Warehouse a
+        <include refid="houseJoins"/>
+    </select>
+</mapper>

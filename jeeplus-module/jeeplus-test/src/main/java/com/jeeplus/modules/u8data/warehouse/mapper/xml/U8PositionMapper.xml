@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.u8data.warehouse.mapper.U8PositionMapper">
+    <sql id="postionColumns">
+        a.cPosCode AS "cPosCode",
+        a.cPosName AS "cPosName",
+        a.iPosGrade AS "iPosGrade",
+        a.bPosEnd AS "bPosEnd",
+        a.cWhCode AS "cWhCode",
+        a.iMaxCubage AS "iMaxCubage",
+        a.iMaxWeight AS "iMaxWeight",
+        a.cMemo AS "cMemo",
+        a.cBarCode AS "cBarCode",
+        a.pubufts AS "pubufts",
+        a.cPosCode1 AS "cPosCode1",
+        a.cWhName AS "cWhName"
+    </sql>
+    <sql id="postionJoins">
+
+    </sql>
+
+    <select id="findList" resultType="U8Position">
+        select
+        <include refid="postionColumns"/>
+        from YT_API_ERP_view_Position a
+        <include refid="postionJoins"/>
+    </select>
+</mapper>
