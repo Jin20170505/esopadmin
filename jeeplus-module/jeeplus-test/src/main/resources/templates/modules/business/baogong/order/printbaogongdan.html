@@ -18,9 +18,26 @@ layout("/include/_container.html", {title:"打印", parent:"报工单"}){
         width: 140px;
         height: 140px;
     }
+    h3{
+        font-size: 28px;
+    }
+
+    .table-bordered th,.table-bordered td{
+        font-size: 20px !important;
+    }
+
+    .table-bordered{
+        border: 1px solid #000000;
+        border-collapse: collapse;
+    }
+
+    .table > thead > tr > th,
+    .table > thead > tr > td,.table > tbody > tr > td,.table > tbody > tr > th{
+        border: 1px solid #000000 !important;
+    }
 </style>
 <div class="white-box">
-    <a id="print" class="btn btn-custom waves-effect w-xs waves-light" onclick="bgprint();">
+    <a id="print" class="btn btn-custom waves-effect w-xs waves-light" onclick="window.print();">
         <i class="fa fa-print"></i> 打印
     </a>
     <script type="text/javascript">

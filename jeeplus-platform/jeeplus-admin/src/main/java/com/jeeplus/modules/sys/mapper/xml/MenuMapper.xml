@@ -223,11 +223,7 @@
 	
 	<update id="delete">
 		DELETE FROM sys_menu 
-		WHERE id = #{id} OR parent_ids LIKE
-					<if test="_databaseId == 'postgre'">'%,'||#{id}||',%'</if>
-					<if test="_databaseId == 'oracle'">'%,'||#{id}||',%'</if>
-					<if test="_databaseId == 'mysql'">CONCAT('%,', #{id}, ',%')</if>
-					<if test="_databaseId == 'mssql'">'%'+#{id}+'%'</if>
+		WHERE id = #{id} OR parent_ids LIKE CONCAT('%,', #{id}, ',%')
 	</update>
 	
 	

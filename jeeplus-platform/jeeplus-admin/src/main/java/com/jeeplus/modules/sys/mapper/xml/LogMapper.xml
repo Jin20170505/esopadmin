@@ -15,11 +15,7 @@
 		JOIN sys_office o ON o.id = u.office_id
 		WHERE a.create_date BETWEEN #{beginDate} AND #{endDate}
 		<if test="title != null and title != ''">
-			AND a.title LIKE
-					<if test="_databaseId == 'postgre'">'%'||#{title}||'%'</if>
-					<if test="_databaseId == 'oracle'">'%'||#{title}||'%'</if>
-					<if test="_databaseId == 'mysql'">CONCAT('%', #{title}, '%')</if>
-					<if test="_databaseId == 'mssql'">'%'+#{title}+'%'</if>
+			AND a.title LIKE CONCAT('%', #{title}, '%')
 		</if>
 		<if test="createBy != null and createBy.name != null and createBy.name != ''">
 			AND u.name = #{createBy.name}

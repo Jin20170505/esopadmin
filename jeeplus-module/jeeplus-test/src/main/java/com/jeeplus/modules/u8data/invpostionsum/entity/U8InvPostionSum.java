@@ -107,6 +107,8 @@ public class U8InvPostionSum extends DataEntity<U8InvPostionSum> {
     public String getdMadeDate() {
         if(StringUtils.isNotEmpty(dMadeDate)){
             dMadeDate = dMadeDate.split(" ")[0];
+        }else {
+            dMadeDate = "";
         }
         return dMadeDate;
     }
@@ -135,6 +137,9 @@ public class U8InvPostionSum extends DataEntity<U8InvPostionSum> {
     }
 
     public String getiMassDates() {
+        if(iMassDates==null){
+            iMassDates = "";
+        }
         return iMassDates;
     }
 
@@ -146,6 +151,8 @@ public class U8InvPostionSum extends DataEntity<U8InvPostionSum> {
     public String getdVDate() {
         if(StringUtils.isNotEmpty(dVDate)){
             dVDate = dVDate.split(" ")[0];
+        }else {
+            dVDate="";
         }
         return dVDate;
     }
