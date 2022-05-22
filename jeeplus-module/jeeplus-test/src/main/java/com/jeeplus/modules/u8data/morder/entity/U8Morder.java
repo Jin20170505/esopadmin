@@ -8,6 +8,8 @@ import java.util.Date;
  * 生产订单
  */
 public class U8Morder extends DataEntity<U8Morder> {
+    private String soCode;// 来源单号
+    private String soSeq; // 来源行号
     private String moId; // 生产订单ID
     private String moCode; // 生产订单单号
     private Date startdate; // 开工日期
@@ -31,6 +33,24 @@ public class U8Morder extends DataEntity<U8Morder> {
 
     private Date start; // 开始日期
     private Date end; // 结束日期
+
+    public String getSoCode() {
+        return soCode;
+    }
+
+    public U8Morder setSoCode(String soCode) {
+        this.soCode = soCode;
+        return this;
+    }
+
+    public String getSoSeq() {
+        return soSeq;
+    }
+
+    public U8Morder setSoSeq(String soSeq) {
+        this.soSeq = soSeq;
+        return this;
+    }
 
     public String getMoId() {
         return moId;

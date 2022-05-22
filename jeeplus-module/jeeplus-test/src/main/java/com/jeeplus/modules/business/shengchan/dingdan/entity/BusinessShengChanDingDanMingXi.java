@@ -19,6 +19,8 @@ import com.jeeplus.modules.sys.entity.Office;
 public class BusinessShengChanDingDanMingXi extends DataEntity<BusinessShengChanDingDanMingXi> {
 	
 	private static final long serialVersionUID = 1L;
+	private String socode;// 来源单号
+	private String soseq; // 来源行号
 	private BusinessShengChanDingDan p;		// 生产订单 父类
 	private Office dept; // 生产部门
 	private Integer no;		// 行号
@@ -35,6 +37,24 @@ public class BusinessShengChanDingDanMingXi extends DataEntity<BusinessShengChan
 	private Double donenum; // 已拆单数量
 	private String status; // 锁定 开立
 	private String ischaidan; // 是否拆单
+
+	public String getSocode() {
+		return socode;
+	}
+
+	public BusinessShengChanDingDanMingXi setSocode(String socode) {
+		this.socode = socode;
+		return this;
+	}
+
+	public String getSoseq() {
+		return soseq;
+	}
+
+	public BusinessShengChanDingDanMingXi setSoseq(String soseq) {
+		this.soseq = soseq;
+		return this;
+	}
 
 	public String getIschaidan() {
 		return ischaidan;

@@ -5,7 +5,7 @@ import com.jeeplus.core.persistence.DataEntity;
 import java.util.Date;
 
 public class U8Inventory extends DataEntity<U8Inventory> {
-
+    private String cInvAddCode; // 存货代码
     private String cInvCCode; // 存货大类编码
     private String cInvCName; // 存货大类名称
     private String cInvCode; // 存货编码
@@ -19,6 +19,15 @@ public class U8Inventory extends DataEntity<U8Inventory> {
     private String bProxyForeign; // 是否委外
     private Date dSDate;  // 启用日期
     private Date dEDate; // 停用日期
+
+    public String getcInvAddCode() {
+        return cInvAddCode;
+    }
+
+    public U8Inventory setcInvAddCode(String cInvAddCode) {
+        this.cInvAddCode = cInvAddCode;
+        return this;
+    }
 
     public String getcInvCCode() {
         return cInvCCode;

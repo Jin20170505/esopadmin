@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jeeplus.modules.u8data.inventory.mapper.U8InventoryMapper">
     <sql id="inventoryColumns">
+        a.cInvAddCode as "cInvAddCode",
         a.cInvCCode as "cInvCCode",
         a.cInvCName as  "cInvCName",
         a.cInvCode as  "cInvCode",

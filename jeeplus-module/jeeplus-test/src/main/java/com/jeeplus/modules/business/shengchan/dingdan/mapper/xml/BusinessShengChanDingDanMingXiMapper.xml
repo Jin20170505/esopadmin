@@ -4,6 +4,8 @@
     
 	<sql id="businessShengChanDingDanMingXiColumns">
 		a.id AS "id",
+        a.socode as "socode",
+        a.soseq as "soseq",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
 		a.update_by AS "updateBy.id",
@@ -140,6 +142,8 @@
 	<insert id="insert">
 		INSERT INTO business_shengchan_dingdan_mingxi(
 			id,ischaidan,
+			socode,
+			soseq,
 			create_by,
 			create_date,
 			update_by,
@@ -157,6 +161,8 @@
 			end_date,dept,type,status
 		) VALUES (
 			#{id},'未拆单',
+			#{socode},
+			#{soseq},
 			#{createBy.id},
 			#{createDate},
 			#{updateBy.id},

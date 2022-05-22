@@ -16,6 +16,7 @@ public class BusinessProduct extends DataEntity<BusinessProduct> {
 	
 	private static final long serialVersionUID = 1L;
 	private BusinessProductTypeOnlyRead type;		// 存货分类 父类
+	private String cinvaddcode;
 	private String code;		// 存货编码
 	private String name;		// 存货名称
 	private String specification;		// 规格型号
@@ -40,7 +41,16 @@ public class BusinessProduct extends DataEntity<BusinessProduct> {
 	public void setType(BusinessProductTypeOnlyRead type) {
 		this.type = type;
 	}
-	
+	@ExcelField(title="存货代码", align=2, sort=6)
+	public String getCinvaddcode() {
+		return cinvaddcode;
+	}
+
+	public BusinessProduct setCinvaddcode(String cinvaddcode) {
+		this.cinvaddcode = cinvaddcode;
+		return this;
+	}
+
 	@ExcelField(title="存货编码", align=2, sort=7)
 	public String getCode() {
 		return code;

@@ -518,6 +518,7 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 			BusinessProduct product = new BusinessProduct();
 			product.setCode(d.getCinvcode());
 			mingXi.setCinv(product);
+			mingXi.setSocode(d.getSoCode()).setSoseq(d.getSoSeq());
 			mingXi.setCinvname(d.getCinvname());
 			mingXi.setStd(d.getCinvstd());
 			mingXi.setNo(d.getSortSeq());

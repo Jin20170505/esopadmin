@@ -52,6 +52,7 @@ public class BusinessProductService extends CrudService<BusinessProductMapper, B
 			Integer i = mapper.hasByCode(d.getcInvCode());
 			if(i==null){
 				BusinessProduct product = new BusinessProduct();
+				product.setCinvaddcode(d.getcInvAddCode());
 				product.setCode(d.getcInvCode());
 				product.setName(d.getcInvName());
 				product.setUnit(d.getcComUnitName());

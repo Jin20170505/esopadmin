@@ -2,8 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jeeplus.modules.u8data.morder.mapper.U8MorderMapper">
     <sql id="orderColumns">
+        a.SoCode as "soCode",
+        a.SoSeq as "soSeq",
         a.moId as "moId",
         a.moCode as  "moCode",
+        a.MoClass as "moClass",
         a.startdate as  "startdate",
         a.dueDate as "dueDate",
         a.cdepcode as "cdepcode",
