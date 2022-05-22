@@ -176,7 +176,7 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		if(order==null){
 			throw new RuntimeException("没有找到对应的报工单.");
 		}
-		if("0".equals(order.getComplate())){
+		if(!"1".equals(order.getComplate())){
 			throw new RuntimeException("此报工单未报工完成.");
 		}
 		Double rukunum = businessRuKuProductMapper.getRuKuNumByBgid(order.getId());

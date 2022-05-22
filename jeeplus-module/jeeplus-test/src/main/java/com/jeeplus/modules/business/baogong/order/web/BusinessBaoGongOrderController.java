@@ -91,7 +91,6 @@ public class BusinessBaoGongOrderController extends BaseController {
 	/**
 	 * 报工单列表页面
 	 */
-	@RequiresPermissions("business:baogong:order:businessBaoGongOrder:list")
 	@RequestMapping(value = {"list", ""})
 	public String list(BusinessBaoGongOrder businessBaoGongOrder, Model model) {
 		model.addAttribute("businessBaoGongOrder", businessBaoGongOrder);
@@ -113,7 +112,6 @@ public class BusinessBaoGongOrderController extends BaseController {
 	 * params:
 	 * 	mode: add, edit, view, 代表三种模式的页面
 	 */
-	@RequiresPermissions(value={"business:baogong:order:businessBaoGongOrder:view","business:baogong:order:businessBaoGongOrder:add","business:baogong:order:businessBaoGongOrder:edit"},logical=Logical.OR)
 	@RequestMapping(value = "form/{mode}")
 	public String form(@PathVariable String mode, BusinessBaoGongOrder businessBaoGongOrder, Model model) {
 		model.addAttribute("mode", mode);

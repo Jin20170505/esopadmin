@@ -77,6 +77,9 @@
 			<if test="cinvname != null  and cinvname != ''">
 				AND a.cinvname like concat('%',#{cinvname},'%')
 			</if>
+			<if test="cinvstd != null  and cinvstd != ''">
+				AND a.cinvstd like concat('%',#{cinvstd},'%')
+			</if>
 			<if test="enddate!=null and enddate !=''">
 				and a.end_date = #{enddate}
 			</if>
@@ -166,7 +169,7 @@
 			#{enddate},
 			#{bgcode},
 			#{qrcode},
-			#{complate},
+			'0',
 			#{remarks}
 		)
 	</insert>
@@ -192,7 +195,6 @@
 			end_date = #{enddate},
 			bgcode = #{bgcode},
 			qrcode = #{qrcode},
-			complate = #{complate},
 			remarks = #{remarks}
 		WHERE id = #{id}
 	</update>

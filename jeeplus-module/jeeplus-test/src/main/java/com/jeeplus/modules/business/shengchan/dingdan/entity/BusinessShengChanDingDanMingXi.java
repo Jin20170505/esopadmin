@@ -32,6 +32,7 @@ public class BusinessShengChanDingDanMingXi extends DataEntity<BusinessShengChan
 	private String enddate;		// 完工日期
 	private String batchno; // 批号
 	private String type;
+	private Double donenum; // 已拆单数量
 	private String status; // 锁定 开立
 	private String ischaidan; // 是否拆单
 
@@ -79,6 +80,15 @@ public class BusinessShengChanDingDanMingXi extends DataEntity<BusinessShengChan
 
 	public BusinessShengChanDingDanMingXi setDept(Office dept) {
 		this.dept = dept;
+		return this;
+	}
+
+	public Double getDonenum() {
+		return donenum;
+	}
+
+	public BusinessShengChanDingDanMingXi setDonenum(Double donenum) {
+		this.donenum = donenum;
 		return this;
 	}
 

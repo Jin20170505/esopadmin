@@ -105,6 +105,9 @@ public class BusinessShengChanBom extends DataEntity<BusinessShengChanBom> {
 	
 	@ExcelField(title="规格型号", align=2, sort=14)
 	public String getCinvstd() {
+		if(cinvstd==null){
+			cinvstd = "";
+		}
 		return cinvstd;
 	}
 

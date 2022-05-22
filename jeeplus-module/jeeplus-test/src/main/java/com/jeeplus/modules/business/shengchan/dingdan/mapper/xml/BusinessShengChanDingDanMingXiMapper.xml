@@ -20,6 +20,7 @@
 		a.std AS "std",
 		a.unit AS "unit",
 		a.num AS "num",
+		a.donenum as "donenum",
 		a.start_date AS "startdate",
 		a.end_date AS "enddate",
 		a.batchno as "batchno",
@@ -43,7 +44,8 @@
 	</select>
 
 	<select id="findShengChanDingDanMingXi" resultType="BusinessShengChanDingDanMingXi">
-		select a.id as "id",a.batchno as "batchno",a.no AS "no",a.cinv_code AS "cinv.code",a.cinv_name AS "cinvname",a.std AS "std",a.unit AS "unit",a.num AS "num",a.start_date AS "startdate",
+		select a.id as "id",a.batchno as "batchno",a.no AS "no",a.cinv_code AS "cinv.code",a.cinv_name AS "cinvname",a.std AS "std",
+		       a.unit AS "unit",a.num AS "num",a.donenum as "donenum",a.start_date AS "startdate",a.ischaidan as "ischaidan",
 			   a.end_date AS "enddate",p.code as "p.code",a.dept AS "dept.id",dept.name AS "dept.name",a.status as "status"
 		FROM business_shengchan_dingdan_mingxi a
 		left join business_shengchan_dingdan p on p.id = a.pid
@@ -63,6 +65,9 @@
 			<if test="cinvname != null  and cinvname != ''">
 				AND a.cinv_name like concat('%',#{cinvname},'%')
 			</if>
+			<if test="std != null  and std != ''">
+				AND a.std like concat('%',#{std},'%')
+			</if>
 			<if test="enddate!=null and enddate !=''">
 				and a.end_date = #{enddate}
 			</if>
@@ -78,7 +83,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.start_date asc,p.code asc,a.no ASC
+				ORDER BY p.code asc,a.no ASC
 			</otherwise>
 		</choose>
 	</select>
@@ -147,7 +152,7 @@
 			cinv_name,
 			std,
 			unit,
-			num,batchno,
+			num,donenum,batchno,
 			start_date,
 			end_date,dept,type,status
 		) VALUES (
@@ -164,7 +169,7 @@
 			#{cinvname},
 			#{std},
 			#{unit},
-			#{num},#{batchno},
+			#{num},0,#{batchno},
 			#{startdate},
 			#{enddate},
 		    #{dept.id},#{type},#{status}

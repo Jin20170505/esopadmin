@@ -224,6 +224,30 @@ public class BusinessShengChanDingDanController extends BaseController {
 		return json;
 	}
 
+
+	/**
+	 * 手工拆单
+	 * @param rid 生产明细ID
+	 * @param gdnum 工单数量
+	 * @param nonum 未拆数量
+	 * @param num 要拆数量
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("handlePlan")
+	public AjaxJson handlePlan(String rid,Double gdnum,Double nonum,Double num){
+		AjaxJson json = new AjaxJson();
+		try {
+			businessShengChanDingDanService.handlerPlan(rid,gdnum,nonum,num);
+			json.setMsg("拆单成功");
+			json.setSuccess(true);
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setSuccess(false);
+			json.setMsg("拆单失败,原因："+e.getMessage());
+		}
+		return json;
+	}
 	/**
 	 * 保存生产订单
 	 */
@@ -388,6 +412,14 @@ public class BusinessShengChanDingDanController extends BaseController {
 		state.put("opened", true);
 		map.put("state", state);
 		mapList.add(map);
+		Map<String, Object> map0 = Maps.newHashMap();
+		map0.put("id", "未拆完");
+		map0.put("text","未拆完");
+		map0.put("parent", "#");
+		Map<String, Object> state0 = Maps.newHashMap();
+		state0.put("opened", true);
+		map0.put("state", state0);
+		mapList.add(map0);
 		Map<String, Object> map1 = Maps.newHashMap();
 		map1.put("id", "已拆单");
 		map1.put("text","已拆单");

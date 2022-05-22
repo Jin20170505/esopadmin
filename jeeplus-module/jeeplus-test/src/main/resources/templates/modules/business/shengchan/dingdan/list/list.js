@@ -107,6 +107,10 @@
             checkbox: true
 
         }
+          ,{
+            field: 'ischaidan',
+            title: '是否拆单'
+          }
             , {
                 field: 'p.code',
                 title: '生产单号',
@@ -154,10 +158,6 @@
                 field: 'dept.name',
                 title: '生产部门'
             }
-          ,{
-            field: 'ischaidan',
-            title: '是否拆单'
-          }
     ]
 
 });
@@ -166,7 +166,7 @@
     $('#table').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
             $('#remove,#jihua').prop('disabled', ! $('#table').bootstrapTable('getSelections').length);
-            $('#chaidan,#print').prop('disabled', $('#table').bootstrapTable('getSelections').length!=1);
+            $('#chaidan,#print,#handler').prop('disabled', $('#table').bootstrapTable('getSelections').length!=1);
         });
 
     $("#search").click("click", function() {// 绑定查询按扭
@@ -194,6 +194,11 @@
             return row.id
         });
     }
+  function getRowSelections() {
+  return $.map($("#table").bootstrapTable('getSelections'), function (row) {
+  return row
+});
+}
   // 打印备料单
   function printbl(){
   var rid = getIdSelections();
@@ -253,6 +258,55 @@
         jp.close(index);
     });
   }
+  // 手工拆单
+  function handler(){
+    var rows = getRowSelections();
+    var row = rows[0];
+    var gdnum = row.num;
+    var nonum = row.num - row.donenum;
+    var n = nonum + '';
+    if(n.indexOf('.')>0){
+      nonum = nonum.toFixed(2);
+    }
+    top.layer.open({
+      type: 1,
+      area: ['500px', '300px'],
+      title:"输入拆单数量",
+      auto:true,
+      maxmin: true, //开启最大化最小化按钮
+      content: $('#handlerform').html(),
+      btn: ['确定', '关闭'],
+      yes: function(index, layero){
+      var num = $(layero).find("#handnum").val();
+      if(!num){
+      jp.warning("请输入数量");
+      return false;
+    }
+      doHandler(row.id,gdnum,nonum,num);
+      top.layer.close(index);
+    },
+      cancel: function(index){
+      top.layer.close(index);
+    },
+  success: function(layero, index){
+  $(layero).find("#gdnum").val(gdnum);
+  $(layero).find("#nonum").val(nonum);
+}
+  });
+  }
+  function doHandler(rid,gdnum,nonum,num){
+  var index  =  jp.loading('处理中...');
+  jp.post('${ctx}/business/shengchan/dingdan/businessShengChanDingDan/handlePlan',{'rid':rid,'gdnum':gdnum,'nonum':nonum,'num':num},function(rs){
+    if(rs.success){
+      jp.toastr_success(rs.msg);
+      refresh();
+    }else{
+      jp.toastr_error(rs.msg);
+    }
+    jp.close(index);
+  });
+}
+
     //刷新列表
   function refresh() {
       $('#table').bootstrapTable('refresh');

@@ -116,7 +116,13 @@ $(document).ready(function() {
                columns: [{
 		        checkbox: true
 		       
-		    }
+		    },{
+                   field: 'isprint',
+                   title: '是否打印',
+                   sortable: true,
+                   sortName: 'isprint'
+
+               }
                    ,{
                        field: 'bgcode',
                        title: '报工单号',
@@ -201,13 +207,7 @@ $(document).ready(function() {
 		        sortName: 'enddate'
 		       
 		    }
-                   ,{
-                       field: 'isprint',
-                       title: '是否打印',
-                       sortable: true,
-                       sortName: 'isprint'
 
-                   }
 		     ]
 		
 		});

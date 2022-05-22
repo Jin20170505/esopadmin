@@ -117,6 +117,9 @@ public class BusinessRuKuProductService extends CrudService<BusinessRuKuProductM
 		if(order==null){
 			throw new RuntimeException("报工单不存在啦");
 		}
+		if(!"1".equals(order.getComplate())){
+			throw new RuntimeException("此单报工未完成,不可入库");
+		}
 		BusinessRuKuProduct product = new BusinessRuKuProduct();
 		BusinessRuKuProductMx mx = new BusinessRuKuProductMx();
 		product.setBatchno(getBatchno(DateUtils.getDate("yyMMdd")));

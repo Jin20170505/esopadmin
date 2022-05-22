@@ -164,6 +164,7 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 		order.setCinvstd(jiHuaGongDan.getCinvstd());
 		order.setStartdate(jiHuaGongDan.getStartdate());
 		order.setEnddate(jiHuaGongDan.getEnddate());
+		order.setComplate("0");
 		order.setNum(jiHuaGongDan.getGdnum());
 		order.setUnit(jiHuaGongDan.getUnit());
 		sb.append("\"num\":\"").append(order.getNum()).append("\",");

@@ -118,6 +118,13 @@ $(document).ready(function() {
 		        checkbox: true
 		       
 		    }
+                   ,{
+                       field: 'status',
+                       title: '状态',
+                       sortable: true,
+                       sortName: 'status'
+
+                   }
 			,{
 		        field: 'code',
 		        title: '单号',
@@ -230,13 +237,6 @@ $(document).ready(function() {
 		        title: '生产部门',
 		        sortable: true,
 		        sortName: 'dept.name'
-		       
-		    }
-			,{
-		        field: 'status',
-		        title: '状态',
-		        sortable: true,
-		        sortName: 'status'
 		       
 		    }
 		     ]

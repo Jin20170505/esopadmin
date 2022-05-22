@@ -193,6 +193,9 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 		if("锁定".equals(mingXi.getStatus())){
 			return mingXi.getP().getCode()+"-"+mingXi.getNo()+",此订单已锁定，请审核后，再操作";
 		}
+		if("未拆完".equals(mingXi.getIschaidan())){
+			throw new RuntimeException(mingXi.getP().getCode()+"-"+mingXi.getNo()+"，此订单已进行手工拆单，请进行手工继续拆单");
+		}
 		if(businessJiHuaGongDanService.hasScddLineid(rid)){
 			return mingXi.getP().getCode()+"-"+mingXi.getNo()+",此订单的计划已存在，无法再次生成";
 		}
@@ -237,6 +240,7 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 		jiHuaGongDans.add(jiHuaGongDan);
 		// 子件
 		bom(mingXi,jiHuaGongDan,1);
+		businessShengChanDingDanMingXiMapper.updateChaidan(rid);
 		jiHuaGongDans.forEach(d->businessJiHuaGongDanService.save(d));
 		return "";
 	}
@@ -263,6 +267,12 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 		}
 		if("锁定".equals(mingXi.getStatus())){
 			throw new RuntimeException("此订单已锁定，请审核后，再操作");
+		}
+		if("未拆完".equals(mingXi.getIschaidan())){
+			throw new RuntimeException("此订单已进行手工拆单，请进行手工继续拆单");
+		}
+		if("已拆单".equals(mingXi.getIschaidan())){
+			throw new RuntimeException("此订单已拆单完成");
 		}
 		if(businessJiHuaGongDanService.hasScddLineid(rid)){
 			throw new RuntimeException("此订单的计划已存在，无法再次生成");
@@ -306,7 +316,7 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 				mx.setNum(jiHuaGongDan.getGdnum());
 				jiHuaGongDan.getBusinessJiHuaGongDanMingXiList().add(mx);
 			});
-			bom(mingXi,jiHuaGongDan,1);
+			bom(mingXi,jiHuaGongDan,1.0);
 			jiHuaGongDans.add(jiHuaGongDan);
 		}else {
 			int idx =1;
@@ -379,6 +389,96 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 			}
 		}
 		businessShengChanDingDanMingXiMapper.updateChaidan(rid);
+		jiHuaGongDans.forEach(d->businessJiHuaGongDanService.save(d));
+	}
+
+
+	// 手工车拆单
+	@Transactional(readOnly = false)
+	public void handlerPlan(String rid,Double gdnum,Double nonum,Double num){
+		BusinessShengChanDingDanMingXi mingXi = businessShengChanDingDanMingXiMapper.get(rid);
+		if("完工".equals(mingXi.getStatus())){
+			throw new RuntimeException("此订单已完工");
+		}
+		if("锁定".equals(mingXi.getStatus())){
+			throw new RuntimeException("此订单已锁定，请审核后，再操作");
+		}
+		if("已拆单".equals(mingXi.getIschaidan())){
+			throw new RuntimeException("此订单已拆单完成");
+		}
+		BaseRoteMain roteMain = baseRoteMainService.getRouteVersionByCinvCode(mingXi.getCinv().getCode());
+		if(roteMain==null||StringUtils.isEmpty(roteMain.getId())){
+			throw new RuntimeException("此存货无工艺路线，需要添加对应的工艺路线");
+		}
+		List<BaseRoute> routes = baseRoteMainService.getRoutes(roteMain.getId());
+		if(routes==null || routes.isEmpty()){
+			throw new RuntimeException("此存货无工艺路线，需要添加对应的工艺路线");
+		}
+		List<BusinessJiHuaGongDan> jiHuaGongDans = Lists.newArrayList();
+		String code = "JHGD"+ DateUtils.getDate("yyyyMMddHHmmss");
+		if(num>=nonum){
+			BusinessJiHuaGongDan jiHuaGongDan = new BusinessJiHuaGongDan();
+			jiHuaGongDan.setCode(code+"001");
+			jiHuaGongDan.setRoute(roteMain);
+			jiHuaGongDan.setDept(mingXi.getDept());
+			jiHuaGongDan.setBatchno(mingXi.getBatchno());
+			jiHuaGongDan.setDd(mingXi.getP());
+			jiHuaGongDan.setCinvcode(mingXi.getCinv().getCode());
+			jiHuaGongDan.setOrderno(mingXi.getNo().toString());
+			jiHuaGongDan.setCinvname(mingXi.getCinvname());
+			jiHuaGongDan.setCinvstd(mingXi.getStd());
+			jiHuaGongDan.setUnit(mingXi.getUnit());
+			jiHuaGongDan.setStartdate(mingXi.getStartdate());
+			jiHuaGongDan.setEnddate(mingXi.getEnddate());
+			jiHuaGongDan.setGdnum(nonum);
+			jiHuaGongDan.setScnum(gdnum);
+			jiHuaGongDan.setSynum(0.0);
+			jiHuaGongDan.setStatus("未下发");
+			routes.forEach(r->{
+				BusinessJiHuaGongDanMingXi mx = new BusinessJiHuaGongDanMingXi();
+				mx.setIncomplete("0");
+				mx.setId("");
+				mx.setNo(r.getNo());
+				mx.setDelFlag("0");
+				mx.setSite(r.getSite());
+				mx.setNum(jiHuaGongDan.getGdnum());
+				jiHuaGongDan.getBusinessJiHuaGongDanMingXiList().add(mx);
+			});
+			bom(mingXi,jiHuaGongDan,nonum/gdnum);
+			jiHuaGongDans.add(jiHuaGongDan);
+			businessShengChanDingDanMingXiMapper.updateChaidan(rid);
+		}else {
+			BusinessJiHuaGongDan jiHuaGongDan = new BusinessJiHuaGongDan();
+			jiHuaGongDan.setCode(code+"001");
+			jiHuaGongDan.setRoute(roteMain);
+			jiHuaGongDan.setDept(mingXi.getDept());
+			jiHuaGongDan.setBatchno(mingXi.getBatchno());
+			jiHuaGongDan.setDd(mingXi.getP());
+			jiHuaGongDan.setCinvcode(mingXi.getCinv().getCode());
+			jiHuaGongDan.setOrderno(mingXi.getNo().toString());
+			jiHuaGongDan.setCinvname(mingXi.getCinvname());
+			jiHuaGongDan.setCinvstd(mingXi.getStd());
+			jiHuaGongDan.setUnit(mingXi.getUnit());
+			jiHuaGongDan.setStartdate(mingXi.getStartdate());
+			jiHuaGongDan.setEnddate(mingXi.getEnddate());
+			jiHuaGongDan.setGdnum(num);
+			jiHuaGongDan.setScnum(gdnum);
+			jiHuaGongDan.setSynum(0.0);
+			jiHuaGongDan.setStatus("未下发");
+			routes.forEach(r->{
+				BusinessJiHuaGongDanMingXi mx = new BusinessJiHuaGongDanMingXi();
+				mx.setIncomplete("0");
+				mx.setId("");
+				mx.setNo(r.getNo());
+				mx.setDelFlag("0");
+				mx.setSite(r.getSite());
+				mx.setNum(jiHuaGongDan.getGdnum());
+				jiHuaGongDan.getBusinessJiHuaGongDanMingXiList().add(mx);
+			});
+			bom(mingXi,jiHuaGongDan,num/gdnum);
+			jiHuaGongDans.add(jiHuaGongDan);
+			businessShengChanDingDanMingXiMapper.updateDoneNum(rid,num);
+		}
 		jiHuaGongDans.forEach(d->businessJiHuaGongDanService.save(d));
 	}
 

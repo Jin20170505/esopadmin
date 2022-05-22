@@ -63,6 +63,9 @@
 			<if test="cinvname != null  and cinvname != ''">
 				AND a.cinvname like concat('%',#{cinvname},'%')
 			</if>
+			<if test="cinvstd != null  and cinvstd != ''">
+				AND a.cinvstd like concat('%',#{cinvstd},'%')
+			</if>
 			<if test="enddate!=null and enddate !=''">
 				and a.end_date = #{enddate}
 			</if>
@@ -84,7 +87,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.start_date asc
+				ORDER BY a.code asc
 			</otherwise>
 		</choose>
 	</select>
