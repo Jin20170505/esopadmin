@@ -22,10 +22,14 @@ layout("/include/_container.html", {title:"打印", parent:"报工单"}){
         font-size: 28px;
     }
 
-    .table-bordered th,.table-bordered td{
-        font-size: 20px !important;
-    }
 
+    .table-bordered th{
+        font-size: 20px !important;
+        vertical-align: middle;
+    }
+    .table-bordered td{
+        font-size: 16px !important;
+    }
     .table-bordered{
         border: 1px solid #000000;
         border-collapse: collapse;
@@ -44,18 +48,18 @@ layout("/include/_container.html", {title:"打印", parent:"报工单"}){
     <table class="table table-bordered">
         <tbody>
         <tr>
-            <th>生产订单号</th>
-            <td>${hmx.p.code!}</td>
-            <th>行号</th>
-            <td>${hmx.no!}</td>
-            <th>生产部门</th>
+            <th width="100px">生产单号</th>
+            <td style="width: 150px;max-width: 190px">${hmx.p.code!}</td>
+            <th width="100px">生产部门</th>
             <td>${hmx.dept.name!}</td>
+            <th width="80px">行号</th>
+            <td width="80px">${hmx.no!}</td>
         </tr>
         <tr>
             <th>产品编码</th>
             <td>${hmx.cinv.code!}</td>
             <th>产品名称</th>
-            <td colspan="3">${hmx.cinvname!}</td>
+            <td colspan="3" style="font-size: 14px;word-break: break-all;word-wrap: break-word;min-width: 150px">${hmx.cinvname!}</td>
         </tr>
         <tr>
             <th>数量</th>
