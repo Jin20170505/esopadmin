@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.u8data.vendor.mapper.U8VendorMapper">
+    <sql id="vendorColumns">
+        a.dModifyDate AS "dModifyDate",
+        a.dEndDate AS "dEndDate",
+        a.cVenCode AS "cVenCode",
+        a.cVenName AS "cVenName",
+        a.cVenAddress AS "cVenAddress",
+        a.cVenPhone AS "cVenPhone",
+        a.cVenPerson AS "cVenPerson",
+        a.cMemo AS "cMemo"
+    </sql>
+    <sql id="vendorJoins">
+
+    </sql>
+
+    <select id="findList" resultType="U8Vendor">
+        select
+        <include refid="vendorColumns"/>
+        from YT_API_ERP_view_Vendor a
+        <include refid="vendorJoins"/>
+    </select>
+</mapper>

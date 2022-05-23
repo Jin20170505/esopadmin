@@ -3,12 +3,7 @@
  */
 package com.jeeplus.modules.business.jihuadingdan.entity;
 
-import com.jeeplus.common.utils.excel.annotation.ExcelField;
 import com.jeeplus.core.persistence.DataEntity;
-import com.jeeplus.modules.base.classgroup.entity.BaseClassGroup;
-import com.jeeplus.modules.base.site.entity.BaseSite;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * 计划工单明细Entity

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.u8data.arrivalvouch.mapper.U8ArrivalVouchMapper">
+    <sql id="arrivalvouchColumns">
+    a.mid as "mid",
+    a.autoid as "autoid",
+    a.ccode as "ccode",
+    a.ivouchrowno as "ivouchrowno",
+    a.ddate as "ddate",
+    a.cvencode as "cvencode",
+    a.cvenabbname as "cvenabbname",
+    a.cvenname as "cvenname",
+    a.cdepname as "cdepname",
+    a.cdepcode as "cdepcode",
+    a.cmaker as "cmaker",
+    a.cpersonname as "cpersonname",
+    a.cwhcode as "cwhcode",
+    a.cwhname as "cwhname",
+    a.cinvcode as "cinvcode",
+    a.cinvname as "cinvname",
+    a.cinvstd as "cinvstd",
+    a.cinvm_unit as "cinvmunit",
+    a.iquantity as "iquantity",
+    a.iinvexchrate as "iinvexchrate",
+    a.vouchstate as "vouchstate",
+    a.cbcloser as "cbcloser",
+    a.csocode as "csocode",
+    a.irowno as "irowno",
+    a.CINSPECTCODE as "CINSPECTCODE",
+    a.INSPECTID as "INSPECTID",
+    a.INSPECTAUTOID as "INSPECTAUTOID",
+    a.FQUANTITY as "FQUANTITY",
+    a.FREGQUANTITY as "FREGQUANTITY",
+    a.frealquantity as "frealquantity",
+    </sql>
+    <sql id="arrivalvouchJoins">
+
+    </sql>
+
+    <select id="findList" resultType="U8ArrivalVouch">
+        select
+        <include refid="arrivalvouchColumns"/>
+        from YT_API_ERP_view_ArrivalVouch a
+        <include refid="arrivalvouchJoins"/>
+    </select>
+</mapper>

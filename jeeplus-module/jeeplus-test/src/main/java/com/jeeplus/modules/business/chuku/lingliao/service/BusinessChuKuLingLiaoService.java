@@ -108,6 +108,7 @@ public class BusinessChuKuLingLiaoService extends CrudService<BusinessChuKuLingL
 			mx.setNo(j.optInt("no",0)).setCinvcode(j.getString("cinvcode"));
 			mx.setCinvname(j.getString("cinvname"));mx.setJhbomid(j.getString("bomid"));
 			mx.setUnit(j.getString("unit"));
+			mx.setGdnum(num);
 			mx.setScbomid(j.getString("scbomid"));
 			mx.setCknum(j.getDouble("num"));
 			mx.setHuowei(new BaseHuoWei(j.getString("hwid")));

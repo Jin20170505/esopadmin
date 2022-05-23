@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.base.vendor.mapper.BaseVendorMapper">
+    
+	<sql id="baseVendorColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.code AS "code",
+		a.name AS "name",
+		a.address AS "address",
+		a.telephone AS "telephone",
+		a.person AS "person",
+		a.end_date AS "enddate",
+		a.remarks AS "remarks"
+	</sql>
+	
+	<sql id="baseVendorJoins">
+		
+	</sql>
+	
+    
+	<select id="get" resultType="BaseVendor" >
+		SELECT 
+			<include refid="baseVendorColumns"/>
+		FROM base_vendor a
+		<include refid="baseVendorJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BaseVendor" >
+		SELECT 
+			<include refid="baseVendorColumns"/>
+		FROM base_vendor a
+		<include refid="baseVendorJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE concat('%',#{name},'%')
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BaseVendor" >
+		SELECT 
+			<include refid="baseVendorColumns"/>
+		FROM base_vendor a
+		<include refid="baseVendorJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO base_vendor(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+			code,
+			name,
+			address,
+			telephone,
+			person,
+			end_date,
+			remarks
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag},
+			#{code},
+			#{name},
+			#{address},
+			#{telephone},
+			#{person},
+			#{enddate},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE base_vendor SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			code = #{code},
+			name = #{name},
+			address = #{address},
+			telephone = #{telephone},
+			person = #{person},
+			end_date = #{enddate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM base_vendor
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE base_vendor SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="BaseVendor" statementType="STATEMENT">
+		select * FROM base_vendor  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

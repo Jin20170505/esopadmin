@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.u8data.customer.mapper.U8CustomerMapper">
+    <sql id="customerColumns">
+    a.dModifyDate as "dModifyDate",
+    a.dEndDate as "dEndDate",
+    a.cCusCode as "cCusCode",
+    a.cCusName as "cCusName",
+    a.cCusAddress as "cCusAddress",
+    a.cCusPhone as "cCusPhone",
+    a.cCusPerson as "cCusPerson",
+    a.cMemo as "cMemo"
+    </sql>
+    <sql id="customerJoins">
+
+    </sql>
+
+    <select id="findList" resultType="U8Customer">
+        select
+        <include refid="customerColumns"/>
+        from YT_API_ERP_view_Customer a
+        <include refid="customerJoins"/>
+    </select>
+</mapper>
