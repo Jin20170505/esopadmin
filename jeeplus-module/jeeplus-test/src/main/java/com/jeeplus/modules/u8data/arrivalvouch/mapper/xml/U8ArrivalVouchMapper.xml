@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jeeplus.modules.u8data.arrivalvouch.mapper.U8ArrivalVouchMapper">
     <sql id="arrivalvouchColumns">
-    a.mid as "mid",
+    a.id as "mid",
     a.autoid as "autoid",
     a.ccode as "ccode",
     a.ivouchrowno as "ivouchrowno",
@@ -24,14 +24,8 @@
     a.iinvexchrate as "iinvexchrate",
     a.vouchstate as "vouchstate",
     a.cbcloser as "cbcloser",
-    a.csocode as "csocode",
-    a.irowno as "irowno",
-    a.CINSPECTCODE as "CINSPECTCODE",
-    a.INSPECTID as "INSPECTID",
-    a.INSPECTAUTOID as "INSPECTAUTOID",
-    a.FQUANTITY as "FQUANTITY",
-    a.FREGQUANTITY as "FREGQUANTITY",
-    a.frealquantity as "frealquantity",
+    a.cordercode as "cordercode",
+    a.irowno as "irowno"
     </sql>
     <sql id="arrivalvouchJoins">
 
@@ -42,5 +36,10 @@
         <include refid="arrivalvouchColumns"/>
         from YT_API_ERP_view_ArrivalVouch a
         <include refid="arrivalvouchJoins"/>
+        <where>
+            <if test="start !=null and end != null">
+                and a.ddate between #{start}  and #{end}
+            </if>
+        </where>
     </select>
 </mapper>

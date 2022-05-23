@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.business.arrivalvouch.mapper.BusinessArrivalVouchMapper">
+    
+	<sql id="businessArrivalVouchColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.code AS "code",
+		a.arrive_date AS "arriveDate",
+		a.u8code AS "u8code",
+		a.dept AS "dept.id",
+		a.vendor AS "vendor.id",
+		a.status AS "status",
+		a.u8status AS "u8status",
+		dept.name AS "dept.name",
+		vendor.name AS "vendor.name"
+	</sql>
+	
+	<sql id="businessArrivalVouchJoins">
+		LEFT JOIN sys_office dept ON dept.id = a.dept
+		LEFT JOIN base_vendor vendor ON vendor.id = a.vendor
+	</sql>
+	
+    
+	<select id="get" resultType="BusinessArrivalVouch" >
+		SELECT 
+			<include refid="businessArrivalVouchColumns"/>
+		FROM business_arrivalvouch a
+		<include refid="businessArrivalVouchJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BusinessArrivalVouch" >
+		SELECT 
+			<include refid="businessArrivalVouchColumns"/>
+		FROM business_arrivalvouch a
+		<include refid="businessArrivalVouchJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="beginArriveDate != null and beginArriveDate != '' and endArriveDate != null and endArriveDate != ''">
+				AND a.arrive_date BETWEEN #{beginArriveDate} AND #{endArriveDate}
+			</if>
+			<if test="dept != null and dept.id != null and dept.id != ''">
+				AND a.dept = #{dept.id}
+			</if>
+			<if test="vendor != null and vendor.id != null and vendor.id != ''">
+				AND a.vendor = #{vendor.id}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BusinessArrivalVouch" >
+		SELECT 
+			<include refid="businessArrivalVouchColumns"/>
+		FROM business_arrivalvouch a
+		<include refid="businessArrivalVouchJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO business_arrivalvouch(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			code,
+			arrive_date,
+			u8code,
+			dept,
+			vendor,
+			status,
+			u8status
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{code},
+			#{arriveDate},
+			#{u8code},
+			#{dept.id},
+			#{vendor.id},
+			#{status},
+			#{u8status}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE business_arrivalvouch SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			code = #{code},
+			arrive_date = #{arriveDate},
+			u8code = #{u8code},
+			dept = #{dept.id},
+			vendor = #{vendor.id},
+			status = #{status},
+			u8status = #{u8status}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM business_arrivalvouch
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE business_arrivalvouch SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="BusinessArrivalVouch" statementType="STATEMENT">
+		select * FROM business_arrivalvouch  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

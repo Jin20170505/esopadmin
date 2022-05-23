@@ -168,7 +168,7 @@ public class BusinessBaoGongOrderController extends BaseController {
 		for(String id : idArray){
 			businessBaoGongOrderService.print(id);
 		}
-		j.setMsg("删除报工单成功");
+		j.setMsg("成功");
 		return j;
 	}
 	

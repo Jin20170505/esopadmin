@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.business.arrivalvouch.mapper.BusinessArrivalVouchMxMapper">
+    
+	<sql id="businessArrivalVouchMxColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.pid AS "p.id",
+		b.code AS "p.code",
+		a.no AS "no",
+		a.ck_id AS "ck.id",
+		a.hw_id AS "hw.id",
+		a.cinvcode AS "cinvcode",
+		a.cinvname AS "cinvname",
+		a.cinvstd AS "cinvstd",
+		a.batchno AS "batchno",
+		a.scdate AS "scdate",
+		a.num AS "num",
+		a.unit AS "unit",
+		a.minnum AS "minnum",
+		a.print_status AS "printstatus",
+		a.qrcode AS "qrcode",
+		a.cordercode AS "cordercode",
+		a.irowno AS "irowno",
+		a.vendor AS "vendor.id",
+		a.dept AS "dept.id",
+		ck.name AS "ck.name",
+		hw.name AS "hw.name"
+	</sql>
+	
+	<sql id="businessArrivalVouchMxJoins">
+		LEFT JOIN business_arrivalvouch b ON b.id = a.pid
+		LEFT JOIN base_cangku ck ON ck.id = a.ck_id
+		LEFT JOIN base_huowei hw ON hw.id = a.hw_id
+	</sql>
+	
+    
+	<select id="get" resultType="BusinessArrivalVouchMx" >
+		SELECT 
+			<include refid="businessArrivalVouchMxColumns"/>
+		FROM business_arrivalvouch_mx a
+		<include refid="businessArrivalVouchMxJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findMxList" resultType="BusinessArrivalVouchMx" >
+		SELECT
+		<include refid="businessArrivalVouchMxColumns"/>,
+		dept.name AS "dept.name",
+		b.arrive_date AS "p.arriveDate",
+		vendor.name AS "vendor.name"
+		FROM business_arrivalvouch_mx a
+		<include refid="businessArrivalVouchMxJoins"/>
+		LEFT JOIN sys_office dept ON dept.id = a.dept
+		LEFT JOIN base_vendor vendor ON vendor.id = a.vendor
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="p != null and p.id != null and p.id != ''">
+				AND a.pid = #{p.id}
+			</if>
+			<if test="beginArriveDate != null and beginArriveDate != '' and endArriveDate != null and endArriveDate != ''">
+			AND b.arrive_date BETWEEN #{beginArriveDate} AND #{endArriveDate}
+		</if>
+			<if test="p != null and p.code != null and p.code != ''">
+				AND b.code = #{p.code}
+			</if>
+			<if test="ck != null and ck.id != null and ck.id != ''">
+				AND a.ck_id = #{ck.id}
+			</if>
+			<if test="hw != null and hw.id != null and hw.id != ''">
+				AND a.hw_id = #{hw.id}
+			</if>
+			<if test="cinvcode != null and cinvcode != ''">
+				AND a.cinvcode = #{cinvcode}
+			</if>
+			<if test="cinvname != null  and cinvname != ''">
+				AND a.cinvname like concat('%',#{cinvname},'%')
+			</if>
+			<if test="cinvstd != null  and cinvstd != ''">
+				AND a.cinvstd like concat('%',#{cinvstd},'%')
+			</if>
+			<if test="batchno != null and batchno != ''">
+				AND a.batchno = #{batchno}
+			</if>
+			<if test="dept != null and dept.id != null and dept.id != ''">
+				AND a.dept = #{dept.id}
+			</if>
+			<if test="vendor != null and vendor.id != null and vendor.id != ''">
+				AND a.vendor = #{vendor.id}
+			</if>
+			<if test="scdate != null and scdate != ''">
+				AND a.scdate = #{scdate}
+			</if>
+			<if test="printstatus != null and printstatus != ''">
+				AND a.print_status = #{printstatus}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY b.code asc, a.no ASC
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findList" resultType="BusinessArrivalVouchMx" >
+		SELECT 
+			<include refid="businessArrivalVouchMxColumns"/>
+		FROM business_arrivalvouch_mx a
+		<include refid="businessArrivalVouchMxJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="p != null and p.id != null and p.id != ''">
+				AND a.pid = #{p.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.no ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BusinessArrivalVouchMx" >
+		SELECT 
+			<include refid="businessArrivalVouchMxColumns"/>
+		FROM business_arrivalvouch_mx a
+		<include refid="businessArrivalVouchMxJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO business_arrivalvouch_mx(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			pid,
+			no,
+			ck_id,
+			hw_id,
+			cinvcode,
+			cinvname,
+			cinvstd,
+			batchno,
+			scdate,
+			num,
+			unit,
+			minnum,
+			print_status,
+			qrcode,
+			cordercode,
+			irowno,
+			vendor,
+			dept
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{p.id},
+			#{no},
+			#{ck.id},
+			#{hw.id},
+			#{cinvcode},
+			#{cinvname},
+			#{cinvstd},
+			#{batchno},
+			#{scdate},
+			#{num},
+			#{unit},
+			#{minnum},
+			'未打印',
+			#{qrcode},
+			#{cordercode},
+			#{irowno},
+			#{vendor.id},
+			#{dept.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE business_arrivalvouch_mx SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			pid = #{p.id},
+			no = #{no},
+			ck_id = #{ck.id},
+			hw_id = #{hw.id},
+			cinvcode = #{cinvcode},
+			cinvname = #{cinvname},
+			cinvstd = #{cinvstd},
+			batchno = #{batchno},
+			scdate = #{scdate},
+			num = #{num},
+			unit = #{unit},
+			minnum = #{minnum},
+			qrcode = #{qrcode},
+			vendor = #{vendor.id},
+			dept = #{dept.id}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM business_arrivalvouch_mx
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE pid = #{p.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE business_arrivalvouch_mx SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE pid = #{p.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="BusinessArrivalVouchMx" statementType="STATEMENT">
+		select * FROM business_arrivalvouch_mx  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

@@ -8,7 +8,7 @@ public class U8ArrivalVouch extends DataEntity<U8ArrivalVouch> {
     private String mid;//	到货单主表id
     private String autoid;//	到货单子表id
     private String ccode;//			到货单号
-    private String ivouchrowno;//		到货单行号
+    private Integer ivouchrowno;//		到货单行号
     private Date ddate;//			日期
     private String cvencode;//		供货单位编号
     private String cvenabbname;//		供应商
@@ -27,14 +27,28 @@ public class U8ArrivalVouch extends DataEntity<U8ArrivalVouch> {
     private Double iinvexchrate;//	换算率
     private String vouchstate;//		单据状态
     private String cbcloser;//		行关闭人
-    private String csocode;//			需求跟踪号
+    private String cordercode;//			需求跟踪号
     private String  irowno;//			跟踪行号
-    private String CINSPECTCODE;//	报检单单据编号
-    private String INSPECTID;//		报检单主表编号 ,
-    private String INSPECTAUTOID;//	报检单子表编号
-    private Double FQUANTITY;//	报检数量
-    private Double FREGQUANTITY;//	合格数量
-    private Double frealquantity;//	实收数量（已入库数量）
+    private Date start; // 开始日期
+    private Date end; // 结束日期
+
+    public Date getStart() {
+        return start;
+    }
+
+    public U8ArrivalVouch setStart(Date start) {
+        this.start = start;
+        return this;
+    }
+
+    public Date getEnd() {
+        return end;
+    }
+
+    public U8ArrivalVouch setEnd(Date end) {
+        this.end = end;
+        return this;
+    }
 
     public String getMid() {
         return mid;
@@ -63,11 +77,11 @@ public class U8ArrivalVouch extends DataEntity<U8ArrivalVouch> {
         return this;
     }
 
-    public String getIvouchrowno() {
+    public Integer getIvouchrowno() {
         return ivouchrowno;
     }
 
-    public U8ArrivalVouch setIvouchrowno(String ivouchrowno) {
+    public U8ArrivalVouch setIvouchrowno(Integer ivouchrowno) {
         this.ivouchrowno = ivouchrowno;
         return this;
     }
@@ -234,15 +248,6 @@ public class U8ArrivalVouch extends DataEntity<U8ArrivalVouch> {
         return this;
     }
 
-    public String getCsocode() {
-        return csocode;
-    }
-
-    public U8ArrivalVouch setCsocode(String csocode) {
-        this.csocode = csocode;
-        return this;
-    }
-
     public String getIrowno() {
         return irowno;
     }
@@ -252,57 +257,12 @@ public class U8ArrivalVouch extends DataEntity<U8ArrivalVouch> {
         return this;
     }
 
-    public String getCINSPECTCODE() {
-        return CINSPECTCODE;
+    public String getCordercode() {
+        return cordercode;
     }
 
-    public U8ArrivalVouch setCINSPECTCODE(String CINSPECTCODE) {
-        this.CINSPECTCODE = CINSPECTCODE;
-        return this;
-    }
-
-    public String getINSPECTID() {
-        return INSPECTID;
-    }
-
-    public U8ArrivalVouch setINSPECTID(String INSPECTID) {
-        this.INSPECTID = INSPECTID;
-        return this;
-    }
-
-    public String getINSPECTAUTOID() {
-        return INSPECTAUTOID;
-    }
-
-    public U8ArrivalVouch setINSPECTAUTOID(String INSPECTAUTOID) {
-        this.INSPECTAUTOID = INSPECTAUTOID;
-        return this;
-    }
-
-    public Double getFQUANTITY() {
-        return FQUANTITY;
-    }
-
-    public U8ArrivalVouch setFQUANTITY(Double FQUANTITY) {
-        this.FQUANTITY = FQUANTITY;
-        return this;
-    }
-
-    public Double getFREGQUANTITY() {
-        return FREGQUANTITY;
-    }
-
-    public U8ArrivalVouch setFREGQUANTITY(Double FREGQUANTITY) {
-        this.FREGQUANTITY = FREGQUANTITY;
-        return this;
-    }
-
-    public Double getFrealquantity() {
-        return frealquantity;
-    }
-
-    public U8ArrivalVouch setFrealquantity(Double frealquantity) {
-        this.frealquantity = frealquantity;
+    public U8ArrivalVouch setCordercode(String cordercode) {
+        this.cordercode = cordercode;
         return this;
     }
 }

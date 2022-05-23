@@ -1,0 +1,82 @@
+<%
+layout("/include/_container.html", {title:"列表", parent:"采购到货"}){
+%>
+    <!-- 搜索框-->
+    <div id="search-collapse" class="white-box collapse m-b-5">
+        <a class="jp-ti-close close" onclick="$('#search-collapse').fadeToggle()">
+            <i class="fa fa-times"></i>
+        </a>
+        <form id="searchForm" class="form-inline">
+			 <div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="到货单号：">到货单号：</label>
+				<input name="code"  maxlength="64"  class=" form-control"/>
+			</div>
+			 <div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="到货日期：">到货日期：</label>
+				<div class="input-daterange input-group" id="arriveDate">
+                    <input type="text" class="form-control" id="beginArriveDate" name="beginArriveDate">
+                    <span class="input-group-text btn-custom border text-white">to</span>
+                    <input type="text" class="form-control" id="endArriveDate" name="endArriveDate">
+                </div>
+			</div>
+			 <div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="部门：">部门：</label>
+				<#treeselect id="dept" name="dept.id"  labelName="dept.name"
+					title="部门" url="/sys/office/treeData?type=2" class="form-control" allowClear="true" notAllowSelectParent="true"/>
+			</div>
+			 <div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="供应商：">供应商：</label>
+				<#gridselect url="${ctx}/base/vendor/baseVendor/data" id="vendor" name="vendor.id"  labelName="vendor.name"
+							 title="选择供应商" class="form-control " fieldLabels="编码|名称" fieldKeys="code|name" searchLabels="编码|名称" searchKeys="code|name"/>
+			</div>
+			 <div class="form-group m-b-10 m-r-10">
+<!--				<label class="m-r-10" title="状态：">状态：</label>-->
+<!--				<input name="status"  maxlength="64"  class=" form-control"/>-->
+			</div>
+		    <div class="form-group m-b-10 m-r-10">
+                <a  id="search" class="btn  btn-custom waves-effect waves-light m-l-10 btn-md btn-rounded"><i class="fa fa-search"></i> 查询</a>
+                <a  id="reset" class="btn  btn-custom waves-effect waves-light m-l-10 btn-md btn-rounded" ><i class="fa fa-refresh"></i> 重置</a>
+            </div>
+        </form>
+    </div>
+
+	<div class="white-box">
+
+	<!-- 工具栏 -->
+	<div id="toolbar">
+			 <% if(shiro.hasPermission("business:arrivalvouch:businessArrivalVouch:add") ){ %>
+		<button  class="btn btn-custom waves-effect w-xs waves-light" onclick="sychu8()">
+			<i class="fa fa-plus"></i> ERP同步
+		</button>
+			 	<button id="add" class="btn btn-custom waves-effect w-xs waves-light" onclick="add()">
+					<i class="fa fa-plus"></i> 新建
+				</button>
+			<% } %>
+			 <% if(shiro.hasPermission("business:arrivalvouch:businessArrivalVouch:edit") ){ %>
+			    <button id="edit" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="edit()">
+	            	<i class="fa fa-edit"></i> 修改
+	        	</button>
+			<% } %>
+			 <% if(shiro.hasPermission("business:arrivalvouch:businessArrivalVouch:del") ){ %>
+				<button id="remove" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="del()">
+	            	<i class="fa fa-remove"></i> 删除
+	        	</button>
+			<% } %>
+			 <% if(shiro.hasPermission("business:arrivalvouch:businessArrivalVouch:import") ){ %>
+<!--				<button id="import"  class="btn btn-white waves-effect w-xs waves-light" >-->
+<!--					<i class="fa fa-upload"></i> 导入-->
+<!--				</button>-->
+			<% } %>
+			 <% if(shiro.hasPermission("business:arrivalvouch:businessArrivalVouch:export") ){ %>
+<!--	        	<button id="export" class="btn btn-white waves-effect w-xs waves-light">-->
+<!--					<i class="fa fa-download"></i> 导出-->
+<!--				</button>-->
+			 <% } %>
+		    </div>
+		
+	<!-- 表格 -->
+	<table id="businessArrivalVouchTable" class="table-bordered"   data-toolbar="#toolbar"></table>
+	</div>
+
+	<% include("businessArrivalVouchList.js"){} %>
+	<% } %>
