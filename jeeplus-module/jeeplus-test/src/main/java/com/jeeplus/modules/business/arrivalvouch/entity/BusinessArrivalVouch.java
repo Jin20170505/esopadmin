@@ -71,6 +71,10 @@ public class BusinessArrivalVouch extends DataEntity<BusinessArrivalVouch> {
 	
 	@ExcelField(title="部门", fieldType=Office.class, value="dept.name", align=2, sort=10)
 	public Office getDept() {
+		if(dept==null){
+			dept = new Office();
+			dept.setName("");
+		}
 		return dept;
 	}
 
@@ -80,6 +84,10 @@ public class BusinessArrivalVouch extends DataEntity<BusinessArrivalVouch> {
 	
 	@ExcelField(title="供应商", fieldType=BaseVendor.class, value="vendor.name", align=2, sort=11)
 	public BaseVendor getVendor() {
+		if(vendor==null){
+			vendor = new BaseVendor();
+			vendor.setName("");
+		}
 		return vendor;
 	}
 

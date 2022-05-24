@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import com.google.common.collect.Lists;
 import com.jeeplus.modules.base.cangku.entity.BaseCangKu;
+import com.jeeplus.modules.base.huowei.entity.BaseHuoWei;
 import com.jeeplus.modules.base.vendor.entity.BaseVendor;
 import com.jeeplus.modules.business.shengchan.dingdan.entity.BusinessShengChanDingDan;
 import com.jeeplus.modules.sys.entity.Office;
@@ -116,6 +117,10 @@ public class BusinessArrivalVouchService extends CrudService<BusinessArrivalVouc
 			mx.setDept(vouch.getDept());
 			mx.setVendor(vouch.getVendor());
 			mx.setCk(new BaseCangKu(d.getCwhcode()));
+			mx.setHw(new BaseHuoWei(d.getCposcode()));
+			mx.setBatchno(d.getCbatch());
+			mx.setScdate(d.getDpdate());
+			mx.setMinnum(d.getcInvDefine1());
 			mx.setCinvcode(d.getCinvcode());
 			mx.setCinvname(d.getCinvname());
 			mx.setCinvstd(d.getCinvstd());
@@ -150,5 +155,9 @@ public class BusinessArrivalVouchService extends CrudService<BusinessArrivalVouc
 
 	public BusinessArrivalVouchMx getMx(String mxid){
 		return businessArrivalVouchMxMapper.get(mxid);
+	}
+
+	public List<String> findNoDoList(String cgid){
+		return businessArrivalVouchMxMapper.findNoDoList(cgid);
 	}
 }

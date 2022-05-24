@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.business.ruku.caigou.mapper.BusinessRukuCaiGouMapper">
+    
+	<sql id="businessRukuCaiGouColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.code AS "code",
+		a.arrival_code AS "arrivalcode",
+		a.arrival_date AS "arrivaldate",
+		a.ck AS "ck.id",
+		a.hw AS "hw.id",
+		a.u8code AS "u8code",
+		ck.name AS "ck.name",
+		hw.name AS "hw.name"
+	</sql>
+	
+	<sql id="businessRukuCaiGouJoins">
+		LEFT JOIN base_cangku ck ON ck.id = a.ck
+		LEFT JOIN base_huowei hw ON hw.id = a.hw
+	</sql>
+	
+    
+	<select id="get" resultType="BusinessRukuCaiGou" >
+		SELECT 
+			<include refid="businessRukuCaiGouColumns"/>
+		FROM business_ruku_caigou a
+		<include refid="businessRukuCaiGouJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BusinessRukuCaiGou" >
+		SELECT 
+			<include refid="businessRukuCaiGouColumns"/>
+		FROM business_ruku_caigou a
+		<include refid="businessRukuCaiGouJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="arrivalcode != null and arrivalcode != ''">
+				AND a.arrival_code = #{arrivalcode}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BusinessRukuCaiGou" >
+		SELECT 
+			<include refid="businessRukuCaiGouColumns"/>
+		FROM business_ruku_caigou a
+		<include refid="businessRukuCaiGouJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO business_ruku_caigou(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			code,
+			arrival_code,
+			arrival_date,
+			ck,
+			hw,
+			u8code
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{code},
+			#{arrivalcode},
+			#{arrivaldate},
+			#{ck.id},
+			#{hw.id},
+			#{u8code}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE business_ruku_caigou SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			code = #{code},
+			arrival_code = #{arrivalcode},
+			arrival_date = #{arrivaldate},
+			ck = #{ck.id},
+			hw = #{hw.id},
+			u8code = #{u8code}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM business_ruku_caigou
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE business_ruku_caigou SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="BusinessRukuCaiGou" statementType="STATEMENT">
+		select * FROM business_ruku_caigou  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

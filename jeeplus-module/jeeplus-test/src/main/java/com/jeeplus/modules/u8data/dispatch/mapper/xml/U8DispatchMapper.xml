@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jeeplus.modules.u8data.arrivalvouch.mapper.U8ArrivalVouchMapper">
-    <sql id="arrivalvouchColumns">
-    a.id as "mid",
+<mapper namespace="com.jeeplus.modules.u8data.dispatch.mapper.U8DispatchMapper">
+    <sql id="dispatchColumns">
+        a.id as "mid",
     a.autoid as "autoid",
     a.ccode as "ccode",
     a.ivouchrowno as "ivouchrowno",
@@ -31,15 +31,15 @@
     a.cordercode as "cordercode",
     a.irowno as "irowno"
     </sql>
-    <sql id="arrivalvouchJoins">
+    <sql id="dispatchJoins">
 
     </sql>
 
-    <select id="findList" resultType="U8ArrivalVouch">
+    <select id="findList" resultType="U8Dispatch">
         select
-        <include refid="arrivalvouchColumns"/>
+        <include refid="dispatchColumns"/>
         from YT_API_ERP_view_ArrivalVouch a
-        <include refid="arrivalvouchJoins"/>
+        <include refid="dispatchJoins"/>
         <where>
             <if test="start !=null and end != null">
                 and a.ddate between #{start}  and #{end}

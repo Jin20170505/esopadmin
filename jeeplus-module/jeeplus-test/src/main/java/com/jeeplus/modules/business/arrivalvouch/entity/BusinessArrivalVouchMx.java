@@ -40,6 +40,8 @@ public class BusinessArrivalVouchMx extends DataEntity<BusinessArrivalVouchMx> {
 	private String irowno;		// 来源行号
 	private BaseVendor vendor;		// 供应商
 	private Office dept;		// 部门
+	private String isrk;	// 是否入库
+	private Double rukunum; // 入库数量
 	private Date beginArriveDate;		// 开始 到货日期
 	private Date endArriveDate;		// 结束 到货日期
 
@@ -104,6 +106,10 @@ public class BusinessArrivalVouchMx extends DataEntity<BusinessArrivalVouchMx> {
 	@NotNull(message="推荐货位不能为空")
 	@ExcelField(title="推荐货位", fieldType=BaseHuoWei.class, value="hw.name", align=2, sort=10)
 	public BaseHuoWei getHw() {
+		if(hw==null){
+			hw = new BaseHuoWei();
+			hw.setName("");
+		}
 		return hw;
 	}
 
@@ -140,6 +146,9 @@ public class BusinessArrivalVouchMx extends DataEntity<BusinessArrivalVouchMx> {
 	
 	@ExcelField(title="批次号", align=2, sort=14)
 	public String getBatchno() {
+		if (batchno==null){
+			batchno = "";
+		}
 		return batchno;
 	}
 
@@ -149,6 +158,9 @@ public class BusinessArrivalVouchMx extends DataEntity<BusinessArrivalVouchMx> {
 	
 	@ExcelField(title="生产日期", align=2, sort=15)
 	public String getScdate() {
+		if(scdate==null){
+			scdate = "";
+		}
 		return scdate;
 	}
 
@@ -238,5 +250,22 @@ public class BusinessArrivalVouchMx extends DataEntity<BusinessArrivalVouchMx> {
 	public void setDept(Office dept) {
 		this.dept = dept;
 	}
-	
+
+	public String getIsrk() {
+		return isrk;
+	}
+
+	public BusinessArrivalVouchMx setIsrk(String isrk) {
+		this.isrk = isrk;
+		return this;
+	}
+
+	public Double getRukunum() {
+		return rukunum;
+	}
+
+	public BusinessArrivalVouchMx setRukunum(Double rukunum) {
+		this.rukunum = rukunum;
+		return this;
+	}
 }

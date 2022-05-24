@@ -26,6 +26,10 @@ public class U8ArrivalVouch extends DataEntity<U8ArrivalVouch> {
     private Double iquantity;//		数量
     private Double iinvexchrate;//	换算率
     private String vouchstate;//		单据状态
+    private Double cInvDefine1;// 最小包装量（存货自定义项1）
+    private String cposcode;// 推荐货位（已拼接）
+    private String cbatch;//  推荐批号（已拼接）
+    private String  dpdate;// 生产日期
     private String cbcloser;//		行关闭人
     private String cordercode;//			需求跟踪号
     private String  irowno;//			跟踪行号
@@ -263,6 +267,45 @@ public class U8ArrivalVouch extends DataEntity<U8ArrivalVouch> {
 
     public U8ArrivalVouch setCordercode(String cordercode) {
         this.cordercode = cordercode;
+        return this;
+    }
+
+    public Double getcInvDefine1() {
+        return cInvDefine1;
+    }
+
+    public U8ArrivalVouch setcInvDefine1(Double cInvDefine1) {
+        this.cInvDefine1 = cInvDefine1;
+        return this;
+    }
+
+    public String getCposcode() {
+        return cposcode;
+    }
+
+    public U8ArrivalVouch setCposcode(String cposcode) {
+        this.cposcode = cposcode;
+        return this;
+    }
+
+    public String getCbatch() {
+        return cbatch;
+    }
+
+    public U8ArrivalVouch setCbatch(String cbatch) {
+        this.cbatch = cbatch;
+        return this;
+    }
+
+    public String getDpdate() {
+        if(dpdate!=null){
+            dpdate = dpdate.split(" ")[0];
+        }
+        return dpdate;
+    }
+
+    public U8ArrivalVouch setDpdate(String dpdate) {
+        this.dpdate = dpdate;
         return this;
     }
 }

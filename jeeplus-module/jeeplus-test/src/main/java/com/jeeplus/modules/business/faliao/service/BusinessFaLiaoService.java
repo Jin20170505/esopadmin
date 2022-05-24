@@ -131,14 +131,13 @@ public class BusinessFaLiaoService extends CrudService<BusinessFaLiaoMapper, Bus
 			tr.setcORdCode("25");
 			List<YT_Trans> trans = Lists.newArrayList();
 			mxes.forEach(d->{
-				String hwcode = huoWeiMapper.getCodeById(d.getHuowei().getId());
 				YT_Trans t = new YT_Trans();
 				t.setcInvCode(d.getCinvcode());
 				t.setiTVQuantity(d.getNum()+"");
 				t.setIrowno(d.getNo()+"");
 				t.setdMadeDate(d.getScdate());
 				t.setcTVBatch(d.getBatchno());
-				t.setCoutposcode(hwcode);
+				t.setCoutposcode(d.getHuowei().getId());
 				trans.add(t);
 			});
 			tr.setTrans(trans);

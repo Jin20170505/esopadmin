@@ -1,6 +1,6 @@
 <script>
 $(document).ready(function() {
-	$('#businessArrivalVouchTable').bootstrapTable({
+	$('#businessRukuCaiGouTable').bootstrapTable({
 		 
 		  //请求方法
                method: 'post',
@@ -49,7 +49,7 @@ $(document).ready(function() {
                //可供选择的每页的行数(*)
                pageList: [10, 25, 50, 100],
                //这个接口需要处理bootstrap table传递的固定参数,并返回特定格式的json数据  
-               url: "${ctx}/business/arrivalvouch/businessArrivalVouch/data",
+               url: "${ctx}/business/ruku/caigou/businessRukuCaiGou/data",
                //默认值为 'limit',传给服务端的参数为：limit, offset, search, sort, order Else
                //queryParamsType:'',   
                ////查询参数,每次调用是会带上这个参数，可自定义                         
@@ -72,33 +72,44 @@ $(document).ready(function() {
 		    }
 			,{
 		        field: 'code',
-		        title: '到货单号',
+		        title: '单号',
 		        sortable: true,
 		        sortName: 'code'
 		        ,formatter:function(value, row , index){
-		        	  <% if(shiro.hasPermission("business:arrivalvouch:businessArrivalVouch:edit") ){ %>
-					   if(!value){
-						  return "<a  href='#' onclick='edit(\""+row.id+"\")'>-</a>";
-					   }else{
-						  return "<a  href='#' onclick='edit(\""+row.id+"\")'>"+value+"</a>";
-						}
-                     <% }else if(shiro.hasPermission("business:arrivalvouch:businessArrivalVouch:view")){ %>
-					   if(!value){
-						  return "<a  href='#' onclick='view(\""+row.id+"\")'>-</a>";
-                       }else{
-                          return "<a  href='#' onclick='view(\""+row.id+"\")'>"+value+"</a>";
-                       }
-                     <% }else{ %>
-					      return value;
-					 <% } %>
+                   if(!value){
+                       return "<a  href='#' onclick='view(\""+row.id+"\")'>-</a>";
+                   }else{
+                       return "<a  href='#' onclick='view(\""+row.id+"\")'>"+value+"</a>";
+                   }
 		         }
 		       
 		    }
 			,{
-		        field: 'arriveDate',
+		        field: 'arrivalcode',
+		        title: '到货单号',
+		        sortable: true,
+		        sortName: 'arrivalcode'
+		       
+		    }
+			,{
+		        field: 'arrivaldate',
 		        title: '到货日期',
 		        sortable: true,
-		        sortName: 'arriveDate'
+		        sortName: 'arrivaldate'
+		       
+		    }
+			// ,{
+		    //     field: 'ck.name',
+		    //     title: '仓库',
+		    //     sortable: true,
+		    //     sortName: 'ck.name'
+		    //
+		    // }
+			,{
+		        field: 'hw.name',
+		        title: '货位',
+		        sortable: true,
+		        sortName: 'hw.name'
 		       
 		    }
 			,{
@@ -108,60 +119,15 @@ $(document).ready(function() {
 		        sortName: 'u8code'
 		       
 		    }
-			,{
-		        field: 'dept.name',
-		        title: '部门',
-		        sortable: true,
-		        sortName: 'dept.name'
-		       
-		    }
-			,{
-		        field: 'vendor.name',
-		        title: '供应商',
-		        sortable: true,
-		        sortName: 'vendor.name'
-		       
-		    }
-			,{
-			   field: 'operate',
-			   title: '操作',
-			   align: 'center',
-			   class: 'text-nowrap',
-			   events: {
-				   'click .view': function (e, value, row, index) {
-					   view(row.id);
-				   },
-				   'click .edit': function (e, value, row, index) {
-					   edit(row.id)
-				   },
-				   'click .del': function (e, value, row, index) {
-					   del(row.id);
-
-				   }
-			   },
-			   formatter:  function operateFormatter(value, row, index) {
-				   return [
-					<% if(shiro.hasPermission("business:arrivalvouch:businessArrivalVouch:view")){ %>
-					   '<a class="view btn btn-icon waves-effect waves-light btn-custom btn-xs m-r-5"> <i class="fa fa-search"></i></a>',
-				   <% } %>
-				   <% if(shiro.hasPermission("business:arrivalvouch:businessArrivalVouch:edit")){ %>
-					   '<a class="edit btn btn-icon waves-effect waves-light btn-success btn-xs m-r-5"> <i class="fa fa-pencil"></i></a>',
-				   <% } %>
-				   <% if(shiro.hasPermission("business:arrivalvouch:businessArrivalVouch:del")){ %>
-					   '<a class="del btn btn-icon waves-effect waves-light btn-danger btn-xs"> <i class="fa fa-trash-o"></a>'
-				   <% } %>
-				   ].join('');
-			   }
-		   }
 		     ]
 		
 		});
 		
 
-	  $('#businessArrivalVouchTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
+	  $('#businessRukuCaiGouTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
-            $('#remove').prop('disabled', ! $('#businessArrivalVouchTable').bootstrapTable('getSelections').length);
-            $('#edit,#print').prop('disabled', $('#businessArrivalVouchTable').bootstrapTable('getSelections').length!=1);
+            $('#remove').prop('disabled', ! $('#businessRukuCaiGouTable').bootstrapTable('getSelections').length);
+            $('#edit').prop('disabled', $('#businessRukuCaiGouTable').bootstrapTable('getSelections').length!=1);
         });
 
 	 $("#import").click(function(){//显示导入面板
@@ -173,7 +139,7 @@ $(document).ready(function() {
 	 $("#btnImportExcel").click(function(){//导入Excel
 		 var importForm = $('#importForm')[0];
 		 jp.block('#import-collapse',"文件上传中...");
-		 jp.uploadFile(importForm,"${ctx}/business/arrivalvouch/businessArrivalVouch/import",function (data) {
+		 jp.uploadFile(importForm,"${ctx}/business/ruku/caigou/businessRukuCaiGou/import",function (data) {
 			 if(data.success){
 				 jp.toastr_success(data.msg);
 				 refresh();
@@ -185,15 +151,15 @@ $(document).ready(function() {
 	  })
 
 	 $("#btnDownloadTpl").click(function(){//下载模板文件
-            jp.downloadFile('${ctx}/business/arrivalvouch/businessArrivalVouch/import/template');
+            jp.downloadFile('${ctx}/business/ruku/caigou/businessRukuCaiGou/import/template');
 		})
 
 	 $("#export").click(function(){//导出Excel文件
 	        var searchParam = $("#searchForm").serializeJSON();
 	        searchParam.pageNo = 1;
 	        searchParam.pageSize = -1;
-            var sortName = $('#businessArrivalVouchTable').bootstrapTable("getOptions", "none").sortName;
-            var sortOrder = $('#businessArrivalVouchTable').bootstrapTable("getOptions", "none").sortOrder;
+            var sortName = $('#businessRukuCaiGouTable').bootstrapTable("getOptions", "none").sortName;
+            var sortOrder = $('#businessRukuCaiGouTable').bootstrapTable("getOptions", "none").sortOrder;
             var values = "";
             for(var key in searchParam){
                 values = values + key + "=" + searchParam[key] + "&";
@@ -202,7 +168,7 @@ $(document).ready(function() {
                 values = values + "orderBy=" + sortName + " "+sortOrder;
             }
 
-			jp.downloadFile('${ctx}/business/arrivalvouch/businessArrivalVouch/export?'+values);
+			jp.downloadFile('${ctx}/business/ruku/caigou/businessRukuCaiGou/export?'+values);
 	  })
 
 	  $("#search").click("click", function() {// 绑定查询按扭
@@ -217,32 +183,24 @@ $(document).ready(function() {
 		  refresh();
 		});
 
-	 $('#arriveDate').datepicker({//日期控件初始化
-			toggleActive: true,
-			language:"zh-CN",
-    			format:"yyyy-mm-dd"
-		});
 		
 	});
 
 	//获取选中行
   function getIdSelections() {
-        return $.map($("#businessArrivalVouchTable").bootstrapTable('getSelections'), function (row) {
+        return $.map($("#businessRukuCaiGouTable").bootstrapTable('getSelections'), function (row) {
             return row.id
         });
     }
-function doPrint(){
-    var rid = getIdSelections();
-    jp.windowOpen('${ctx}/business/arrivalvouch/businessArrivalVouch/goToPrint?rid='+rid,"打印",1200,1200);
-}
+
   //删除
   function del(ids){
      if(!ids){
           ids = getIdSelections();
      }
-	 jp.confirm('确认要删除该采购到货记录吗？', function(){
+	 jp.confirm('确认要删除该采购入库记录吗？', function(){
 		var index =jp.loading();
-		jp.get("${ctx}/business/arrivalvouch/businessArrivalVouch/delete?ids=" + ids, function(data){
+		jp.get("${ctx}/business/ruku/caigou/businessRukuCaiGou/delete?ids=" + ids, function(data){
 				if(data.success){
 					refresh();
 					jp.toastr_success(data.msg);
@@ -255,46 +213,44 @@ function doPrint(){
 	 })
   }
 
-function sychu8(){
-	 jp.openSaveDialog('同步日期(到货日期)选择', "${ctx}/business/arrivalvouch/businessArrivalVouch/goToDateSelect",'80%', '70%');
-}
+
     //刷新列表
   function refresh() {
-      $('#businessArrivalVouchTable').bootstrapTable('refresh');
+      $('#businessRukuCaiGouTable').bootstrapTable('refresh');
   }
 
    //新增表单页面
  function add() {
-     jp.openSaveDialog('新增采购到货', "${ctx}/business/arrivalvouch/businessArrivalVouch/form/add",'100%', '100%');
+     jp.openSaveDialog('新增采购入库', "${ctx}/business/ruku/caigou/businessRukuCaiGou/form/add",'90%', '90%');
  }
   //编辑表单页面
   function edit(id){
       if(!id){
           id = getIdSelections();
       }
-	  jp.openSaveDialog('编辑采购到货', "${ctx}/business/arrivalvouch/businessArrivalVouch/form/edit?id="+id,'100%', '100%');
+	  jp.openSaveDialog('编辑采购入库', "${ctx}/business/ruku/caigou/businessRukuCaiGou/form/edit?id="+id,'90%', '90%');
   }
   //查看表单页面
   function view(id) {
       if(!id){
           id = getIdSelections();
       }
-      jp.openViewDialog('查看采购到货', "${ctx}/business/arrivalvouch/businessArrivalVouch/form/view?id="+id,'100%', '100%');
+      jp.openViewDialog('查看采购入库', "${ctx}/business/ruku/caigou/businessRukuCaiGou/form/view?id="+id,'90%', '90%');
   }
  //子表展示
 		   
   function detailFormatter(index, row) {
-	  var htmltpl =  $("#businessArrivalVouchChildrenTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
+	  var htmltpl =  $("#businessRukuCaiGouChildrenTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
 	  var html = Mustache.render(htmltpl, {
 			idx:row.id
 		});
-	  $.get("${ctx}/business/arrivalvouch/businessArrivalVouch/detail?id="+row.id, function(businessArrivalVouch){
-    	var businessArrivalVouchChild1RowIdx = 0, businessArrivalVouchChild1Tpl = $("#businessArrivalVouchChild1Tpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
-		var data1 =  businessArrivalVouch.businessArrivalVouchMxList;
+	  $.get("${ctx}/business/ruku/caigou/businessRukuCaiGou/detail?id="+row.id, function(businessRukuCaiGou){
+    	var businessRukuCaiGouChild1RowIdx = 0, businessRukuCaiGouChild1Tpl = $("#businessRukuCaiGouChild1Tpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
+		var data1 =  businessRukuCaiGou.businessRukuCaigouMxList;
 		for (var i=0; i<data1.length; i++){
 			data1[i].dict = {};
-			addRow('#businessArrivalVouchChild-'+row.id+'-1-List', businessArrivalVouchChild1RowIdx, businessArrivalVouchChild1Tpl, data1[i]);
-			businessArrivalVouchChild1RowIdx = businessArrivalVouchChild1RowIdx + 1;
+			addRow('#businessRukuCaiGouChild-'+row.id+'-1-List', businessRukuCaiGouChild1RowIdx, businessRukuCaiGouChild1Tpl, data1[i]);
+			businessRukuCaiGouChild1RowIdx = businessRukuCaiGouChild1RowIdx + 1;
 		}
 				
       	  			
@@ -309,11 +265,11 @@ function sychu8(){
 		}));
 	}
 </script>
-<script type="text/template" id="businessArrivalVouchChildrenTpl">//<!--
+<script type="text/template" id="businessRukuCaiGouChildrenTpl">//<!--
 	<div class="card card-tabs">
 	<div class="card-heading  pb-0">
 	    <ul class="nav nav-pills float-left" role="tablist">
-				<li class="nav-item"><a data-toggle="tab" class="nav-link show active" href="#tab-{{idx}}-1" aria-expanded="true">到货单明细</a></li>
+				<li class="nav-item"><a data-toggle="tab" class="nav-link show active" href="#tab-{{idx}}-1" aria-expanded="true">采购入库明细</a></li>
 		</ul>
 		</div>
 		<div class="card-body">
@@ -323,20 +279,16 @@ function sychu8(){
 						<thead>
 							<tr>
 								<th>行号</th>
-								<th>仓库</th>
-								<th>推荐货位</th>
 								<th>存货编码</th>
 								<th>存货名称</th>
 								<th>规格型号</th>
-								<th>批次号</th>
-								<th>生产日期</th>
 								<th>数量</th>
 								<th>单位</th>
-								<th>最小包装数</th>
-								<th>打印状态</th>
+								<th>批号</th>
+								<th>生产日期</th>
 							</tr>
 						</thead>
-						<tbody id="businessArrivalVouchChild-{{idx}}-1-List">
+						<tbody id="businessRukuCaiGouChild-{{idx}}-1-List">
 						</tbody>
 					</table>
 				</div>
@@ -344,16 +296,10 @@ function sychu8(){
 		</div>
 		</div>//-->
 	</script>
-	<script type="text/template" id="businessArrivalVouchChild1Tpl">//<!--
+	<script type="text/template" id="businessRukuCaiGouChild1Tpl">//<!--
 				<tr>
 					<td>
 						{{row.no}}
-					</td>
-					<td>
-						{{row.ck.name}}
-					</td>
-					<td>
-						{{row.hw.name}}
 					</td>
 					<td>
 						{{row.cinvcode}}
@@ -365,22 +311,16 @@ function sychu8(){
 						{{row.cinvstd}}
 					</td>
 					<td>
-						{{row.batchno}}
-					</td>
-					<td>
-						{{row.scdate}}
-					</td>
-					<td>
 						{{row.num}}
 					</td>
 					<td>
 						{{row.unit}}
 					</td>
 					<td>
-						{{row.minnum}}
+						{{row.batchno}}
 					</td>
 					<td>
-						{{row.printstatus}}
+						{{row.scdate}}
 					</td>
 				</tr>//-->
 	</script>

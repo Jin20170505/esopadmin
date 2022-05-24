@@ -3,15 +3,18 @@
  */
 package com.jeeplus.modules.business.arrivalvouch.web;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
+import com.jeeplus.common.utils.QRCodeUtil;
 import com.jeeplus.modules.business.arrivalvouch.entity.BusinessArrivalVouchMx;
 import com.jeeplus.modules.business.ruku.product.entity.BusinessRuKuProduct;
 import com.jeeplus.modules.business.ruku.product.entity.BusinessRuKuProductMx;
@@ -97,6 +100,36 @@ public class BusinessArrivalVouchController extends BaseController {
 		}
 		return json;
 	}
+
+	@RequestMapping("goToPrint")
+	public String goToPrint(String rid,Model model){
+		BusinessArrivalVouch vouch = businessArrivalVouchService.get(rid);
+		model.addAttribute("bean",vouch);
+		return "modules/business/arrivalvouch/print";
+	}
+	@RequestMapping("/img/{rid}")
+	public void getImage(@PathVariable("rid") String rid, HttpServletResponse response) throws IOException {
+		response.reset();
+		response.setContentType("image/jpg");
+		ServletOutputStream out = null;
+		try{
+			BusinessArrivalVouch vouch = businessArrivalVouchService.get(rid);
+			StringBuilder sb = new StringBuilder();
+			sb.append("{\"cgcode\":\"").append(vouch.getCode()).append("\",\"arrivaldate\":\"")
+					.append(DateUtils.formatDate(vouch.getArriveDate(),"yyyy-MM-dd")).append("\",\"deptname\":\"").append(vouch.getDept().getName())
+					.append("\",\"vendorname\":\"").append(vouch.getVendor().getName()).append("\",\"cgid\":\"")
+					.append(vouch.getId()).append("\"}");
+			out = response.getOutputStream();
+			QRCodeUtil.encode(sb.toString(),out);
+			out.flush();
+		}catch (Exception e){
+			e.printStackTrace();
+		}finally {
+			if(out!=null){
+				out.close();
+			}
+		}
+	}
 	@RequestMapping("goToTagPrint")
 	public String goToTagPrint(String rids,Model model){
 		model.addAttribute("rids",rids);
@@ -111,9 +144,8 @@ public class BusinessArrivalVouchController extends BaseController {
 			ProductTagBean tagBean = new ProductTagBean();
 			tagBean.setBatchno(bean.getBatchno()).setCinvcode(bean.getCinvcode()).setCinvname(bean.getCinvname()).setCinvstd(bean.getCinvstd())
 					.setNum(num+"").setUnit(bean.getUnit())
-					.setDate(DateUtils.getDate("YYYY-MM-dd"));
-			String qr = "'cinvcode':'"+tagBean.getCinvcode()+"','cinvcodename':'"+tagBean.getCinvname()+"','batchno':'"+tagBean.getBatchno()+"','date':'"+tagBean.getDate()+"','num':'"+tagBean.getNum()+"','unit':'"+tagBean.getUnit()+"'";
-			tagBean.setQrcode(qr);
+					.setDate(bean.getScdate());
+			tagBean.setQrcode(bean.getId());
 			tagBeans.add(tagBean);
 			gdnum = gdnum - num;
 		}
@@ -121,13 +153,32 @@ public class BusinessArrivalVouchController extends BaseController {
 			ProductTagBean tagBean = new ProductTagBean();
 			tagBean.setBatchno(bean.getBatchno()).setCinvcode(bean.getCinvcode()).setCinvname(bean.getCinvname()).setCinvstd(bean.getCinvstd())
 					.setNum(gdnum+"").setUnit(bean.getUnit())
-					.setDate(DateUtils.getDate("YYYY-MM-dd"));
-			String qr = "'cinvcode':'"+tagBean.getCinvcode()+"','cinvcodename':'"+tagBean.getCinvname()+"','batchno':'"+tagBean.getBatchno()+"','date':'"+tagBean.getDate()+"','num':'"+tagBean.getNum()+"','unit':'"+tagBean.getUnit()+"'";
-			tagBean.setQrcode(qr);
+					.setDate(bean.getScdate());
+			tagBean.setQrcode(bean.getId());
 			tagBeans.add(tagBean);
 		}
 		model.addAttribute("beans", tagBeans);
 		return "modules/business/arrivalvouch/list/print";
+	}
+
+	@RequestMapping("/qr")
+	public void getQrImage(String rid,String num, HttpServletResponse response) throws IOException {
+		response.reset();
+		response.setContentType("image/jpg");
+		ServletOutputStream out = null;
+		try{
+			BusinessArrivalVouchMx tagBean = businessArrivalVouchService.getMx(rid);
+			String qr = "'cinvcode':'"+tagBean.getCinvcode()+"','cinvname':'"+tagBean.getCinvname()+"','cinvstd':'"+tagBean.getCinvstd()+"','batchno':'"+tagBean.getBatchno()+"','date':'"+tagBean.getScdate()+"','num':'"+num+"','unit':'"+tagBean.getUnit()+"','cghid':'"+tagBean.getId()+"','cgid':'"+tagBean.getP().getId()+"'";
+			out = response.getOutputStream();
+			QRCodeUtil.encode(qr,out);
+			out.flush();
+		}catch (Exception e){
+			e.printStackTrace();
+		}finally {
+			if(out!=null){
+				out.close();
+			}
+		}
 	}
 
 	@ResponseBody

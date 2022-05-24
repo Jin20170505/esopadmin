@@ -29,4 +29,7 @@ public interface BusinessArrivalVouchMxMapper extends BaseMapper<BusinessArrival
 
     @Select("select 1 from business_arrivalvouch_mx where id = #{id}")
     Integer hasById(@Param("id") String id);
+
+    @Select("select id from business_arrivalvouch_mx where pid = #{cgid} and isrk = '0'")
+    List<String> findNoDoList(@Param("cgid") String cgid);
 }
