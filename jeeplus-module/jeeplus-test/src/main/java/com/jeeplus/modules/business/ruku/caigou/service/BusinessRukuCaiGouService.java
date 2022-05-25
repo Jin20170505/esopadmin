@@ -110,7 +110,7 @@ public class BusinessRukuCaiGouService extends CrudService<BusinessRukuCaiGouMap
 			mx.setCgid(cgid).setCghid(cghid);
 			businessRukuCaiGou.getBusinessRukuCaigouMxList().add(mx);
 		});
-		// 判断数量超额与否
+		// TODO 判断数量超额与否
 		save(businessRukuCaiGou);
 	}
 }

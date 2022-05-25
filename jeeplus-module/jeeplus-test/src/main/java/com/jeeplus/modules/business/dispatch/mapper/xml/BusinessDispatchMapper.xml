@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.business.dispatch.mapper.BusinessDispatchMapper">
+    
+	<sql id="businessDispatchColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.code AS "code",
+		a.opcode AS "opcode",
+		a.u8code AS "u8code",
+		a.dept AS "dept.id",
+		a.customer AS "customer.id",
+		a.status AS "status",
+		a.u8status AS "u8status",
+		a.printstatus AS "printstatus",
+		a.fahuo_date AS "fahuodate",
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+		dept.name AS "dept.name",
+				
+		customer.name AS "customer.name"
+	</sql>
+	
+	<sql id="businessDispatchJoins">
+		
+		LEFT JOIN sys_office dept ON dept.id = a.dept
+		LEFT JOIN base_customer customer ON customer.id = a.customer
+	</sql>
+	
+    
+	<select id="get" resultType="BusinessDispatch" >
+		SELECT 
+			<include refid="businessDispatchColumns"/>
+		FROM business_dispatch a
+		<include refid="businessDispatchJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BusinessDispatch" >
+		SELECT 
+			<include refid="businessDispatchColumns"/>
+		FROM business_dispatch a
+		<include refid="businessDispatchJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="u8code != null and u8code != ''">
+				AND a.u8code = #{u8code}
+			</if>
+			<if test="dept != null and dept.id != null and dept.id != ''">
+				AND a.dept = #{dept.id}
+			</if>
+			<if test="customer != null and customer.id != null and customer.id != ''">
+				AND a.customer = #{customer.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BusinessDispatch" >
+		SELECT 
+			<include refid="businessDispatchColumns"/>
+		FROM business_dispatch a
+		<include refid="businessDispatchJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO business_dispatch(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			code,
+			opcode,
+			u8code,
+			dept,
+			customer,
+			status,
+			u8status,
+			printstatus,
+			fahuo_date
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{code},
+			#{opcode},
+			#{u8code},
+			#{dept.id},
+			#{customer.id},
+			#{status},
+			#{u8status},
+			#{printstatus},
+			#{fahuodate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE business_dispatch SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			code = #{code},
+			opcode = #{opcode},
+			u8code = #{u8code},
+			dept = #{dept.id},
+			customer = #{customer.id},
+			status = #{status},
+			u8status = #{u8status},
+			printstatus = #{printstatus},
+			fahuo_date = #{fahuodate}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM business_dispatch
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE business_dispatch SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="BusinessDispatch" statementType="STATEMENT">
+		select * FROM business_dispatch  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

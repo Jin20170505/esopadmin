@@ -2,6 +2,8 @@ package com.jeeplus.modules.u8data.dispatch.entity;
 
 import com.jeeplus.core.persistence.DataEntity;
 
+import java.util.Date;
+
 /**
  * 销售发货
  */
@@ -10,6 +12,7 @@ public class U8Dispatch extends DataEntity<U8Dispatch> {
     private String lineid; // 行ID
     private String cdlcode;// 			发货退货单号
     private Integer irowno;//					发货单行号
+    private Date fahuoDate; //  发货日期
     private String cCusCode;//				客户编号
     private String ccusname;//				客户名称
     private String ccusabbname;//			客户简称
@@ -20,6 +23,7 @@ public class U8Dispatch extends DataEntity<U8Dispatch> {
     private String cInvStd;//				规格型号
     private String cComUnitCode;//			计量单位编码
     private String cComUnitName;//			计量单位名称
+    private String scdate;//    生产日期
     private Double iquantity;//				数量
     private String cWhCode;//				仓库编码
     private String cWhName;//				仓库名称
@@ -30,6 +34,43 @@ public class U8Dispatch extends DataEntity<U8Dispatch> {
     private String cPosition;//				货位
     private String cpersoncode;//	业务员编码
     private String cPsnName;//	业务员名称
+    private Date start; // 开始日期
+    private Date end; // 结束日期
+    public Date getFahuoDate() {
+        return fahuoDate;
+    }
+
+    public U8Dispatch setFahuoDate(Date fahuoDate) {
+        this.fahuoDate = fahuoDate;
+        return this;
+    }
+
+    public String getScdate() {
+        return scdate;
+    }
+
+    public U8Dispatch setScdate(String scdate) {
+        this.scdate = scdate;
+        return this;
+    }
+
+    public Date getStart() {
+        return start;
+    }
+
+    public U8Dispatch setStart(Date start) {
+        this.start = start;
+        return this;
+    }
+
+    public Date getEnd() {
+        return end;
+    }
+
+    public U8Dispatch setEnd(Date end) {
+        this.end = end;
+        return this;
+    }
 
     public String getMid() {
         return mid;

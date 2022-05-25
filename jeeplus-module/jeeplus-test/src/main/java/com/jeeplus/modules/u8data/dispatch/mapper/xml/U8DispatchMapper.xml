@@ -2,34 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jeeplus.modules.u8data.dispatch.mapper.U8DispatchMapper">
     <sql id="dispatchColumns">
-        a.id as "mid",
-    a.autoid as "autoid",
-    a.ccode as "ccode",
-    a.ivouchrowno as "ivouchrowno",
-    a.ddate as "ddate",
-    a.cvencode as "cvencode",
-    a.cvenabbname as "cvenabbname",
-    a.cvenname as "cvenname",
-    a.cdepname as "cdepname",
-    a.cdepcode as "cdepcode",
-    a.cmaker as "cmaker",
-    a.cpersonname as "cpersonname",
-    a.cwhcode as "cwhcode",
-    a.cwhname as "cwhname",
-    a.cinvcode as "cinvcode",
-    a.cinvname as "cinvname",
-    a.cinvstd as "cinvstd",
-    a.cinvm_unit as "cinvmunit",
-    a.iquantity as "iquantity",
-    a.iinvexchrate as "iinvexchrate",
-    a.vouchstate as "vouchstate",
-    a.cbcloser as "cbcloser",
-    a.cInvDefine1 as "cInvDefine1",
-    a.cposcode as "cposcode",
-    a.cbatch as "cbatch",
-    a.dpdate as "dpdate",
-    a.cordercode as "cordercode",
-    a.irowno as "irowno"
+        a.DLID as "mid",
+        a.autoid as "lineid",
+        a.cdlcode as "cdlcode",
+        a.dMDate as  "scdate",
+        a.dDate as "fahuoDate",
+        a.cpersoncode as "cpersoncode",
+        a.irowno as "irowno",
+        a.cCusCode AS "cCusCode",
+         a.ccusname	AS "ccusname",
+         a.ccusabbname AS "ccusabbname",
+         a.cdepcode	AS "cdepcode",
+         a.cdepname	AS "cdepname",
+         a.cInvCode	AS "cInvCode",
+         a.cInvName	AS "cInvName",
+         a.cInvStd	AS "cInvStd",
+         a.cComUnitCode AS "cComUnitCode",
+         a.cComUnitName	AS "cComUnitName",
+         a.iquantity AS "iquantity",
+         a.cWhCode AS "cWhCode",
+         a.cWhName AS "cWhName",
+         a.cSoCode	AS "cSoCode",
+        a.iorderrowno AS "iorderrowno",
+         a.fOutQuantity	AS "fOutQuantity",
+         a.cBatch		AS "cBatch",
+         a.cPosition	AS "cPosition",
+         a.cPsn_Name	AS "cPsnName"
     </sql>
     <sql id="dispatchJoins">
 
@@ -38,11 +36,11 @@
     <select id="findList" resultType="U8Dispatch">
         select
         <include refid="dispatchColumns"/>
-        from YT_API_ERP_view_ArrivalVouch a
+        from YT_API_ERP_view_DispatchList a
         <include refid="dispatchJoins"/>
         <where>
             <if test="start !=null and end != null">
-                and a.ddate between #{start}  and #{end}
+                and a.dDate between #{start}  and #{end}
             </if>
         </where>
     </select>

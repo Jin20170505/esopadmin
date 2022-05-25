@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.business.dispatch.mapper.BusinessDispatchMxMapper">
+    
+	<sql id="businessDispatchMxColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.pid AS "p.id",
+		a.no AS "no",
+		a.ck_id AS "ck.id",
+		a.hw_id AS "hw.id",
+		a.cinvcode AS "cinvcode",
+		a.cinvname AS "cinvname",
+		a.cinvstd AS "cinvstd",
+		a.batchno AS "batchno",
+		a.scdate AS "scdate",
+		a.num AS "num",
+		a.unit AS "unit",
+		a.cordercode AS "cordercode",
+		a.irowno AS "irowno",
+		a.customer AS "customer.id",
+		a.dept AS "dept.id",
+				
+				
+				
+				
+				
+				
+				
+				
+				
+		ck.name AS "ck.name",
+				
+		hw.name AS "hw.name"
+	</sql>
+	
+	<sql id="businessDispatchMxJoins">
+		
+			LEFT JOIN business_dispatch b ON b.id = a.pid
+		LEFT JOIN base_cangku ck ON ck.id = a.ck_id
+		LEFT JOIN base_huowei hw ON hw.id = a.hw_id
+	</sql>
+	
+    
+	<select id="get" resultType="BusinessDispatchMx" >
+		SELECT 
+			<include refid="businessDispatchMxColumns"/>
+		FROM business_dispatch_mx a
+		<include refid="businessDispatchMxJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BusinessDispatchMx" >
+		SELECT 
+			<include refid="businessDispatchMxColumns"/>
+		FROM business_dispatch_mx a
+		<include refid="businessDispatchMxJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="p != null and p.id != ''">
+				AND a.pid = #{p.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.no ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BusinessDispatchMx" >
+		SELECT 
+			<include refid="businessDispatchMxColumns"/>
+		FROM business_dispatch_mx a
+		<include refid="businessDispatchMxJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO business_dispatch_mx(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			pid,
+			no,
+			ck_id,
+			hw_id,
+			cinvcode,
+			cinvname,
+			cinvstd,
+			batchno,
+			scdate,
+			num,
+			unit,
+			cordercode,
+			irowno,
+			customer,
+			dept
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{p.id},
+			#{no},
+			#{ck.id},
+			#{hw.id},
+			#{cinvcode},
+			#{cinvname},
+			#{cinvstd},
+			#{batchno},
+			#{scdate},
+			#{num},
+			#{unit},
+			#{cordercode},
+			#{irowno},
+			#{customer.id},
+			#{dept.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE business_dispatch_mx SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			pid = #{p.id},
+			no = #{no},
+			ck_id = #{ck.id},
+			hw_id = #{hw.id},
+			cinvcode = #{cinvcode},
+			cinvname = #{cinvname},
+			cinvstd = #{cinvstd},
+			batchno = #{batchno},
+			scdate = #{scdate},
+			num = #{num},
+			unit = #{unit},
+			cordercode = #{cordercode},
+			irowno = #{irowno},
+			customer = #{customer.id},
+			dept = #{dept.id}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM business_dispatch_mx
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE pid = #{p.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE business_dispatch_mx SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE pid = #{p.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="BusinessDispatchMx" statementType="STATEMENT">
+		select * FROM business_dispatch_mx  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>
