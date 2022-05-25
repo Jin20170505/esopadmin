@@ -18,6 +18,7 @@ import com.jeeplus.modules.business.baogong.order.mapper.BusinessBaoGongOrderMap
 import com.jeeplus.modules.business.baogong.order.mapper.BusinessBaoGongOrderMingXiMapper;
 import com.jeeplus.modules.business.baogong.record.service.BusinessBaoGongRecordService;
 import com.jeeplus.modules.business.chuku.lingliao.mapper.BusinessChuKuLingLiaoMapper;
+import com.jeeplus.modules.business.chuku.lingliao.mapper.BusinessChuKuLingLiaoMxMapper;
 import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDan;
 import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDanBom;
 import com.jeeplus.modules.business.jihuadingdan.mapper.BusinessJiHuaGongDanBomMapper;
@@ -69,15 +70,33 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		bean.setCinvcode(jihua.getCinvcode()).setCinvname(jihua.getCinvname()).setCinvstd(jihua.getCinvstd())
 				.setNum(jihua.getGdnum()).setUnit(jihua.getUnit()).setRemarks(jihua.getRemarks());
 		bean.setSccode(order.getOrdercode()).setScline(order.getOrderline());
-		boms.forEach(d->{
-			BomBean b = new BomBean();
-			b.setNo(d.getNo()).setScyid(d.getScyid()).setBomid(d.getId()).setCinvcode(d.getCinvcode()).setCinvname(d.getCinvname()).setCinvstd(d.getCinvstd())
-					.setNum(d.getNum()).setUnit(d.getUnitname()).setRemarks(d.getRemarks());
-			bean.getBomList().add(b);
+		boms.stream().forEach(d->{
+			String yl = lingliaoComplete(d.getId(),d.getNum());
+			if(!"0".equals(yl)){
+				BomBean b = new BomBean();
+				b.setNo(d.getNo()).setScyid(d.getScyid()).setBomid(d.getId()).setCinvcode(d.getCinvcode()).setCinvname(d.getCinvname()).setCinvstd(d.getCinvstd())
+						.setNum(Double.valueOf(yl)).setUnit(d.getUnitname()).setRemarks(d.getRemarks());
+				bean.getBomList().add(b);
+			}
 		});
+		if(bean.getBomList().isEmpty()){
+			throw new RuntimeException("该工单领料已完成，不可再领");
+		}
 		return bean;
 	}
-
+	@Autowired
+	private BusinessChuKuLingLiaoMxMapper businessChuKuLingLiaoMxMapper;
+	private String lingliaoComplete(String pbomid,Double sum){
+		Double cknumSum = businessChuKuLingLiaoMxMapper.sumCkNum(pbomid);
+		if(cknumSum==null){
+			return sum+"";
+		}
+		double sy = sum - cknumSum;
+		if(sy>0){
+			return  sy+"";
+		}
+		return "0";
+	}
 	// 用于 报工
 	public BusinessBaoGongOrder getBaoGongInfo(String bgid,String bghid,String bgcode){
 		BusinessBaoGongOrder order = null;

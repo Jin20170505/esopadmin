@@ -4,6 +4,7 @@ package org.jeeplus.u8.webservice;
 import com.google.common.collect.Lists;
 import com.jeeplus.common.utils.StringUtils;
 import net.sf.json.JSONObject;
+import net.sourceforge.jtds.jdbc.DateTime;
 import org.apache.commons.io.IOUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -14,10 +15,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-public class U8Post {
+public final class U8Post {
 
+    //成品入库单
     public static String Rd10Post(YT_Rd10 rd10,String posturl) throws Exception
     {
         Map<String,Object> param = new LinkedHashMap<String, Object>();
@@ -96,6 +99,7 @@ public class U8Post {
     public static String responseWeb(String response,String respon)
     {
         //创建Reader对象
+        response = new String(response.getBytes(StandardCharsets.UTF_8));
         SAXReader reader = new SAXReader();
         //加载xml
         Document document = null;
@@ -137,9 +141,40 @@ public class U8Post {
 
     public static void main(String[] args) {
         // TODO Auto-generated method stub
-        String s = "<?xml version=\"1.0\" encoding=\"utf-8\"?><soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"><soap:Body><YTRdrecord10Response xmlns=\"http://tempuri.org/\"><YTRdrecord10Result>{\"count\":\"0\",\"message\":\"产品入库单同步成功\",\"id\":\"CPRK20220520222221\"}</YTRdrecord10Result></YTRdrecord10Response></soap:Body></soap:Envelope>";
+        YT_Rd01 rd01 = new YT_Rd01();
+        YT_Rds01 rds01 = new YT_Rds01();
+        List<YT_Rds01> s = new ArrayList<>();
+        rd01.setCode("cs001");
+        rd01.setcBusType("普通采购");
+        rd01.setcSource("来料检验单");
+        rd01.setcWhCode("01");
+        rd01.setdDate("2022-05-20");
+        rd01.setcRdCode("11");
+        rd01.setcDepCode("05");
+        rd01.setcPersonCode("");
+        rd01.setcPTCode("01");
+        rd01.setcVenCode("G00001");
+        rd01.setcMaker("demo");
+        rd01.setDnmaketim("2022-05-20");
+
+        rds01.setIrowno("1");
+        rds01.setcInvCode("C030000096");
+        rds01.setiArrsId("1000000006");
+        rds01.setcBatch("1");
+        rds01.setcPosition("G-07-02-05");
+        rds01.setdMadeDate("2022-05-20");
+        rds01.setcARVCode("2205210003");
+        rds01.setiQuantity("10");
+        s.add(rds01);
+        rd01.setRd01s(s);
+        try {
+            Rd01Post(rd01,U8Url.URL);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
+    //材料出库单
     public static String Rd11Post(YT_Rd11 rd11, String posturl) throws Exception
     {
         Map<String,Object> param = new LinkedHashMap<String, Object>();
@@ -210,6 +245,7 @@ public class U8Post {
         return getjson;
     }
 
+    //调拨单
     public static String TranPost(YT_Tran tr,String posturl) throws Exception
     {
         Map<String,Object> param = new LinkedHashMap<String, Object>();
@@ -278,6 +314,83 @@ public class U8Post {
         }
         System.out.println("请求返回报文：" + result);
         String getjson =  responseWeb(result,"YTTransVouchResult");
+        return getjson;
+    }
+
+    //采购入库单
+    public static String Rd01Post(YT_Rd01 tr,String posturl) throws Exception
+    {
+        Map<String,Object> param = new LinkedHashMap<String, Object>();
+        param.put("Code",tr.getCode());
+        param.put("cBusType",tr.getcBusType());
+        param.put("cSource",tr.getcSource());
+        param.put("cWhCode",tr.getcWhCode());
+        param.put("dDate",tr.getdDate());
+        param.put("cRdCode",tr.getcRdCode());
+        param.put("cDepCode",tr.getcDepCode());
+        param.put("cPersonCode",tr.getcPersonCode());
+        param.put("cPTCode",tr.getcPTCode());
+        param.put("cVenCode",tr.getcVenCode());
+        param.put("cMaker",tr.getcMaker());
+        param.put("dnmaketim",tr.getDnmaketim());
+        param.put("cExchCode","RMB");
+
+        List<Map<String, Object>> Trans = Lists.newArrayList();
+        for (YT_Rds01 tr1:tr.getRd01s())
+        {
+            Map<String, Object> trs = new LinkedHashMap<String, Object>();
+            trs.put("irowno",tr1.getIrowno());
+            trs.put("cInvCode",tr1.getcInvCode());
+            trs.put("iQuantity",tr1.getiQuantity());
+            trs.put("iArrsId",tr1.getiArrsId());
+            trs.put("cBatch",tr1.getcBatch());
+            trs.put("cPosition",tr1.getcPosition());
+            trs.put("dMadeDate",tr1.getdMadeDate());
+            trs.put("cARVCode",tr1.getcARVCode());
+            Trans.add(trs);
+        }
+        param.put("Details",Trans);
+        JSONObject  ss = JSONObject.fromObject(param);
+        StringBuilder soap = new StringBuilder();
+        soap.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+        soap.append("<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">");
+        soap.append("<soap:Body>");
+        soap.append("<YTRdrecord xmlns=\"http://tempuri.org/\">");
+        soap.append("<jsonstring>"+ss.toString()+"</jsonstring>");
+        soap.append("</YTRdrecord>");
+        soap.append("</soap:Body>");
+        soap.append("</soap:Envelope>");
+        String jsons = soap.toString();
+        String url2 = posturl;
+        //接受返回报文
+        String result = new String();
+        URL u = new URL(url2);
+        HttpURLConnection conn = (HttpURLConnection) u.openConnection();
+        conn.setDoInput(true);
+        //允许对外输出数据
+        conn.setDoOutput(true);
+        conn.setUseCaches(false);
+        conn.setDefaultUseCaches(false);
+        conn.setRequestProperty("Content-Type","text/xml;charset=UTF-8");
+        //soap
+        conn.setRequestProperty("Content-Length",String.valueOf(jsons.length()));
+        conn.setRequestMethod("POST");
+        //定义输出流
+        OutputStream output = conn.getOutputStream();
+        if(StringUtils.isNotBlank(jsons)){
+            byte[] b = jsons.getBytes("UTF-8");
+            //发送soap请求报文
+            output.write(b,0,b.length);
+            output.flush();
+            output.close();
+            //定义输入流，获取soap报文
+            InputStream input = conn.getInputStream();
+            //设置编码格式
+            result = IOUtils.toString(input,"UTF-8");
+            input.close();
+        }
+        System.out.println("请求返回报文：" + result);
+        String getjson =  responseWeb(result,"YTRdrecordResult");
         return getjson;
     }
 

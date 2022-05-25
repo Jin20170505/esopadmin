@@ -103,6 +103,7 @@ layout("/include/_container.html", {title:"打印", parent:"报工单"}){
                 <th>工序名称</th>
                 <th>工号</th>
                 <th>姓名</th>
+                <th>班组</th>
                 <th>备注</th>
             </tr>
         </thead>
@@ -121,6 +122,7 @@ layout("/include/_container.html", {title:"打印", parent:"报工单"}){
                         <td>`+data[i].site+`</td>
                         <td>`+data[i].opcode+`</td>
                         <td>`+data[i].opname+`</td>
+                        <td>`+data[i].classgroup+`</td>
                         <td></td>
                     </tr>`;
         }
