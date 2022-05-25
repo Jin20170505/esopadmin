@@ -101,6 +101,7 @@ public final class U8Post {
         //创建Reader对象
         response = new String(response.getBytes(StandardCharsets.UTF_8));
         SAXReader reader = new SAXReader();
+        reader.setEncoding("UTF-8");
         //加载xml
         Document document = null;
         Map<String, String> request = new HashMap();
