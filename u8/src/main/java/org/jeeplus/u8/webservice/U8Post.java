@@ -11,6 +11,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.jeeplus.u8.webservice.entity.U8WebServiceResult;
+import org.jeeplus.u8.webservice.util.XMLParseUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -95,35 +96,9 @@ public final class U8Post {
             input.close();
         }
         System.out.println("请求返回报文：" + result);
-        return responseWeb(result);
+        return XMLParseUtil.responseWeb(result);
     }
 
-    public static U8WebServiceResult responseWeb(String xml) {
-        U8WebServiceResult result = new U8WebServiceResult();
-        if(StringUtils.isEmpty(xml)){
-            result.setCount("1");
-            result.setMessage("U8返回空报文");
-            return result;
-        }
-        int index = xml.indexOf("{");int last = xml.lastIndexOf("}")+1;
-        if(index<0|| last<1){
-            result.setCount("1");
-            result.setMessage("U8返回无法解析的报文："+xml);
-            return result;
-        }
-        String rs = xml.substring(index,last);
-        try {
-            JSONObject json = JSONObject.fromObject(rs);
-            result.setCount(json.optString("count","1"));
-            result.setMessage(json.optString("message","没有message节点"));
-            return result;
-        }catch (Exception e){
-            result.setCount("1");
-            result.setMessage("无法解析结果："+rs);
-            return result;
-        }
-
-    }
 
     public static void main(String[] args) {
         // TODO Auto-generated method stub
@@ -227,7 +202,7 @@ public final class U8Post {
             input.close();
         }
         System.out.println("请求返回报文：" + result);
-        return responseWeb(result);
+        return XMLParseUtil.responseWeb(result);
     }
 
     //调拨单
@@ -298,7 +273,7 @@ public final class U8Post {
             input.close();
         }
         System.out.println("请求返回报文：" + result);
-        return responseWeb(result);
+        return XMLParseUtil.responseWeb(result);
     }
 
     //采购入库单
@@ -374,7 +349,7 @@ public final class U8Post {
             input.close();
         }
         System.out.println("请求返回报文：" + result);
-        return responseWeb(result);
+        return XMLParseUtil.responseWeb(result);
     }
 
 

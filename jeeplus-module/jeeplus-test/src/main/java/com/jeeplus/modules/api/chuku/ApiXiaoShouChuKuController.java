@@ -30,11 +30,11 @@ public class ApiXiaoShouChuKuController {
     }
 
     @RequestMapping("do")
-    public AjaxJson dochuku(String xsfhid){
+    public AjaxJson dochuku(String xsfhid,String userid){
         AjaxJson json  = new AjaxJson();
         try{
             BusinessDispatch dispatch = dispatchService.get(xsfhid);
-            chukuDispatchService.chuku(dispatch);
+            chukuDispatchService.chuku(dispatch,userid);
         }catch (Exception e){
             e.printStackTrace();
             json.setSuccess(false);

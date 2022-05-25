@@ -7,6 +7,12 @@ import java.util.List;
 
 import com.jeeplus.common.utils.DateUtils;
 import com.jeeplus.modules.business.dispatch.entity.BusinessDispatch;
+import com.jeeplus.modules.sys.entity.User;
+import com.jeeplus.modules.sys.utils.UserUtils;
+import org.jeeplus.u8.webservice.entity.U8WebServiceResult;
+import org.jeeplus.u8.webservice.xiaoshouchuku.U8XiaoShouChuKuWebService;
+import org.jeeplus.u8.webservice.xiaoshouchuku.entity.U8WebXiaoShouBean;
+import org.jeeplus.u8.webservice.xiaoshouchuku.entity.U8WebXiaoShouMxBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,13 +78,13 @@ public class BusinessChukuDispatchService extends CrudService<BusinessChukuDispa
 		businessChukuDispatchMxMapper.delete(new BusinessChukuDispatchMx(businessChukuDispatch));
 	}
 	@Transactional(readOnly = false)
-    public void chuku(BusinessDispatch dispatch) {
+    public void chuku(BusinessDispatch dispatch,String userid) {
 		BusinessChukuDispatch main = new BusinessChukuDispatch();
 		main.setCustomer(dispatch.getCustomer());
 		main.setDept(dispatch.getDept());
 		main.setDispatchcode(dispatch.getCode());
 		main.setFahuoDate(dispatch.getFahuodate());
-		main.setCode(DateUtils.getDate("yyyyMMddHHmmss"));
+		main.setCode("XSCK"+DateUtils.getDate("yyyyMMddHHmmss"));
 		if(dispatch.getBusinessDispatchMxList()!=null){
 			dispatch.getBusinessDispatchMxList().forEach(d->{
 				BusinessChukuDispatchMx mx = new BusinessChukuDispatchMx();
@@ -96,5 +102,33 @@ public class BusinessChukuDispatchService extends CrudService<BusinessChukuDispa
 			});
 		}
 		save(main);
+		User user  = UserUtils.get(userid);
+		if(user==null){
+			user = new User();
+		}
+		// U8 销售出库 接口
+		U8WebXiaoShouBean xiaoShouBean = new U8WebXiaoShouBean();
+		try{
+			xiaoShouBean.setCode(main.getCode()).setcWhCode(main.getBusinessChukuDispatchMxList().get(0).getCk().getId());
+			xiaoShouBean.setcRdCode("23").setcSTCode("01").setBredvouch("0").setcMemo("");
+			xiaoShouBean.setdDate(DateUtils.formatDate(main.getFahuoDate())).setcCusCode(main.getCustomer().getId());
+			xiaoShouBean.setcDepCode(main.getDept().getId()).setcMaker(user.getNo()).setcPersonCode("");
+
+			main.getBusinessChukuDispatchMxList().forEach(d->{
+				U8WebXiaoShouMxBean mx = new U8WebXiaoShouMxBean();
+				mx.setcBatch(d.getBatchno()).setcInvCode(d.getCinvcode()).setiQuantity(d.getNum().toString()).setcPosition(d.getHw().getId())
+						.setIrowno(d.getNo()+"").setcDLCode(d.getFhid()).setcDLCode(main.getDispatchcode());
+				xiaoShouBean.getDetails().add(mx);
+			});
+			U8WebServiceResult rs = U8XiaoShouChuKuWebService.xiaoshouchuku(xiaoShouBean);
+			if("1".equals(rs.getCount())){
+				throw new RuntimeException(rs.getMessage());
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new RuntimeException("数据传U8出错，原因："+e.getMessage());
+		}
+
+
     }
 }
