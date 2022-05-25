@@ -26,6 +26,7 @@ import org.jeeplus.u8.webservice.U8Post;
 import org.jeeplus.u8.webservice.U8Url;
 import org.jeeplus.u8.webservice.YT_Rd01;
 import org.jeeplus.u8.webservice.YT_Rds01;
+import org.jeeplus.u8.webservice.entity.U8WebServiceResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -161,13 +162,9 @@ public class BusinessRukuCaiGouService extends CrudService<BusinessRukuCaiGouMap
 		});
 		rd01.setRd01s(rd01s);
 		try{
-			String rs = U8Post.Rd01Post(rd01, U8Url.URL);
-			if(StringUtils.isEmpty(rs)){
-				throw new RuntimeException("数据传U8出错,未有返回值。");
-			}
-			JSONObject rsjson = JSONObject.fromObject(rs);
-			if("1".equals(rsjson.optString("count"))){
-				throw new RuntimeException(rsjson.optString("message"));
+			U8WebServiceResult rs = U8Post.Rd01Post(rd01, U8Url.URL);
+			if("1".equals(rs.getCount())){
+				throw new RuntimeException(rs.getMessage());
 			}
 		}catch (Exception e){
 			e.printStackTrace();

@@ -141,13 +141,9 @@ public class BusinessFaLiaoService extends CrudService<BusinessFaLiaoMapper, Bus
 				trans.add(t);
 			});
 			tr.setTrans(trans);
-			String rs = U8Post.TranPost(tr, U8Url.URL);
-			if(StringUtils.isEmpty(rs)){
-				throw new RuntimeException("数据传U8出错,未有返回值。");
-			}
-			JSONObject rsjson = JSONObject.fromObject(rs);
-			if("1".equals(rsjson.optString("count"))){
-				throw new RuntimeException(rsjson.optString("message"));
+			U8WebServiceResult rs = U8Post.TranPost(tr, U8Url.URL);
+			if("1".equals(rs.getCount())){
+				throw new RuntimeException(rs.getMessage());
 			}
 		}catch (Exception e){
 			e.printStackTrace();

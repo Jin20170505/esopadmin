@@ -183,13 +183,9 @@ public class BusinessRuKuProductService extends CrudService<BusinessRuKuProductM
 			}
 			rd10s.add(r);
 			rd10.setRd10s(rd10s);
-			String rs = U8Post.Rd10Post(rd10, U8Url.URL);
-			if(StringUtils.isEmpty(rs)){
-				throw new RuntimeException("数据传U8出错,未有返回值。");
-			}
-			JSONObject rsjson = JSONObject.fromObject(rs);
-			if("1".equals(rsjson.optString("count"))){
-				throw new RuntimeException(rsjson.optString("message"));
+			U8WebServiceResult rs = U8Post.Rd10Post(rd10, U8Url.URL);
+			if("1".equals(rs.getCount())){
+				throw new RuntimeException(rs.getMessage());
 			}
 		}catch (Exception e){
 			e.printStackTrace();

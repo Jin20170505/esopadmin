@@ -10,9 +10,12 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.jeeplus.u8.webservice.entity.U8WebServiceResult;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -21,7 +24,7 @@ import java.util.*;
 public final class U8Post {
 
     //成品入库单
-    public static String Rd10Post(YT_Rd10 rd10,String posturl) throws Exception
+    public static U8WebServiceResult Rd10Post(YT_Rd10 rd10,String posturl) throws Exception
     {
         Map<String,Object> param = new LinkedHashMap<String, Object>();
         param.put("cBusType",rd10.getcBusType());
@@ -92,52 +95,34 @@ public final class U8Post {
             input.close();
         }
         System.out.println("请求返回报文：" + result);
-        String getjson =  responseWeb(result,"YTRdrecord10Result");
-        return getjson;
+        return responseWeb(result);
     }
 
-    public static String responseWeb(String response,String respon)
-    {
-        //创建Reader对象
-        response = new String(response.getBytes(StandardCharsets.UTF_8));
-        SAXReader reader = new SAXReader();
-        reader.setEncoding("UTF-8");
-        //加载xml
-        Document document = null;
-        Map<String, String> request = new HashMap();
+    public static U8WebServiceResult responseWeb(String xml) {
+        U8WebServiceResult result = new U8WebServiceResult();
+        if(StringUtils.isEmpty(xml)){
+            result.setCount("1");
+            result.setMessage("U8返回空报文");
+            return result;
+        }
+        int index = xml.indexOf("{");int last = xml.lastIndexOf("}")+1;
+        if(index<0|| last<1){
+            result.setCount("1");
+            result.setMessage("U8返回无法解析的报文："+xml);
+            return result;
+        }
+        String rs = xml.substring(index,last);
         try {
-            //获取数据流
-            InputStream is = new ByteArrayInputStream(response.getBytes());
-            document = reader.read(is);
-        } catch (DocumentException e) {
-            e.printStackTrace();
+            JSONObject json = JSONObject.fromObject(rs);
+            result.setCount(json.optString("count","1"));
+            result.setMessage(json.optString("message","没有message节点"));
+            return result;
+        }catch (Exception e){
+            result.setCount("1");
+            result.setMessage("无法解析结果："+rs);
+            return result;
         }
-        //获取根节点
-        Element rootElement = document.getRootElement();
-        Iterator iterator = rootElement.elementIterator();
-        String ss = "1";
-        List<String> s = new ArrayList<>();
-        while (iterator.hasNext())
-        {
-            request = new HashMap();
-            Element stu = (Element) iterator.next();
-            //判断节点是否为Result 如果不是则向下遍历
-            while (!stu.getName().equals(respon))
-            {
-                if (stu.elementIterator().hasNext()) {
-                    stu = (Element) stu.elementIterator().next();
-                }else {
-                    ss = "";
-                    break;
-                }
-             }
-            if(ss != "")
-            {
-                String rs = stu.getText();
-                return rs;
-            }
-        }
-        return "";
+
     }
 
     public static void main(String[] args) {
@@ -176,7 +161,7 @@ public final class U8Post {
     }
 
     //材料出库单
-    public static String Rd11Post(YT_Rd11 rd11, String posturl) throws Exception
+    public static U8WebServiceResult Rd11Post(YT_Rd11 rd11, String posturl) throws Exception
     {
         Map<String,Object> param = new LinkedHashMap<String, Object>();
         param.put("cBusType",rd11.getcBusType());
@@ -242,12 +227,11 @@ public final class U8Post {
             input.close();
         }
         System.out.println("请求返回报文：" + result);
-        String getjson =  responseWeb(result,"YTRdrecord11Result");
-        return getjson;
+        return responseWeb(result);
     }
 
     //调拨单
-    public static String TranPost(YT_Tran tr,String posturl) throws Exception
+    public static U8WebServiceResult TranPost(YT_Tran tr,String posturl) throws Exception
     {
         Map<String,Object> param = new LinkedHashMap<String, Object>();
         param.put("cTVCode",tr.getcTVCode());
@@ -314,12 +298,11 @@ public final class U8Post {
             input.close();
         }
         System.out.println("请求返回报文：" + result);
-        String getjson =  responseWeb(result,"YTTransVouchResult");
-        return getjson;
+        return responseWeb(result);
     }
 
     //采购入库单
-    public static String Rd01Post(YT_Rd01 tr,String posturl) throws Exception
+    public static U8WebServiceResult Rd01Post(YT_Rd01 tr,String posturl) throws Exception
     {
         Map<String,Object> param = new LinkedHashMap<String, Object>();
         param.put("Code",tr.getCode());
@@ -391,8 +374,7 @@ public final class U8Post {
             input.close();
         }
         System.out.println("请求返回报文：" + result);
-        String getjson =  responseWeb(result,"YTRdrecordResult");
-        return getjson;
+        return responseWeb(result);
     }
 
 
