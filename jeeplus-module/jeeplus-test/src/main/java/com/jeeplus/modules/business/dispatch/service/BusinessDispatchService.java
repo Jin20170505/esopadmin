@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import com.google.common.collect.Lists;
 import com.jeeplus.modules.base.cangku.entity.BaseCangKu;
+import com.jeeplus.modules.base.cangku.mapper.BaseCangKuMapper;
 import com.jeeplus.modules.base.customer.entity.BaseCustomer;
 import com.jeeplus.modules.base.huowei.entity.BaseHuoWei;
 import com.jeeplus.modules.base.vendor.entity.BaseVendor;
@@ -86,6 +87,8 @@ public class BusinessDispatchService extends CrudService<BusinessDispatchMapper,
 		super.delete(businessDispatch);
 		businessDispatchMxMapper.delete(new BusinessDispatchMx(businessDispatch));
 	}
+	@Autowired
+	private BaseCangKuMapper cangKuMapper;
 	@Transactional(readOnly = false)
     public void sychu8(List<U8Dispatch> data) {
 		List<BusinessDispatch> list = Lists.newArrayList();
@@ -103,6 +106,7 @@ public class BusinessDispatchService extends CrudService<BusinessDispatchMapper,
 				dispatch.setFahuodate(d.getFahuoDate());
 			}
 			BusinessDispatchMx mx = new BusinessDispatchMx();
+			String ckid = cangKuMapper.getIdByCode(d.getcWhCode());
 			mx.preInsert();
 			mx.setP(dispatch);
 			mx.setId(d.getLineid());
@@ -111,7 +115,7 @@ public class BusinessDispatchService extends CrudService<BusinessDispatchMapper,
 			mx.setIrowno(d.getIrowno()+"");
 			mx.setDept(dispatch.getDept());
 			mx.setCustomer(dispatch.getCustomer());
-			mx.setCk(new BaseCangKu(d.getcWhCode()));
+			mx.setCk(new BaseCangKu(ckid));
 			mx.setHw(new BaseHuoWei(d.getcPosition()));
 			mx.setBatchno(d.getcBatch());
 			mx.setScdate(d.getScdate());
