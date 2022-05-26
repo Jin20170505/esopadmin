@@ -233,5 +233,7 @@ $(document).ready(function() {
             return row.id
         });
     }
-
+    function refresh() {
+    $('#businessArrivalVouchTable').bootstrapTable('refresh');
+}
 </script>

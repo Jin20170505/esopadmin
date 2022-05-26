@@ -4,6 +4,8 @@
 package com.jeeplus.modules.business.dispatch.entity;
 
 import javax.validation.constraints.NotNull;
+
+import com.jeeplus.common.utils.StringUtils;
 import com.jeeplus.modules.base.cangku.entity.BaseCangKu;
 import com.jeeplus.modules.base.huowei.entity.BaseHuoWei;
 import com.jeeplus.modules.base.customer.entity.BaseCustomer;
@@ -68,6 +70,11 @@ public class BusinessDispatchMx extends DataEntity<BusinessDispatchMx> {
 	
 	@ExcelField(title="仓库", fieldType=BaseCangKu.class, value="ck.name", align=2, sort=9)
 	public BaseCangKu getCk() {
+		if(ck == null){
+			ck = new BaseCangKu();
+			ck.setId("");
+			ck.setName("");
+		}
 		return ck;
 	}
 
@@ -77,6 +84,11 @@ public class BusinessDispatchMx extends DataEntity<BusinessDispatchMx> {
 	
 	@ExcelField(title="货位", fieldType=BaseHuoWei.class, value="hw.name", align=2, sort=10)
 	public BaseHuoWei getHw() {
+		if(hw == null){
+			hw = new BaseHuoWei();
+			hw.setId("");
+			hw.setName("");
+		}
 		return hw;
 	}
 
@@ -113,6 +125,9 @@ public class BusinessDispatchMx extends DataEntity<BusinessDispatchMx> {
 	
 	@ExcelField(title="批次号", align=2, sort=14)
 	public String getBatchno() {
+		if(StringUtils.isEmpty(batchno)){
+			batchno = "";
+		}
 		return batchno;
 	}
 
@@ -122,6 +137,10 @@ public class BusinessDispatchMx extends DataEntity<BusinessDispatchMx> {
 	
 	@ExcelField(title="生产日期", align=2, sort=15)
 	public String getScdate() {
+		if(StringUtils.isEmpty(scdate)){
+			scdate = "";
+		}
+		scdate = scdate.split(" ")[0];
 		return scdate;
 	}
 

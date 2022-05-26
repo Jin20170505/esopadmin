@@ -112,4 +112,18 @@ public class U8WebXiaoShouMxBean {
         this.cDLCode = cDLCode;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "U8WebXiaoShouMxBean{" +
+                "cInvCode='" + cInvCode + '\'' +
+                ", iQuantity='" + iQuantity + '\'' +
+                ", cBatch='" + cBatch + '\'' +
+                ", cPosition='" + cPosition + '\'' +
+                ", dMadeDate='" + dMadeDate + '\'' +
+                ", irowno='" + irowno + '\'' +
+                ", iDLsID='" + iDLsID + '\'' +
+                ", cDLCode='" + cDLCode + '\'' +
+                '}';
+    }
 }

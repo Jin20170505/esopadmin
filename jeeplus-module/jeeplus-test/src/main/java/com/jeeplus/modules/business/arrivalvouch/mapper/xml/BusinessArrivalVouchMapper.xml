@@ -15,6 +15,7 @@
 		a.u8code AS "u8code",
 		a.dept AS "dept.id",
 		a.vendor AS "vendor.id",
+		vendor.code AS "vendor.code",
 		a.status AS "status",
 		a.printstatus as "printstatus",
 		a.u8status AS "u8status",

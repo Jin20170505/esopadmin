@@ -134,9 +134,10 @@ public class BusinessRukuCaiGouService extends CrudService<BusinessRukuCaiGouMap
 		rd01.setdDate(DateUtils.formatDate(vouch.getArriveDate(),"yyyy-MM-dd"));
 		rd01.setcRdCode("11");
 		rd01.setcDepCode(user.getOffice().getCode());
-		rd01.setcPersonCode(user.getNo());
+		rd01.setcPersonCode("");
 		rd01.setcPTCode("01");
 		rd01.setcVenCode(vouch.getVendor().getCode());
+		System.out.println(vouch.getVendor().getCode());
 		rd01.setcMaker("demo");
 		rd01.setDnmaketim(DateUtils.getDate());
 		List<YT_Rds01> rd01s = new ArrayList<>();
@@ -154,6 +155,7 @@ public class BusinessRukuCaiGouService extends CrudService<BusinessRukuCaiGouMap
 		});
 		rd01.setRd01s(rd01s);
 		try{
+
 			U8WebServiceResult rs = U8Post.Rd01Post(rd01, U8Url.URL);
 			if("1".equals(rs.getCount())){
 				throw new RuntimeException(rs.getMessage());

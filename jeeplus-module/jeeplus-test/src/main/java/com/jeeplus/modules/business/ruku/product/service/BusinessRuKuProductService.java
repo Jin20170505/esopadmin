@@ -152,8 +152,19 @@ public class BusinessRuKuProductService extends CrudService<BusinessRuKuProductM
 		mx.setCreateBy(new User(userid));
 		mapper.insert(product);
 		businessRuKuProductMxMapper.insert(mx);
-		// 判断入库数量 是否大于生产数量 关闭单据
-
+		BusinessShengChanDingDanMingXi shengChanDingDanMingXi = shengChanDingDanMingXiMapper.getInfo(mx.getSchid());
+		// TODO 判断入库数量 是否大于生产数量 关闭单据
+//		Double scnum = shengChanDingDanMingXi.getNum();
+//		if(scnum==null){
+//			scnum =0.0;
+//		}
+//		Double rkSum = businessRuKuProductMxMapper.getRuKuSumByScHid(mx.getSchid());
+//		if(rkSum==null){
+//			rkSum=0.0;
+//		}
+//		if(rkSum>=scnum){
+//			shengChanDingDanMingXiMapper.
+//		}
 		User user = UserUtils.get(userid);
 		// TODO U8成品入库
 		try{
@@ -178,7 +189,6 @@ public class BusinessRuKuProductService extends CrudService<BusinessRuKuProductM
 			r.setBatch(product.getBatchno());
 			r.setCbMemo("");
 			r.setdMadeDate(DateUtils.getDate());
-			BusinessShengChanDingDanMingXi shengChanDingDanMingXi = shengChanDingDanMingXiMapper.getInfo(mx.getSchid());
 			if(shengChanDingDanMingXi!=null){
 				r.setCmocode(shengChanDingDanMingXi.getP().getCode());
 				r.setImoseq(shengChanDingDanMingXi.getNo()+"");

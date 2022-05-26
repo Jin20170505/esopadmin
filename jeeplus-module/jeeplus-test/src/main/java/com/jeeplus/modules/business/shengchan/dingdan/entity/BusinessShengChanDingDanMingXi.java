@@ -35,7 +35,7 @@ public class BusinessShengChanDingDanMingXi extends DataEntity<BusinessShengChan
 	private String batchno; // 批号
 	private String type;
 	private Double donenum; // 已拆单数量
-	private String status; // 锁定 开立
+	private String status; // 锁定 开立 完成
 	private String ischaidan; // 是否拆单
 
 	public String getSocode() {

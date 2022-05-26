@@ -3,6 +3,7 @@
  */
 package com.jeeplus.modules.business.ruku.product.mapper;
 
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 import com.jeeplus.core.persistence.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
@@ -17,5 +18,6 @@ import com.jeeplus.modules.business.ruku.product.entity.BusinessRuKuProductMx;
 @Repository
 public interface BusinessRuKuProductMxMapper extends BaseMapper<BusinessRuKuProductMx> {
 
+    @Select("select sum(num) from business_ruku_product_mx where schid = #{schid}")
     Double getRuKuSumByScHid(String schid);
 }

@@ -6,9 +6,14 @@ package com.jeeplus.modules.business.chuku.dispatch.service;
 import java.util.List;
 
 import com.jeeplus.common.utils.DateUtils;
+import com.jeeplus.modules.base.cangku.entity.BaseCangKu;
+import com.jeeplus.modules.base.cangku.mapper.BaseCangKuMapper;
+import com.jeeplus.modules.base.huowei.entity.BaseHuoWei;
 import com.jeeplus.modules.business.dispatch.entity.BusinessDispatch;
 import com.jeeplus.modules.sys.entity.User;
 import com.jeeplus.modules.sys.utils.UserUtils;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.jeeplus.u8.webservice.entity.U8WebServiceResult;
 import org.jeeplus.u8.webservice.xiaoshouchuku.U8XiaoShouChuKuWebService;
 import org.jeeplus.u8.webservice.xiaoshouchuku.entity.U8WebXiaoShouBean;
@@ -77,47 +82,52 @@ public class BusinessChukuDispatchService extends CrudService<BusinessChukuDispa
 		super.delete(businessChukuDispatch);
 		businessChukuDispatchMxMapper.delete(new BusinessChukuDispatchMx(businessChukuDispatch));
 	}
+	@Autowired
+	private BaseCangKuMapper cangKuMapper;
 	@Transactional(readOnly = false)
-    public void chuku(BusinessDispatch dispatch,String userid) {
+    public void chuku(BusinessDispatch dispatch,String userid,String ckid,String mxJson) {
 		BusinessChukuDispatch main = new BusinessChukuDispatch();
 		main.setCustomer(dispatch.getCustomer());
 		main.setDept(dispatch.getDept());
 		main.setDispatchcode(dispatch.getCode());
 		main.setFahuoDate(dispatch.getFahuodate());
 		main.setCode("XSCK"+DateUtils.getDate("yyyyMMddHHmmss"));
-		if(dispatch.getBusinessDispatchMxList()!=null){
-			dispatch.getBusinessDispatchMxList().forEach(d->{
-				BusinessChukuDispatchMx mx = new BusinessChukuDispatchMx();
-				mx.setBatchno(d.getBatchno());
-				mx.setCinvcode(d.getCinvcode());
-				mx.setCinvname(d.getCinvname());
-				mx.setCinvstd(d.getCinvstd());
-				mx.setNo(d.getNo());
-				mx.setFid(dispatch.getId()).setFhid(d.getId());
-				mx.setCk(d.getCk());mx.setHw(d.getHw());
-				mx.setNum(d.getNum());mx.setUnit(d.getUnit());
-				mx.setScdate(d.getScdate());
-				mx.setDelFlag("0");mx.setId("");
-				main.getBusinessChukuDispatchMxList().add(mx);
-			});
-		}
+		JSONObject js = JSONObject.fromObject(mxJson);
+		JSONArray array = js.getJSONArray("list");
+		array.forEach(e->{
+			JSONObject o = JSONObject.fromObject(e);
+			BusinessChukuDispatchMx mx = new BusinessChukuDispatchMx();
+			mx.setBatchno(o.optString("batchno"));
+			mx.setCinvcode(o.optString("cinvcode"));
+			mx.setCinvname(o.optString("cinvname"));
+			mx.setCinvstd(o.optString("cinvstd"));
+			mx.setNo(o.optInt("no"));
+			mx.setFid(dispatch.getId()).setFhid(o.optString("id"));
+			mx.setCk(new BaseCangKu(ckid));mx.setHw(new BaseHuoWei(o.optString("hwid")));
+			mx.setNum(o.optDouble("num"));mx.setUnit(o.optString("unit"));
+			mx.setScdate(o.optString("scdate"));
+			mx.setDelFlag("0");mx.setId("");
+			main.getBusinessChukuDispatchMxList().add(mx);
+		});
 		save(main);
 		User user  = UserUtils.get(userid);
 		if(user==null){
 			user = new User();
 		}
+		String code = cangKuMapper.getCodeById(ckid);
 		// U8 销售出库 接口
 		U8WebXiaoShouBean xiaoShouBean = new U8WebXiaoShouBean();
 		try{
-			xiaoShouBean.setCode(main.getCode()).setcWhCode(main.getBusinessChukuDispatchMxList().get(0).getCk().getId());
+			xiaoShouBean.setCode(main.getCode()).setcWhCode(code);
 			xiaoShouBean.setcRdCode("23").setcSTCode("01").setBredvouch("0").setcMemo("");
 			xiaoShouBean.setdDate(DateUtils.formatDate(main.getFahuoDate())).setcCusCode(main.getCustomer().getId());
-			xiaoShouBean.setcDepCode(main.getDept().getId()).setcMaker(user.getNo()).setcPersonCode("");
+			xiaoShouBean.setcDepCode(main.getDept().getId()).setcMaker(user.getNo()).setcPersonCode(user.getName());
 
 			main.getBusinessChukuDispatchMxList().forEach(d->{
 				U8WebXiaoShouMxBean mx = new U8WebXiaoShouMxBean();
-				mx.setcBatch(d.getBatchno()).setcInvCode(d.getCinvcode()).setiQuantity(d.getNum().toString()).setcPosition(d.getHw().getId())
-						.setIrowno(d.getNo()+"").setcDLCode(d.getFhid()).setcDLCode(main.getDispatchcode());
+				mx.setcBatch(d.getBatchno()).setdMadeDate(d.getScdate()).setcInvCode(d.getCinvcode()).setiQuantity(d.getNum().toString()).setcPosition(d.getHw().getId())
+						.setIrowno(d.getNo()+"").setiDLsID(d.getFhid()).setcDLCode(main.getDispatchcode());
+				System.out.println(mx);
 				xiaoShouBean.getDetails().add(mx);
 			});
 			U8WebServiceResult rs = U8XiaoShouChuKuWebService.xiaoshouchuku(xiaoShouBean);
