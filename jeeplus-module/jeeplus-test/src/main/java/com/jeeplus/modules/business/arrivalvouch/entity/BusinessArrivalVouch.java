@@ -28,6 +28,7 @@ public class BusinessArrivalVouch extends DataEntity<BusinessArrivalVouch> {
 	private BaseVendor vendor;		// 供应商
 	private String status;		// 状态
 	private String u8status;		// U8状态
+	private String printstatus; // 打印状态
 	private Date beginArriveDate;		// 开始 到货日期
 	private Date endArriveDate;		// 结束 到货日期
 	private List<BusinessArrivalVouchMx> businessArrivalVouchMxList = Lists.newArrayList();		// 子表列表
@@ -112,7 +113,16 @@ public class BusinessArrivalVouch extends DataEntity<BusinessArrivalVouch> {
 	public void setU8status(String u8status) {
 		this.u8status = u8status;
 	}
-	
+
+	public String getPrintstatus() {
+		return printstatus;
+	}
+
+	public BusinessArrivalVouch setPrintstatus(String printstatus) {
+		this.printstatus = printstatus;
+		return this;
+	}
+
 	public Date getBeginArriveDate() {
 		return beginArriveDate;
 	}

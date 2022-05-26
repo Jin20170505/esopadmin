@@ -4,6 +4,7 @@ package com.jeeplus.modules.business.ruku.product.entity;
  * 标签·打印
  */
 public class ProductTagBean {
+    private String id;
     private String batchno;
     private String qrcode;
     private String cinvcode;
@@ -12,6 +13,15 @@ public class ProductTagBean {
     private String num;
     private String unit;
     private String date;
+
+    public String getId() {
+        return id;
+    }
+
+    public ProductTagBean setId(String id) {
+        this.id = id;
+        return this;
+    }
 
     public String getBatchno() {
         return batchno;

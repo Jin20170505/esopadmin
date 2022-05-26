@@ -157,7 +157,8 @@ public class BusinessArrivalVouchService extends CrudService<BusinessArrivalVouc
 		return businessArrivalVouchMxMapper.get(mxid);
 	}
 
-	public List<String> findNoDoList(String cgid){
-		return businessArrivalVouchMxMapper.findNoDoList(cgid);
+	@Transactional(readOnly = false)
+	public void mainPrint(String id){
+		mapper.print(id);
 	}
 }

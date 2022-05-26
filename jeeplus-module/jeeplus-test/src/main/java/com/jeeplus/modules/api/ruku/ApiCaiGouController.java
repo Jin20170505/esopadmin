@@ -21,20 +21,6 @@ public class ApiCaiGouController {
     private BusinessArrivalVouchService arrivalVouchService;
     @Autowired
     private BusinessRukuCaiGouService businessRukuCaiGouService;
-    @RequestMapping("findNodoList")
-    public AjaxJson findNodoList(String cgid){
-        AjaxJson json = new AjaxJson();
-        try {
-            List<String> nodocghids = arrivalVouchService.findNoDoList(cgid);
-            json.put("info",nodocghids);
-            json.setSuccess(true);
-        }catch (Exception e){
-            e.printStackTrace();
-            json.setSuccess(false);
-            json.setMsg("查询失败，原因："+e.getMessage());
-        }
-        return json;
-    }
 
     @RequestMapping("getMxDetail")
     public AjaxJson getMxDetail(String mxid,Double num){

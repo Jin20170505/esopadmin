@@ -192,6 +192,16 @@ public class BusinessArrivalVouchController extends BaseController {
 		j.setMsg("成功");
 		return j;
 	}
+
+	@RequestMapping("mainPrint")
+	@ResponseBody
+	public AjaxJson mainPrint(String rid){
+		AjaxJson j = new AjaxJson();
+		businessArrivalVouchService.mainPrint(rid);
+		j.setSuccess(true);
+		return j;
+	}
+
 	/**
 	 * 采购到货列表页面
 	 */

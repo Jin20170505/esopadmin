@@ -16,6 +16,7 @@
 		a.dept AS "dept.id",
 		a.vendor AS "vendor.id",
 		a.status AS "status",
+		a.printstatus as "printstatus",
 		a.u8status AS "u8status",
 		dept.name AS "dept.name",
 		vendor.name AS "vendor.name"
@@ -57,6 +58,9 @@
 			</if>
 			<if test="status != null and status != ''">
 				AND a.status = #{status}
+			</if>
+			<if test="printstatus != null and printstatus != ''">
+				AND a.printstatus = #{printstatus}
 			</if>
 		</where>
 		<choose>
@@ -102,7 +106,7 @@
 			u8code,
 			dept,
 			vendor,
-			status,
+			status,printstatus,
 			u8status
 		) VALUES (
 			#{id},
@@ -117,7 +121,7 @@
 			#{u8code},
 			#{dept.id},
 			#{vendor.id},
-			#{status},
+			#{status},'未打印',
 			#{u8status}
 		)
 	</insert>

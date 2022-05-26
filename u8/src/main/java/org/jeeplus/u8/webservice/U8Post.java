@@ -135,11 +135,11 @@ public final class U8Post {
         }
     }
 
-    //材料出库单
+    //材料出库单 or 补料 or 委外发料
     public static U8WebServiceResult Rd11Post(YT_Rd11 rd11, String posturl) throws Exception
     {
         Map<String,Object> param = new LinkedHashMap<String, Object>();
-        param.put("cBusType",rd11.getcBusType());
+        param.put("cBusType",rd11.getcBusType());// 领料/补料/委外发料
         param.put("cSource",rd11.getcSource());
         param.put("cWhCode",rd11.getcWhCode());
         param.put("dDate",rd11.getdDate());
