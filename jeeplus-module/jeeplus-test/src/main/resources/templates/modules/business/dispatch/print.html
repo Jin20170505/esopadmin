@@ -41,16 +41,26 @@ layout("/include/_container.html", {title:"打印", parent:"报工单"}){
     }
 </style>
 <div class="white-box">
-    <a id="print" class="btn btn-custom waves-effect w-xs waves-light" onclick="window.print();">
+    <a id="print" class="btn btn-custom waves-effect w-xs waves-light" onclick="rukuPrint();">
         <i class="fa fa-print"></i> 打印
     </a>
-    <h3 style="text-align: center;">采购入库单</h3>
+    <script type="text/javascript">
+        var rid ='${bean.id!}';
+        function rukuPrint(){
+            jp.get('${ctx}/business/dispatch/businessDispatch/print?rid='+rid,function (rs){
+                if(rs.success){
+                    window.print();
+                }
+            });
+        }
+    </script>
+    <h3 style="text-align: center;">销售发货单</h3>
     <table class="table table-bordered">
         <tbody>
         <tr>
-            <th width="100px">采购单号</th>
+            <th width="100px">发货单号</th>
             <td style="width: 150px;max-width: 190px">${bean.code!}</td>
-            <th width="100px">到货日期</th>
+            <th width="100px">发货日期</th>
             <td>${fn.formatDate(bean.fahuodate!, 'yyyy-MM-dd')}</td>
             <td rowspan="4"><img id="qrcode" src="${ctx}/business/dispatch/businessDispatch/img/${bean.id!}"/></td>
         </tr>

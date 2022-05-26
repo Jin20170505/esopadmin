@@ -35,7 +35,6 @@
 	</sql>
 	
 	<sql id="businessDispatchJoins">
-		
 		LEFT JOIN sys_office dept ON dept.id = a.dept
 		LEFT JOIN base_customer customer ON customer.id = a.customer
 	</sql>
@@ -68,6 +67,9 @@
 			</if>
 			<if test="customer != null and customer.id != null and customer.id != ''">
 				AND a.customer = #{customer.id}
+			</if>
+			<if test="printstatus != null and printstatus != ''">
+				AND a.printstatus = #{printstatus}
 			</if>
 		</where>
 		<choose>
@@ -132,7 +134,7 @@
 			#{customer.id},
 			#{status},
 			#{u8status},
-			#{printstatus},
+			'未打印',
 			#{fahuodate}
 		)
 	</insert>

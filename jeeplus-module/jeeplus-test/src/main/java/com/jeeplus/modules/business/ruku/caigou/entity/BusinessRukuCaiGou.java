@@ -90,7 +90,7 @@ public class BusinessRukuCaiGou extends DataEntity<BusinessRukuCaiGou> {
 	public void setU8code(String u8code) {
 		this.u8code = u8code;
 	}
-	
+
 	public List<BusinessRukuCaigouMx> getBusinessRukuCaigouMxList() {
 		return businessRukuCaigouMxList;
 	}

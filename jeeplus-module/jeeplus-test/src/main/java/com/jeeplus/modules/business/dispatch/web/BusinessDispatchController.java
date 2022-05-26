@@ -145,6 +145,15 @@ public class BusinessDispatchController extends BaseController {
 			}
 		}
 	}
+
+	@RequestMapping("print")
+	@ResponseBody
+	public AjaxJson mainPrint(String rid){
+		AjaxJson j = new AjaxJson();
+		businessDispatchService.print(rid);
+		j.setSuccess(true);
+		return j;
+	}
 	/**
 	 * 查看，增加，编辑销售发货单表单页面
 	 * params:

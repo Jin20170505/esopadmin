@@ -1,4 +1,50 @@
 <script>
+    $(document).ready(function() {
+    var to = false;
+    $('#search_q').keyup(function () {
+    if(to) { clearTimeout(to); }
+    to = setTimeout(function () {
+    var v = $('#search_q').val();
+    $('#businessProductTypeOnlyReadjsTree').jstree(true).search(v);
+}, 250);
+});
+    $('#businessProductTypeOnlyReadjsTree').jstree({
+    'core' : {
+    "multiple": false,
+    "animation": 0,
+    "themes": {"icons": true, "stripes": false},
+    'data' : {
+    "url" : "${ctx}/business/baogong/order/businessBaoGongOrder/treeData",
+    "dataType" : "json"
+}
+},
+    "conditionalselect" : function (node, event) {
+    return false;
+},
+    'plugins': ['types', 'wholerow', "search"],
+    "types": {
+    "default": {
+    "icon": "fa fa-folder text-custom"
+},
+    "file": {
+    "icon": "fa fa-file text-success"
+}
+}
+
+}).bind("activate_node.jstree", function (obj, e) {
+    var node = $('#businessProductTypeOnlyReadjsTree').jstree(true).get_selected(true)[0];
+    var opt = {
+    silent: true,
+    query:{
+    'printstatus':node.id
+}
+};
+    $("#printstatus").val(node.id);
+    $('#businessDispatchTable').bootstrapTable('refresh',opt);
+}).on('loaded.jstree', function() {
+    $("#businessProductTypeOnlyReadjsTree").jstree('open_all');
+});
+});
 $(document).ready(function() {
 	$('#businessDispatchTable').bootstrapTable({
 		 
@@ -70,6 +116,10 @@ $(document).ready(function() {
 		        checkbox: true
 		       
 		    }
+                   ,{
+                       field: 'printstatus',
+                       title: '打印状态'
+                   }
 			,{
 		        field: 'code',
 		        title: '销售发货单号',

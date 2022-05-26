@@ -3,6 +3,8 @@
  */
 package com.jeeplus.modules.business.ruku.caigou.mapper;
 
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 import com.jeeplus.core.persistence.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
@@ -15,5 +17,5 @@ import com.jeeplus.modules.business.ruku.caigou.entity.BusinessRukuCaiGou;
 @Mapper
 @Repository
 public interface BusinessRukuCaiGouMapper extends BaseMapper<BusinessRukuCaiGou> {
-	
+
 }

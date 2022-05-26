@@ -1,4 +1,5 @@
-<script> $(document).ready(function() {
+<script>
+    $(document).ready(function() {
     var to = false;
     $('#search_q').keyup(function () {
     if(to) { clearTimeout(to); }
@@ -35,7 +36,7 @@
     var opt = {
     silent: true,
     query:{
-    'isprint':node.id
+    'printstatus':node.id
 }
 };
     $("#printstatus").val(node.id);
@@ -115,6 +116,10 @@ $(document).ready(function() {
 		        checkbox: true
 		       
 		    }
+                   ,{
+                       field: 'printstatus',
+                       title: '打印状态'
+                   }
 			,{
 		        field: 'code',
 		        title: '到货单号',

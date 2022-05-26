@@ -48,13 +48,13 @@ layout("/include/_container.html", {title:"打印", parent:"报工单"}){
         var rid ='${bean.id!}';
         function rukuPrint(){
             jp.get('${ctx}/business/arrivalvouch/businessArrivalVouch/mainPrint?rid='+rid,function (rs){
-               if(rs.sucess){
+               if(rs.success){
                    window.print();
                }
             });
         }
     </script>
-    <h3 style="text-align: center;">入库单</h3>
+    <h3 style="text-align: center;">采购到货单</h3>
     <table class="table table-bordered">
         <tbody>
         <tr>

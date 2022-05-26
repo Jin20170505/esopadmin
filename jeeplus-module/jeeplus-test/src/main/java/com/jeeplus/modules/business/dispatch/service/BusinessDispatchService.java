@@ -52,7 +52,10 @@ public class BusinessDispatchService extends CrudService<BusinessDispatchMapper,
 	public Page<BusinessDispatch> findPage(Page<BusinessDispatch> page, BusinessDispatch businessDispatch) {
 		return super.findPage(page, businessDispatch);
 	}
-	
+	@Transactional(readOnly = false)
+	public void print(String rid){
+		mapper.print(rid);
+	}
 	@Transactional(readOnly = false)
 	public void save(BusinessDispatch businessDispatch) {
 		super.save(businessDispatch);

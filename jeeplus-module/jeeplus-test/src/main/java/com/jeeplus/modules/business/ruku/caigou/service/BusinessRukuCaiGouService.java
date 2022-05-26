@@ -86,11 +86,8 @@ public class BusinessRukuCaiGouService extends CrudService<BusinessRukuCaiGouMap
 		super.delete(businessRukuCaiGou);
 		businessRukuCaigouMxMapper.delete(new BusinessRukuCaigouMx(businessRukuCaiGou));
 	}
-
 	@Autowired
 	private BusinessArrivalVouchMapper arrivalVouchMapper;
-	@Autowired
-	private BusinessArrivalVouchMxMapper arrivalVouchMxMapper;
 	@Autowired
 	private BaseHuoWeiMapper baseHuoWeiMapper;
 	@Transactional(readOnly = false)
