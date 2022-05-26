@@ -16,5 +16,6 @@ import com.jeeplus.modules.business.ruku.product.entity.BusinessRuKuProductMx;
 @Mapper
 @Repository
 public interface BusinessRuKuProductMxMapper extends BaseMapper<BusinessRuKuProductMx> {
-	
+
+    Double getRuKuSumByScHid(String schid);
 }

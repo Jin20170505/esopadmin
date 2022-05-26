@@ -8,6 +8,7 @@ import com.jeeplus.common.utils.StringUtils;
 import com.jeeplus.core.persistence.Page;
 import com.jeeplus.core.service.CrudService;
 import com.jeeplus.modules.base.cangku.entity.BaseCangKu;
+import com.jeeplus.modules.base.cangku.mapper.BaseCangKuMapper;
 import com.jeeplus.modules.base.huowei.entity.BaseHuoWei;
 import com.jeeplus.modules.base.huowei.mapper.BaseHuoWeiMapper;
 import com.jeeplus.modules.business.arrivalvouch.entity.BusinessArrivalVouch;
@@ -89,18 +90,16 @@ public class BusinessRukuCaiGouService extends CrudService<BusinessRukuCaiGouMap
 	@Autowired
 	private BusinessArrivalVouchMapper arrivalVouchMapper;
 	@Autowired
-	private BaseHuoWeiMapper baseHuoWeiMapper;
+	private BaseCangKuMapper cangKuMapper;
 	@Transactional(readOnly = false)
-	public void doRuKu(String cgid,String cgcode,String hwid,String userid,String mxJson){
+	public void doRuKu(String cgid,String cgcode,String ckid,String hwid,String userid,String mxJson){
 		BusinessRukuCaiGou businessRukuCaiGou = new BusinessRukuCaiGou();
 		User user = UserUtils.get(userid);
 		BusinessArrivalVouch vouch = arrivalVouchMapper.get(cgid);
 		businessRukuCaiGou.setArrivalcode(vouch.getCode());
 		businessRukuCaiGou.setArrivaldate(DateUtils.formatDate(vouch.getArriveDate()));
 		businessRukuCaiGou.setHw(new BaseHuoWei(hwid));
-		if(StringUtils.isNotEmpty(hwid)){
-			businessRukuCaiGou.setCk(new BaseCangKu(baseHuoWeiMapper.getckofhw(hwid)));
-		}
+		businessRukuCaiGou.setCk(new BaseCangKu(ckid));
 		businessRukuCaiGou.setCode("CGRKD"+DateUtils.getDate("yyyyMMddHHmmss"));
 		businessRukuCaiGou.setU8code(businessRukuCaiGou.getCode());
 		JSONObject json = JSONObject.fromObject(mxJson);
@@ -124,17 +123,13 @@ public class BusinessRukuCaiGouService extends CrudService<BusinessRukuCaiGouMap
 			mx.setCgid(cgid).setCghid(cghid);
 			businessRukuCaiGou.getBusinessRukuCaigouMxList().add(mx);
 		});
-
+		String ckcode = cangKuMapper.getCodeById(ckid);
 		save(businessRukuCaiGou);
 		YT_Rd01 rd01 = new YT_Rd01();
 		rd01.setCode(businessRukuCaiGou.getCode());
 		rd01.setcBusType("普通采购");
 		rd01.setcSource("来料检验单");
-		if(StringUtils.isEmpty(hwid)){
-			rd01.setcWhCode("");
-		}else {
-			rd01.setcWhCode(businessRukuCaiGou.getCk().getCode());
-		}
+		rd01.setcWhCode(ckcode);
 
 		rd01.setdDate(DateUtils.formatDate(vouch.getArriveDate(),"yyyy-MM-dd"));
 		rd01.setcRdCode("11");

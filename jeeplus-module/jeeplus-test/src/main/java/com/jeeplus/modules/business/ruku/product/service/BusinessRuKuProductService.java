@@ -152,6 +152,8 @@ public class BusinessRuKuProductService extends CrudService<BusinessRuKuProductM
 		mx.setCreateBy(new User(userid));
 		mapper.insert(product);
 		businessRuKuProductMxMapper.insert(mx);
+		// 判断入库数量 是否大于生产数量 关闭单据
+
 		User user = UserUtils.get(userid);
 		// TODO U8成品入库
 		try{

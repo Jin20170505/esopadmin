@@ -55,10 +55,10 @@ public class ApiCaiGouController {
     }
 
     @RequestMapping("doRuKu")
-    public AjaxJson doRuKu(String cgid,String cgcode,String hwid,String userid,String mxJson){
+    public AjaxJson doRuKu(String cgid,String cgcode,String ckid,String hwid,String userid,String mxJson){
         AjaxJson json = new AjaxJson();
         try {
-            businessRukuCaiGouService.doRuKu(cgid,cgcode,hwid,userid,mxJson);
+            businessRukuCaiGouService.doRuKu(cgid,cgcode,ckid,hwid,userid,mxJson);
             json.setSuccess(true);
             json.setMsg("入库成功");
         }catch (Exception e){
