@@ -550,8 +550,8 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 			d.getBusinessShengChanDingDanMingXiList().forEach(e->{
 				if(null==businessShengChanDingDanMingXiMapper.hasById(e.getId())){
 					businessShengChanDingDanMingXiMapper.insert(e);
-					rs.add(e.getId());
 				}
+				rs.add(e.getId());
 			});
 		});
 		return  rs;
