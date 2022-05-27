@@ -19,4 +19,5 @@ import com.jeeplus.modules.business.baogong.record.entity.BusinessBaoGongRecord;
 public interface BusinessBaoGongRecordMapper extends BaseMapper<BusinessBaoGongRecord> {
 
     Double getDoneSumNum(@Param("bgid") String bgid,@Param("bghid") String bghid);
+
 }

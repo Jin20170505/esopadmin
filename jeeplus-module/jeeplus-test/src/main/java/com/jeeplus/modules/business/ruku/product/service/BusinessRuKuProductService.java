@@ -12,7 +12,9 @@ import com.jeeplus.modules.base.cangku.mapper.BaseCangKuMapper;
 import com.jeeplus.modules.base.huowei.entity.BaseHuoWei;
 import com.jeeplus.modules.base.huowei.mapper.BaseHuoWeiMapper;
 import com.jeeplus.modules.business.baogong.order.entity.BusinessBaoGongOrder;
+import com.jeeplus.modules.business.baogong.order.mapper.BusinessBaoGongOrderMingXiMapper;
 import com.jeeplus.modules.business.baogong.order.service.BusinessBaoGongOrderService;
+import com.jeeplus.modules.business.baogong.record.service.BusinessBaoGongRecordService;
 import com.jeeplus.modules.business.shengchan.dingdan.entity.BusinessShengChanDingDanMingXi;
 import com.jeeplus.modules.business.shengchan.dingdan.mapper.BusinessShengChanDingDanMingXiMapper;
 import com.jeeplus.modules.sys.entity.User;
@@ -110,15 +112,37 @@ public class BusinessRuKuProductService extends CrudService<BusinessRuKuProductM
 	@Autowired
 	private BaseHuoWeiMapper huoWeiMapper;
 	@Autowired
+	private BusinessRuKuProductMapper businessRuKuProductMapper;
+	@Autowired
 	private BusinessShengChanDingDanMingXiMapper shengChanDingDanMingXiMapper;
+	@Autowired
+	private BusinessBaoGongOrderMingXiMapper businessBaoGongOrderMingXiMapper;
+	@Autowired
+	private BusinessBaoGongRecordService businessBaoGongRecordService;
 	@Transactional(readOnly = false)
 	public void ruku(String bgid,String ckid,String hwid,String remarks,String userid,Double rukunum){
 		BusinessBaoGongOrder order  = businessBaoGongOrderService.get(bgid);
 		if(order==null){
 			throw new RuntimeException("报工单不存在啦");
 		}
-		if(!"1".equals(order.getComplate())){
-			throw new RuntimeException("此单报工未完成,不可入库");
+		// TODO 根据报工的最后一条工序的合格数量进行入库
+
+//		if(!"1".equals(order.getComplate())){
+//			throw new RuntimeException("此单报工未完成,不可入库");
+//		}
+		Double donerukunum = businessRuKuProductMapper.getRuKuNumByBgid(order.getId());
+		if(donerukunum==null){
+			donerukunum = 0.0;
+		}
+		Double sumrknum = rukunum+donerukunum;
+		if(order.getNum()<sumrknum){
+			throw new RuntimeException("入库数量大于报工工单数量,无法入库。");
+		}
+		String lastBgHid = businessBaoGongOrderMingXiMapper.lastestGxHId(order.getId());
+		// 最后一道工序 报工数量
+		Double donebgnum = businessBaoGongRecordService.getDoneSumNum(order.getId(),lastBgHid);
+		if(donebgnum<sumrknum){
+			throw new RuntimeException("此报工单入库数量大于最后一道报工数量,无法入库。");
 		}
 		BusinessRuKuProduct product = new BusinessRuKuProduct();
 		BusinessRuKuProductMx mx = new BusinessRuKuProductMx();

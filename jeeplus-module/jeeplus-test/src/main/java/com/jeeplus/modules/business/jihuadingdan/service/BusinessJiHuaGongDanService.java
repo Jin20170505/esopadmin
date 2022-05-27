@@ -136,7 +136,7 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 	@Autowired
 	private BusinessBaoGongOrderService businessBaoGongOrderService;
 	@Transactional(readOnly = false)
-	public void shengchengbaogongdan(String id){
+	public  void shengchengbaogongdan(String id){
 		boolean flag = businessBaoGongOrderService.hasScOrderFromPlan(id);
 		if(flag){
 			throw new RuntimeException("该计划工单以生成报工单。请勿多次生成.");
@@ -168,7 +168,11 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 		order.setNum(jiHuaGongDan.getGdnum());
 		order.setUnit(jiHuaGongDan.getUnit());
 		sb.append("\"num\":\"").append(order.getNum()).append("\",");
-		String code = "BGD"+ DateUtils.getDate("yyyyMMddHHmmss");
+		String code="";
+		synchronized (this){
+			code = "BGD"+ DateUtils.getDate("yyyyMMddHHmmss");
+		}
+
 		order.setBgcode(code);
 		sb.append("\"bgcode\":\"").append(order.getBgcode()).append("\"");
 		sb.append("}");

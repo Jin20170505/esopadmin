@@ -195,21 +195,30 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		if(order==null){
 			throw new RuntimeException("没有找到对应的报工单.");
 		}
-		if(!"1".equals(order.getComplate())){
-			throw new RuntimeException("此报工单未报工完成.");
-		}
+//		if(!"1".equals(order.getComplate())){
+//			throw new RuntimeException("此报工单未报工完成.");
+//		}
 		Double rukunum = businessRuKuProductMapper.getRuKuNumByBgid(order.getId());
 		if(rukunum==null){
 			rukunum = 0.0;
 		}
 		if(order.getNum()<=rukunum){
-			throw new RuntimeException("此报工单入库数量已满,无法入库。");
+			throw new RuntimeException("此报工单已入库数量等于报工工单数量,无法入库。");
+		}
+		String lastBgHid = businessBaoGongOrderMingXiMapper.lastestGxHId(order.getId());
+		// 最后一道工序 报工数量
+		Double donebgnum = businessBaoGongRecordService.getDoneSumNum(order.getId(),lastBgHid);
+		if(donebgnum==null || donebgnum <0.000001){
+			throw new RuntimeException("此报工单最后一道工序未报工,无法入库。");
+		}
+		if(donebgnum<=rukunum){
+			throw new RuntimeException("此报工单已入库数量等于最后一道报工数量,无法入库。");
 		}
 		ProductRuKuBean bean = new ProductRuKuBean();
 		bean.setBatchno(order.getBatchno()).setBgcode(order.getBgcode()).setUnit(order.getUnit()).setBgid(order.getId())
 		.setCinvcode(order.getCinvcode()).setCinvname(order.getCinvname()).setCinvstd(order.getCinvstd()).setSccode(order.getOrdercode())
 		.setScline(order.getOrderline());
-		bean.setNum(order.getNum()-rukunum);
+		bean.setNum(donebgnum-rukunum);
 		return bean;
 	}
 

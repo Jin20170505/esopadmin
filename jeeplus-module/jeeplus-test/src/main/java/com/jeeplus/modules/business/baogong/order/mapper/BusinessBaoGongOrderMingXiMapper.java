@@ -4,6 +4,7 @@
 package com.jeeplus.modules.business.baogong.order.mapper;
 
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 import com.jeeplus.core.persistence.BaseMapper;
@@ -21,4 +22,8 @@ public interface BusinessBaoGongOrderMingXiMapper extends BaseMapper<BusinessBao
 
     @Update("update business_baogong_order_mingxi set complete = '1' where id = #{id}")
     void completeBg(@Param("id") String id);
+
+    /** 报工最后一道工序ID */
+    @Select("select id from business_baogong_order_mingxi where pid = #{bgid} and no = (select max(no) from business_baogong_order_mingxi where pid = #{bgid})")
+    String lastestGxHId(String bgid);
 }

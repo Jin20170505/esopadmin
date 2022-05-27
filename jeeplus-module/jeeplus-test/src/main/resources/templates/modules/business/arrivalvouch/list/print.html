@@ -17,6 +17,9 @@
             .page-break{
                 page-break-before: always;
             }
+            #cinvname{
+                font-size: 8px;
+            }
         }
         #print{
             width: 100px;
@@ -25,8 +28,8 @@
         }
         .qrcode{
             display: block;
-            width: 50px;
-            height: 50px;
+            width: 80px;
+            height: 80px;
         }
         .table-bordered{
             border: 1px solid #000000;
@@ -131,7 +134,7 @@
         </tr>
         <tr>
             <th style="height: 40px;">存货名称</th>
-            <td colspan="3" style="vertical-align: top;text-align: left;font-size: 5px;height: 40px">`+bean.cinvname+`</td>
+            <td colspan="3" style="vertical-align: top;text-align: left;font-size: 5px;" id="cinvname">`+bean.cinvname+`</td>
         </tr>
         <tr>
             <th>批次号</th>

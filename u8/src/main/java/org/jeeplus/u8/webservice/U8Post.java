@@ -67,10 +67,9 @@ public final class U8Post {
         soap.append("</soap:Body>");
         soap.append("</soap:Envelope>");
         String jsons = soap.toString();
-        String url2 = posturl;
         //接受返回报文
         String result = new String();
-        URL u = new URL(url2);
+        URL u = new URL(U8Url.URL);
         HttpURLConnection conn = (HttpURLConnection) u.openConnection();
         conn.setDoInput(true);
         //允许对外输出数据
@@ -173,10 +172,9 @@ public final class U8Post {
         soap.append("</soap:Body>");
         soap.append("</soap:Envelope>");
         String jsons = soap.toString();
-        String url2 = posturl;
         //接受返回报文
         String result = new String();
-        URL u = new URL(url2);
+        URL u = new URL(U8Url.URL);
         HttpURLConnection conn = (HttpURLConnection) u.openConnection();
         conn.setDoInput(true);
         //允许对外输出数据
@@ -244,10 +242,9 @@ public final class U8Post {
         soap.append("</soap:Body>");
         soap.append("</soap:Envelope>");
         String jsons = soap.toString();
-        String url2 = posturl;
         //接受返回报文
         String result = new String();
-        URL u = new URL(url2);
+        URL u = new URL(U8Url.URL);
         HttpURLConnection conn = (HttpURLConnection) u.openConnection();
         conn.setDoInput(true);
         //允许对外输出数据
@@ -320,10 +317,9 @@ public final class U8Post {
         soap.append("</soap:Body>");
         soap.append("</soap:Envelope>");
         String jsons = soap.toString();
-        String url2 = posturl;
         //接受返回报文
         String result = new String();
-        URL u = new URL(url2);
+        URL u = new URL(U8Url.URL);
         HttpURLConnection conn = (HttpURLConnection) u.openConnection();
         conn.setDoInput(true);
         //允许对外输出数据
