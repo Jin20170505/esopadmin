@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.u8data.ommo.mapper.U8OmMoMainMapper">
+    <sql id="ommoColumns">
+        a.moid as "moid",
+        a.cCode as "cCode",
+        a.cVenCode as "cVenCode",
+        a.cVenName as "cVenName",
+        a.dDate as "dDate",
+        a.dCreateTime as "dCreateTime",
+        a.cMemo as "cMemo",
+        a.cInvCode as "cInvCode",
+        a.cInvName as "cInvName",
+        a.cInvStd as "cInvStd",
+        a.cComUnitCode as "cComUnitCode",
+        a.cComUnitName as "cComUnitName",
+        a.iQuantity as "iQuantity",
+        a.dStartDate as "dStartDate",
+        a.dArriveDate as "dArriveDate",
+        a.cbMemo as "cbMemo",
+        a.moDetailsID as "moDetailsID",
+        a.iVouchRowNo as "iVouchRowNo"
+    </sql>
+    <sql id="ommoJoins">
+
+    </sql>
+
+    <select id="findList" resultType="U8OmMoMain">
+        select
+        <include refid="ommoColumns"/>
+        from YT_API_ERP_view_OM_MOMain a
+        <include refid="ommoJoins"/>
+        <where>
+            <if test="start !=null and end != null">
+                and a.dCreateTime between #{start}  and #{end}
+            </if>
+        </where>
+    </select>
+
+</mapper>

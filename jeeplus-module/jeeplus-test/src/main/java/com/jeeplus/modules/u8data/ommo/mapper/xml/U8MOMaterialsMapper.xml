@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.u8data.ommo.mapper.U8MOMaterialsMapper">
+    <sql id="ommoColumns">
+        a.MOMaterialsID as "MOMaterialsIDs",
+        a.MoDetailsID as "MoDetailsID",
+        a.cWhCode as "cWhCode",
+        a.cWhName as "cWhName",
+        a.cInvCode as "cInvCode",
+        a.cInvName as "cInvName",
+        a.cInvStd as "cInvStd",
+        a.cComUnitCode as "cComUnitCode",
+        a.cComUnitName as "cComUnitName",
+        a.iQuantity as "iQuantity",
+        a.cBatch as "cBatch",
+        a.dRequiredDate as "dRequiredDate"
+    </sql>
+    <sql id="ommoJoins">
+
+    </sql>
+
+    <select id="findList" resultType="U8MOMaterials">
+        select
+        <include refid="ommoColumns"/>
+        from YT_API_ERP_view_OM_MOMaterials a
+        <include refid="ommoJoins"/>
+        where a.MoDetailsID = #{moDetailsID}
+    </select>
+
+</mapper>
