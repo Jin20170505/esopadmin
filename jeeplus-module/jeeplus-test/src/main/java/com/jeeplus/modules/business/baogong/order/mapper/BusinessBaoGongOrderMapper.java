@@ -37,4 +37,9 @@ public interface BusinessBaoGongOrderMapper extends BaseMapper<BusinessBaoGongOr
 
     @Select("select complete from business_baogong_order_mingxi where pid = #{bgid}")
     List<String> findCompleteStatusByBgid(@Param("bgid") String bgid);
+
+    @Update("update business_baogao_order set complate = '0' where id = #{id}")
+    void restOrder(@Param("id") String id);
+    @Update("update business_baogong_order_mingxi set complete = '0' where pid = #{bgid}")
+    void restOrderMx(@Param("bgid") String bgid);
 }

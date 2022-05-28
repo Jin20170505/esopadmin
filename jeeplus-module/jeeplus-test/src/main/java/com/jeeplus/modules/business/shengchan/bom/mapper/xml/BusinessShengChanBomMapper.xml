@@ -10,6 +10,7 @@
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
+		a.hw as "hw",
 		a.schid AS "schid",
 		a.scline AS "scline",
 		a.no AS "no",
@@ -83,7 +84,7 @@
 	
 	<insert id="insert">
 		INSERT INTO business_shengchan_bom(
-			id,
+			id,hw,
 			create_by,
 			create_date,
 			update_by,
@@ -106,7 +107,7 @@
 			baseqtyd,isdaochong,
 			auxbaseqtyn
 		) VALUES (
-			#{id},
+			#{id},#{hw},
 			#{createBy.id},
 			#{createDate},
 			#{updateBy.id},

@@ -95,6 +95,7 @@ layout("/include/_container.html", {title:"打印", parent:"报工单"}){
             <th style="width: 100px;">规格型号</th>
             <th  width="70px;">数量</th>
             <th  width="60px;">单位</th>
+            <th>货位</th>
             <th>条码</th>
         </tr>
         </thead>
@@ -115,6 +116,7 @@ layout("/include/_container.html", {title:"打印", parent:"报工单"}){
                         <td style="vertical-align:middle;">`+data[i].cinvstd+`</td>
                         <td style="vertical-align:middle;">`+data[i].num+`</td>
                         <td style="vertical-align:middle;">`+data[i].unitname+`</td>
+                        <td style="vertical-align:middle;">`+data[i].hw+`</td>
                         <td><img width="80" height="40" src="${ctx}/qrcode/barcode/`+data[i].id+`"/></td>
                     </tr>`;
         }

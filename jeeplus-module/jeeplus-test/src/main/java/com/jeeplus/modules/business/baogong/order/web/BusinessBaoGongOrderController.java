@@ -63,6 +63,21 @@ public class BusinessBaoGongOrderController extends BaseController {
 		}
 		return entity;
 	}
+	@ResponseBody
+	@RequestMapping("baogongchongzhi")
+	public AjaxJson baogongchongzhi(String rid){
+		AjaxJson json=new AjaxJson();
+		try {
+			businessBaoGongOrderService.baogongchongzhi(rid);
+			json.setSuccess(true);
+			json.setMsg("重置成功!");
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setSuccess(false);
+			json.setMsg("失败，原因："+e.getMessage());
+		}
+		return json;
+	}
 
 	@RequestMapping("goToPrint")
 	public String goToPrint(String rid,Model model){

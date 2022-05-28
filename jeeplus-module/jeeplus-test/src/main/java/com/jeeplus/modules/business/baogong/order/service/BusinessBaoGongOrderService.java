@@ -42,7 +42,8 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 	private BusinessBaoGongOrderMingXiMapper businessBaoGongOrderMingXiMapper;
 	@Autowired
 	private BusinessBaoGongRecordService businessBaoGongRecordService;
-
+	@Autowired
+	private BusinessRuKuProductMapper businessRuKuProductMapper;
 	public BusinessBaoGongOrder get(String id) {
 		BusinessBaoGongOrder businessBaoGongOrder = super.get(id);
 		businessBaoGongOrder.setBusinessBaoGongOrderMingXiList(businessBaoGongOrderMingXiMapper.findList(new BusinessBaoGongOrderMingXi(businessBaoGongOrder)));
@@ -162,6 +163,11 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 	
 	@Transactional(readOnly = false)
 	public void delete(BusinessBaoGongOrder businessBaoGongOrder) {
+		Integer rk = businessRuKuProductMapper.hasByBgid(businessBaoGongOrder.getId());
+		if(rk!=null && 1 ==rk){
+			throw new RuntimeException("已进行了入库，无法删除.");
+		}
+		businessBaoGongRecordService.deleteByBgid(businessBaoGongOrder.getId());
 		super.delete(businessBaoGongOrder);
 		businessBaoGongOrderMingXiMapper.delete(new BusinessBaoGongOrderMingXi(businessBaoGongOrder));
 	}
@@ -174,9 +180,6 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 	public String getQrCode(String id){
 		return mapper.getQrCodeById(id);
 	}
-
-	@Autowired
-	private BusinessRuKuProductMapper businessRuKuProductMapper;
 
 	public ZhiJianBean getZhiJianInfo(String bgcode){
 		BusinessBaoGongOrder order = mapper.getByCode(bgcode);
@@ -280,5 +283,16 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 	@Transactional(readOnly = false)
 	public void print(String id){
 		mapper.print(id);
+	}
+
+	@Transactional(readOnly = false)
+	public void baogongchongzhi(String rid){
+		Integer rk = businessRuKuProductMapper.hasByBgid(rid);
+		if(rk!=null && 1 ==rk){
+			throw new RuntimeException("此单已进行了入库，无法重置.");
+		}
+		businessBaoGongRecordService.deleteByBgid(rid);
+		mapper.restOrder(rid);
+		mapper.restOrderMx(rid);
 	}
 }

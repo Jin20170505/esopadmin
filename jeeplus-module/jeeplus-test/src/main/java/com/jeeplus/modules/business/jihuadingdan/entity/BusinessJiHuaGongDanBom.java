@@ -14,6 +14,7 @@ public class BusinessJiHuaGongDanBom extends DataEntity<BusinessJiHuaGongDanBom>
 
 	private static final long serialVersionUID = 1L;
 	private BusinessJiHuaGongDan p;		// 计划工单 父类
+	private String hw; // 货位
 	private String scyid; // 生产子件ID
 	private Integer no;		// 子件行号
 	private Double num;		// 数量
@@ -186,6 +187,18 @@ public class BusinessJiHuaGongDanBom extends DataEntity<BusinessJiHuaGongDanBom>
 
 	public BusinessJiHuaGongDanBom setIsdaochong(String isdaochong) {
 		this.isdaochong = isdaochong;
+		return this;
+	}
+
+	public String getHw() {
+		if(hw==null){
+			hw = "";
+		}
+		return hw;
+	}
+
+	public BusinessJiHuaGongDanBom setHw(String hw) {
+		this.hw = hw;
 		return this;
 	}
 }

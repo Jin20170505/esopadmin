@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.business.ommo.bom.mapper.BussinessOmMoDetailOnlyMapper">
+    
+	<sql id="bussinessOmMoDetailOnlyColumns">
+		a.id AS "id",
+		b.code AS "code",
+		vendor.name AS "vendor",
+		b.ddate AS "ddate",
+		a.no AS "no",
+		a.num as "num",
+		a.cinvcode AS "cinvcode",
+		a.cinvname AS "cinvname",
+		a.cinvstd AS "cinvstd",
+		a.memo AS "memo"
+	</sql>
+	
+	<sql id="bussinessOmMoDetailOnlyJoins">
+		LEFT JOIN business_om_momain b ON b.id = a.moid
+		LEFT JOIN base_vendor vendor ON vendor.id = b.vendor
+	</sql>
+
+	<select id="get" resultType="BussinessOmMoDetailOnly" >
+		SELECT 
+			<include refid="bussinessOmMoDetailOnlyColumns"/>
+		FROM business_om_modetail a
+		<include refid="bussinessOmMoDetailOnlyJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+</mapper>

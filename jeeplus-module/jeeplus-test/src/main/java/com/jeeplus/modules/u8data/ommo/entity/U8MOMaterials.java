@@ -8,34 +8,35 @@ import java.util.Date;
  * 委外用料明细
  */
 public class U8MOMaterials extends DataEntity<U8MOMaterials> {
-    private String MOMaterialsID;//	委外用料单子表ID
-    private String MoDetailsID;//		委外订单子表ID
+    private String momaterialsID;//	委外用料单子表ID
+    private String moDetailsID;//		委外订单子表ID
     private String cWhCode;//			仓库编码
     private String cWhName;//			仓库名称
+    private String hw; // 货位
     private String cInvCode;//		子件编码
     private String cInvName;//		存货名称
     private String cInvStd;//		规格型号
     private String cComUnitCode;//	单位编码
     private String cComUnitName;//	单位名称
-    private String iQuantity;//	应领数量
+    private Double iQuantity;//	应领数量
     private String cBatch;//		批号
     private Date dRequiredDate;//	需求日期
 
-    public String getMOMaterialsID() {
-        return MOMaterialsID;
+    public String getMomaterialsID() {
+        return momaterialsID;
     }
 
-    public U8MOMaterials setMOMaterialsID(String MOMaterialsID) {
-        this.MOMaterialsID = MOMaterialsID;
+    public U8MOMaterials setMomaterialsID(String momaterialsID) {
+        this.momaterialsID = momaterialsID;
         return this;
     }
 
     public String getMoDetailsID() {
-        return MoDetailsID;
+        return moDetailsID;
     }
 
     public U8MOMaterials setMoDetailsID(String moDetailsID) {
-        MoDetailsID = moDetailsID;
+        this.moDetailsID = moDetailsID;
         return this;
     }
 
@@ -102,11 +103,11 @@ public class U8MOMaterials extends DataEntity<U8MOMaterials> {
         return this;
     }
 
-    public String getiQuantity() {
+    public Double getiQuantity() {
         return iQuantity;
     }
 
-    public U8MOMaterials setiQuantity(String iQuantity) {
+    public U8MOMaterials setiQuantity(Double iQuantity) {
         this.iQuantity = iQuantity;
         return this;
     }
@@ -126,6 +127,15 @@ public class U8MOMaterials extends DataEntity<U8MOMaterials> {
 
     public U8MOMaterials setdRequiredDate(Date dRequiredDate) {
         this.dRequiredDate = dRequiredDate;
+        return this;
+    }
+
+    public String getHw() {
+        return hw;
+    }
+
+    public U8MOMaterials setHw(String hw) {
+        this.hw = hw;
         return this;
     }
 }

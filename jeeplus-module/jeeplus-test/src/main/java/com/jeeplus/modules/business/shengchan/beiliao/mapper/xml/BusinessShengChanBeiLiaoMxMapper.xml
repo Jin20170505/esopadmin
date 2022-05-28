@@ -10,6 +10,7 @@
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
+		a.hw as "hw",
 		a.no AS "no",
 		a.cinvcode AS "cinvcode",
 		a.cinvname AS "cinvname",
@@ -76,7 +77,7 @@
 	
 	<insert id="insert">
 		INSERT INTO business_shengchan_beiliao_mx(
-			id,
+			id,hw,
 			create_by,
 			create_date,
 			update_by,
@@ -91,7 +92,7 @@
 			unit,
 			pid
 		) VALUES (
-			#{id},
+			#{id},#{hw},
 			#{createBy.id},
 			#{createDate},
 			#{updateBy.id},

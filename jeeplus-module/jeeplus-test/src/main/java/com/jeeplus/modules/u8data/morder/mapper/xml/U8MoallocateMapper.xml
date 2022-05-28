@@ -17,6 +17,7 @@
         a.cComUnitCode as "cComUnitCode",
         a.cComUnitName as "cComUnitName",
         a.Remark as "remark",
+        a.cPosCode as "hw",
         a.qty as "qty"
     </sql>
     <sql id="oallocateJoins">

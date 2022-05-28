@@ -1,0 +1,67 @@
+<%
+layout("/include/_container.html", {title:"明细列表", parent:"委外订单"}){
+%>
+
+<div class="row">
+    <div class="col-sm-3 col-md-2 p-r-5">
+        <div class="white-box" style="height: 794px;">
+            <div>
+                <div style="width: calc(100% - 50px);float: left">
+                    <div class="input-group">
+					<span class="input-group-prepend">
+						<button type="button" class="btn btn-sm waves-effect waves-light btn-custom"><i class="fa fa-search"></i></button>
+					</span>
+                        <input type="text" class="form-control input-sm" id="search_q" placeholder="查找...">
+                    </div>
+                </div>
+            </div>
+            <div id="businessProductTypeOnlyReadjsTree"></div>
+        </div>
+    </div>
+    <div class="col-sm-9 col-md-10" style="padding-left: 0px">
+<!-- 搜索框-->
+<div id="search-collapse" class="white-box collapse m-b-5">
+    <a class="jp-ti-close close" onclick="$('#search-collapse').fadeToggle()">
+        <i class="fa fa-times"></i>
+    </a>
+    <form id="searchForm" class="form-inline">
+
+        <div class="form-group m-b-10 m-r-10">
+            <label class="m-r-10" title="：">委外单号：</label>
+            <input name="mo.code"  maxlength="64"  class=" form-control"/>
+        </div>
+        <div class="form-group m-b-10 m-r-10">
+        <label class="m-r-10" title="：">存货编码：</label>
+        <input name="cinvcode"  maxlength="64"  class=" form-control"/>
+        </div>
+        <div class="form-group m-b-10 m-r-10">
+            <label class="m-r-10" title="：">存货名称：</label>
+            <input name="cinvname"  maxlength="64"  class=" form-control"/>
+        </div>
+        <div class="form-group m-b-10 m-r-10">
+            <label class="m-r-10" title="：">规格型号：</label>
+            <input name="std"  maxlength="64"  class=" form-control"/>
+        </div>
+        <div class="form-group m-b-10 m-r-10">
+            <label class="m-r-10" title="：">是否打印：</label>
+            <input name="printstatus" id="printstatus" readonly  maxlength="64"  class=" form-control"/>
+        </div>
+        <div class="form-group m-b-10 m-r-10">
+            <a  id="search" class="btn  btn-custom waves-effect waves-light m-l-10 btn-md btn-rounded"><i class="fa fa-search"></i> 查询</a>
+            <a  id="reset" class="btn  btn-custom waves-effect waves-light m-l-10 btn-md btn-rounded" ><i class="fa fa-refresh"></i> 重置</a>
+        </div>
+    </form>
+</div>
+<div class="white-box">
+    <!-- 工具栏 -->
+    <div id="toolbar">
+        <button id="print" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="printbl()">
+            <i class="fa fa-print"></i> 打印
+        </button>
+    </div>
+    <!-- 表格 -->
+    <table id="table" class="table-bordered"   data-toolbar="#toolbar"></table>
+</div>
+</div>
+<% include("list.js"){} %>
+<% } %>

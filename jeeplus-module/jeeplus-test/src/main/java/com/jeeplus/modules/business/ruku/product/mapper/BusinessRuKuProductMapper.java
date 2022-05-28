@@ -21,4 +21,6 @@ public interface BusinessRuKuProductMapper extends BaseMapper<BusinessRuKuProduc
     Double getRuKuNumByBgid(@Param("bgid") String bgid);
 	
 	String getMaxBatchno(@Param("ymd") String yyyymmdd);
+	@Select("select 1 from business_ruku_product where bgid = #{bgid} limit 1")
+	Integer hasByBgid(@Param("bgid")String bgid);
 }

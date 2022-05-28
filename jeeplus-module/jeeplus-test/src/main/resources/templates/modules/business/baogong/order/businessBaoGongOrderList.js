@@ -216,7 +216,7 @@ $(document).ready(function() {
 	  $('#businessBaoGongOrderTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
             $('#remove').prop('disabled', ! $('#businessBaoGongOrderTable').bootstrapTable('getSelections').length);
-            $('#edit,#print').prop('disabled', $('#businessBaoGongOrderTable').bootstrapTable('getSelections').length!=1);
+            $('#edit,#print,#baogongchongzhi').prop('disabled', $('#businessBaoGongOrderTable').bootstrapTable('getSelections').length!=1);
         });
 
 	 $("#import").click(function(){//显示导入面板
@@ -280,7 +280,21 @@ $(document).ready(function() {
     format:'Y-m-d'
 });
 	});
-
+function baogongchongzhi(){
+    var rid = getIdSelections();
+    jp.confirm('确认要重置该报工单记录吗？', function(){
+        var index =jp.loading();
+        jp.get("${ctx}/business/baogong/order/businessBaoGongOrder/baogongchongzhi?rid=" + rid, function(data){
+            if(data.success){
+            refresh();
+            jp.toastr_success(data.msg);
+            }else{
+                jp.toastr_error(data.msg);
+            }
+            jp.close(index);
+        })
+    })
+}
     // 生成报工单
     function shengchengbaogongdan(){
     top.layer.open({
@@ -342,7 +356,6 @@ $(document).ready(function() {
 				}
 				jp.close(index);
 			})
-
 	 })
   }
 

@@ -110,4 +110,9 @@ public class BusinessBaoGongRecordService extends CrudService<BusinessBaoGongRec
 		mapper.insert(record);
 		baoGongOrderService.complete(order.getId(),order.getNum());
 	}
+
+	@Transactional(readOnly = false)
+	public void deleteByBgid(String bgid){
+		mapper.deleteByBgid(bgid);
+	}
 }

@@ -134,6 +134,7 @@ layout("/include/_dialog.html"){
 						<th>存货规格</th>
 						<th>数量</th>
 						<th>单位</th>
+						<th>货位</th>
 						<th width="10">&nbsp;</th>
 					</tr>
 				</thead>
@@ -174,6 +175,9 @@ layout("/include/_dialog.html"){
 					
 					<td>
 						<input id="businessShengChanBeiLiaoMxList{{idx}}_unit" name="businessShengChanBeiLiaoMxList[{{idx}}].unit" type="text" value="{{row.unit}}"    class="form-control "/>
+					</td>
+					<td>
+						<input id="businessShengChanBeiLiaoMxList{{idx}}_hw" name="businessShengChanBeiLiaoMxList[{{idx}}].hw" type="text" value="{{row.hw}}"    class="form-control "/>
 					</td>
 					
 					<td class="text-center" width="10">

@@ -128,6 +128,11 @@ layout("/include/_container.html", {title:"列表", parent:"报工单"}){
 	            	<i class="fa fa-remove"></i> 删除
 	        	</button>
 			<% } %>
+		<% if(shiro.hasPermission("business:baogong:order:businessBaoGongOrder:baogongchongzhi") ){ %>
+		<button id="baogongchongzhi" class="btn btn-white waves-effect w-xs waves-light"  disabled onclick="baogongchongzhi()">
+			报工重置
+		</button>
+		<% } %>
 			 <% if(shiro.hasPermission("business:baogong:order:businessBaoGongOrder:import") ){ %>
 <!--				<button id="import"  class="btn btn-white waves-effect w-xs waves-light" >-->
 <!--					<i class="fa fa-upload"></i> 导入-->

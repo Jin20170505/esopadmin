@@ -21,6 +21,7 @@ public class U8Moallocate extends DataEntity<U8Moallocate> {
     private String productType; // 产出类型
     private String cComUnitCode;// 单位编号
     private String cComUnitName; // 单位名称
+    private String hw;
     private String remark;
 
     public String getAllocateId() {
@@ -164,6 +165,18 @@ public class U8Moallocate extends DataEntity<U8Moallocate> {
 
     public U8Moallocate setRemark(String remark) {
         this.remark = remark;
+        return this;
+    }
+
+    public String getHw() {
+        if(hw==null){
+            hw = "";
+        }
+        return hw;
+    }
+
+    public U8Moallocate setHw(String hw) {
+        this.hw = hw;
         return this;
     }
 }

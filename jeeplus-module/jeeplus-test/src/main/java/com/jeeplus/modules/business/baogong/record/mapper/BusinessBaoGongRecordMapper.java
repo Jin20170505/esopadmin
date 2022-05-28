@@ -3,6 +3,7 @@
  */
 package com.jeeplus.modules.business.baogong.record.mapper;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
@@ -19,5 +20,8 @@ import com.jeeplus.modules.business.baogong.record.entity.BusinessBaoGongRecord;
 public interface BusinessBaoGongRecordMapper extends BaseMapper<BusinessBaoGongRecord> {
 
     Double getDoneSumNum(@Param("bgid") String bgid,@Param("bghid") String bghid);
+
+    @Delete("delete from business_baogong_record where bgid = #{bgid}")
+    void deleteByBgid(@Param("bgid") String bgid);
 
 }

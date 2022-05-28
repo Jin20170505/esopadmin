@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.business.ommo.mapper.BusinessOmMoMainMapper">
+    
+	<sql id="businessOmMoMainColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.code AS "code",
+		a.vendor AS "vendor.id",
+		a.dcreatedate AS "dcreatedate",
+		a.ddate AS "ddate",
+		a.memo AS "memo",
+		a.status AS "status",
+		a.u8code AS "u8code",
+		vendor.name AS "vendor.name"
+	</sql>
+	
+	<sql id="businessOmMoMainJoins">
+		LEFT JOIN base_vendor vendor ON vendor.id = a.vendor
+	</sql>
+	
+    
+	<select id="get" resultType="BusinessOmMoMain" >
+		SELECT 
+			<include refid="businessOmMoMainColumns"/>
+		FROM business_om_momain a
+		<include refid="businessOmMoMainJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BusinessOmMoMain" >
+		SELECT 
+			<include refid="businessOmMoMainColumns"/>
+		FROM business_om_momain a
+		<include refid="businessOmMoMainJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="vendor != null and vendor.id != null and vendor.id != ''">
+				AND a.vendor = #{vendor.id}
+			</if>
+			<if test="beginDcreatedate != null and beginDcreatedate != '' and endDcreatedate != null  and endDcreatedate != '' ">
+				AND a.dcreatedate BETWEEN #{beginDcreatedate} AND #{endDcreatedate}
+			</if>
+			<if test="beginDdate != null and beginDdate != '' and endDdate != null and endDdate != '' ">
+				AND a.ddate BETWEEN #{beginDdate} AND #{endDdate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.code asc
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BusinessOmMoMain" >
+		SELECT 
+			<include refid="businessOmMoMainColumns"/>
+		FROM business_om_momain a
+		<include refid="businessOmMoMainJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="batchInsert" parameterType="java.util.List">
+		INSERT INTO business_om_momain(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			code,
+			vendor,
+			dcreatedate,
+			ddate,
+			memo,
+			status,
+			u8code
+		) VALUES
+		<foreach collection="list" separator="," item="item">
+			(
+			#{item.id},
+			#{item.createBy.id},
+			#{item.createDate},
+			#{item.updateBy.id},
+			#{item.updateDate},
+			#{item.remarks},
+			#{item.delFlag},
+			#{item.code},
+			#{item.vendor.id},
+			#{item.dcreatedate},
+			#{item.ddate},
+			#{item.memo},
+			#{item.status},
+			#{item.u8code}
+			)
+		</foreach>
+		on duplicate key update
+		id = values(id),
+		update_date= VALUES(update_date),
+		code=VALUES(code),
+		vendor=VALUES(vendor),
+		dcreatedate=VALUES(dcreatedate),
+		ddate=VALUES(ddate),
+		memo=VALUES(memo),
+		status=VALUES(status),
+		u8code=VALUES(u8code)
+	</insert>
+
+	<insert id="insert">
+		INSERT INTO business_om_momain(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			code,
+			vendor,
+			dcreatedate,
+			ddate,
+			memo,
+			status,
+			u8code
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{code},
+			#{vendor.id},
+			#{dcreatedate},
+			#{ddate},
+			#{memo},
+			#{status},
+			#{u8code}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE business_om_momain SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			code = #{code},
+			vendor = #{vendor.id},
+			dcreatedate = #{dcreatedate},
+			ddate = #{ddate},
+			memo = #{memo},
+			status = #{status},
+			u8code = #{u8code}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM business_om_momain
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE business_om_momain SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="BusinessOmMoMain" statementType="STATEMENT">
+		select * FROM business_om_momain  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

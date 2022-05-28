@@ -15,6 +15,7 @@ import com.jeeplus.common.utils.excel.annotation.ExcelField;
 public class BusinessShengChanBom extends DataEntity<BusinessShengChanBom> {
 	
 	private static final long serialVersionUID = 1L;
+	private String hw;	// 货位
 	private String schid;		// 生产行ID 父类
 	private String scline;		// 生产行号
 	private String no;		// 子件行号
@@ -40,6 +41,17 @@ public class BusinessShengChanBom extends DataEntity<BusinessShengChanBom> {
 		super(id);
 	}
 
+	public String getHw() {
+		if(hw==null){
+			hw = "";
+		}
+		return hw;
+	}
+
+	public BusinessShengChanBom setHw(String hw) {
+		this.hw = hw;
+		return this;
+	}
 
 	public String getSchid() {
 		return schid;

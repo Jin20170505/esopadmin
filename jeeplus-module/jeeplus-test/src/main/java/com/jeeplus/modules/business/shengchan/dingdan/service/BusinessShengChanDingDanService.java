@@ -108,6 +108,7 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 				b.setCinvcode(d.getCinvcode());b.setCinvname(d.getCinvname());
 				b.setCinvstd(d.getCinvstd());b.setNo(Integer.valueOf(d.getNo()));
 				b.setNum(d.getNum());b.setUnit(d.getUnitname());
+				b.setHw(d.getHw());
 				beiLiao.getBusinessShengChanBeiLiaoMxList().add(b);
 			});
 		}
@@ -252,7 +253,7 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 				b.setId("");b.setDelFlag("0");
 				b.setScyid(d.getId()).setCinvcode(d.getCinvcode()).setCinvname(d.getCinvname()).setCinvstd(d.getCinvstd()).setNo(Integer.valueOf(d.getNo()))
 						.setAuxbaseqtyn(d.getAuxbaseqtyn()).setBaseqtyd(d.getBaseqtyd()).setIsdaochong(d.getIsdaochong()).setNum(d.getNum()*r)
-						.setDonenum(0.00).setBaseqtyn(d.getBaseqtyn()).setProducttype(d.getProducttype()).setUnitcode(d.getUnitcode())
+						.setDonenum(0.00).setBaseqtyn(d.getBaseqtyn()).setProducttype(d.getProducttype()).setUnitcode(d.getUnitcode()).setHw(d.getHw())
 				.setUnitname(d.getUnitname()).setRemarks(d.getRemarks());
 				jiHuaGongDan.getBusinessJiHuaGongDanBomList().add(b);
 			});

@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jeeplus.modules.u8data.ommo.mapper.U8MOMaterialsMapper">
     <sql id="ommoColumns">
-        a.MOMaterialsID as "MOMaterialsIDs",
-        a.MoDetailsID as "MoDetailsID",
+        a.MOMaterialsID as "momaterialsID",
+        a.MoDetailsID as "moDetailsID",
         a.cWhCode as "cWhCode",
         a.cWhName as "cWhName",
         a.cInvCode as "cInvCode",
@@ -19,6 +19,13 @@
 
     </sql>
 
+    <select id="findByWid" resultType="U8MOMaterials">
+        select
+        <include refid="ommoColumns"/>
+        from YT_API_ERP_view_OM_MOMaterials a
+        <include refid="ommoJoins"/>
+        where a.MoDetailsID = #{wid}
+    </select>
     <select id="findList" resultType="U8MOMaterials">
         select
         <include refid="ommoColumns"/>

@@ -16,6 +16,7 @@ public class BusinessShengChanBeiLiaoMx extends DataEntity<BusinessShengChanBeiL
 	
 	private static final long serialVersionUID = 1L;
 	private Integer no;		// 序号
+	private String hw;// 货位
 	private String cinvcode;		// 存货编码
 	private String cinvname;		// 存货名称
 	private String cinvstd;		// 存货规格
@@ -88,7 +89,16 @@ public class BusinessShengChanBeiLiaoMx extends DataEntity<BusinessShengChanBeiL
 	public void setUnit(String unit) {
 		this.unit = unit;
 	}
-	
+
+	public String getHw() {
+		return hw;
+	}
+
+	public BusinessShengChanBeiLiaoMx setHw(String hw) {
+		this.hw = hw;
+		return this;
+	}
+
 	public BusinessShengChanBeiLiao getP() {
 		return p;
 	}

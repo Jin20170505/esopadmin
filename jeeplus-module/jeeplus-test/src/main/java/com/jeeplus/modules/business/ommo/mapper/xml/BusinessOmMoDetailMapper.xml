@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.business.ommo.mapper.BusinessOmMoDetailMapper">
+    
+	<sql id="businessOmMoDetailColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.moid AS "mo.id",
+		b.code as "mo.code",
+		a.startdate AS "startdate",
+		a.arrivedate AS "arrivedate",
+		a.no AS "no",
+		a.cinvcode AS "cinvcode",
+		a.cinvname AS "cinvname",
+		a.cinvstd AS "cinvstd",
+		a.num AS "num",
+		a.unit AS "unit",
+		a.printstatus AS "printstatus",
+		a.memo AS "memo"
+	</sql>
+	
+	<sql id="businessOmMoDetailJoins">
+			LEFT JOIN business_om_momain b ON b.id = a.moid
+	</sql>
+	
+    
+	<select id="get" resultType="BusinessOmMoDetail" >
+		SELECT 
+			<include refid="businessOmMoDetailColumns"/>
+		FROM business_om_modetail a
+		<include refid="businessOmMoDetailJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BusinessOmMoDetail" >
+		SELECT 
+			<include refid="businessOmMoDetailColumns"/>
+		FROM business_om_modetail a
+		<include refid="businessOmMoDetailJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="mo != null and mo.id != null and mo.id != ''">
+				AND a.moid = #{mo.id}
+			</if>
+			<if test="mo != null and mo.code != null and mo.code != ''">
+				AND b.code = #{mo.code}
+			</if>
+			<if test="cinvcode != null  and cinvcode != ''">
+				AND a.cinvcode = #{cinvcode}
+			</if>
+			<if test="cinvname != null  and cinvname != ''">
+				AND a.cinvname like concat('%',#{cinvname},'%')
+			</if>
+			<if test="cinvstd != null  and cinvstd != ''">
+				AND a.cinvstd like concat('%',#{cinvstd},'%')
+			</if>
+			<if test="printstatus != null and printstatus != ''">
+				AND a.printstatus = #{printstatus}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY b.code asc, a.no ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BusinessOmMoDetail" >
+		SELECT 
+			<include refid="businessOmMoDetailColumns"/>
+		FROM business_om_modetail a
+		<include refid="businessOmMoDetailJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	<insert id="batchInsert" parameterType="java.util.List">
+		INSERT INTO business_om_modetail(
+			id,
+			printstatus,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			startdate,
+			arrivedate,
+			moid,
+			no,
+			cinvcode,
+			cinvname,
+			cinvstd,
+			num,
+			unit,
+			memo
+		) VALUES
+		<foreach collection="list" separator="," item="item">
+			(
+			#{item.id},'未打印',
+			#{item.createBy.id},
+			#{item.createDate},
+			#{item.updateBy.id},
+			#{item.updateDate},
+			#{item.remarks},
+			#{item.delFlag},
+			#{item.startdate},
+			#{item.arrivedate},
+			#{item.mo.id},
+			#{item.no},
+			#{item.cinvcode},
+			#{item.cinvname},
+			#{item.cinvstd},
+			#{item.num},
+			#{item.unit},
+			#{item.memo}
+			)
+		</foreach>
+		on duplicate key update
+		id = values(id),
+		update_date= VALUES(update_date),
+		moid = values(moid),
+		no=VALUES(no),
+		cinvcode=VALUES(cinvcode),
+		cinvname=VALUES(cinvname),
+		cinvstd=VALUES(cinvstd),
+		num=VALUES(num),
+		unit=VALUES(unit),
+		memo=VALUES(memo)
+	</insert>
+	<insert id="insert">
+		INSERT INTO business_om_modetail(
+			id,
+			printstatus,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			startdate,
+			arrivedate,
+			moid,
+			no,
+			cinvcode,
+			cinvname,
+			cinvstd,
+			num,
+			unit,
+			memo
+		) VALUES (
+			#{id},'未打印',
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{startdate},
+			#{arrivedate},
+			#{mo.id},
+			#{no},
+			#{cinvcode},
+			#{cinvname},
+			#{cinvstd},
+			#{num},
+			#{unit},
+			#{memo}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE business_om_modetail SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			startdate = #{startdate},
+			arrivedate = #{arrivedate},
+			moid = #{mo.id},
+			no = #{no},
+			cinvcode = #{cinvcode},
+			cinvname = #{cinvname},
+			cinvstd = #{cinvstd},
+			num = #{num},
+			unit = #{unit},
+			memo = #{memo}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM business_om_modetail
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE moid = #{mo.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE business_om_modetail SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE moid = #{mo.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="BusinessOmMoDetail" statementType="STATEMENT">
+		select * FROM business_om_modetail  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

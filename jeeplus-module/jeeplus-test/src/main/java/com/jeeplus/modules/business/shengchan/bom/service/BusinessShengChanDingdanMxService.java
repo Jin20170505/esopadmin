@@ -105,6 +105,7 @@ public class BusinessShengChanDingdanMxService extends CrudService<BusinessSheng
 			businessShengChanBom.setProducttype(d.getProductType());
 			businessShengChanBom.setRate(d.getChangeRate());
 			businessShengChanBom.setIsdaochong("0");
+			businessShengChanBom.setHw(d.getHw());
 			businessShengChanBom.preInsert();
 			businessShengChanBom.setId(d.getAllocateId());
 			businessShengChanBomMapper.insert(businessShengChanBom);
