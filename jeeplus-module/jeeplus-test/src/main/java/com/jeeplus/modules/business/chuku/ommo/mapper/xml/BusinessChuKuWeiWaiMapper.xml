@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.business.chuku.ommo.mapper.BusinessChuKuWeiWaiMapper">
+    
+	<sql id="businessChuKuWeiWaiColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.mocode AS "mocode",
+		a.mono AS "mono",
+		a.vendor AS "vendor.id",
+		a.cinvcode AS "cinvcode",
+		a.cinvname AS "cinvname",
+		a.cinvstd AS "cinvstd",
+		a.num AS "num",
+		a.unit AS "unit",
+		a.startdate AS "startdate",
+		a.arrivedate AS "arrivedate",
+		a.moid AS "moid",
+		a.mohid AS "mohid",
+				
+				
+				
+				
+				
+				
+				
+				
+				
+		vendor.name AS "vendor.name"
+	</sql>
+	
+	<sql id="businessChuKuWeiWaiJoins">
+		
+		LEFT JOIN base_vendor vendor ON vendor.id = a.vendor
+	</sql>
+	
+    
+	<select id="get" resultType="BusinessChuKuWeiWai" >
+		SELECT 
+			<include refid="businessChuKuWeiWaiColumns"/>
+		FROM business_chuku_weiwai a
+		<include refid="businessChuKuWeiWaiJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BusinessChuKuWeiWai" >
+		SELECT 
+			<include refid="businessChuKuWeiWaiColumns"/>
+		FROM business_chuku_weiwai a
+		<include refid="businessChuKuWeiWaiJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="mocode != null and mocode != ''">
+				AND a.mocode = #{mocode}
+			</if>
+			<if test="mono != null and mono != ''">
+				AND a.mono = #{mono}
+			</if>
+			<if test="vendor != null and vendor.id != null and vendor.id != ''">
+				AND a.vendor = #{vendor.id}
+			</if>
+			<if test="cinvcode != null and cinvcode != ''">
+				AND a.cinvcode = #{cinvcode}
+			</if>
+			<if test="cinvname != null and cinvname != ''">
+				AND a.cinvname = #{cinvname}
+			</if>
+			<if test="beginStartdate != null and endStartdate != null ">
+				AND a.startdate BETWEEN #{beginStartdate} AND #{endStartdate}
+			</if>
+			<if test="beginArrivedate != null and endArrivedate != null ">
+				AND a.arrivedate BETWEEN #{beginArrivedate} AND #{endArrivedate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BusinessChuKuWeiWai" >
+		SELECT 
+			<include refid="businessChuKuWeiWaiColumns"/>
+		FROM business_chuku_weiwai a
+		<include refid="businessChuKuWeiWaiJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO business_chuku_weiwai(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			mocode,
+			mono,
+			vendor,
+			cinvcode,
+			cinvname,
+			cinvstd,
+			num,
+			unit,
+			startdate,
+			arrivedate,
+			moid,
+			mohid
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{mocode},
+			#{mono},
+			#{vendor.id},
+			#{cinvcode},
+			#{cinvname},
+			#{cinvstd},
+			#{num},
+			#{unit},
+			#{startdate},
+			#{arrivedate},
+			#{moid},
+			#{mohid}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE business_chuku_weiwai SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			mocode = #{mocode},
+			mono = #{mono},
+			vendor = #{vendor.id},
+			cinvcode = #{cinvcode},
+			cinvname = #{cinvname},
+			cinvstd = #{cinvstd},
+			num = #{num},
+			unit = #{unit},
+			startdate = #{startdate},
+			arrivedate = #{arrivedate},
+			moid = #{moid},
+			mohid = #{mohid}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM business_chuku_weiwai
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE business_chuku_weiwai SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="BusinessChuKuWeiWai" statementType="STATEMENT">
+		select * FROM business_chuku_weiwai  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>
