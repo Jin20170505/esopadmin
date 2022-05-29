@@ -17,6 +17,13 @@ import com.jeeplus.modules.sys.entity.User;
 import com.jeeplus.modules.sys.utils.UserUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.jeeplus.u8.webservice.entity.U8WebServiceResult;
+import org.jeeplus.u8.webservice.otherinck.U8OtherInCkWebService;
+import org.jeeplus.u8.webservice.otherinck.entity.U8OtherInCkMain;
+import org.jeeplus.u8.webservice.otherinck.entity.U8OtherInCkMx;
+import org.jeeplus.u8.webservice.otheroutck.U8OtherOutCkWebService;
+import org.jeeplus.u8.webservice.otheroutck.entity.U8OtherOutCkMain;
+import org.jeeplus.u8.webservice.otheroutck.entity.U8OtherOutCkMx;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -136,11 +143,45 @@ public class BusinessPanDianService extends CrudService<BusinessPanDianMapper, B
 		// TODO U8接口
 		// 其他入库
 		if(inck.size()>0){
-
+			U8OtherInCkMain m = new U8OtherInCkMain();
+			m.setcDepCode(user.getOffice().getCode()).setcWhCode(ckcode).setcMaker(user.getName()).setcMemo("")
+					.setCrdcode("14").setcCode(code).setMesCode(code).setdDate(ddate);
+			try{
+				inck.forEach(d->{
+					U8OtherInCkMx x = new U8OtherInCkMx();
+					x.setcBatch(d.getBatchno()).setcPosition(hw).setcInvCode(d.getCinvcode()).
+							setdMadeDate(d.getScdate()).setiQuantity(d.getCha()+"").setiRSRowNO(d.getNo()+"");
+					m.getDetails().add(x);
+				});
+				U8WebServiceResult rs = U8OtherInCkWebService.inck(m);
+				if("1".equals(rs.getCount())){
+					throw new RuntimeException(rs.getMessage());
+				}
+			}catch (Exception e){
+				e.printStackTrace();
+				throw new RuntimeException("数据传U8出错(入库)，原因："+e.getMessage());
+			}
 		}
 		// 其他出库
 		if(outck.size()>0){
-
+			U8OtherOutCkMain m = new U8OtherOutCkMain();
+			m.setcDepCode(user.getOffice().getCode()).setcWhCode(ckcode).setcMaker(user.getName()).setcMemo("")
+					.setCrdcode("24").setcCode(code).setMesCode(code).setdDate(ddate);
+			try{
+				outck.forEach(d->{
+					U8OtherOutCkMx x = new U8OtherOutCkMx();
+					x.setcBatch(d.getBatchno()).setcPosition(hw).setcInvCode(d.getCinvcode()).
+							setdMadeDate(d.getScdate()).setiQuantity((0-d.getCha())+"").setiRSRowNO(d.getNo()+"");
+					m.getDetails().add(x);
+				});
+				U8WebServiceResult rs = U8OtherOutCkWebService.outck(m);
+				if("1".equals(rs.getCount())){
+					throw new RuntimeException(rs.getMessage());
+				}
+			}catch (Exception e){
+				e.printStackTrace();
+				throw new RuntimeException("数据传U8出错(出库)，原因："+e.getMessage());
+			}
 		}
 	}
 }
