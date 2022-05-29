@@ -13,6 +13,7 @@
         a.cComUnitName as "cComUnitName",
         a.iQuantity as "iQuantity",
         a.cBatch as "cBatch",
+        a.cPosition as "hw",
         a.dRequiredDate as "dRequiredDate"
     </sql>
     <sql id="ommoJoins">

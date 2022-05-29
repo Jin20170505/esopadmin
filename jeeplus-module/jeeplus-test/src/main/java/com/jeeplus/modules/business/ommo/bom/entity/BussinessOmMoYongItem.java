@@ -80,6 +80,10 @@ public class BussinessOmMoYongItem extends DataEntity<BussinessOmMoYongItem> {
 	
 	@ExcelField(title="货位", fieldType=BaseHuoWei.class, value="hw.name", align=2, sort=10)
 	public BaseHuoWei getHw() {
+		if(hw==null){
+			hw = new BaseHuoWei();
+			hw.setCode("");
+		}
 		return hw;
 	}
 

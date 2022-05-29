@@ -22,6 +22,7 @@
 		a.unit AS "unit",
 		a.requireddate AS "requireddate",
 		ck.name AS "ck.name",
+		hw.code AS "hw.code",
 		hw.name AS "hw.name"
 	</sql>
 	

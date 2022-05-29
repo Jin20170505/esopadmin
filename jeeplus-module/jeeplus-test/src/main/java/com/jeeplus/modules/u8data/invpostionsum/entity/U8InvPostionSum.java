@@ -12,6 +12,7 @@ public class U8InvPostionSum extends DataEntity<U8InvPostionSum> {
     private String cinvstd; // 规格型号
     private String cinvtype; // 存货大类编码
     private Double iquantity; // 现存数量
+    private String unit; // 单位
     private String cbatch; // 批号
     private String dMadeDate; // 生产日期
     private String cMassUnit;//保质期单位
@@ -66,6 +67,9 @@ public class U8InvPostionSum extends DataEntity<U8InvPostionSum> {
     }
 
     public String getCinvstd() {
+        if(cinvstd==null){
+            cinvstd = "";
+        }
         return cinvstd;
     }
 
@@ -95,7 +99,22 @@ public class U8InvPostionSum extends DataEntity<U8InvPostionSum> {
         return this;
     }
 
+    public String getUnit() {
+        if(unit==null){
+            unit="";
+        }
+        return unit;
+    }
+
+    public U8InvPostionSum setUnit(String unit) {
+        this.unit = unit;
+        return this;
+    }
+
     public String getCbatch() {
+        if(cbatch==null){
+            cbatch = "";
+        }
         return cbatch;
     }
 

@@ -99,6 +99,7 @@ layout("/include/_container.html", {title:"打印", parent:"报工单"}){
                 <th width="120px">规格型号</th>
                 <th width="120px">数量</th>
                 <th width="120px">批号</th>
+                <th width="120px">货位</th>
                 <th colspan="2">条码</th>
             </tr>
         </thead>
@@ -118,7 +119,8 @@ layout("/include/_container.html", {title:"打印", parent:"报工单"}){
                         <td>`+data[i].cinvname+`</td>
                         <td>`+data[i].cinvstd+`</td>
                         <td>`+data[i].num+`</td>
-                        <td>`+data[i].batchno+`</td>`;
+                        <td>`+data[i].batchno+`</td>
+                        <td>`+data[i].hw.code+`</td>`;
             if(i%2==0){
                 htm += `<td><img class="qrcode" src="${ctx}/qrcode/qr/`+data[i].qrcode+`"/></td><td></td>`
             }else {

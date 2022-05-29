@@ -29,6 +29,9 @@
         from YT_API_ERP_view_InvPositionSum a
         <include refid="sumJoins"/>
         <where>
+            <if test="cPosCode != null and cPosCode != '' ">
+                and a.cPosCode = #{cPosCode}
+            </if>
             <if test="cinvcode != null and cinvcode != '' ">
                 and a.cInvCode = #{cinvcode}
             </if>

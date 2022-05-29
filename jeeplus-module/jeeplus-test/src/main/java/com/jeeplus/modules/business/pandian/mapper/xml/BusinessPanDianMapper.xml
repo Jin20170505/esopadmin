@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jeeplus.modules.base.huowei.mapper.BaseHuoWeiMapper">
+<mapper namespace="com.jeeplus.modules.business.pandian.mapper.BusinessPanDianMapper">
     
-	<sql id="baseHuoWeiColumns">
+	<sql id="businessPanDianColumns">
 		a.id AS "id",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
@@ -11,53 +11,52 @@
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
 		a.code AS "code",
-		a.name AS "name",
-		a.cangku AS "ck.id",
-		a.max_v AS "maxv",
-		a.max_w AS "maxw",
-		ck.name AS "ck.name"
+		a.ddate AS "ddate",
+		a.duser AS "duser.id",
+		a.ck AS "ck.id",
+		a.hw AS "hw.id",
+		duser.name AS "duser.name",
+				
+		ck.name AS "ck.name",
+				
+		hw.name AS "hw.name"
 	</sql>
 	
-	<sql id="baseHuoWeiJoins">
-		LEFT JOIN base_cangku ck ON ck.id = a.cangku
+	<sql id="businessPanDianJoins">
+		
+		LEFT JOIN sys_user duser ON duser.id = a.duser
+		LEFT JOIN base_cangku ck ON ck.id = a.ck
+		LEFT JOIN base_huowei hw ON hw.id = a.hw
 	</sql>
-	<select id="findHwItem" resultType="com.jeeplus.modules.api.bean.ckandhw.HwBean">
-		select a.id as "value",a.code as "text",a.cangku as "ckid" from base_huowei a
-		<where>
-			<if test="ckid!=null and ckid!=''">
-				and a.cangku  = #{ckid}
-			</if>
-		</where>
-	</select>
+	
     
-	<select id="get" resultType="BaseHuoWei" >
+	<select id="get" resultType="BusinessPanDian" >
 		SELECT 
-			<include refid="baseHuoWeiColumns"/>
-		FROM base_huowei a
-		<include refid="baseHuoWeiJoins"/>
+			<include refid="businessPanDianColumns"/>
+		FROM business_pandian a
+		<include refid="businessPanDianJoins"/>
 		WHERE a.id = #{id}
 	</select>
 	
-	<select id="findList" resultType="BaseHuoWei" >
+	<select id="findList" resultType="BusinessPanDian" >
 		SELECT 
-			<include refid="baseHuoWeiColumns"/>
-		FROM base_huowei a
-		<include refid="baseHuoWeiJoins"/>
+			<include refid="businessPanDianColumns"/>
+		FROM business_pandian a
+		<include refid="businessPanDianJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
 			<if test="code != null and code != ''">
 				AND a.code = #{code}
 			</if>
-			<if test="name != null and name != ''">
-				AND a.name LIKE
-				    <if test="_databaseId == 'postgre'">'%'||#{name}||'%'</if>
-					<if test="_databaseId == 'oracle'">'%'||#{name}||'%'</if>
-					<if test="_databaseId == 'mssql'">'%'+#{name}+'%'</if>
-					<if test="_databaseId == 'mysql'">concat('%',#{name},'%')</if>
+			<if test="beginDdate != null and beginDdate != '' and endDdate != null and endDdate != '' ">
+				AND a.ddate BETWEEN #{beginDdate} AND #{endDdate}
 			</if>
 			<if test="ck != null and ck.id != null and ck.id != ''">
-				AND a.cangku = #{ck.id}
+				AND a.ck = #{ck.id}
+			</if>
+			<if test="hw != null and hw.id != null and hw.id != ''">
+				AND a.hw = #{hw.id}
 			</if>
 		</where>
 		<choose>
@@ -70,11 +69,11 @@
 		</choose>
 	</select>
 	
-	<select id="findAllList" resultType="BaseHuoWei" >
+	<select id="findAllList" resultType="BusinessPanDian" >
 		SELECT 
-			<include refid="baseHuoWeiColumns"/>
-		FROM base_huowei a
-		<include refid="baseHuoWeiJoins"/>
+			<include refid="businessPanDianColumns"/>
+		FROM business_pandian a
+		<include refid="businessPanDianJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
@@ -90,7 +89,7 @@
 	</select>
 	
 	<insert id="insert">
-		INSERT INTO base_huowei(
+		INSERT INTO business_pandian(
 			id,
 			create_by,
 			create_date,
@@ -99,10 +98,10 @@
 			remarks,
 			del_flag,
 			code,
-			name,
-			cangku,
-			max_v,
-			max_w
+			ddate,
+			duser,
+			ck,
+			hw
 		) VALUES (
 			#{id},
 			#{createBy.id},
@@ -112,44 +111,44 @@
 			#{remarks},
 			#{delFlag},
 			#{code},
-			#{name},
+			#{ddate},
+			#{duser.id},
 			#{ck.id},
-			#{maxv},
-			#{maxw}
+			#{hw.id}
 		)
 	</insert>
 	
 	<update id="update">
-		UPDATE base_huowei SET 	
+		UPDATE business_pandian SET 	
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
 			remarks = #{remarks},
 			code = #{code},
-			name = #{name},
-			cangku = #{ck.id},
-			max_v = #{maxv},
-			max_w = #{maxw}
+			ddate = #{ddate},
+			duser = #{duser.id},
+			ck = #{ck.id},
+			hw = #{hw.id}
 		WHERE id = #{id}
 	</update>
 	
 	
 	<!--物理删除-->
 	<update id="delete">
-		DELETE FROM base_huowei
+		DELETE FROM business_pandian
 		WHERE id = #{id}
 	</update>
 	
 	<!--逻辑删除-->
 	<update id="deleteByLogic">
-		UPDATE base_huowei SET 
+		UPDATE business_pandian SET 
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
 	
 	
 	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
-	<select id="findUniqueByProperty" resultType="BaseHuoWei" statementType="STATEMENT">
-		select * FROM base_huowei  where ${propertyName} = '${value}'
+	<select id="findUniqueByProperty" resultType="BusinessPanDian" statementType="STATEMENT">
+		select * FROM business_pandian  where ${propertyName} = '${value}'
 	</select>
 	
 </mapper>
