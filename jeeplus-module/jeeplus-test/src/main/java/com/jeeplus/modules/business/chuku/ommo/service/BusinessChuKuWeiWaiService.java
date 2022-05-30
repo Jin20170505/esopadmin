@@ -8,6 +8,8 @@ import java.util.List;
 
 import com.jeeplus.common.utils.DateUtils;
 import com.jeeplus.common.utils.number.RandomUtil;
+import com.jeeplus.modules.base.cangku.mapper.BaseCangKuMapper;
+import com.jeeplus.modules.base.huowei.mapper.BaseHuoWeiMapper;
 import com.jeeplus.modules.base.vendor.entity.BaseVendor;
 import com.jeeplus.modules.business.ommo.bom.entity.BussinessOmMoDetailOnly;
 import com.jeeplus.modules.sys.entity.User;
@@ -89,9 +91,10 @@ public class BusinessChuKuWeiWaiService extends CrudService<BusinessChuKuWeiWaiM
 		Integer i = mapper.hasByWwHid(wwhid);
 		return i!=null && i == 1;
 	}
-
+	@Autowired
+	private BaseCangKuMapper cangKuMapper;
 	@Transactional(readOnly = false)
-	public void weiwaichuku(String wwid, String wwhid, BussinessOmMoDetailOnly info, String userid, String mxJson){
+	public void weiwaichuku(String wwid, String wwhid,String ckid, BussinessOmMoDetailOnly info, String userid, String mxJson){
 		User user = UserUtils.get(userid);
 		BusinessChuKuWeiWai businessChuKuWeiWai = new BusinessChuKuWeiWai();
 		String code = "";
@@ -130,11 +133,12 @@ public class BusinessChuKuWeiWaiService extends CrudService<BusinessChuKuWeiWaiM
 			businessChuKuWeiWai.getBusinessChuKuWeiWaiMxList().add(mx);
 		});
 		save(businessChuKuWeiWai);
+		String ck = cangKuMapper.getCodeById(ckid);
 		try {
 			YT_Rd11 rd11 = new YT_Rd11();
 			rd11.setcBusType("委外发料");
 			rd11.setcSource("委外订单");
-			rd11.setcWhCode("");
+			rd11.setcWhCode(ck);
 			rd11.setcRdcode("21");
 			rd11.setdDate(DateUtils.getDate());
 			rd11.setcCode(businessChuKuWeiWai.getCode());
@@ -153,10 +157,10 @@ public class BusinessChuKuWeiWaiService extends CrudService<BusinessChuKuWeiWaiM
 				rd11s.add(r);
 			});
 			rd11.setRd11s(rd11s);
-//			U8WebServiceResult rs = U8Post.Rd11Post(rd11, U8Url.URL);
-//			if("1".equals(rs.getCount())){
-//				throw new RuntimeException(rs.getMessage());
-//			}
+			U8WebServiceResult rs = U8Post.Rd11Post(rd11, U8Url.URL);
+			if("1".equals(rs.getCount())){
+				throw new RuntimeException(rs.getMessage());
+			}
 		}catch (Exception e){
 			e.printStackTrace();
 			throw new RuntimeException("数据传U8出错，原因："+e.getMessage());

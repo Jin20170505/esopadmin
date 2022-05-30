@@ -36,11 +36,11 @@ public class ApiWeiWaiChuKuController {
     }
 
     @RequestMapping("do")
-    public AjaxJson dochuku(String wwid, String wwhid,String userid,String mxJson){
+    public AjaxJson dochuku(String wwid,String wwhid,String ckid,String userid,String mxJson){
         AjaxJson json  = new AjaxJson();
         try{
             BussinessOmMoDetailOnly info = omMoDetailOnlyService.get(wwhid);
-            businessChuKuWeiWaiService.weiwaichuku(wwid,wwhid,info,userid,mxJson);
+            businessChuKuWeiWaiService.weiwaichuku(wwid,wwhid,ckid,info,userid,mxJson);
         }catch (Exception e){
             e.printStackTrace();
             json.setSuccess(false);

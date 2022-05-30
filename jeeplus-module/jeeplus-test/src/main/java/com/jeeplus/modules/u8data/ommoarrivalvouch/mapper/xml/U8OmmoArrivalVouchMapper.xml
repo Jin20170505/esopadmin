@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.u8data.ommoarrivalvouch.mapper.U8OmmoArrivalVouchMapper">
+    <sql id="ommoColumns">
+        a.id AS "mid",
+        a.autoid AS "autoid",
+        a.ccode AS "ccode",
+        a.ivouchrowno AS "ivouchrowno",
+        a.ddate AS "ddate",
+        a.cvencode AS "cvencode",
+        a.cvenabbname AS "cvenabbname",
+        a.cvenname AS "cvenname",
+        a.cdepname AS "cdepname",
+        a.cdepcode AS "cdepcode",
+        a.cmaker AS "cmaker",
+        a.cpersonname AS "cpersonname",
+        a.cwhcode AS "cwhcode",
+        a.cwhname AS "cwhname",
+        a.cinvcode AS "cinvcode",
+        a.cinvname AS "cinvname",
+        a.cinvstd AS "cinvstd",
+        a.cinvm_unit AS "cinvm_unit",
+        a.iquantity AS "iquantity",
+        a.vouchstate AS "vouchstate",
+        a.cbcloser AS "cbcloser",
+        a.csocode AS "csocode",
+        a.irowno AS "irowno",
+        a.cInvDefine1 AS "cInvDefine1",
+        a.cposcode AS "cposcode",
+        a.cbatch AS "cbatch",
+        a.dpdate AS "dpdate"
+    </sql>
+    <sql id="ommoJoins">
+
+    </sql>
+
+    <select id="findList" resultType="U8OmmoArrivalVouch">
+        select
+        <include refid="ommoColumns"/>
+        from YT_API_ERP_view_OM_MOArrivalVouch a
+        <include refid="ommoJoins"/>
+        <where>
+            <if test="start !=null and end != null">
+                and a.ddate between #{start}  and #{end}
+            </if>
+        </where>
+    </select>
+
+</mapper>
