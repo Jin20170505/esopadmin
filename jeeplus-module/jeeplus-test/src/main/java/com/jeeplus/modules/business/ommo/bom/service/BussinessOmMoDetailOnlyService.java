@@ -38,6 +38,9 @@ public class BussinessOmMoDetailOnlyService extends CrudService<BussinessOmMoDet
 		return bussinessOmMoDetailOnly;
 	}
 
+	public BussinessOmMoYongItem getMx(String mxid){
+		return bussinessOmMoYongItemMapper.get(mxid);
+	}
 	
 	@Transactional(readOnly = false)
 	public void save(BussinessOmMoDetailOnly bussinessOmMoDetailOnly) {

@@ -5,10 +5,10 @@ layout("/include/_dialog.html"){
 
 		$(document).ready(function() {
 					        $('#startdate').datetimepicker({
-				 format:'Y-m-d H:i'
+				 format:'Y-m-d'
 		    });
 	        $('#arrivedate').datetimepicker({
-				 format:'Y-m-d H:i'
+				 format:'Y-m-d'
 		    });
 		});
 
@@ -120,7 +120,7 @@ layout("/include/_dialog.html"){
 					<td class="width-15 active"><label class="pull-right">计划下达日期：</label></td>
 					<td class="width-35">
                     <div class="input-group">
-                        <input readonly=""  id="startdate" name="startdate"  placeholder="请选择日期" class="form-control   "   value="${fn.formatDate(businessChuKuWeiWai.startdate!, 'yyyy-MM-dd HH:mm:ss')}">
+                        <input readonly=""  id="startdate" name="startdate"  placeholder="请选择日期" class="form-control   "   value="${fn.formatDate(businessChuKuWeiWai.startdate!, 'yyyy-MM-dd')}">
                         <div class="input-group-append">
                             <span class="input-group-text btn-custom border text-white"><i class="ti-calendar"></i></span>
                         </div>
@@ -129,7 +129,7 @@ layout("/include/_dialog.html"){
 					<td class="width-15 active"><label class="pull-right">计划到货日期：</label></td>
 					<td class="width-35">
                     <div class="input-group">
-                        <input readonly=""  id="arrivedate" name="arrivedate"  placeholder="请选择日期" class="form-control   "   value="${fn.formatDate(businessChuKuWeiWai.arrivedate!, 'yyyy-MM-dd HH:mm:ss')}">
+                        <input readonly=""  id="arrivedate" name="arrivedate"  placeholder="请选择日期" class="form-control   "   value="${fn.formatDate(businessChuKuWeiWai.arrivedate!, 'yyyy-MM-dd')}">
                         <div class="input-group-append">
                             <span class="input-group-text btn-custom border text-white"><i class="ti-calendar"></i></span>
                         </div>

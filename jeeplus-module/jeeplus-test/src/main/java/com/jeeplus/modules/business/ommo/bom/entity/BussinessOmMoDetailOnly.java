@@ -23,10 +23,32 @@ public class BussinessOmMoDetailOnly extends DataEntity<BussinessOmMoDetailOnly>
 	private String cinvcode;		// 存货编码
 	private String cinvname;		// 存货名称
 	private String cinvstd;		// 规格型号
-	private String num;
+	private Double num;
+	private String unit;
 	private String vendor;
+	private String vendorid;
 	private Date ddate;		// 订单日期
+	private Date startdate;		// 计划下达日期
+	private Date arrivedate;		// 计划到货日期
 	private String qrcode;
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public BussinessOmMoDetailOnly setUnit(String unit) {
+		this.unit = unit;
+		return this;
+	}
+
+	public String getVendorid() {
+		return vendorid;
+	}
+
+	public BussinessOmMoDetailOnly setVendorid(String vendorid) {
+		this.vendorid = vendorid;
+		return this;
+	}
 
 	public String getQrcode() {
 		qrcode  = code+";"+no;
@@ -122,11 +144,11 @@ public class BussinessOmMoDetailOnly extends DataEntity<BussinessOmMoDetailOnly>
 		this.bussinessOmMoYongItemList = bussinessOmMoYongItemList;
 	}
 
-	public String getNum() {
+	public Double getNum() {
 		return num;
 	}
 
-	public BussinessOmMoDetailOnly setNum(String num) {
+	public BussinessOmMoDetailOnly setNum(Double num) {
 		this.num = num;
 		return this;
 	}
@@ -146,6 +168,29 @@ public class BussinessOmMoDetailOnly extends DataEntity<BussinessOmMoDetailOnly>
 
 	public BussinessOmMoDetailOnly setDdate(Date ddate) {
 		this.ddate = ddate;
+		return this;
+	}
+
+	public Date getStartdate() {
+		return startdate;
+	}
+
+	public BussinessOmMoDetailOnly setStartdate(Date startdate) {
+		this.startdate = startdate;
+		return this;
+	}
+
+	public Date getArrivedate() {
+		return arrivedate;
+	}
+
+	public BussinessOmMoDetailOnly setArrivedate(Date arrivedate) {
+		this.arrivedate = arrivedate;
+		return this;
+	}
+
+	public BussinessOmMoDetailOnly setQrcode(String qrcode) {
+		this.qrcode = qrcode;
 		return this;
 	}
 }

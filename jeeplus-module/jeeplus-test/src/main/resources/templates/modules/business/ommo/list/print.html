@@ -67,7 +67,7 @@ layout("/include/_container.html", {title:"打印", parent:"报工单"}){
             <td style="max-width: 190px;">${order.code!}</td>
             <th width="100px">行号</th>
             <td>${order.no!}</td>
-            <td rowspan="4" width="180px"><img id="qrcode" src="${ctx}/qrcode/qr/${order.qrcode!}"/></td>
+            <td rowspan="4" width="180px"><img id="qrcode" src="${ctx}/business/ommo/businessOmMoMain/qr?rid=${order.id!}"/></td>
         </tr>
 
         <tr>
@@ -122,9 +122,9 @@ layout("/include/_container.html", {title:"打印", parent:"报工单"}){
                         <td>`+data[i].batchno+`</td>
                         <td>`+data[i].hw.code+`</td>`;
             if(i%2==0){
-                htm += `<td><img class="qrcode" src="${ctx}/qrcode/qr/`+data[i].qrcode+`"/></td><td></td>`
+                htm += `<td><img class="qrcode" src="${ctx}/business/ommo/bom/bussinessOmMoDetailOnly/qr?rid=`+data[i].id+`"/></td><td></td>`
             }else {
-                htm+=`<td></td><td><img class="qrcode" src="${ctx}/qrcode/qr/`+data[i].qrcode+`"/></td>`
+                htm+=`<td></td><td><img class="qrcode" src="${ctx}/business/ommo/bom/bussinessOmMoDetailOnly/qr?rid=`+data[i].id+`"/></td>`
             }
 
                    htm+= `</tr>`;

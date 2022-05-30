@@ -3,13 +3,20 @@
  */
 package com.jeeplus.modules.business.ommo.bom.web;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
+import com.jeeplus.common.utils.QRCodeUtil;
+import com.jeeplus.modules.business.ommo.bom.entity.BussinessOmMoYongItem;
+import com.jeeplus.modules.business.ruku.product.entity.BusinessRuKuProduct;
+import com.jeeplus.modules.business.ruku.product.entity.BusinessRuKuProductMx;
+import com.jeeplus.modules.business.ruku.product.entity.ProductTagBean;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +63,25 @@ public class BussinessOmMoDetailOnlyController extends BaseController {
 		}
 		return entity;
 	}
-	
+	@RequestMapping("/qr")
+	public void getQrImage(String rid,HttpServletResponse response) throws IOException {
+		response.reset();
+		response.setContentType("image/jpg");
+		ServletOutputStream out = null;
+		try{
+			BussinessOmMoYongItem tagBean = bussinessOmMoDetailOnlyService.getMx(rid);
+			String qr = "'cinvcode':'"+tagBean.getCinvcode()+"','cinvcodename':'"+tagBean.getCinvname()+"','batchno':'"+tagBean.getBatchno()+"','num':'"+tagBean.getNum()+"','unit':'"+tagBean.getUnit()+"'";
+			out = response.getOutputStream();
+			QRCodeUtil.encode(qr,out);
+			out.flush();
+		}catch (Exception e){
+			e.printStackTrace();
+		}finally {
+			if(out!=null){
+				out.close();
+			}
+		}
+	}
 	/**
 	 * 委外用料列表页面
 	 */

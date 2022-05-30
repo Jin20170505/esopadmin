@@ -32,7 +32,10 @@ public class BusinessOmMoMainService extends CrudService<BusinessOmMoMainMapper,
 
 	@Autowired
 	private BusinessOmMoDetailMapper businessOmMoDetailMapper;
-	
+
+	public BusinessOmMoDetail getDetail(String id){
+		return businessOmMoDetailMapper.get(id);
+	}
 	public BusinessOmMoMain get(String id) {
 		BusinessOmMoMain businessOmMoMain = super.get(id);
 		businessOmMoMain.setBusinessOmMoDetailList(businessOmMoDetailMapper.findList(new BusinessOmMoDetail(businessOmMoMain)));

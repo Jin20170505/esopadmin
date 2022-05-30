@@ -19,6 +19,7 @@ import com.jeeplus.common.utils.excel.annotation.ExcelField;
 public class BusinessChuKuWeiWai extends DataEntity<BusinessChuKuWeiWai> {
 	
 	private static final long serialVersionUID = 1L;
+	private String code; //	单号
 	private String mocode;		// 委外单号
 	private Integer mono;		// 委外行号
 	private BaseVendor vendor;		// 供应商
@@ -43,6 +44,15 @@ public class BusinessChuKuWeiWai extends DataEntity<BusinessChuKuWeiWai> {
 
 	public BusinessChuKuWeiWai(String id){
 		super(id);
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public BusinessChuKuWeiWai setCode(String code) {
+		this.code = code;
+		return this;
 	}
 
 	@ExcelField(title="委外单号", align=2, sort=7)
@@ -117,7 +127,7 @@ public class BusinessChuKuWeiWai extends DataEntity<BusinessChuKuWeiWai> {
 		this.unit = unit;
 	}
 	
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	@ExcelField(title="计划下达日期", align=2, sort=15)
 	public Date getStartdate() {
 		return startdate;
@@ -127,7 +137,7 @@ public class BusinessChuKuWeiWai extends DataEntity<BusinessChuKuWeiWai> {
 		this.startdate = startdate;
 	}
 	
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	@ExcelField(title="计划到货日期", align=2, sort=16)
 	public Date getArrivedate() {
 		return arrivedate;

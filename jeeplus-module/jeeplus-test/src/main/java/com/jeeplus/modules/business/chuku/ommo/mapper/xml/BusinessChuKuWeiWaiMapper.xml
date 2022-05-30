@@ -22,20 +22,10 @@
 		a.arrivedate AS "arrivedate",
 		a.moid AS "moid",
 		a.mohid AS "mohid",
-				
-				
-				
-				
-				
-				
-				
-				
-				
 		vendor.name AS "vendor.name"
 	</sql>
 	
 	<sql id="businessChuKuWeiWaiJoins">
-		
 		LEFT JOIN base_vendor vendor ON vendor.id = a.vendor
 	</sql>
 	

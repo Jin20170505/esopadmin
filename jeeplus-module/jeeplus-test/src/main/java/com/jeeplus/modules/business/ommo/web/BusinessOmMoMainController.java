@@ -17,6 +17,9 @@ import com.jeeplus.modules.business.baogong.order.entity.BusinessBaoGongOrder;
 import com.jeeplus.modules.business.ommo.bom.entity.BussinessOmMoDetailOnly;
 import com.jeeplus.modules.business.ommo.bom.service.BussinessOmMoDetailOnlyService;
 import com.jeeplus.modules.business.ommo.entity.BusinessOmMoDetail;
+import com.jeeplus.modules.business.ruku.product.entity.BusinessRuKuProduct;
+import com.jeeplus.modules.business.ruku.product.entity.BusinessRuKuProductMx;
+import com.jeeplus.modules.business.ruku.product.entity.ProductTagBean;
 import com.jeeplus.modules.u8data.morder.entity.U8Moallocate;
 import com.jeeplus.modules.u8data.morder.entity.U8Morder;
 import com.jeeplus.modules.u8data.morder.service.U8MoallocateService;
@@ -71,7 +74,25 @@ public class BusinessOmMoMainController extends BaseController {
 		}
 		return entity;
 	}
-	
+	@RequestMapping("/qr")
+	public void getQrImage(String rid, HttpServletResponse response) throws IOException {
+		response.reset();
+		response.setContentType("image/jpg");
+		ServletOutputStream out = null;
+		try{
+			BusinessOmMoDetail detail = businessOmMoMainService.getDetail(rid);
+			String qr = "{\"wwcode\":\""+detail.getMo().getCode()+"\",\"lineno\":\""+detail.getNo()+"\",\"wwid\":\""+detail.getMo().getId()+"\",\"wwhid\":\""+detail.getId()+"\"}";
+			out = response.getOutputStream();
+			QRCodeUtil.encode(qr,out);
+			out.flush();
+		}catch (Exception e){
+			e.printStackTrace();
+		}finally {
+			if(out!=null){
+				out.close();
+			}
+		}
+	}
 	/**
 	 * 委外订单列表页面
 	 */
