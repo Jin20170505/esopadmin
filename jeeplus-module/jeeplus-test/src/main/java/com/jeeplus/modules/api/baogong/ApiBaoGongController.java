@@ -53,10 +53,10 @@ public class ApiBaoGongController {
      * @return
      */
     @RequestMapping("do")
-    public AjaxJson baogong(String bgid,String bghid,String remarks,String userid,String opname,Double dbnum,Double flnum,Double fgnum,Double gfnum,Double bhgnum,Double hgnum,String complete){
+    public AjaxJson baogong(String bgid,String bghid,String remarks,String userid,String opname,String douser,Double dbnum,Double flnum,Double fgnum,Double gfnum,Double bhgnum,Double hgnum,String complete){
         AjaxJson json = new AjaxJson();
         try{
-            businessBaoGongRecordService.baogong(bgid,bghid, remarks, userid, opname,dbnum, flnum, fgnum,gfnum, bhgnum, hgnum,complete);
+            businessBaoGongRecordService.baogong(bgid,bghid, remarks, userid, opname,douser,dbnum, flnum, fgnum,gfnum, bhgnum, hgnum,complete);
             json.setSuccess(true);
             json.setMsg("报工成功。");
         }catch (Exception e){

@@ -1,6 +1,6 @@
 <script>
 $(document).ready(function() {
-	$('#businessRuKuProductTable').bootstrapTable({
+	$('#businessPanDianTable').bootstrapTable({
 		 
 		  //请求方法
                method: 'post',
@@ -49,7 +49,7 @@ $(document).ready(function() {
                //可供选择的每页的行数(*)
                pageList: [10, 25, 50, 100],
                //这个接口需要处理bootstrap table传递的固定参数,并返回特定格式的json数据  
-               url: "${ctx}/business/ruku/product/businessRuKuProduct/data",
+               url: "${ctx}/business/pandian/businessPanDian/data",
                //默认值为 'limit',传给服务端的参数为：limit, offset, search, sort, order Else
                //queryParamsType:'',   
                ////查询参数,每次调用是会带上这个参数，可自定义                         
@@ -72,74 +72,40 @@ $(document).ready(function() {
 		    }
 			,{
 		        field: 'code',
-		        title: '入库单号',
+		        title: '盘点单号',
 		        sortable: true,
 		        sortName: 'code'
 		        ,formatter:function(value, row , index){
-                    return "<a  href='#' onclick='view(\""+row.id+"\")'>"+value+"</a>";
+                           return "<a  href='#' onclick='view(\""+row.id+"\")'>"+value+"</a>";
 		         }
 		       
 		    }
 			,{
-		        field: 'sccode',
-		        title: '生产订单号',
+		        field: 'ddate',
+		        title: '盘点日期',
 		        sortable: true,
-		        sortName: 'sccode'
-		       
-		    },{
-                       field: 'bgcode',
-                       title: '报工单号',
-                       sortable: true,
-                       sortName: 'bgcode'
-
-                   }
-			,{
-		        field: 'cinvcode',
-		        title: '存货编码',
-		        sortable: true,
-		        sortName: 'cinvcode'
+		        sortName: 'ddate'
 		       
 		    }
 			,{
-		        field: 'cinvname',
-		        title: '存货名称',
+		        field: 'duser.name',
+		        title: '盘点人',
 		        sortable: true,
-		        sortName: 'cinvname'
+		        sortName: 'duser.name'
 		       
 		    }
 			,{
-		        field: 'cinvstd',
-		        title: '规格型号',
+		        field: 'ck.name',
+		        title: '盘点仓库',
 		        sortable: true,
-		        sortName: 'cinvstd'
+		        sortName: 'ck.name'
 		       
 		    }
 			,{
-		        field: 'batchno',
-		        title: '批号',
+		        field: 'hw.name',
+		        title: '盘点货位',
 		        sortable: true,
-		        sortName: 'batchno'
-		       
-		    }
-			,{
-		        field: 'cangku.name',
-		        title: '仓库',
-		        sortable: true,
-		        sortName: 'cangku.name'
-		       
-		    }
-                   ,{
-                       field: 'num',
-                       title: '数量',
-                       sortable: true,
-                       sortName: 'num'
-
-                   }
-			,{
-		        field: 'remarks',
-		        title: '备注信息',
-		        sortable: true,
-		        sortName: 'remarks'
+		        sortName: 'hw.name'
 		       
 		    }
 		     ]
@@ -147,10 +113,10 @@ $(document).ready(function() {
 		});
 		
 
-	  $('#businessRuKuProductTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
+	  $('#businessPanDianTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
-            $('#remove').prop('disabled', ! $('#businessRuKuProductTable').bootstrapTable('getSelections').length);
-            $('#edit,#print').prop('disabled', $('#businessRuKuProductTable').bootstrapTable('getSelections').length!=1);
+            $('#remove').prop('disabled', ! $('#businessPanDianTable').bootstrapTable('getSelections').length);
+            $('#edit').prop('disabled', $('#businessPanDianTable').bootstrapTable('getSelections').length!=1);
         });
 
 	 $("#import").click(function(){//显示导入面板
@@ -162,7 +128,7 @@ $(document).ready(function() {
 	 $("#btnImportExcel").click(function(){//导入Excel
 		 var importForm = $('#importForm')[0];
 		 jp.block('#import-collapse',"文件上传中...");
-		 jp.uploadFile(importForm,"${ctx}/business/ruku/product/businessRuKuProduct/import",function (data) {
+		 jp.uploadFile(importForm,"${ctx}/business/pandian/businessPanDian/import",function (data) {
 			 if(data.success){
 				 jp.toastr_success(data.msg);
 				 refresh();
@@ -174,15 +140,15 @@ $(document).ready(function() {
 	  })
 
 	 $("#btnDownloadTpl").click(function(){//下载模板文件
-            jp.downloadFile('${ctx}/business/ruku/product/businessRuKuProduct/import/template');
+            jp.downloadFile('${ctx}/business/pandian/businessPanDian/import/template');
 		})
 
 	 $("#export").click(function(){//导出Excel文件
 	        var searchParam = $("#searchForm").serializeJSON();
 	        searchParam.pageNo = 1;
 	        searchParam.pageSize = -1;
-            var sortName = $('#businessRuKuProductTable').bootstrapTable("getOptions", "none").sortName;
-            var sortOrder = $('#businessRuKuProductTable').bootstrapTable("getOptions", "none").sortOrder;
+            var sortName = $('#businessPanDianTable').bootstrapTable("getOptions", "none").sortName;
+            var sortOrder = $('#businessPanDianTable').bootstrapTable("getOptions", "none").sortOrder;
             var values = "";
             for(var key in searchParam){
                 values = values + key + "=" + searchParam[key] + "&";
@@ -191,7 +157,7 @@ $(document).ready(function() {
                 values = values + "orderBy=" + sortName + " "+sortOrder;
             }
 
-			jp.downloadFile('${ctx}/business/ruku/product/businessRuKuProduct/export?'+values);
+			jp.downloadFile('${ctx}/business/pandian/businessPanDian/export?'+values);
 	  })
 
 	  $("#search").click("click", function() {// 绑定查询按扭
@@ -206,57 +172,29 @@ $(document).ready(function() {
 		  refresh();
 		});
 
+	 $('#ddate').datepicker({//日期控件初始化
+			toggleActive: true,
+			language:"zh-CN",
+    			format:"yyyy-mm-dd"
+		});
 		
 	});
 
 	//获取选中行
   function getIdSelections() {
-        return $.map($("#businessRuKuProductTable").bootstrapTable('getSelections'), function (row) {
+        return $.map($("#businessPanDianTable").bootstrapTable('getSelections'), function (row) {
             return row.id
         });
     }
 
-    function printbq(){
-    var rid = getIdSelections();
-    top.layer.open({
-    type: 1,
-    area: ['500px', '200px'],
-    title:"输入包装数量(即此单分几包)",
-    auto:true,
-    maxmin: true, //开启最大化最小化按钮
-    content: $('#baonumform').html(),
-    btn: ['确定', '关闭'],
-    yes: function(index, layero){
-    var num = $(layero).find("#num").val();
-    if(!num){
-    jp.warning("请输入数量");
-    return false;
-}
-    if((num-0)<=0){
-    jp.warning("请输入大于0的数字");
-    return false;
-}
-    doPrint(rid,num);
-    top.layer.close(index);
-},
-    cancel: function(index){
-    top.layer.close(index);
-}
-});
-
-    }
-
-    function doPrint(rid,num){
-    jp.windowOpen('${ctx}/business/ruku/product/businessRuKuProduct/goToTagPrint?rid='+rid+'&num='+num,"产品标签--打印",1200,1200);
-}
   //删除
   function del(ids){
      if(!ids){
           ids = getIdSelections();
      }
-	 jp.confirm('确认要删除该产成品入库记录吗？', function(){
+	 jp.confirm('确认要删除该盘点单记录吗？', function(){
 		var index =jp.loading();
-		jp.get("${ctx}/business/ruku/product/businessRuKuProduct/delete?ids=" + ids, function(data){
+		jp.get("${ctx}/business/pandian/businessPanDian/delete?ids=" + ids, function(data){
 				if(data.success){
 					refresh();
 					jp.toastr_success(data.msg);
@@ -272,41 +210,41 @@ $(document).ready(function() {
 
     //刷新列表
   function refresh() {
-      $('#businessRuKuProductTable').bootstrapTable('refresh');
+      $('#businessPanDianTable').bootstrapTable('refresh');
   }
 
    //新增表单页面
  function add() {
-     jp.openSaveDialog('新增产成品入库', "${ctx}/business/ruku/product/businessRuKuProduct/form/add",'90%', '90%');
+     jp.openSaveDialog('新增盘点单', "${ctx}/business/pandian/businessPanDian/form/add",'90%', '90%');
  }
   //编辑表单页面
   function edit(id){
       if(!id){
           id = getIdSelections();
       }
-	  jp.openSaveDialog('编辑产成品入库', "${ctx}/business/ruku/product/businessRuKuProduct/form/edit?id="+id,'90%', '90%');
+	  jp.openSaveDialog('编辑盘点单', "${ctx}/business/pandian/businessPanDian/form/edit?id="+id,'90%', '90%');
   }
   //查看表单页面
   function view(id) {
       if(!id){
           id = getIdSelections();
       }
-      jp.openViewDialog('查看产成品入库', "${ctx}/business/ruku/product/businessRuKuProduct/form/view?id="+id,'90%', '90%');
+      jp.openViewDialog('查看盘点单', "${ctx}/business/pandian/businessPanDian/form/view?id="+id,'90%', '90%');
   }
  //子表展示
 		   
   function detailFormatter(index, row) {
-	  var htmltpl =  $("#businessRuKuProductChildrenTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
+	  var htmltpl =  $("#businessPanDianChildrenTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
 	  var html = Mustache.render(htmltpl, {
 			idx:row.id
 		});
-	  $.get("${ctx}/business/ruku/product/businessRuKuProduct/detail?id="+row.id, function(businessRuKuProduct){
-    	var businessRuKuProductChild1RowIdx = 0, businessRuKuProductChild1Tpl = $("#businessRuKuProductChild1Tpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
-		var data1 =  businessRuKuProduct.businessRuKuProductMxList;
+	  $.get("${ctx}/business/pandian/businessPanDian/detail?id="+row.id, function(businessPanDian){
+    	var businessPanDianChild1RowIdx = 0, businessPanDianChild1Tpl = $("#businessPanDianChild1Tpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
+		var data1 =  businessPanDian.businessPanDianMxList;
 		for (var i=0; i<data1.length; i++){
 			data1[i].dict = {};
-			addRow('#businessRuKuProductChild-'+row.id+'-1-List', businessRuKuProductChild1RowIdx, businessRuKuProductChild1Tpl, data1[i]);
-			businessRuKuProductChild1RowIdx = businessRuKuProductChild1RowIdx + 1;
+			addRow('#businessPanDianChild-'+row.id+'-1-List', businessPanDianChild1RowIdx, businessPanDianChild1Tpl, data1[i]);
+			businessPanDianChild1RowIdx = businessPanDianChild1RowIdx + 1;
 		}
 				
       	  			
@@ -321,11 +259,11 @@ $(document).ready(function() {
 		}));
 	}
 </script>
-<script type="text/template" id="businessRuKuProductChildrenTpl">//<!--
+<script type="text/template" id="businessPanDianChildrenTpl">//<!--
 	<div class="card card-tabs">
 	<div class="card-heading  pb-0">
 	    <ul class="nav nav-pills float-left" role="tablist">
-				<li class="nav-item"><a data-toggle="tab" class="nav-link show active" href="#tab-{{idx}}-1" aria-expanded="true">产成品入库单明细</a></li>
+				<li class="nav-item"><a data-toggle="tab" class="nav-link show active" href="#tab-{{idx}}-1" aria-expanded="true">盘点明细</a></li>
 		</ul>
 		</div>
 		<div class="card-body">
@@ -334,17 +272,22 @@ $(document).ready(function() {
 						<table class="table table-bordered">
 						<thead>
 							<tr>
-								<th>生产订单行号</th>
-								<th>产品编码</th>
-								<th>产品名称</th>
+								<th>序号</th>
+								<th>存货编码</th>
+								<th>存货名称</th>
 								<th>规格型号</th>
-								<th>数量</th>
+								<th>生产日期</th>
+								<th>批号</th>
+								<th>现存数量</th>
 								<th>单位</th>
-								<th>货位</th>
+								<th>货位编码</th>
+								<th>仓库编码</th>
 								<th>备注信息</th>
+								<th>实盘数量</th>
+								<th>差值</th>
 							</tr>
 						</thead>
-						<tbody id="businessRuKuProductChild-{{idx}}-1-List">
+						<tbody id="businessPanDianChild-{{idx}}-1-List">
 						</tbody>
 					</table>
 				</div>
@@ -352,10 +295,10 @@ $(document).ready(function() {
 		</div>
 		</div>//-->
 	</script>
-	<script type="text/template" id="businessRuKuProductChild1Tpl">//<!--
+	<script type="text/template" id="businessPanDianChild1Tpl">//<!--
 				<tr>
 					<td>
-						{{row.linecode}}
+						{{row.no}}
 					</td>
 					<td>
 						{{row.cinvcode}}
@@ -367,16 +310,31 @@ $(document).ready(function() {
 						{{row.cinvstd}}
 					</td>
 					<td>
+						{{row.scdate}}
+					</td>
+					<td>
+						{{row.batchno}}
+					</td>
+					<td>
 						{{row.num}}
 					</td>
 					<td>
 						{{row.unit}}
 					</td>
 					<td>
-						{{row.huowei.name}}
+						{{row.hwcode}}
+					</td>
+					<td>
+						{{row.ckcode}}
 					</td>
 					<td>
 						{{row.remarks}}
+					</td>
+					<td>
+						{{row.pannum}}
+					</td>
+					<td>
+						{{row.cha}}
 					</td>
 				</tr>//-->
 	</script>

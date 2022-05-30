@@ -64,7 +64,7 @@ public class BusinessBaoGongRecordService extends CrudService<BusinessBaoGongRec
 
 	// 报工
 	@Transactional(readOnly = false)
-	public void baogong(String bgid,String bghid,String remarks,String userid,String opname,Double dbnum,Double lfnum,Double fgnum,Double gfnum,Double bhgnum,Double hgnum,String complete){
+	public void baogong(String bgid,String bghid,String remarks,String userid,String opname,String douser,Double dbnum,Double lfnum,Double fgnum,Double gfnum,Double bhgnum,Double hgnum,String complete){
 		BusinessBaoGongOrder order = baoGongOrderService.getBaoGongInfo(bgid,bghid,null);
 		BusinessBaoGongOrderMingXi mingXi = order.getBusinessBaoGongOrderMingXiList().get(0);
 		if(mingXi==null){
@@ -76,6 +76,7 @@ public class BusinessBaoGongRecordService extends CrudService<BusinessBaoGongRec
 			throw new RuntimeException("报工数量超出工单数量");
 		}
 		BusinessBaoGongRecord record = new BusinessBaoGongRecord();
+		record.setDouser(new User(douser));
 		record.setBgdate(new Date());
 		record.setBgcode(order.getBgcode());
 		record.setBgid(bgid);

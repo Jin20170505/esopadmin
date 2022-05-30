@@ -9,6 +9,7 @@
 		a.update_by AS "updateBy.id",
 		a.update_date AS "updateDate",
 		a.del_flag AS "delFlag",
+		a.do_user as "douser.id",
 		a.bgdate AS "bgdate",
 		a.bgcode AS "bgcode",
 		a.ordercode AS "ordercode",
@@ -25,11 +26,12 @@
 		a.fgnum AS "fgnum",
 		a.bhgnum AS "bhgnum",
 		a.hgnum AS "hgnum",
+		douser.name AS "douser.name",
 		a.remarks AS "remarks"
 	</sql>
 	
 	<sql id="businessBaoGongRecordJoins">
-		
+		left join sys_user douser on douser.id = a.do_user
 	</sql>
 
 	<select id="getDoneSumNum" resultType="Double">
@@ -99,7 +101,7 @@
 	
 	<insert id="insert">
 		INSERT INTO business_baogong_record(
-			id,
+			id,do_user,
 			create_by,
 			create_date,
 			update_by,
@@ -120,7 +122,7 @@
 			hgnum,unit,cinvcode,cinvname,cinvstd,
 			remarks
 		) VALUES (
-			#{id},
+			#{id},#{douser.id},
 			#{createBy.id},
 			#{createDate},
 			#{updateBy.id},

@@ -95,6 +95,7 @@ public class BusinessRukuCaiGouService extends CrudService<BusinessRukuCaiGouMap
 	public void doRuKu(String cgid,String cgcode,String ckid,String hwid,String userid,String mxJson){
 		BusinessRukuCaiGou businessRukuCaiGou = new BusinessRukuCaiGou();
 		User user = UserUtils.get(userid);
+		businessRukuCaiGou.setCreateBy(user);
 		BusinessArrivalVouch vouch = arrivalVouchMapper.get(cgid);
 		businessRukuCaiGou.setArrivalcode(vouch.getCode());
 		businessRukuCaiGou.setArrivaldate(DateUtils.formatDate(vouch.getArriveDate()));

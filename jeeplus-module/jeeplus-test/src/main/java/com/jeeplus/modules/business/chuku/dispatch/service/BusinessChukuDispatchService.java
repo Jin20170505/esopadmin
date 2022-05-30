@@ -109,8 +109,9 @@ public class BusinessChukuDispatchService extends CrudService<BusinessChukuDispa
 			mx.setDelFlag("0");mx.setId("");
 			main.getBusinessChukuDispatchMxList().add(mx);
 		});
-		save(main);
 		User user  = UserUtils.get(userid);
+		main.setCreateBy(user);
+		save(main);
 		if(user==null){
 			user = new User();
 		}

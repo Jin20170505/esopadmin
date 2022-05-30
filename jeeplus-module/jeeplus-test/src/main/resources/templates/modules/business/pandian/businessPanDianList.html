@@ -1,0 +1,71 @@
+<%
+layout("/include/_container.html", {title:"列表", parent:"盘点单"}){
+%>
+    <!-- 搜索框-->
+    <div id="search-collapse" class="white-box collapse m-b-5">
+        <a class="jp-ti-close close" onclick="$('#search-collapse').fadeToggle()">
+            <i class="fa fa-times"></i>
+        </a>
+        <form id="searchForm" class="form-inline">
+			 <div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="盘点单号：">盘点单号：</label>
+				<input name="code"  maxlength="64"  class=" form-control"/>
+			</div>
+			 <div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="盘点日期：">盘点日期：</label>
+				<div class="input-daterange input-group" id="ddate">
+                    <input type="text" class="form-control" id="beginDdate" name="beginDdate">
+                    <span class="input-group-text btn-custom border text-white">to</span>
+                    <input type="text" class="form-control" id="endDdate" name="endDdate">
+                </div>
+			</div>
+			 <div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="盘点仓库：">盘点仓库：</label>
+				<#gridselect url="${ctx}/base/cangku/baseCangKu/data" id="ck" name="ck.id"  labelName="ck.name"
+							 title="选择盘点仓库" class="form-control " fieldLabels="编码|名称" fieldKeys="code|name" searchLabels="编码|名称" searchKeys="code|name"/>
+			</div>
+			 <div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="盘点货位：">盘点货位：</label>
+				<#gridselect url="${ctx}/base/huowei/baseHuoWei/data" id="hw" name="hw.id"  labelName="hw.name"
+							 title="选择盘点货位" class="form-control " fieldLabels="编码|名称" fieldKeys="code|name" searchLabels="编码|名称" searchKeys="code|name"/>
+			</div>
+		    <div class="form-group m-b-10 m-r-10">
+                <a  id="search" class="btn  btn-custom waves-effect waves-light m-l-10 btn-md btn-rounded"><i class="fa fa-search"></i> 查询</a>
+                <a  id="reset" class="btn  btn-custom waves-effect waves-light m-l-10 btn-md btn-rounded" ><i class="fa fa-refresh"></i> 重置</a>
+            </div>
+        </form>
+    </div>
+
+	<div class="white-box">
+
+	<!-- 工具栏 -->
+	<div id="toolbar">
+			 <% if(shiro.hasPermission("business:pandian:businessPanDian:add") ){ %>
+<!--			 	<button id="add" class="btn btn-custom waves-effect w-xs waves-light" onclick="add()">-->
+<!--					<i class="fa fa-plus"></i> 新建-->
+<!--				</button>-->
+			<% } %>
+			 <% if(shiro.hasPermission("business:pandian:businessPanDian:edit") ){ %>
+			    <button id="edit" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="edit()">
+	            	<i class="fa fa-edit"></i> 修改
+	        	</button>
+			<% } %>
+			 <% if(shiro.hasPermission("business:pandian:businessPanDian:del") ){ %>
+				<button id="remove" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="del()">
+	            	<i class="fa fa-remove"></i> 删除
+	        	</button>
+			<% } %>
+			 <% if(shiro.hasPermission("business:pandian:businessPanDian:import") ){ %>
+
+			<% } %>
+			 <% if(shiro.hasPermission("business:pandian:businessPanDian:export") ){ %>
+
+			 <% } %>
+		    </div>
+		
+	<!-- 表格 -->
+	<table id="businessPanDianTable" class="table-bordered"   data-toolbar="#toolbar"></table>
+	</div>
+
+	<% include("businessPanDianList.js"){} %>
+	<% } %>

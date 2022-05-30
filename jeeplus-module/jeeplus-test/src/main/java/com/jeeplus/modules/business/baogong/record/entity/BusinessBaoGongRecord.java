@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import com.jeeplus.core.persistence.DataEntity;
 import com.jeeplus.common.utils.excel.annotation.ExcelField;
+import com.jeeplus.modules.sys.entity.User;
 
 /**
  * 员工报工Entity
@@ -17,6 +18,7 @@ public class BusinessBaoGongRecord extends DataEntity<BusinessBaoGongRecord> {
 	
 	private static final long serialVersionUID = 1L;
 	private Date bgdate;		// 报工时间
+	private User douser;	// 实际做工人
 	private String bgid;	// 报工ID
 	private String bgcode;		// 报工单号
 	private String planid;	// 计划工单ID
@@ -46,6 +48,15 @@ public class BusinessBaoGongRecord extends DataEntity<BusinessBaoGongRecord> {
 
 	public BusinessBaoGongRecord(String id){
 		super(id);
+	}
+
+	public User getDouser() {
+		return douser;
+	}
+
+	public BusinessBaoGongRecord setDouser(User douser) {
+		this.douser = douser;
+		return this;
 	}
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
