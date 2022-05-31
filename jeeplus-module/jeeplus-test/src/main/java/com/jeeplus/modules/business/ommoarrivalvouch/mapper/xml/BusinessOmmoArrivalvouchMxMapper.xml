@@ -32,7 +32,24 @@
 	<sql id="businessOmmoArrivalvouchMxJoins">
 			LEFT JOIN business_ommo_arrivalvouch b ON b.id = a.pid
 	</sql>
-	
+
+	<select id="getMxByPidAndCinvcode" resultType="BusinessOmmoArrivalvouchMx">
+		select  a.id AS "id", a.cinvcode AS "cinvcode",
+				a.cinvname AS "cinvname",
+				a.cinvstd AS "cinvstd",
+				a.batchno AS "batchno",
+				a.scdate AS "scdate",
+				a.num AS "num",
+				a.unit AS "unit",
+				a.minnum AS "minnum",
+				a.hw AS "hw" FROM business_ommo_arrivalvouch_mx a
+				where a.pid = #{pid} and a.cinvcode = #{cinvcode}
+				<if test="batchno !=null and batchno !='' ">
+					and a.batchno = #{batchno}
+				</if>
+				limit 1;
+	</select>
+
     <select id="findMxList" resultType="BusinessOmmoArrivalvouchMx">
 		SELECT
 		<include refid="businessOmmoArrivalvouchMxColumns"/>,

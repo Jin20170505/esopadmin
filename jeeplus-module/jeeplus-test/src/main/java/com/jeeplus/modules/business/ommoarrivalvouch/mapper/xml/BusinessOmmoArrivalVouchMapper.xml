@@ -19,6 +19,7 @@
 		a.printstatus AS "printstatus",
 		a.memo AS "memo",
 		vendor.name AS "vendor.name",
+		vendor.code AS "vendor.code",
 		dept.name AS "dept.name"
 	</sql>
 	

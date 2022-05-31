@@ -118,7 +118,7 @@ public class BusinessOmmoArrivalVouchController extends BaseController {
 		try{
 			BusinessOmmoArrivalVouch vouch = businessOmmoArrivalVouchService.get(rid);
 			StringBuilder sb = new StringBuilder();
-			sb.append("{\"wwcode\":\"").append(vouch.getCode()).append("\",\"date\":\"")
+			sb.append("{\"wwcode\":\"").append(vouch.getCode()).append("\",\"arrivaldate\":\"")
 					.append(DateUtils.formatDate(vouch.getDdate(),"yyyy-MM-dd")).append("\",\"deptname\":\"").append(vouch.getDept().getName())
 					.append("\",\"vendorname\":\"").append(vouch.getVendor().getName()).append("\",\"wwid\":\"")
 					.append(vouch.getId()).append("\"}");
@@ -171,7 +171,7 @@ public class BusinessOmmoArrivalVouchController extends BaseController {
 		ServletOutputStream out = null;
 		try{
 			BusinessOmmoArrivalvouchMx tagBean = businessOmmoArrivalVouchService.getMx(rid);
-			String qr = "'cinvcode':'"+tagBean.getCinvcode()+"','num':'"+num+"','cghid':'"+tagBean.getId()+"','cgid':'"+tagBean.getP().getId()+"'";
+			String qr = "'cinvcode':'"+tagBean.getCinvcode()+"','cinvcodename':'"+tagBean.getCinvname()+"','batchno':'"+tagBean.getBatchno()+"','date':'"+tagBean.getScdate()+"','num':'"+num+"','unit':'"+tagBean.getUnit()+"'";
 			out = response.getOutputStream();
 			QRCodeUtil.encode(qr,out);
 			out.flush();

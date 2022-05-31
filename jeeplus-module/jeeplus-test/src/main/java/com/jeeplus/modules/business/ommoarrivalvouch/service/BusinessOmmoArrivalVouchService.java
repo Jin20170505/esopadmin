@@ -175,4 +175,8 @@ public class BusinessOmmoArrivalVouchService extends CrudService<BusinessOmmoArr
     public void print(String id) {
 		businessOmmoArrivalvouchMxMapper.print(id);
     }
+
+    public BusinessOmmoArrivalvouchMx getMxByPidAndCinvcode(String pid,String cinvcode,String batchno){
+		return businessOmmoArrivalvouchMxMapper.getMxByPidAndCinvcode(pid, cinvcode, batchno);
+	}
 }

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.business.ruku.ommo.mapper.BusinessRukuOmmoMapper">
+    
+	<sql id="businessRukuOmmoColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.code AS "code",
+		a.wdcode AS "wdcode",
+		a.dept AS "dept.id",
+		a.vendor AS "vendor.id",
+		a.ddate AS "ddate",
+		a.rdate AS "rdate",
+		a.ck AS "ck.id",
+		a.u8code AS "u8code",
+				
+				
+				
+				
+				
+				
+				
+				
+				
+		dept.name AS "dept.name",
+				
+		vendor.name AS "vendor.name",
+				
+				
+				
+		ck.name AS "ck.name"
+	</sql>
+	
+	<sql id="businessRukuOmmoJoins">
+		
+		LEFT JOIN sys_office dept ON dept.id = a.dept
+		LEFT JOIN base_vendor vendor ON vendor.id = a.vendor
+		LEFT JOIN base_cangku ck ON ck.id = a.ck
+	</sql>
+	
+    
+	<select id="get" resultType="BusinessRukuOmmo" >
+		SELECT 
+			<include refid="businessRukuOmmoColumns"/>
+		FROM business_ruku_ommo a
+		<include refid="businessRukuOmmoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BusinessRukuOmmo" >
+		SELECT 
+			<include refid="businessRukuOmmoColumns"/>
+		FROM business_ruku_ommo a
+		<include refid="businessRukuOmmoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="wdcode != null and wdcode != ''">
+				AND a.wdcode = #{wdcode}
+			</if>
+			<if test="dept != null and dept.id != null and dept.id != ''">
+				AND a.dept = #{dept.id}
+			</if>
+			<if test="vendor != null and vendor.id != null and vendor.id != ''">
+				AND a.vendor = #{vendor.id}
+			</if>
+			<if test="beginRdate != null and endRdate != null  and beginRdate != '' and endRdate != '' ">
+				AND a.rdate BETWEEN #{beginRdate} AND #{endRdate}
+			</if>
+			<if test="ck != null and ck.id != null and ck.id != ''">
+				AND a.ck = #{ck.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BusinessRukuOmmo" >
+		SELECT 
+			<include refid="businessRukuOmmoColumns"/>
+		FROM business_ruku_ommo a
+		<include refid="businessRukuOmmoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO business_ruku_ommo(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			code,
+			wdcode,
+			dept,
+			vendor,
+			ddate,
+			rdate,
+			ck,
+			u8code
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{code},
+			#{wdcode},
+			#{dept.id},
+			#{vendor.id},
+			#{ddate},
+			#{rdate},
+			#{ck.id},
+			#{u8code}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE business_ruku_ommo SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			code = #{code},
+			wdcode = #{wdcode},
+			dept = #{dept.id},
+			vendor = #{vendor.id},
+			ddate = #{ddate},
+			rdate = #{rdate},
+			ck = #{ck.id},
+			u8code = #{u8code}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM business_ruku_ommo
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE business_ruku_ommo SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="BusinessRukuOmmo" statementType="STATEMENT">
+		select * FROM business_ruku_ommo  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

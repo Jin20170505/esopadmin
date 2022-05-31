@@ -1,0 +1,225 @@
+<%
+layout("/include/_dialog.html"){
+%>
+	<script type="text/javascript">
+
+		$(document).ready(function() {
+					        $('#rdate').datetimepicker({
+				 format:'Y-m-d H:i'
+		    });
+		});
+
+		function save() {
+            var isValidate = jp.validateForm('#inputForm');//校验表单
+            if(!isValidate){
+                return false;
+			}else{
+                var index = jp.loading();
+                jp.post("${ctx}/business/ruku/ommo/businessRukuOmmo/save",$('#inputForm').serialize(),function(data){
+                    if(data.success){
+                        jp.getParent().refresh();
+                        var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                        parent.layer.close(dialogIndex);
+                        jp.toastr_success(data.msg)
+
+                    }else{
+                        jp.toastr_error(data.msg);
+                    }
+                    jp.close(index);
+                })
+			}
+
+        }
+
+		function addRow(list, idx, tpl, row){
+			$(list).append(Mustache.render(tpl, {
+				idx: idx, delBtn: true, row: row
+			}));
+			$(list+idx).find("select").each(function(){
+				$(this).val($(this).attr("data-value"));
+			});
+			$(list+idx).find("input[type='checkbox'], input[type='radio']").each(function(){
+				var ss = $(this).attr("data-value").split(',');
+				for (var i=0; i<ss.length; i++){
+					if($(this).val() == ss[i]){
+						$(this).attr("checked","checked");
+					}
+				}
+			});
+			$(list+idx).find(".jp-calendar-picker-input").each(function(){
+				 $(this).datetimepicker({
+					 format:'Y-m-d H:i'
+			    });
+			});
+		}
+		function delRow(obj, prefix){
+			var id = $(prefix+"_id");
+			var delFlag = $(prefix+"_delFlag");
+			if (id.val() == ""){
+				$(obj).parent().parent().remove();
+			}else if(delFlag.val() == "0"){
+				delFlag.val("1");
+				$(obj).html("&divide;").attr("title", "撤销删除");
+				$(obj).parent().parent().addClass("error");
+			}else if(delFlag.val() == "1"){
+				delFlag.val("0");
+				$(obj).html("&times;").attr("title", "删除");
+				$(obj).parent().parent().removeClass("error");
+			}
+		}
+	</script>
+<form id="inputForm"  method="post"  class="form-horizontal p-15">
+		<input type="hidden" name="id" value="${businessRukuOmmo.id!}"/>
+		<table class="table table-bordered">
+		   <tbody>
+				<tr>
+					<td class="width-15 active"><label class="pull-right">单号：</label></td>
+					<td class="width-35">
+						<input name="code" value="${businessRukuOmmo.code!}"    class="form-control "/>
+				</td>
+					<td class="width-15 active"><label class="pull-right">委外到货单号：</label></td>
+					<td class="width-35">
+						<input name="wdcode" value="${businessRukuOmmo.wdcode!}"    class="form-control "/>
+				</td>
+				</tr>
+				<tr>
+					<td class="width-15 active"><label class="pull-right">部门：</label></td>
+					<td class="width-35">
+						<#treeselect id="dept" name="dept.id" value="${businessRukuOmmo.dept.id!}" labelName="dept.name" labelValue="${businessRukuOmmo.dept.name!}"
+							title="部门" url="/sys/office/treeData?type=2" class="form-control " allowClear="true" notAllowSelectParent="true"/>
+				</td>
+					<td class="width-15 active"><label class="pull-right">供应商：</label></td>
+					<td class="width-35">
+						<#gridselect url="${ctx}/base/vendor/baseVendor/data" id="vendor" name="vendor.id" value="${businessRukuOmmo.vendor.id!}" labelName="vendor.name" labelValue="${businessRukuOmmo.vendor.name!}"
+							 title="选择供应商" class="form-control " fieldLabels="编码|名称" fieldKeys="code|name" searchLabels="编码|名称" searchKeys="code|name" />
+				</td>
+				</tr>
+				<tr>
+					<td class="width-15 active"><label class="pull-right">到货时间：</label></td>
+					<td class="width-35">
+						<input name="ddate" value="${businessRukuOmmo.ddate!}"    class="form-control "/>
+				</td>
+					<td class="width-15 active"><label class="pull-right">入库时间：</label></td>
+					<td class="width-35">
+                    <div class="input-group">
+                        <input readonly=""  id="rdate" name="rdate"  placeholder="请选择日期" class="form-control   "   value="${fn.formatDate(businessRukuOmmo.rdate!, 'yyyy-MM-dd HH:mm:ss')}">
+                        <div class="input-group-append">
+                            <span class="input-group-text btn-custom border text-white"><i class="ti-calendar"></i></span>
+                        </div>
+                    </div>
+				</td>
+				</tr>
+				<tr>
+					<td class="width-15 active"><label class="pull-right">仓库：</label></td>
+					<td class="width-35">
+						<#gridselect url="${ctx}/base/cangku/baseCangKu/data" id="ck" name="ck.id" value="${businessRukuOmmo.ck.id!}" labelName="ck.name" labelValue="${businessRukuOmmo.ck.name!}"
+							 title="选择仓库" class="form-control " fieldLabels="编码|名称" fieldKeys="code|name" searchLabels="编码|名称" searchKeys="code|name" />
+				</td>
+					<td class="width-15 active"></td>
+		   			<td class="width-35" ></td>
+		  		</tr>
+		 	</tbody>
+		</table>
+			<div class="card card-tabs">
+            <div class="card-heading  pb-0">
+                <ul class="nav nav-pills float-left" role="tablist">
+				<li class="nav-item">
+					<a data-toggle="tab" class="nav-link show active" role="tab" href="#tab-1" aria-expanded="true">委外入库明细：</a>
+                </li>
+            </ul>
+            </div>
+            <div class="card-body">
+		    <div class="tab-content">
+			<div id="tab-1" class="tab-pane fade active show">
+			<a class="btn btn-white btn-sm m-b-5" onclick="addRow('#businessRukuOmmoMxList', businessRukuOmmoMxRowIdx, businessRukuOmmoMxTpl);businessRukuOmmoMxRowIdx = businessRukuOmmoMxRowIdx + 1;" title="新增"><i class="fa fa-plus"></i> 新增</a>
+			<table class="table table-striped table-bordered table-condensed">
+				<thead>
+					<tr>
+						<th class="hide"></th>
+						<th>序号</th>
+						<th>存货编码</th>
+						<th>存货名称</th>
+						<th>规格型号</th>
+						<th>批号</th>
+						<th>生产日期</th>
+						<th>入库数量</th>
+						<th>单位</th>
+						<th>货位</th>
+						<th width="10">&nbsp;</th>
+					</tr>
+				</thead>
+				<tbody id="businessRukuOmmoMxList">
+				</tbody>
+			</table>
+			<script type="text/template" id="businessRukuOmmoMxTpl">//<!--
+				<tr id="businessRukuOmmoMxList{{idx}}">
+					<td class="hide">
+						<input id="businessRukuOmmoMxList{{idx}}_id" name="businessRukuOmmoMxList[{{idx}}].id" type="hidden" value="{{row.id}}"/>
+						<input id="businessRukuOmmoMxList{{idx}}_delFlag" name="businessRukuOmmoMxList[{{idx}}].delFlag" type="hidden" value="0"/>
+					</td>
+					
+					<td>
+						<input id="businessRukuOmmoMxList{{idx}}_no" name="businessRukuOmmoMxList[{{idx}}].no" type="text" value="{{row.no}}"    class="form-control "/>
+					</td>
+					
+					
+					<td>
+						<input id="businessRukuOmmoMxList{{idx}}_cinvcode" name="businessRukuOmmoMxList[{{idx}}].cinvcode" type="text" value="{{row.cinvcode}}"    class="form-control "/>
+					</td>
+					
+					
+					<td>
+						<input id="businessRukuOmmoMxList{{idx}}_cinvname" name="businessRukuOmmoMxList[{{idx}}].cinvname" type="text" value="{{row.cinvname}}"    class="form-control "/>
+					</td>
+					
+					
+					<td>
+						<input id="businessRukuOmmoMxList{{idx}}_cinvstd" name="businessRukuOmmoMxList[{{idx}}].cinvstd" type="text" value="{{row.cinvstd}}"    class="form-control "/>
+					</td>
+					
+					
+					<td>
+						<input id="businessRukuOmmoMxList{{idx}}_batchno" name="businessRukuOmmoMxList[{{idx}}].batchno" type="text" value="{{row.batchno}}"    class="form-control "/>
+					</td>
+					
+					
+					<td>
+						<input id="businessRukuOmmoMxList{{idx}}_scdate" name="businessRukuOmmoMxList[{{idx}}].scdate" type="text" value="{{row.scdate}}"    class="form-control "/>
+					</td>
+					
+					
+					<td>
+						<input id="businessRukuOmmoMxList{{idx}}_rukunum" name="businessRukuOmmoMxList[{{idx}}].rukunum" type="text" value="{{row.rukunum}}"    class="form-control "/>
+					</td>
+					
+					
+					<td>
+						<input id="businessRukuOmmoMxList{{idx}}_unit" name="businessRukuOmmoMxList[{{idx}}].unit" type="text" value="{{row.unit}}"    class="form-control "/>
+					</td>
+					
+					
+					<td>
+						<input id="businessRukuOmmoMxList{{idx}}_hw" name="businessRukuOmmoMxList[{{idx}}].hw" type="text" value="{{row.hw}}"    class="form-control "/>
+					</td>
+					
+					<td class="text-center" width="10">
+						{{#delBtn}}<span class="close" onclick="delRow(this, '#businessRukuOmmoMxList{{idx}}')" title="删除">&times;</span>{{/delBtn}}
+					</td>
+				</tr>//-->
+			</script>
+			<script type="text/javascript">
+				var businessRukuOmmoMxRowIdx = 0, businessRukuOmmoMxTpl = $("#businessRukuOmmoMxTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
+				$(document).ready(function() {
+					var data = ${fn.toJson(businessRukuOmmo.businessRukuOmmoMxList)};
+					for (var i=0; i<data.length; i++){
+						addRow('#businessRukuOmmoMxList', businessRukuOmmoMxRowIdx, businessRukuOmmoMxTpl, data[i]);
+						businessRukuOmmoMxRowIdx = businessRukuOmmoMxRowIdx + 1;
+					}
+				});
+			</script>
+			</div>
+		</div>
+		</div>
+		</div>
+		</form>
+<% } %>

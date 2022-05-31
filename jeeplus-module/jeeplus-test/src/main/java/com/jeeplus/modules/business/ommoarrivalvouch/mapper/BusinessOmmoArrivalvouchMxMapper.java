@@ -27,4 +27,6 @@ public interface BusinessOmmoArrivalvouchMxMapper extends BaseMapper<BusinessOmm
 
     @Update("update business_ommo_arrivalvouch_mx set printstatus = '已打印' where id = #{id}")
     void print(@Param("id") String id);
+
+    BusinessOmmoArrivalvouchMx getMxByPidAndCinvcode(@Param("pid") String pid,@Param("cinvcode") String cinvcode,@Param("batchno") String batchno);
 }
