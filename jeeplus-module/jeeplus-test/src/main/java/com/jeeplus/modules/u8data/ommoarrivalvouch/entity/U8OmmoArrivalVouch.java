@@ -1,5 +1,7 @@
 package com.jeeplus.modules.u8data.ommoarrivalvouch.entity;
 
+import com.jeeplus.common.utils.DateUtils;
+import com.jeeplus.common.utils.StringUtils;
 import com.jeeplus.core.persistence.DataEntity;
 
 import java.util.Date;
@@ -8,7 +10,7 @@ public class U8OmmoArrivalVouch extends DataEntity<U8OmmoArrivalVouch> {
     private String mid;//	到货单主表id
     private String autoid;//	到货单子表id
     private String ccode;//			到货单号
-    private String ivouchrowno;//		到货单行号
+    private Integer ivouchrowno;//		到货单行号
     private Date ddate;//			日期
     private String cvencode;//		供货单位编号
     private String cvenabbname;//		供应商
@@ -35,6 +37,21 @@ public class U8OmmoArrivalVouch extends DataEntity<U8OmmoArrivalVouch> {
     private Date start; // 开始日期
     private Date end; // 结束日期
 
+    public Double getMinNum(){
+        if(StringUtils.isEmpty(cInvDefine1)){
+            return null;
+        }else {
+            return Double.valueOf(cInvDefine1);
+        }
+
+    }
+    public String getScdate(){
+        if(dpdate==null){
+            return "";
+        }else {
+            return DateUtils.formatDate(dpdate,"yyyy-MM-dd");
+        }
+    }
     public String getMid() {
         return mid;
     }
@@ -62,11 +79,11 @@ public class U8OmmoArrivalVouch extends DataEntity<U8OmmoArrivalVouch> {
         return this;
     }
 
-    public String getIvouchrowno() {
+    public Integer getIvouchrowno() {
         return ivouchrowno;
     }
 
-    public U8OmmoArrivalVouch setIvouchrowno(String ivouchrowno) {
+    public U8OmmoArrivalVouch setIvouchrowno(Integer ivouchrowno) {
         this.ivouchrowno = ivouchrowno;
         return this;
     }

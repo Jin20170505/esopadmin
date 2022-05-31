@@ -23,7 +23,7 @@
         a.iquantity AS "iquantity",
         a.vouchstate AS "vouchstate",
         a.cbcloser AS "cbcloser",
-        a.csocode AS "csocode",
+        a.cordercode AS "csocode",
         a.irowno AS "irowno",
         a.cInvDefine1 AS "cInvDefine1",
         a.cposcode AS "cposcode",

@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.business.ommoarrivalvouch.mapper.BusinessOmmoArrivalVouchMapper">
+    
+	<sql id="businessOmmoArrivalVouchColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.code AS "code",
+		a.ddate AS "ddate",
+		a.vendor AS "vendor.id",
+		a.dept AS "dept.id",
+		a.cmarker AS "cmarker",
+		a.cpersonname AS "cpersonname",
+		a.printstatus AS "printstatus",
+		a.memo AS "memo",
+		vendor.name AS "vendor.name",
+		dept.name AS "dept.name"
+	</sql>
+	
+	<sql id="businessOmmoArrivalVouchJoins">
+		LEFT JOIN base_vendor vendor ON vendor.id = a.vendor
+		LEFT JOIN sys_office dept ON dept.id = a.dept
+	</sql>
+	
+    
+	<select id="get" resultType="BusinessOmmoArrivalVouch" >
+		SELECT 
+			<include refid="businessOmmoArrivalVouchColumns"/>
+		FROM business_ommo_arrivalvouch a
+		<include refid="businessOmmoArrivalVouchJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BusinessOmmoArrivalVouch" >
+		SELECT 
+			<include refid="businessOmmoArrivalVouchColumns"/>
+		FROM business_ommo_arrivalvouch a
+		<include refid="businessOmmoArrivalVouchJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="beginDdate != null and beginDdate != '' and endDdate != null and endDdate != ''">
+				AND a.ddate BETWEEN #{beginDdate} AND #{endDdate}
+			</if>
+			<if test="vendor != null and vendor.id != null and vendor.id != ''">
+				AND a.vendor = #{vendor.id}
+			</if>
+			<if test="dept != null and dept.id != null and dept.id != ''">
+				AND a.dept = #{dept.id}
+			</if>
+			<if test="cmarker != null and cmarker != ''">
+				AND a.cmarker = #{cmarker}
+			</if>
+			<if test="printstatus != null and printstatus != ''">
+				AND a.printstatus = #{printstatus}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BusinessOmmoArrivalVouch" >
+		SELECT 
+			<include refid="businessOmmoArrivalVouchColumns"/>
+		FROM business_ommo_arrivalvouch a
+		<include refid="businessOmmoArrivalVouchJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	<insert id="batchInsert" parameterType="java.util.List">
+		INSERT INTO business_ommo_arrivalvouch(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			code,
+			ddate,
+			vendor,
+			dept,
+			cmarker,
+			cpersonname,
+			printstatus,
+			memo
+		) VALUES
+		<foreach collection="list" separator="," item="item">
+			(
+			#{item.id},
+			#{item.createBy.id},
+			#{item.createDate},
+			#{item.updateBy.id},
+			#{item.updateDate},
+			#{item.remarks},
+			#{item.delFlag},
+			#{item.code},
+			#{item.ddate},
+			#{item.vendor.id},
+			#{item.dept.id},
+			#{item.cmarker},
+			#{item.cpersonname},
+			'未打印',
+			#{item.memo}
+			)
+		</foreach>
+		on duplicate key update
+		id = values(id),
+		update_date= VALUES(update_date),
+		code=VALUES(code),
+		vendor=VALUES(vendor),
+		ddate=VALUES(ddate),
+		memo=VALUES(memo),
+		dept=VALUES(dept),
+		cpersonname=VALUES(cpersonname),
+		cmarker=VALUES(cmarker)
+	</insert>
+	<insert id="insert">
+		INSERT INTO business_ommo_arrivalvouch(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			code,
+			ddate,
+			vendor,
+			dept,
+			cmarker,
+			cpersonname,
+			printstatus,
+			memo
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{code},
+			#{ddate},
+			#{vendor.id},
+			#{dept.id},
+			#{cmarker},
+			#{cpersonname},
+			#{printstatus},
+			#{memo}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE business_ommo_arrivalvouch SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			code = #{code},
+			ddate = #{ddate},
+			vendor = #{vendor.id},
+			dept = #{dept.id},
+			cmarker = #{cmarker},
+			cpersonname = #{cpersonname},
+			printstatus = #{printstatus},
+			memo = #{memo}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM business_ommo_arrivalvouch
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE business_ommo_arrivalvouch SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="BusinessOmmoArrivalVouch" statementType="STATEMENT">
+		select * FROM business_ommo_arrivalvouch  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

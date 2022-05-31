@@ -1,0 +1,121 @@
+<%
+layout("/include/_container.html", {title:"打印", parent:"报工单"}){
+%>
+<style type="text/css">
+    @media print {
+        #print{
+            display: none;
+        }
+    }
+    #print{
+        width: 100px;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+    }
+    #qrcode{
+        display: block;
+        width: 140px;
+        height: 140px;
+    }
+    h3{
+        font-size: 28px;
+    }
+
+
+    .table-bordered th{
+        font-size: 20px !important;
+        vertical-align: middle;
+    }
+    .table-bordered td{
+        font-size: 16px !important;
+    }
+    .table-bordered{
+        border: 1px solid #000000;
+        border-collapse: collapse;
+    }
+
+    .table > thead > tr > th,
+    .table > thead > tr > td,.table > tbody > tr > td,.table > tbody > tr > th{
+        border: 1px solid #000000 !important;
+    }
+</style>
+<div class="white-box">
+    <a id="print" class="btn btn-custom waves-effect w-xs waves-light" onclick="rukuPrint();">
+        <i class="fa fa-print"></i> 打印
+    </a>
+    <script type="text/javascript">
+        var rid ='${bean.id!}';
+        function rukuPrint(){
+            jp.get('${ctx}/business/ommoarrivalvouch/businessOmmoArrivalVouch/mainPrint?rid='+rid,function (rs){
+               if(rs.success){
+                   window.print();
+               }
+            });
+        }
+    </script>
+    <h3 style="text-align: center;">委外到货单</h3>
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <th width="100px">委外单号</th>
+            <td style="width: 150px;max-width: 190px">${bean.code!}</td>
+            <th width="100px">到货日期</th>
+            <td>${fn.formatDate(bean.ddate!, 'yyyy-MM-dd')}</td>
+            <td rowspan="4"><img id="qrcode" src="${ctx}/business/ommoarrivalvouch/businessOmmoArrivalVouch/img/${bean.id!}"/></td>
+        </tr>
+        <tr>
+            <th>部门</th>
+            <td>${bean.dept.name!}</td>
+            <th>供应商</th>
+            <td>${bean.vendor.name!}</td>
+
+        </tr>
+        <tr>
+            <th></th>
+            <td></td>
+            <th></th>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th width="60px;">序号</th>
+            <th style="min-width: 100px;">存货编码</th>
+            <th style="text-align: center;word-wrap: break-word;word-break: break-all;">存货名称</th>
+            <th style="width: 100px;">规格型号</th>
+            <th  width="70px;">数量</th>
+            <th  width="60px;">单位</th>
+            <th>批次号</th>
+            <th>生产日期</th>
+            <th>推荐货位</th>
+        </tr>
+        </thead>
+        <tbody id="itemList">
+
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var data = ${fn.toJson(bean.businessOmmoArrivalvouchMxList)};
+        var htm = '';
+        for (var i=0; i<data.length; i++){
+            htm +=  `<tr>
+                        <td style="vertical-align:middle;">`+data[i].no+`</td>
+                        <td style="vertical-align:middle;">`+data[i].cinvcode+`</td>
+                        <td style="vertical-align:middle;">`+data[i].cinvname+`</td>
+                        <td style="vertical-align:middle;">`+data[i].cinvstd+`</td>
+                        <td style="vertical-align:middle;">`+data[i].num+`</td>
+                        <td style="vertical-align:middle;">`+data[i].unit+`</td>
+                        <td style="vertical-align:middle;">`+data[i].batchno+`</td>
+                        <td style="vertical-align:middle;">`+data[i].scdate+`</td>
+                        <td style="vertical-align:middle;">`+data[i].hw+`</td>
+                    </tr>`;
+        }
+        $('#itemList').html(htm);
+    });
+</script>
+<% } %>
