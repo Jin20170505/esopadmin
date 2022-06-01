@@ -392,12 +392,12 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 		}
 		businessShengChanDingDanMingXiMapper.updateChaidan(rid);
 		jiHuaGongDans.forEach(d->businessJiHuaGongDanService.save(d));
-		weichaCheck(rid);
+		//weichaCheck(rid);
 	}
 
 
 	@Transactional(readOnly = false)
-	public void weichaCheck(String rid){
+	public void weichaCheck1(String rid){
 		List<BusinessShengChanBom> boms = businessShengChanDingdanMxService.findBomList(rid);
 		if(boms!=null){
 			boms.forEach(d->{
@@ -464,7 +464,7 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 			jiHuaGongDans.add(jiHuaGongDan);
 			businessShengChanDingDanMingXiMapper.updateChaidan(rid);
 			jiHuaGongDans.forEach(d->businessJiHuaGongDanService.save(d));
-			weichaCheck(rid);
+			//weichaCheck(rid);
 		}else {
 			BusinessJiHuaGongDan jiHuaGongDan = new BusinessJiHuaGongDan();
 			jiHuaGongDan.setCode(code+"001");

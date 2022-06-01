@@ -3,28 +3,26 @@
  */
 package com.jeeplus.modules.business.jihuadingdan.service;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.jeeplus.common.utils.DateUtils;
+import com.jeeplus.common.utils.StringUtils;
 import com.jeeplus.common.utils.number.RandomUtil;
+import com.jeeplus.core.persistence.Page;
+import com.jeeplus.core.service.CrudService;
 import com.jeeplus.modules.business.baogong.order.entity.BusinessBaoGongOrder;
 import com.jeeplus.modules.business.baogong.order.entity.BusinessBaoGongOrderMingXi;
 import com.jeeplus.modules.business.baogong.order.service.BusinessBaoGongOrderService;
+import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDan;
 import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDanBom;
+import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDanMingXi;
 import com.jeeplus.modules.business.jihuadingdan.mapper.BusinessJiHuaGongDanBomMapper;
+import com.jeeplus.modules.business.jihuadingdan.mapper.BusinessJiHuaGongDanMapper;
+import com.jeeplus.modules.business.jihuadingdan.mapper.BusinessJiHuaGongDanMingXiMapper;
 import com.jeeplus.modules.business.shengchan.dingdan.mapper.BusinessShengChanDingDanMingXiMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jeeplus.core.persistence.Page;
-import com.jeeplus.core.service.CrudService;
-import com.jeeplus.common.utils.StringUtils;
-import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDan;
-import com.jeeplus.modules.business.jihuadingdan.mapper.BusinessJiHuaGongDanMapper;
-import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDanMingXi;
-import com.jeeplus.modules.business.jihuadingdan.mapper.BusinessJiHuaGongDanMingXiMapper;
+import java.util.List;
 
 /**
  * 计划工单Service
