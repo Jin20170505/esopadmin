@@ -168,7 +168,7 @@ public class BusinessArrivalVouchController extends BaseController {
 		ServletOutputStream out = null;
 		try{
 			BusinessArrivalVouchMx tagBean = businessArrivalVouchService.getMx(rid);
-			String qr = "'cinvcode':'"+tagBean.getCinvcode()+"','num':'"+num+"','cghid':'"+tagBean.getId()+"','cgid':'"+tagBean.getP().getId()+"'";
+			String qr = "'cinvcode':'"+tagBean.getCinvcode()+"','cinvcodename':'"+tagBean.getCinvname()+"','batchno':'"+tagBean.getBatchno()+"','date':'"+tagBean.getScdate()+"','num':'"+num+"','unit':'"+tagBean.getUnit()+"'";
 			out = response.getOutputStream();
 			QRCodeUtil.encode(qr,out);
 			out.flush();

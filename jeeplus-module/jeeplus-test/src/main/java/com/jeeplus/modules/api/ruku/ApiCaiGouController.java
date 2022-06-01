@@ -1,6 +1,7 @@
 package com.jeeplus.modules.api.ruku;
 
 import com.jeeplus.common.json.AjaxJson;
+import com.jeeplus.common.utils.StringUtils;
 import com.jeeplus.modules.business.arrivalvouch.entity.BusinessArrivalVouch;
 import com.jeeplus.modules.business.arrivalvouch.entity.BusinessArrivalVouchMx;
 import com.jeeplus.modules.business.arrivalvouch.service.BusinessArrivalVouchService;
@@ -23,11 +24,16 @@ public class ApiCaiGouController {
     private BusinessRukuCaiGouService businessRukuCaiGouService;
 
     @RequestMapping("getMxDetail")
-    public AjaxJson getMxDetail(String mxid,Double num){
+    public AjaxJson getMxDetail(String cgid,String cinvcode,String batchno,Double num){
         AjaxJson json = new AjaxJson();
         try{
-            BusinessArrivalVouchMx mx = arrivalVouchService.getMx(mxid);
-            Double rukuSum = businessRukuCaiGouService.getRukuNum(mxid);
+            BusinessArrivalVouchMx mx = arrivalVouchService.getMxByCinvcodeAndBatchno(cgid,cinvcode,batchno);
+            if(mx==null|| StringUtils.isEmpty(mx.getId())){
+                json.setMsg("此存货不在该采购单中。");
+                json.setSuccess(false);
+                return json;
+            }
+            Double rukuSum = businessRukuCaiGouService.getRukuNum(mx.getId());
             if(rukuSum!=null){
                 double yl = mx.getNum()  - rukuSum ;
                 if(yl<0){

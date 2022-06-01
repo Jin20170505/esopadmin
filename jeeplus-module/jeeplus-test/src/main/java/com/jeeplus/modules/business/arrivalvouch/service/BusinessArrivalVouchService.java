@@ -157,6 +157,10 @@ public class BusinessArrivalVouchService extends CrudService<BusinessArrivalVouc
 		return businessArrivalVouchMxMapper.get(mxid);
 	}
 
+	public BusinessArrivalVouchMx getMxByCinvcodeAndBatchno(String pid,String cinvcode,String batchno){
+		return businessArrivalVouchMxMapper.getMxByCinvcodeAndBatchno(pid,cinvcode,batchno);
+	}
+
 	@Transactional(readOnly = false)
 	public void mainPrint(String id){
 		mapper.print(id);
