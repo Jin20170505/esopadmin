@@ -189,4 +189,13 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 		mapper.updateisshengcheng(id,"已生成");
 		businessBaoGongOrderService.save(order);
 	}
+
+	public Double getSumnumByScYid(String scyid){
+		return businessJiHuaGongDanBomMapper.getSumnumByScYid(scyid);
+	}
+
+	@Transactional(readOnly = false)
+	public void updateWeiCha(String scyid,double num){
+		businessJiHuaGongDanBomMapper.updateWeiCha(scyid,num);
+	}
 }

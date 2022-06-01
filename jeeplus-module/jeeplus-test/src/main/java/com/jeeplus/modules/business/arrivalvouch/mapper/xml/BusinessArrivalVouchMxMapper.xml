@@ -57,6 +57,9 @@
 		<if test="batchno != null and batchno != ''">
 			AND a.batchno = #{batchno}
 		</if>
+		<if test="scdate != null and scdate != ''">
+			AND a.scdate = #{scdate}
+		</if>
 	</select>
 
 	<select id="findMxList" resultType="BusinessArrivalVouchMx" >

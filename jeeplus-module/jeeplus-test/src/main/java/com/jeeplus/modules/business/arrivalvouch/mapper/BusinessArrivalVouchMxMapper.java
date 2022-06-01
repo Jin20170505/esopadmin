@@ -33,5 +33,5 @@ public interface BusinessArrivalVouchMxMapper extends BaseMapper<BusinessArrival
     @Select("select id from business_arrivalvouch_mx where pid = #{cgid} and isrk = '0'")
     List<String> findNoDoList(@Param("cgid") String cgid);
 
-    BusinessArrivalVouchMx getMxByCinvcodeAndBatchno(@Param("pid") String pid,@Param("cinvcode") String cinvcode,@Param("batchno") String batchno);
+    BusinessArrivalVouchMx getMxByCinvcodeAndBatchno(@Param("pid") String pid,@Param("cinvcode") String cinvcode,@Param("batchno") String batchno,@Param("scdate") String scdate);
 }

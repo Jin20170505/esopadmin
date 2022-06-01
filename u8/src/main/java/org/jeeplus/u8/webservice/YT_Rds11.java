@@ -71,4 +71,5 @@ public class YT_Rds11 extends DataEntity<YT_Rds11> {
     public void setIopseq(String iopseq) {
         this.iopseq = iopseq;
     }
+
 }

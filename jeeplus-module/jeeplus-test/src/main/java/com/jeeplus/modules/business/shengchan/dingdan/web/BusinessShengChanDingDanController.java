@@ -184,7 +184,7 @@ public class BusinessShengChanDingDanController extends BaseController {
 	}
 	@ResponseBody
 	@RequestMapping("chaidan")
-	public AjaxJson chaidan(String rid,int num){
+	public AjaxJson chaidan(String rid,Double num){
 		AjaxJson json = new AjaxJson();
 		try {
 			businessShengChanDingDanService.chaidan(rid,num);

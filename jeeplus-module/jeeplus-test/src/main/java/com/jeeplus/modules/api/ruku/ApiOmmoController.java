@@ -23,10 +23,10 @@ public class ApiOmmoController {
     private BusinessRukuOmmoService businessRukuOmmoService;
 
     @RequestMapping("getMxDetail")
-    public AjaxJson getMxDetail(String wdid,String cinvcode,String batchno, Double num){
+    public AjaxJson getMxDetail(String wdid,String cinvcode,String batchno,String scdate, Double num){
         AjaxJson json = new AjaxJson();
         try{
-            BusinessOmmoArrivalvouchMx mx = businessOmmoArrivalVouchService.getMxByPidAndCinvcode(wdid,cinvcode,batchno);
+            BusinessOmmoArrivalvouchMx mx = businessOmmoArrivalVouchService.getMxByPidAndCinvcode(wdid,cinvcode,batchno,scdate);
             if(mx==null){
                 json.setMsg("该存货不属于此委外订单。");
                 json.setSuccess(false);

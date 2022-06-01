@@ -24,10 +24,10 @@ public class ApiCaiGouController {
     private BusinessRukuCaiGouService businessRukuCaiGouService;
 
     @RequestMapping("getMxDetail")
-    public AjaxJson getMxDetail(String cgid,String cinvcode,String batchno,Double num){
+    public AjaxJson getMxDetail(String cgid,String cinvcode,String batchno,String scdate,Double num){
         AjaxJson json = new AjaxJson();
         try{
-            BusinessArrivalVouchMx mx = arrivalVouchService.getMxByCinvcodeAndBatchno(cgid,cinvcode,batchno);
+            BusinessArrivalVouchMx mx = arrivalVouchService.getMxByCinvcodeAndBatchno(cgid,cinvcode,batchno,scdate);
             if(mx==null|| StringUtils.isEmpty(mx.getId())){
                 json.setMsg("此存货不在该采购单中。");
                 json.setSuccess(false);

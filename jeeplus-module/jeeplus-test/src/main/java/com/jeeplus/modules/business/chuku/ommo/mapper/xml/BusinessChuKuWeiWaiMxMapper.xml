@@ -19,6 +19,7 @@
 		a.unit AS "unit",
 		a.batchno AS "batchno",
 		a.hw AS "hw",
+		a.bomid as "bomid",
 		a.moid AS "moid",
 		a.mohid AS "mohid"
 	</sql>
@@ -80,7 +81,7 @@
 	
 	<insert id="insert">
 		INSERT INTO business_chuku_weiwai_mx(
-			id,
+			id,bomid,
 			create_by,
 			create_date,
 			update_by,
@@ -99,7 +100,7 @@
 			moid,
 			mohid
 		) VALUES (
-			#{id},
+			#{id},#{bomid},
 			#{createBy.id},
 			#{createDate},
 			#{updateBy.id},

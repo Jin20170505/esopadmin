@@ -3,9 +3,24 @@ package com.jeeplus.modules.business.jihuadingdan.mapper;
 import com.jeeplus.core.persistence.BaseMapper;
 import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDanBom;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 @Mapper
 @Repository
 public interface BusinessJiHuaGongDanBomMapper extends BaseMapper<BusinessJiHuaGongDanBom> {
+
+    @Select("select sum(num) from business_jihua_gongdan_bom where scyid = #{scyid}")
+    Double getSumnumByScYid(@Param("scyid") String scyid);
+
+    @Select("select id from business_jihua_gongdan_bom where create_date = (select max(create_date) as create_date from business_jihua_gongdan_bom  where scyid = #{scyid})")
+    String getIdByCreateDate(@Param("scyid") String scyid);
+
+    @Select("select sum(num) from business_jihua_gongdan_bom where scyid = #{scyid} and id != #{id}")
+    Double getSumnumByScYidCid(@Param("scyid") String scyid,@Param("id") String id);
+
+    @Update("update business_jihua_gongdan_bom set num = #{num} where id = #{id}")
+    void updateWeiCha(@Param("id") String id,@Param("num") double num);
 }

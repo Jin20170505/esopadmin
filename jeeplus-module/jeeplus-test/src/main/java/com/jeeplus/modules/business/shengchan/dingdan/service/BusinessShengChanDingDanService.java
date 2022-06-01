@@ -29,6 +29,7 @@ import com.jeeplus.modules.business.shengchan.bom.service.BusinessShengChanDingd
 import com.jeeplus.modules.sys.entity.Office;
 import com.jeeplus.modules.u8data.morder.entity.U8Moallocate;
 import com.jeeplus.modules.u8data.morder.entity.U8Morder;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -261,7 +262,7 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 	}
 
 	@Transactional(readOnly = false)
-	public void chaidan(String rid,int num){
+	public void chaidan(String rid,Double num){
 		BusinessShengChanDingDanMingXi mingXi = businessShengChanDingDanMingXiMapper.get(rid);
 		if("完工".equals(mingXi.getStatus())){
 			throw new RuntimeException("此订单已完工");
@@ -303,7 +304,7 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 			jiHuaGongDan.setUnit(mingXi.getUnit());
 			jiHuaGongDan.setStartdate(mingXi.getStartdate());
 			jiHuaGongDan.setEnddate(mingXi.getEnddate());
-			jiHuaGongDan.setGdnum(Double.valueOf(num));
+			jiHuaGongDan.setGdnum(num);
 			jiHuaGongDan.setScnum(mingXi.getNum());
 			jiHuaGongDan.setSynum(0.0);
 			jiHuaGongDan.setStatus("未下发");
@@ -336,7 +337,7 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 				jiHuaGongDan.setUnit(mingXi.getUnit());
 				jiHuaGongDan.setStartdate(mingXi.getStartdate());
 				jiHuaGongDan.setEnddate(mingXi.getEnddate());
-				jiHuaGongDan.setGdnum(Double.valueOf(num));
+				jiHuaGongDan.setGdnum(num);
 				jiHuaGongDan.setScnum(mingXi.getNum());
 				jiHuaGongDan.setSynum(0.0);
 				jiHuaGongDan.setStatus("未下发");
@@ -391,8 +392,22 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 		}
 		businessShengChanDingDanMingXiMapper.updateChaidan(rid);
 		jiHuaGongDans.forEach(d->businessJiHuaGongDanService.save(d));
+		weichaCheck(rid);
 	}
 
+
+	@Transactional(readOnly = false)
+	public void weichaCheck(String rid){
+		List<BusinessShengChanBom> boms = businessShengChanDingdanMxService.findBomList(rid);
+		if(boms!=null){
+			boms.forEach(d->{
+				Double sum = businessJiHuaGongDanService.getSumnumByScYid(d.getId());
+				if((d.getNum()-sum) >0){
+					businessJiHuaGongDanService.updateWeiCha(d.getId(),d.getNum()-sum);
+				}
+			});
+		}
+	}
 
 	// 手工车拆单
 	@Transactional(readOnly = false)
@@ -448,6 +463,8 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 			bom(mingXi,jiHuaGongDan,nonum/gdnum);
 			jiHuaGongDans.add(jiHuaGongDan);
 			businessShengChanDingDanMingXiMapper.updateChaidan(rid);
+			jiHuaGongDans.forEach(d->businessJiHuaGongDanService.save(d));
+			weichaCheck(rid);
 		}else {
 			BusinessJiHuaGongDan jiHuaGongDan = new BusinessJiHuaGongDan();
 			jiHuaGongDan.setCode(code+"001");
@@ -479,8 +496,9 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 			bom(mingXi,jiHuaGongDan,num/gdnum);
 			jiHuaGongDans.add(jiHuaGongDan);
 			businessShengChanDingDanMingXiMapper.updateDoneNum(rid,num);
+			jiHuaGongDans.forEach(d->businessJiHuaGongDanService.save(d));
 		}
-		jiHuaGongDans.forEach(d->businessJiHuaGongDanService.save(d));
+
 	}
 
 	private String getcode(int num){
@@ -537,8 +555,6 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 			mingXi.setCreateDate(d.getCreateTime());
 			dingDan.getBusinessShengChanDingDanMingXiList().add(mingXi);
 		});
-
-
 		return saveU8Data(dingDans);
 	}
 	@Transactional(readOnly = false)

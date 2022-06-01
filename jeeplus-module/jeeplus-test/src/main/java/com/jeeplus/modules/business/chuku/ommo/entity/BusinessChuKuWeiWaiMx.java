@@ -26,6 +26,7 @@ public class BusinessChuKuWeiWaiMx extends DataEntity<BusinessChuKuWeiWaiMx> {
 	private String hw;		// 货位
 	private String moid;		// 订单ID
 	private String mohid;		// 订单行ID
+	private String bomid; // 用料ID
 	
 	public BusinessChuKuWeiWaiMx() {
 		super();
@@ -136,5 +137,13 @@ public class BusinessChuKuWeiWaiMx extends DataEntity<BusinessChuKuWeiWaiMx> {
 	public void setMohid(String mohid) {
 		this.mohid = mohid;
 	}
-	
+
+	public String getBomid() {
+		return bomid;
+	}
+
+	public BusinessChuKuWeiWaiMx setBomid(String bomid) {
+		this.bomid = bomid;
+		return this;
+	}
 }

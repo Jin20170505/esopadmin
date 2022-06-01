@@ -90,6 +90,7 @@ layout("/include/_container.html", {title:"打印", parent:"报工单"}){
             <th  width="60px;">单位</th>
             <th>批次号</th>
             <th>生产日期</th>
+            <th>货位</th>
         </tr>
         </thead>
         <tbody id="itemList">
@@ -111,6 +112,7 @@ layout("/include/_container.html", {title:"打印", parent:"报工单"}){
                         <td style="vertical-align:middle;">`+data[i].unit+`</td>
                         <td style="vertical-align:middle;">`+data[i].batchno+`</td>
                         <td style="vertical-align:middle;">`+data[i].scdate+`</td>
+                        <td style="vertical-align:middle;">`+data[i].hw.id+`</td>
                     </tr>`;
         }
         $('#itemList').html(htm);

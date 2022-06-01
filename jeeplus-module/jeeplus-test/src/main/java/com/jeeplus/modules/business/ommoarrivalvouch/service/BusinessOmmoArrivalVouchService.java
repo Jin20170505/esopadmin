@@ -176,7 +176,7 @@ public class BusinessOmmoArrivalVouchService extends CrudService<BusinessOmmoArr
 		businessOmmoArrivalvouchMxMapper.print(id);
     }
 
-    public BusinessOmmoArrivalvouchMx getMxByPidAndCinvcode(String pid,String cinvcode,String batchno){
-		return businessOmmoArrivalvouchMxMapper.getMxByPidAndCinvcode(pid, cinvcode, batchno);
+    public BusinessOmmoArrivalvouchMx getMxByPidAndCinvcode(String pid,String cinvcode,String batchno,String scdate){
+		return businessOmmoArrivalvouchMxMapper.getMxByPidAndCinvcode(pid, cinvcode, batchno,scdate);
 	}
 }

@@ -120,6 +120,7 @@ public class BusinessChuKuWeiWaiService extends CrudService<BusinessChuKuWeiWaiM
 		array.forEach(a->{
 			JSONObject j = JSONObject.fromObject(a);
 			BusinessChuKuWeiWaiMx mx = new BusinessChuKuWeiWaiMx();
+			mx.setBomid(j.optString("id"));
 			mx.setId("");mx.setDelFlag("0");
 			mx.setNo(j.optInt("no"));
 			mx.setCinvcode(j.optString("cinvcode"));
@@ -153,7 +154,7 @@ public class BusinessChuKuWeiWaiService extends CrudService<BusinessChuKuWeiWaiM
 				r.setCmocode(info.getCode());
 				r.setImoseq(info.getNo()+"");
 				r.setInvcode(d.getCinvcode());
-				r.setIopseq(d.getNo()+"");
+				r.setIopseq(d.getBomid()); // 委外订单子件ID
 				rd11s.add(r);
 			});
 			rd11.setRd11s(rd11s);
