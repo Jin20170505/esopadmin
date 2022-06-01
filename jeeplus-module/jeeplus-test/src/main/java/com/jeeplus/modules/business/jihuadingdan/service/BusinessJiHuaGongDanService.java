@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.jeeplus.common.utils.DateUtils;
+import com.jeeplus.common.utils.number.RandomUtil;
 import com.jeeplus.modules.business.baogong.order.entity.BusinessBaoGongOrder;
 import com.jeeplus.modules.business.baogong.order.entity.BusinessBaoGongOrderMingXi;
 import com.jeeplus.modules.business.baogong.order.service.BusinessBaoGongOrderService;
@@ -170,7 +171,7 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 		sb.append("\"num\":\"").append(order.getNum()).append("\",");
 		String code="";
 		synchronized (this){
-			code = "BGD"+ DateUtils.getDate("yyyyMMddHHmmss");
+			code = "BGD"+ DateUtils.getDate("yyyyMMddHHmmss")+ RandomUtil.nextInt(100,999);
 		}
 
 		order.setBgcode(code);
