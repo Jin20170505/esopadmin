@@ -180,6 +180,19 @@
 			#{enddate},
 		    #{dept.id},#{type},#{status}
 		)
+		on duplicate key update
+		 id = values(id),
+		 update_date= VALUES(update_date),
+			cinv_code = values(cinv_code),
+			cinv_name = values(cinv_name),
+		 no=VALUES(no),
+			batchno=VALUES(batchno),
+			start_date=VALUES(start_date),
+			end_date=VALUES(end_date),
+			std=VALUES(std),
+		 num=VALUES(num),
+		 unit=VALUES(unit),
+			dept = values(dept)
 	</insert>
 	
 	<update id="update">

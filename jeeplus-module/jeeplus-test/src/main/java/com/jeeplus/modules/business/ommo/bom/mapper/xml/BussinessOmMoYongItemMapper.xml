@@ -52,14 +52,7 @@
 				AND a.ommohid = #{ommo.id}
 			</if>
 		</where>
-		<choose>
-			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
-				ORDER BY ${page.orderBy}
-			</when>
-			<otherwise>
-				ORDER BY a.no ASC
-			</otherwise>
-		</choose>
+		ORDER BY a.no ASC
 	</select>
 	
 	<select id="findAllList" resultType="BussinessOmMoYongItem" >
@@ -128,12 +121,12 @@
 		id = values(id),
 		update_date= VALUES(update_date),
 		ck = values(ck),
+		hw = values(hw),
 		no=VALUES(no),
 		cinvcode=VALUES(cinvcode),
 		cinvname=VALUES(cinvname),
 		cinvstd=VALUES(cinvstd),
 		num=VALUES(num),
-		unit=VALUES(unit),
 		unit=VALUES(unit),
 		requireddate=VALUES(requireddate)
 	</insert>

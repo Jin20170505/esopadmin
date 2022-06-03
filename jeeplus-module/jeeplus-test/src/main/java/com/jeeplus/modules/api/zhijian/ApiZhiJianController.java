@@ -31,10 +31,11 @@ public class ApiZhiJianController {
     }
 
     @RequestMapping("do")
-    public AjaxJson doZhiJian(String sccode,String scline,String userid,String userno,String username,String remarks,Double jynum,Double hgnum,Double bhgnum,Double blnum){
+    public AjaxJson doZhiJian(String sccode,String scline,String userid,String userno,String username,
+                              String remarks,String cinvcode,String cinvname,Double jynum,Double hgnum,Double bhgnum,Double blnum){
         AjaxJson json = new AjaxJson();
         try{
-            businessCheckIPQCService.zhijian(sccode, scline, userid, userno, username, remarks, jynum, hgnum, bhgnum, blnum);
+            businessCheckIPQCService.zhijian(sccode, scline, userid, userno, username, remarks,cinvcode,cinvname, jynum, hgnum, bhgnum, blnum);
             json.setSuccess(true);
             json.setMsg("检验成功。");
         }catch (Exception e){

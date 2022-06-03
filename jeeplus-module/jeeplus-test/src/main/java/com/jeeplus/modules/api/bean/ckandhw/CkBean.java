@@ -6,7 +6,7 @@ package com.jeeplus.modules.api.bean.ckandhw;
 public class CkBean {
     private String value;// 仓库ID
     private String text; // 仓库名称
-
+    private String usehw; // 是否启用货位
     public String getValue() {
         return value;
     }
@@ -22,6 +22,15 @@ public class CkBean {
 
     public CkBean setText(String text) {
         this.text = text;
+        return this;
+    }
+
+    public String getUsehw() {
+        return usehw;
+    }
+
+    public CkBean setUsehw(String usehw) {
+        this.usehw = usehw;
         return this;
     }
 }

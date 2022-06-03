@@ -5,7 +5,12 @@ package com.jeeplus.modules.base.vendor.service;
 
 import java.util.List;
 
+import com.jeeplus.common.utils.StringUtils;
+import com.jeeplus.modules.base.route.entity.BaseRoute;
+import com.jeeplus.modules.base.vendor.entity.BaseCkOfVendor;
+import com.jeeplus.modules.base.vendor.mapper.BaseCkOfVendorMapper;
 import com.jeeplus.modules.u8data.vendor.entity.U8Vendor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,8 +27,13 @@ import com.jeeplus.modules.base.vendor.mapper.BaseVendorMapper;
 @Transactional(readOnly = true)
 public class BaseVendorService extends CrudService<BaseVendorMapper, BaseVendor> {
 
+	@Autowired
+	private BaseCkOfVendorMapper baseCkOfVendorMapper;
+
 	public BaseVendor get(String id) {
-		return super.get(id);
+		BaseVendor vendor = super.get(id);
+		vendor.setCkOfVendors(baseCkOfVendorMapper.findList(new BaseCkOfVendor(vendor)));
+		return vendor;
 	}
 	
 	public List<BaseVendor> findList(BaseVendor baseVendor) {
@@ -37,11 +47,30 @@ public class BaseVendorService extends CrudService<BaseVendorMapper, BaseVendor>
 	@Transactional(readOnly = false)
 	public void save(BaseVendor baseVendor) {
 		super.save(baseVendor);
+		for (BaseCkOfVendor ckOfVendor : baseVendor.getCkOfVendors()){
+			if (ckOfVendor.getId() == null){
+				continue;
+			}
+			if (BaseCkOfVendor.DEL_FLAG_NORMAL.equals(ckOfVendor.getDelFlag())){
+				if (StringUtils.isBlank(ckOfVendor.getId())){
+					ckOfVendor.setVendor(baseVendor);
+					ckOfVendor.preInsert();
+					baseCkOfVendorMapper.insert(ckOfVendor);
+				}else{
+					ckOfVendor.setVendor(baseVendor);
+					ckOfVendor.preUpdate();
+					baseCkOfVendorMapper.update(ckOfVendor);
+				}
+			}else{
+				baseCkOfVendorMapper.delete(ckOfVendor);
+			}
+		}
 	}
 	
 	@Transactional(readOnly = false)
 	public void delete(BaseVendor baseVendor) {
 		super.delete(baseVendor);
+		baseCkOfVendorMapper.delete(new BaseCkOfVendor(baseVendor));
 	}
 
 	@Transactional(readOnly = false)

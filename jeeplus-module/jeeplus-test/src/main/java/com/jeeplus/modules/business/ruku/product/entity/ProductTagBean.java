@@ -50,6 +50,15 @@ public class ProductTagBean {
         return this;
     }
 
+    public String getSimpleCinvname(){
+        if(cinvname==null){
+            return "";
+        }
+        if(cinvname.length() <=20){
+            return cinvname;
+        }
+        return cinvname.substring(0,20);
+    }
     public String getCinvname() {
         return cinvname;
     }

@@ -3,16 +3,22 @@
  */
 package com.jeeplus.modules.business.shengchan.dingdan.web;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
 import com.google.common.collect.Maps;
+import com.jeeplus.common.utils.QRCodeUtil;
 import com.jeeplus.modules.business.product.archive.entity.BusinessProductTypeOnlyRead;
+import com.jeeplus.modules.business.ruku.product.entity.BusinessRuKuProduct;
+import com.jeeplus.modules.business.ruku.product.entity.BusinessRuKuProductMx;
+import com.jeeplus.modules.business.ruku.product.entity.ProductTagBean;
 import com.jeeplus.modules.business.shengchan.bom.entity.BusinessShengChanBom;
 import com.jeeplus.modules.business.shengchan.bom.service.BusinessShengChanDingdanMxService;
 import com.jeeplus.modules.business.shengchan.dingdan.entity.BusinessShengChanDingDanMingXi;
@@ -70,7 +76,7 @@ public class BusinessShengChanDingDanController extends BaseController {
 	private U8MorderService u8MorderService;
 	@ResponseBody
 	@RequestMapping("sychu8")
-	public AjaxJson sychU8(String start,String end){
+	public AjaxJson sychU8(String start,String end,String code){
 		AjaxJson json = new AjaxJson();
 		try{
 			U8Morder order = new U8Morder();
@@ -78,6 +84,7 @@ public class BusinessShengChanDingDanController extends BaseController {
 			if(StringUtils.isNotEmpty(start)&&StringUtils.isNotEmpty(end)){
 				order.setStart(DateUtils.parseDate(start)).setEnd(DateUtils.parseDate(end));
 			}
+			order.setMoCode(code);
 			List<U8Morder> data = u8MorderService.findList(order);
 			if(data==null){
 				json.setMsg("同步成功(u8数据空)");
@@ -110,7 +117,6 @@ public class BusinessShengChanDingDanController extends BaseController {
 				json.setSuccess(true);
 				return json;
 			}
-			businessShengChanDingdanMxService.deleteBom(schid);
 			businessShengChanDingdanMxService.sychU8bom(data);
 		}catch (Exception e){
 			e.printStackTrace();
@@ -153,7 +159,29 @@ public class BusinessShengChanDingDanController extends BaseController {
 		model.addAttribute("boms",boms);
 		return "modules/business/shengchan/dingdan/list/beiliaoprint";
 	}
-
+	@RequestMapping("/qr")
+	public void getQrImage(String bomid, HttpServletResponse response) throws IOException {
+		response.reset();
+		response.setContentType("image/jpg");
+		ServletOutputStream out = null;
+		try{
+			BusinessShengChanBom bean = businessShengChanDingdanMxService.getBom(bomid);
+			ProductTagBean tagBean = new ProductTagBean();
+			tagBean.setBatchno("").setCinvcode(bean.getCinvcode()).setCinvname(bean.getCinvname()).setCinvstd(bean.getCinvstd())
+					.setNum(bean.getNum()+"").setUnit(bean.getUnitname()).setId(bean.getId())
+					.setDate("");
+			String qr = "'cinvcode':'"+tagBean.getCinvcode()+"','cinvcodename':'"+tagBean.getSimpleCinvname()+"','batchno':'"+tagBean.getBatchno()+"','date':'"+tagBean.getDate()+"','num':'"+tagBean.getNum()+"','unit':'"+tagBean.getUnit()+"'";
+			out = response.getOutputStream();
+			QRCodeUtil.encode(qr,out);
+			out.flush();
+		}catch (Exception e){
+			e.printStackTrace();
+		}finally {
+			if(out!=null){
+				out.close();
+			}
+		}
+	}
 		/**
 	 * 生产订单列表数据
 	 */

@@ -119,7 +119,19 @@ $(document).ready(function() {
 		        sortable: true,
 		        sortName: 'checkname'
 		       
-		    }
+		    },{
+    field: 'cinvcode',
+    title: '存货编码',
+    sortable: true,
+    sortName: 'cinvcode'
+
+    },{
+    field: 'cinvname',
+    title: '存货名称',
+    sortable: true,
+    sortName: 'cinvname'
+
+    }
 			,{
 		        field: 'checkdate',
 		        title: '质检日期',

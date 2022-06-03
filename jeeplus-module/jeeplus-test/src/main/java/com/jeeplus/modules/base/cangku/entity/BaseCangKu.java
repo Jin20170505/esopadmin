@@ -27,7 +27,8 @@ public class BaseCangKu extends DataEntity<BaseCangKu> {
 	private String master;		// 负责人
 	private String address;		// 仓库地址
 	private String type;		// 仓库属性
-	private Date indate;		// 停用日期 
+	private Date indate;		// 停用日期
+	private String usehw; // 是否启动货位
 	
 	public BaseCangKu() {
 		super();
@@ -121,5 +122,15 @@ public class BaseCangKu extends DataEntity<BaseCangKu> {
 	public void setIndate(Date indate) {
 		this.indate = indate;
 	}
-	
+
+	@NotNull(message="停用日期 不能为空")
+	@ExcelField(title="是否启用货位 ", align=2, sort=15)
+	public String getUsehw() {
+		return usehw;
+	}
+
+	public BaseCangKu setUsehw(String usehw) {
+		this.usehw = usehw;
+		return this;
+	}
 }

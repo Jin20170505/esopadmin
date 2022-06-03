@@ -19,6 +19,7 @@
 		a.address AS "address",
 		a.type AS "type",
 		a.indate AS "indate",
+		a.usehw as "usehw",
 		dept.name AS "dept.name",
 		factory.name AS "factory.name"
 	</sql>
@@ -97,7 +98,7 @@
 	
 	<insert id="insert">
 		INSERT INTO base_cangku(
-			id,
+			id,usehw,
 			create_by,
 			create_date,
 			update_by,
@@ -114,7 +115,7 @@
 			type,
 			indate
 		) VALUES (
-			#{id},
+			#{id},#{usehw},
 			#{createBy.id},
 			#{createDate},
 			#{updateBy.id},
@@ -139,6 +140,7 @@
 			update_date = #{updateDate},
 			remarks = #{remarks},
 			code = #{code},
+			usehw = #{usehw},
 			name = #{name},
 			dept = #{dept.id},
 			factory = #{factory.id},

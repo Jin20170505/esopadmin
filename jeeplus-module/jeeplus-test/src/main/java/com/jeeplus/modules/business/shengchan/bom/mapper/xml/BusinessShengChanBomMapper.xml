@@ -130,6 +130,19 @@
 			#{baseqtyd},#{isdaochong},
 			#{auxbaseqtyn}
 		)
+			on duplicate key update
+			 id = values(id),
+			 update_date= VALUES(update_date),
+			cinvcode = values(cinvcode),
+			cinvname = values(cinvname),
+			 no=VALUES(no),
+			unitcode=VALUES(unitcode),
+			unitname=VALUES(unitname),
+			rate=VALUES(rate),
+			cinvstd=VALUES(cinvstd),
+			 num=VALUES(num),
+			producttype=VALUES(producttype),
+			hw = values(hw)
 	</insert>
 	
 	<update id="update">

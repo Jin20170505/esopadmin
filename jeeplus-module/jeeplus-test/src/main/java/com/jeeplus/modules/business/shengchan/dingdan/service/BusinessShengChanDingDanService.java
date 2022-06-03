@@ -561,13 +561,9 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 	public List<String> saveU8Data(List<BusinessShengChanDingDan> list){
 		List<String> rs = new ArrayList<>();
 		list.forEach(d->{
-			if(null == mapper.hasById(d.getId())){
-				mapper.insert(d);
-			}
+			mapper.insert(d);
 			d.getBusinessShengChanDingDanMingXiList().forEach(e->{
-				if(null==businessShengChanDingDanMingXiMapper.hasById(e.getId())){
-					businessShengChanDingDanMingXiMapper.insert(e);
-				}
+				businessShengChanDingDanMingXiMapper.insert(e);
 				rs.add(e.getId());
 			});
 		});

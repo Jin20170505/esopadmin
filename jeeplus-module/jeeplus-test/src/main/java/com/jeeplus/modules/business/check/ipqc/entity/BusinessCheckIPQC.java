@@ -24,6 +24,8 @@ public class BusinessCheckIPQC extends DataEntity<BusinessCheckIPQC> {
 	private String sccode;		// 生产订单号
 	private String linecode;		// 行号
 	private String username;		// 工号
+	private String cinvcode; // 存货编码
+	private String cinvname;	// 存货名称
 	private String checkname;		// 质检人
 	private Date checkdate;		// 质检日期
 	private Double checknum;		// 检验数量
@@ -95,7 +97,25 @@ public class BusinessCheckIPQC extends DataEntity<BusinessCheckIPQC> {
 	public void setCheckname(String checkname) {
 		this.checkname = checkname;
 	}
-	
+
+	public String getCinvcode() {
+		return cinvcode;
+	}
+
+	public BusinessCheckIPQC setCinvcode(String cinvcode) {
+		this.cinvcode = cinvcode;
+		return this;
+	}
+
+	public String getCinvname() {
+		return cinvname;
+	}
+
+	public BusinessCheckIPQC setCinvname(String cinvname) {
+		this.cinvname = cinvname;
+		return this;
+	}
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@NotNull(message="质检日期不能为空")
 	@ExcelField(title="质检日期", align=2, sort=11)

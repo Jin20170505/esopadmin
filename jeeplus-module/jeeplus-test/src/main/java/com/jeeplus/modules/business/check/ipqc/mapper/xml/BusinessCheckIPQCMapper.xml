@@ -14,6 +14,8 @@
 		a.linecode AS "linecode",
 		a.usercode AS "username",
 		a.checkname AS "checkname",
+		a.cinvcode AS "cinvcode",
+		a.cinvname AS "cinvname",
 		a.check_date AS "checkdate",
 		a.check_num AS "checknum",
 		a.hege_num AS "hegenum",
@@ -84,7 +86,7 @@
 	
 	<insert id="insert">
 		INSERT INTO business_check_ipqc(
-			id,
+			id,cinvcode,cinvname,
 			create_by,
 			create_date,
 			update_by,
@@ -102,7 +104,7 @@
 			bad_num,
 			remarks
 		) VALUES (
-			#{id},
+			#{id},#{cinvcode},#{cinvname},
 			#{createBy.id},
 			#{createDate},
 			#{updateBy.id},
@@ -130,6 +132,8 @@
 			sccode = #{sccode},
 			linecode = #{linecode},
 			usercode = #{username},
+			cinvcode ={cinvcode},
+			cinvname = #{cinvname},
 			checkname = #{checkname},
 			check_date = #{checkdate},
 			check_num = #{checknum},

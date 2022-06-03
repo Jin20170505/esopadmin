@@ -4,9 +4,12 @@
 package com.jeeplus.modules.base.vendor.entity;
 
 import java.util.Date;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.validation.constraints.NotNull;
 
+import com.google.common.collect.Lists;
 import com.jeeplus.core.persistence.DataEntity;
 import com.jeeplus.common.utils.excel.annotation.ExcelField;
 
@@ -23,7 +26,7 @@ public class BaseVendor extends DataEntity<BaseVendor> {
 	private String telephone;		// 电话
 	private String person;		// 联系人
 	private Date enddate;		// 停用日期
-	
+	private List<BaseCkOfVendor> ckOfVendors = Lists.newArrayList();
 	public BaseVendor() {
 		super();
 	}
@@ -87,5 +90,13 @@ public class BaseVendor extends DataEntity<BaseVendor> {
 	public void setEnddate(Date enddate) {
 		this.enddate = enddate;
 	}
-	
+
+	public List<BaseCkOfVendor> getCkOfVendors() {
+		return ckOfVendors;
+	}
+
+	public BaseVendor setCkOfVendors(List<BaseCkOfVendor> ckOfVendors) {
+		this.ckOfVendors = ckOfVendors;
+		return this;
+	}
 }

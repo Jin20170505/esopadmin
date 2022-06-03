@@ -87,8 +87,10 @@ layout("/include/_dialog.html"){
                         </div>
                     </div>
             </td>
-                <td class="width-15 active"></td>
-                <td class="width-35" ></td>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>是否启用货位：</label></td>
+                <td class="width-35">
+                    <#select path="usehw" value="${baseCangKu.usehw!'0'}" items="${fn.getDictList('yes_no')}" itemLabel="label" itemValue="value" class="required"/>
+                </td>
             </tr>
         </tbody>
     </table>

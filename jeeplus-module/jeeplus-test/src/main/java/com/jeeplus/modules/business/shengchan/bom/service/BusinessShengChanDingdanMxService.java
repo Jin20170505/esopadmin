@@ -40,6 +40,10 @@ public class BusinessShengChanDingdanMxService extends CrudService<BusinessSheng
 		return businessShengChanBomMapper.findList(bom);
 	}
 
+	public BusinessShengChanBom getBom(String bomid){
+		return businessShengChanBomMapper.get(bomid);
+	}
+
 	public List<BusinessShengChanDingdanMx> findList(BusinessShengChanDingdanMx businessShengChanDingdanMx) {
 		return super.findList(businessShengChanDingdanMx);
 	}

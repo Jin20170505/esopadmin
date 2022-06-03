@@ -41,6 +41,9 @@
             <if test="start !=null and end != null">
                 and a.createDate between #{start}  and #{end}
             </if>
+            <if test="moCode!=null and moCode !=''">
+                and a.moCode = #{moCode}
+            </if>
         </where>
     </select>
 
