@@ -101,6 +101,15 @@ public class BusinessOmmoArrivalvouchMx extends DataEntity<BusinessOmmoArrivalvo
 		return cinvname;
 	}
 
+	public String getSimpleCinvname(){
+		if(cinvname==null){
+			return "";
+		}
+		if(cinvname.length()>20){
+			return cinvname.substring(0,20);
+		}
+		return cinvname;
+	}
 	public void setCinvname(String cinvname) {
 		this.cinvname = cinvname;
 	}

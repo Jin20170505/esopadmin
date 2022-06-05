@@ -226,13 +226,6 @@ $(document).ready(function() {
 		       
 		    }
 			,{
-		        field: 'synum',
-		        title: '剩余数量',
-		        sortable: true,
-		        sortName: 'synum'
-		       
-		    }
-			,{
 		        field: 'dept.name',
 		        title: '生产部门',
 		        sortable: true,

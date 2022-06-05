@@ -92,7 +92,53 @@
 			</otherwise>
 		</choose>
 	</select>
-	
+
+	<insert id="batchInsert" parameterType="java.util.List">
+		INSERT INTO business_arrivalvouch(
+		id,
+		create_by,
+		create_date,
+		update_by,
+		update_date,
+		remarks,
+		del_flag,
+		code,
+		arrive_date,
+		u8code,
+		dept,
+		vendor,
+		status,printstatus,
+		u8status
+		) VALUES
+		<foreach collection="list" separator="," item="item">
+			(
+			#{item.id},
+			#{item.createBy.id},
+			#{item.createDate},
+			#{item.updateBy.id},
+			#{item.updateDate},
+			#{item.remarks},
+			#{item.delFlag},
+			#{item.code},
+			#{item.arriveDate},
+			#{item.u8code},
+			#{item.dept.id},
+			#{item.vendor.id},
+			#{item.status},'未打印',
+			#{item.u8status}
+			)
+		</foreach>
+		on duplicate key update
+		id = values(id),
+		update_date= VALUES(update_date),
+		code=VALUES(code),
+		arrive_date=VALUES(arrive_date),
+		u8code = values(u8code),
+		dept=VALUES(dept),
+		vendor=VALUES(vendor),
+		dept=VALUES(dept)
+	</insert>
+
 	<insert id="insert">
 		INSERT INTO business_arrivalvouch(
 			id,

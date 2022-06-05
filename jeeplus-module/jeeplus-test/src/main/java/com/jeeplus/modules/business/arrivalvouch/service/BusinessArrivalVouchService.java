@@ -94,6 +94,7 @@ public class BusinessArrivalVouchService extends CrudService<BusinessArrivalVouc
 	@Transactional(readOnly = false)
 	public void sychu8(List<U8ArrivalVouch> data) {
 		List<BusinessArrivalVouch> list = Lists.newArrayList();
+		List<BusinessArrivalVouchMx> mxList = Lists.newArrayList();
 		data.forEach(d->{
 			BusinessArrivalVouch vouch = getBusinessAouch(d.getMid(),list);
 			if(vouch==null){
@@ -106,6 +107,7 @@ public class BusinessArrivalVouchService extends CrudService<BusinessArrivalVouc
 				vouch.setDept(new Office(d.getCdepcode()));
 				vouch.setVendor(new BaseVendor(d.getCvencode()));
 				vouch.setArriveDate(d.getDdate());
+				list.add(vouch);
 			}
 			BusinessArrivalVouchMx mx = new BusinessArrivalVouchMx();
 			mx.preInsert();
@@ -126,23 +128,40 @@ public class BusinessArrivalVouchService extends CrudService<BusinessArrivalVouc
 			mx.setCinvstd(d.getCinvstd());
 			mx.setNum(d.getIquantity());
 			mx.setUnit(d.getCinvmunit());
-			vouch.getBusinessArrivalVouchMxList().add(mx);
-			list.add(vouch);
+			mxList.add(mx);
 		});
-		saveU8Data(list);
+		saveU8Data(list,mxList);
 	}
 	@Transactional(readOnly = false)
-	public void saveU8Data(List<BusinessArrivalVouch> list){
-		list.forEach(d->{
-			if(null == mapper.hasById(d.getId())){
-				mapper.insert(d);
-			}
-			d.getBusinessArrivalVouchMxList().forEach(e->{
-				if(null==businessArrivalVouchMxMapper.hasById(e.getId())){
-					businessArrivalVouchMxMapper.insert(e);
+	public void saveU8Data(List<BusinessArrivalVouch> mains,List<BusinessArrivalVouchMx> details){
+		if(!mains.isEmpty()){
+			int i = 0;
+			int j = 0;
+			int mlen = mains.size();
+			while (i<mlen){
+				j = i;
+				i = i+300;
+				if(i>=mlen){
+					mapper.batchInsert(mains.subList(j,mlen));
+				}else {
+					mapper.batchInsert(mains.subList(j,i));
 				}
-			});
-		});
+			}
+		}
+		if(!details.isEmpty()){
+			int i = 0;
+			int j = 0;
+			int mlen = details.size();
+			while (i<mlen){
+				j = i;
+				i = i+300;
+				if(i>=mlen){
+					businessArrivalVouchMxMapper.batchInsert(details.subList(j,mlen));
+				}else {
+					businessArrivalVouchMxMapper.batchInsert(details.subList(j,i));
+				}
+			}
+		}
 	}
 
 	public BusinessArrivalVouch getBusinessAouch(String mid, List<BusinessArrivalVouch> list){

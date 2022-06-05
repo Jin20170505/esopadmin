@@ -11,6 +11,8 @@ import com.jeeplus.core.persistence.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import com.jeeplus.modules.business.arrivalvouch.entity.BusinessArrivalVouch;
 
+import java.util.List;
+
 /**
  * 采购到货单MAPPER接口
  * @author Jin
@@ -23,5 +25,8 @@ public interface BusinessArrivalVouchMapper extends BaseMapper<BusinessArrivalVo
 
     @Update("update business_arrivalvouch set printstatus = '已打印' where id = #{id}")
     void print(@Param("id") String id);
+
+
+    void batchInsert(List<BusinessArrivalVouch> list);
 
 }
