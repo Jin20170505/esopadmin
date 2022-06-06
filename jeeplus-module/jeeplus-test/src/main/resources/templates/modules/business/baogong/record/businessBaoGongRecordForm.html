@@ -71,13 +71,30 @@ layout("/include/_dialog.html"){
             </td>
             </tr>
             <tr>
+                <td class="width-15 active"><label class="pull-right">实际报工人：</label></td>
+                <td class="width-35">
+                    <#userselect id="duser" name="douser.id" value="${businessBaoGongRecord.douser.id!}" labelName="douser.name" labelValue="${businessBaoGongRecord.douser.name!}"
+                    class="form-control "  allowClear="true"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">存货编码：</label></td>
+                <td class="width-35">
+                    <input name="cinvcode" value="${businessBaoGongRecord.cinvcode!}"    class="form-control "/>
+                </td>
+                <td class="width-15 active"><label class="pull-right">存货名称：</label></td>
+                <td class="width-35">
+                    <input name="cinvname" value="${businessBaoGongRecord.cinvname!}"    class="form-control "/>
+                </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">规格型号：</label></td>
+                <td class="width-35">
+                    <input name="cinvstd" value="${businessBaoGongRecord.cinvstd!}"    class="form-control "/>
+                </td>
                 <td class="width-15 active"><label class="pull-right">工单数量：</label></td>
                 <td class="width-35">
                     <input name="gdnum" value="${businessBaoGongRecord.gdnum!}"    class="form-control  number"/>
-            </td>
-                <td class="width-15 active"><label class="pull-right">待报工数量：</label></td>
-                <td class="width-35">
-                    <input name="doingnum" value="${businessBaoGongRecord.doingnum!}"    class="form-control  number"/>
             </td>
             </tr>
             <tr>

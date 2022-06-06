@@ -10,6 +10,8 @@ import com.jeeplus.core.persistence.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import com.jeeplus.modules.business.product.archive.entity.BusinessProduct;
 
+import java.util.List;
+
 /**
  * 存货档案MAPPER接口
  * @author Jin
@@ -24,4 +26,6 @@ public interface BusinessProductMapper extends BaseMapper<BusinessProduct> {
 
     @Select("select 1 from business_product where id = #{code} limit 1")
     Integer hasByCode(@Param("code")String code);
+
+    void batchInsert(List<BusinessProduct> list);
 }

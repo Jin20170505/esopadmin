@@ -35,7 +35,7 @@
 	</sql>
 
 	<select id="getDoneSumNum" resultType="Double">
-		select sum(hgnum) from business_baogong_record where bgid=#{bgid}
+		select sum(hgnum) from business_baogong_record where bgid=#{bgid} and del_flag ='0'
 		 <if test="bghid!=null and bghid!=''">
 			 and bghid=#{bghid}
 		 </if>
@@ -66,8 +66,20 @@
 			<if test="ordercode != null and ordercode != ''">
 				AND a.ordercode = #{ordercode}
 			</if>
+			<if test="cinvcode != null  and cinvcode != ''">
+				AND a.cinvcode = #{cinvcode}
+			</if>
+			<if test="cinvname != null  and cinvname != ''">
+				AND a.cinvname like concat('%',#{cinvname},'%')
+			</if>
+			<if test="cinvstd != null  and cinvstd != ''">
+				AND a.cinvstd like concat('%',#{cinvstd},'%')
+			</if>
 			<if test="username != null and username != ''">
 				AND a.username = #{username}
+			</if>
+			<if test="douser != null and douser.id!=null and douser.id !=''">
+				and a.do_user = #{douser.id}
 			</if>
 		</where>
 		<choose>

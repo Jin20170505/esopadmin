@@ -21,7 +21,7 @@ public class BusinessProduct extends DataEntity<BusinessProduct> {
 	private String name;		// 存货名称
 	private String specification;		// 规格型号
 	private String unit;		// 计量单位
-	
+	private String sccall;	// 是否生产叫料
 	public BusinessProduct() {
 		super();
 	}
@@ -86,5 +86,13 @@ public class BusinessProduct extends DataEntity<BusinessProduct> {
 	public void setUnit(String unit) {
 		this.unit = unit;
 	}
-	
+
+	public String getSccall() {
+		return sccall;
+	}
+
+	public BusinessProduct setSccall(String sccall) {
+		this.sccall = sccall;
+		return this;
+	}
 }

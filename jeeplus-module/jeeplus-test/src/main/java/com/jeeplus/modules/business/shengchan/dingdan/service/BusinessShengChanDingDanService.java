@@ -3,10 +3,7 @@
  */
 package com.jeeplus.modules.business.shengchan.dingdan.service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import com.google.common.collect.Lists;
 import com.jeeplus.common.utils.DateUtils;
@@ -26,6 +23,7 @@ import com.jeeplus.modules.business.shengchan.beiliao.service.BusinessShengChanB
 import com.jeeplus.modules.business.shengchan.bom.entity.BusinessShengChanBom;
 import com.jeeplus.modules.business.shengchan.bom.mapper.BusinessShengChanBomMapper;
 import com.jeeplus.modules.business.shengchan.bom.service.BusinessShengChanDingdanMxService;
+import com.jeeplus.modules.business.shengchan.paichan.service.BusinessShengChanPaiChanService;
 import com.jeeplus.modules.sys.entity.Office;
 import com.jeeplus.modules.u8data.morder.entity.U8Moallocate;
 import com.jeeplus.modules.u8data.morder.entity.U8Morder;
@@ -186,6 +184,8 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 			mapper.updateStatus(id,"未审核");
 		});
 	}
+	@Autowired
+	private BusinessShengChanPaiChanService businessShengChanPaiChanService;
 	@Transactional(readOnly = false)
 	public String doPlan(String rid){
 		BusinessShengChanDingDanMingXi mingXi = businessShengChanDingDanMingXiMapper.get(rid);
@@ -209,6 +209,8 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 		if(routes==null || routes.isEmpty()){
 			return mingXi.getP().getCode()+"-"+mingXi.getNo()+",此存货无工艺路线，需要添加对应的工艺路线";
 		}
+		// TODO 排产检验
+		businessShengChanPaiChanService.checckPaiChan(mingXi.getDept().getId(),mingXi.getP().getCode(),mingXi.getNo().toString(),new Date());
 		List<BusinessJiHuaGongDan> jiHuaGongDans = Lists.newArrayList();
 		double sum = mingXi.getNum();
 		String code = "JHGD"+ DateUtils.getDate("yyyyMMddHHmmss");
@@ -287,6 +289,8 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 		if(routes==null || routes.isEmpty()){
 			throw new RuntimeException("此存货无工艺路线，需要添加对应的工艺路线");
 		}
+		// TODO 排产检验
+		businessShengChanPaiChanService.checckPaiChan(mingXi.getDept().getId(),mingXi.getP().getCode(),mingXi.getNo().toString(),new Date());
 		List<BusinessJiHuaGongDan> jiHuaGongDans = Lists.newArrayList();
 		double sum = mingXi.getNum();
 		String code = "JHGD"+ DateUtils.getDate("yyyyMMddHHmmss");
@@ -429,6 +433,10 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 		List<BaseRoute> routes = baseRoteMainService.getRoutes(roteMain.getId());
 		if(routes==null || routes.isEmpty()){
 			throw new RuntimeException("此存货无工艺路线，需要添加对应的工艺路线");
+		}
+		if("未拆单".equals(mingXi.getIschaidan())){
+			// TODO 排产检验
+			businessShengChanPaiChanService.checckPaiChan(mingXi.getDept().getId(),mingXi.getP().getCode(),mingXi.getNo().toString(),new Date());
 		}
 		List<BusinessJiHuaGongDan> jiHuaGongDans = Lists.newArrayList();
 		String code = "JHGD"+ DateUtils.getDate("yyyyMMddHHmmss");

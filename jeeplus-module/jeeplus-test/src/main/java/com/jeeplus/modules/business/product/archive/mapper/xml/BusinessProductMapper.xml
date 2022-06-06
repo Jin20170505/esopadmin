@@ -16,6 +16,7 @@
 		a.specification AS "specification",
 		a.unit AS "unit",
 		a.remarks AS "remarks",
+		a.sccall as "sccall",
 		b.name AS "type.name"
 	</sql>
 	
@@ -86,7 +87,52 @@
 			</otherwise>
 		</choose>
 	</select>
-	
+	<insert id="batchInsert" parameterType="java.util.List">
+		INSERT INTO business_product(
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+			id,
+			type_id,
+			code,
+		    cinvaddcode,
+			name,
+			specification,
+			unit,
+			sccall,
+			remarks
+		) VALUES
+		<foreach collection="list" separator="," item="item">
+			(
+				#{item.createBy.id},
+				#{item.createDate},
+				#{item.updateBy.id},
+				#{item.updateDate},
+				#{item.delFlag},
+				#{item.id},
+				#{item.type.id},
+				#{item.code},
+				#{item.cinvaddcode},
+				#{item.name},
+				#{item.specification},
+				#{item.unit},
+				'0',
+				#{item.remarks}
+			)
+		</foreach>
+		on duplicate key update
+		id = values(id),
+		update_date= VALUES(update_date),
+		code=VALUES(code),
+		type_id=VALUES(type_id),
+		cinvaddcode=VALUES(cinvaddcode),
+		name=VALUES(name),
+		specification=VALUES(specification),
+		unit=VALUES(unit),
+		remarks=VALUES(remarks)
+	</insert>
 	<insert id="insert">
 		INSERT INTO business_product(
 			create_by,
@@ -99,7 +145,7 @@
 			code,cinvaddcode,
 			name,
 			specification,
-			unit,
+			unit,sccall,
 			remarks
 		) VALUES (
 			#{createBy.id},
@@ -112,9 +158,10 @@
 			#{code},#{cinvaddcode},
 			#{name},
 			#{specification},
-			#{unit},
+			#{unit},#{sccall},
 			#{remarks}
 		)
+
 	</insert>
 	
 	<update id="update">
@@ -126,6 +173,7 @@
 			name = #{name},
 			specification = #{specification},
 			unit = #{unit},
+			sccall = #{sccall},
 			remarks = #{remarks}
 		WHERE id = #{id}
 	</update>

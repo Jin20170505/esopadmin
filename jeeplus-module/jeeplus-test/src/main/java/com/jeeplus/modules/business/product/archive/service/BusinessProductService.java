@@ -3,6 +3,7 @@
  */
 package com.jeeplus.modules.business.product.archive.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.jeeplus.modules.business.product.archive.entity.BusinessProductTypeOnlyRead;
@@ -48,9 +49,8 @@ public class BusinessProductService extends CrudService<BusinessProductMapper, B
 
 	@Transactional(readOnly = false)
 	public void sychu8(List<U8Inventory> data){
+		List<BusinessProduct> list = new ArrayList<>(data.size());
 		data.forEach(d->{
-			Integer i = mapper.hasByCode(d.getcInvCode());
-			if(i==null){
 				BusinessProduct product = new BusinessProduct();
 				product.setCinvaddcode(d.getcInvAddCode());
 				product.setCode(d.getcInvCode());
@@ -60,9 +60,22 @@ public class BusinessProductService extends CrudService<BusinessProductMapper, B
 				product.setType(new BusinessProductTypeOnlyRead(d.getcInvCCode()));
 				product.preInsert();
 				product.setId(d.getcInvCode());
-				mapper.insert(product);
-			}
+				list.add(product);
 		});
+		if(!list.isEmpty()){
+			int i = 0;
+			int j = 0;
+			int mlen = list.size();
+			while (i<mlen){
+				j = i;
+				i = i+300;
+				if(i>=mlen){
+					mapper.batchInsert(list.subList(j,mlen));
+				}else {
+					mapper.batchInsert(list.subList(j,i));
+				}
+			}
+		}
 
 	}
 

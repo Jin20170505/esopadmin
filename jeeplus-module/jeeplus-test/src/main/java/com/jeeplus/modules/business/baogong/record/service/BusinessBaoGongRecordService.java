@@ -9,8 +9,11 @@ import java.util.List;
 import com.jeeplus.common.utils.StringUtils;
 import com.jeeplus.modules.business.baogong.order.entity.BusinessBaoGongOrder;
 import com.jeeplus.modules.business.baogong.order.entity.BusinessBaoGongOrderMingXi;
+import com.jeeplus.modules.business.baogong.order.mapper.BusinessBaoGongOrderMapper;
+import com.jeeplus.modules.business.baogong.order.mapper.BusinessBaoGongOrderMingXiMapper;
 import com.jeeplus.modules.business.baogong.order.service.BusinessBaoGongOrderService;
 import com.jeeplus.modules.sys.entity.User;
+import com.jeeplus.modules.sys.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -48,10 +51,16 @@ public class BusinessBaoGongRecordService extends CrudService<BusinessBaoGongRec
 	public void save(BusinessBaoGongRecord businessBaoGongRecord) {
 		super.save(businessBaoGongRecord);
 	}
-	
+
+	@Autowired
+	private BusinessBaoGongOrderMingXiMapper businessBaoGongOrderMingXiMapper;
+	@Autowired
+	private BusinessBaoGongOrderMapper businessBaoGongOrderMapper;
 	@Transactional(readOnly = false)
 	public void delete(BusinessBaoGongRecord businessBaoGongRecord) {
-		super.delete(businessBaoGongRecord);
+		mapper.deleteByLogic(businessBaoGongRecord);
+		businessBaoGongOrderMapper.uncompleteBg(businessBaoGongRecord.getBgid());
+		businessBaoGongOrderMingXiMapper.uncompleteBg(businessBaoGongRecord.getBghid());
 	}
 
 	public double getDoneSumNum(String bgid,String bghid){
@@ -62,9 +71,15 @@ public class BusinessBaoGongRecordService extends CrudService<BusinessBaoGongRec
 		return sum;
 	}
 
+	@Autowired
+	private UserMapper userMapper;
 	// 报工
 	@Transactional(readOnly = false)
 	public void baogong(String bgid,String bghid,String remarks,String userid,String opname,String douser,Double dbnum,Double lfnum,Double fgnum,Double gfnum,Double bhgnum,Double hgnum,String complete){
+		User dou = userMapper.getByNo(douser);
+		if(dou==null){
+			throw new RuntimeException("实际报工人的工号不存在");
+		}
 		BusinessBaoGongOrder order = baoGongOrderService.getBaoGongInfo(bgid,bghid,null);
 		BusinessBaoGongOrderMingXi mingXi = order.getBusinessBaoGongOrderMingXiList().get(0);
 		if(mingXi==null){
@@ -76,12 +91,15 @@ public class BusinessBaoGongRecordService extends CrudService<BusinessBaoGongRec
 			throw new RuntimeException("报工数量超出工单数量");
 		}
 		BusinessBaoGongRecord record = new BusinessBaoGongRecord();
-		record.setDouser(new User(douser));
+		record.setDouser(dou);
 		record.setBgdate(new Date());
 		record.setBgcode(order.getBgcode());
 		record.setBgid(bgid);
 		record.setBghid(bghid);
-		record.setBhgnum(bhgnum);
+		fgnum = fgnum==null?0.0:fgnum;
+		gfnum = gfnum==null?0.0:gfnum;
+		lfnum = lfnum==null?0.0:lfnum;
+		record.setBhgnum(fgnum+gfnum+lfnum);
 		record.setUsername(opname);
 		record.setDoingnum(dbnum);
 		record.setCinvcode(order.getCinvcode());

@@ -31,7 +31,8 @@ public interface BusinessBaoGongOrderMapper extends BaseMapper<BusinessBaoGongOr
 
     @Update("update business_baogao_order set complate = '1' where id = #{id}")
     void completeBg(@Param("id") String id);
-
+    @Update("update business_baogao_order set complate = '0' where id = #{id}")
+    void uncompleteBg(@Param("id") String id);
     @Update("update business_baogao_order set isprint = '已打印' where id = #{id}")
     void print(@Param("id") String id);
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jeeplus.modules.business.shengchan.dingdan.mapper.BusinessShengChanDingDanMapper">
+<mapper namespace="com.jeeplus.modules.business.shengchan.paichan.mapper.BusinessShengChanPaiChanMapper">
     
-	<sql id="businessShengChanDingDanColumns">
+	<sql id="businessShengChanPaiChanColumns">
 		a.id AS "id",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
@@ -10,40 +10,39 @@
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
-		a.status as "status",
 		a.code AS "code",
+		a.pdate AS "pdate",
 		a.dept AS "dept.id",
-		a.startdate as "startdate",
-		a.enddate as "enddate",
+		a.sumweight AS "sumweight",
 		dept.name AS "dept.name"
 	</sql>
 	
-	<sql id="businessShengChanDingDanJoins">
+	<sql id="businessShengChanPaiChanJoins">
 		LEFT JOIN sys_office dept ON dept.id = a.dept
 	</sql>
 	
     
-	<select id="get" resultType="BusinessShengChanDingDan" >
+	<select id="get" resultType="BusinessShengChanPaiChan" >
 		SELECT 
-			<include refid="businessShengChanDingDanColumns"/>
-		FROM business_shengchan_dingdan a
-		<include refid="businessShengChanDingDanJoins"/>
+			<include refid="businessShengChanPaiChanColumns"/>
+		FROM business_shengchan_paichan a
+		<include refid="businessShengChanPaiChanJoins"/>
 		WHERE a.id = #{id}
 	</select>
 	
-	<select id="findList" resultType="BusinessShengChanDingDan" >
+	<select id="findList" resultType="BusinessShengChanPaiChan" >
 		SELECT 
-			<include refid="businessShengChanDingDanColumns"/>
-		FROM business_shengchan_dingdan a
-		<include refid="businessShengChanDingDanJoins"/>
+			<include refid="businessShengChanPaiChanColumns"/>
+		FROM business_shengchan_paichan a
+		<include refid="businessShengChanPaiChanJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
 			<if test="code != null and code != ''">
 				AND a.code = #{code}
 			</if>
-			<if test="status != null and status != ''">
-				AND a.status = #{status}
+			<if test="beginPdate != null and endPdate != null ">
+				AND a.pdate BETWEEN #{beginPdate} AND #{endPdate}
 			</if>
 			<if test="dept != null and dept.id != null and dept.id != ''">
 				AND a.dept = #{dept.id}
@@ -59,11 +58,11 @@
 		</choose>
 	</select>
 	
-	<select id="findAllList" resultType="BusinessShengChanDingDan" >
+	<select id="findAllList" resultType="BusinessShengChanPaiChan" >
 		SELECT 
-			<include refid="businessShengChanDingDanColumns"/>
-		FROM business_shengchan_dingdan a
-		<include refid="businessShengChanDingDanJoins"/>
+			<include refid="businessShengChanPaiChanColumns"/>
+		FROM business_shengchan_paichan a
+		<include refid="businessShengChanPaiChanJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
@@ -79,16 +78,18 @@
 	</select>
 	
 	<insert id="insert">
-		INSERT INTO business_shengchan_dingdan(
+		INSERT INTO business_shengchan_paichan(
 			id,
 			create_by,
 			create_date,
 			update_by,
 			update_date,
 			remarks,
-			del_flag,status,
-			code,startdate,enddate,
-			dept
+			del_flag,
+			code,
+			pdate,
+			dept,
+			sumweight
 		) VALUES (
 			#{id},
 			#{createBy.id},
@@ -96,48 +97,44 @@
 			#{updateBy.id},
 			#{updateDate},
 			#{remarks},
-			#{delFlag},'未审核',
-			#{code},#{startdate},#{enddate},
-			#{dept.id}
+			#{delFlag},
+			#{code},
+			#{pdate},
+			#{dept.id},
+			#{sumweight}
 		)
-		on duplicate key update
-		 id = values(id),
-		update_date= VALUES(update_date),
-		startdate = values(startdate),
-		enddate = values(enddate),
-		dept=VALUES(dept)
 	</insert>
 	
 	<update id="update">
-		UPDATE business_shengchan_dingdan SET 	
+		UPDATE business_shengchan_paichan SET 	
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
 			remarks = #{remarks},
 			code = #{code},
-			startdate = #{startdate},
-		    enddate = #{enddate},
-			dept = #{dept.id}
+			pdate = #{pdate},
+			dept = #{dept.id},
+			sumweight = #{sumweight}
 		WHERE id = #{id}
 	</update>
 	
 	
 	<!--物理删除-->
 	<update id="delete">
-		DELETE FROM business_shengchan_dingdan
+		DELETE FROM business_shengchan_paichan
 		WHERE id = #{id}
 	</update>
 	
 	<!--逻辑删除-->
 	<update id="deleteByLogic">
-		UPDATE business_shengchan_dingdan SET 
+		UPDATE business_shengchan_paichan SET 
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
 	
 	
 	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
-	<select id="findUniqueByProperty" resultType="BusinessShengChanDingDan" statementType="STATEMENT">
-		select * FROM business_shengchan_dingdan  where ${propertyName} = '${value}'
+	<select id="findUniqueByProperty" resultType="BusinessShengChanPaiChan" statementType="STATEMENT">
+		select * FROM business_shengchan_paichan  where ${propertyName} = '${value}'
 	</select>
 	
 </mapper>

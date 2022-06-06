@@ -1,6 +1,6 @@
 <script>
 $(document).ready(function() {
-	$('#businessBaoGongRecordTable').bootstrapTable({
+	$('#businessShengChanPaiChanDeptTable').bootstrapTable({
 		 
 		  //请求方法
                method: 'post',
@@ -47,7 +47,7 @@ $(document).ready(function() {
                //可供选择的每页的行数(*)
                pageList: [10, 25, 50, 100],
                //这个接口需要处理bootstrap table传递的固定参数,并返回特定格式的json数据  
-               url: "${ctx}/business/baogong/record/businessBaoGongRecord/data",
+               url: "${ctx}/business/shengchan/paichan/dept/businessShengChanPaiChanDept/data",
                //默认值为 'limit',传给服务端的参数为：limit, offset, search, sort, order Else
                //queryParamsType:'',   
                ////查询参数,每次调用是会带上这个参数，可自定义                         
@@ -69,132 +69,76 @@ $(document).ready(function() {
 		       
 		    }
 			,{
-		        field: 'bgdate',
-		        title: '报工时间',
+		        field: 'no',
+		        title: '序号',
 		        sortable: true,
-		        sortName: 'bgdate'
+		        sortName: 'no'
+		        ,formatter:function(value, row , index){
+		        	  <% if(shiro.hasPermission("business:shengchan:paichan:dept:businessShengChanPaiChanDept:edit") ){ %>
+					   if(!value){
+						  return "<a  href='#' onclick='edit(\""+row.id+"\")'>-</a>";
+					   }else{
+						  return "<a  href='#' onclick='edit(\""+row.id+"\")'>"+value+"</a>";
+						}
+                     <% }else if(shiro.hasPermission("business:shengchan:paichan:dept:businessShengChanPaiChanDept:view")){ %>
+					   if(!value){
+						  return "<a  href='#' onclick='view(\""+row.id+"\")'>-</a>";
+                       }else{
+                          return "<a  href='#' onclick='view(\""+row.id+"\")'>"+value+"</a>";
+                       }
+                     <% }else{ %>
+					      return value;
+					 <% } %>
+		         }
 		       
 		    }
 			,{
-		        field: 'bgcode',
-		        title: '报工单号',
+		        field: 'dept.name',
+		        title: '排产部门',
 		        sortable: true,
-		        sortName: 'bgcode'
-               ,formatter:function(value, row , index){
-                   if(!value){
-                       return "<a  href='#' onclick='view(\""+row.id+"\")'>-</a>";
-                   }else{
-                       return "<a  href='#' onclick='view(\""+row.id+"\")'>"+value+"</a>";
-                   }
-               }
-		    }
-			,{
-		        field: 'ordercode',
-		        title: '生产订单号',
-		        sortable: true,
-		        sortName: 'ordercode'
+		        sortName: 'dept.name'
 		       
 		    }
 			,{
-		        field: 'orderline',
-		        title: '生产订单行号',
-		        sortable: true,
-		        sortName: 'orderline'
-		       
-		    }
-			,{
-		        field: 'site',
-		        title: '工序名称',
-		        sortable: true,
-		        sortName: 'site'
-		       
-		    }
-			,{
-		        field: 'username',
-		        title: '姓名',
-		        sortable: true,
-		        sortName: 'username'
-		       
-		    }
-                   ,{
-                       field: 'cinvcode',
-                       title: '存货编码',
-                       sortable: true,
-                       sortName: 'cinvcode'
+			   field: 'operate',
+			   title: '操作',
+			   align: 'center',
+			   class: 'text-nowrap',
+			   events: {
+				   'click .view': function (e, value, row, index) {
+					   view(row.id);
+				   },
+				   'click .edit': function (e, value, row, index) {
+					   edit(row.id)
+				   },
+				   'click .del': function (e, value, row, index) {
+					   del(row.id);
 
-                   }
-                   ,{
-                       field: 'cinvname',
-                       title: '存货名称',
-                       sortable: true,
-                       sortName: 'cinvname'
-
-                   }
-                   ,{
-                       field: 'cinvstd',
-                       title: '规格型号',
-                       sortable: true,
-                       sortName: 'cinvstd'
-
-                   }
-			,{
-		        field: 'gdnum',
-		        title: '工单数量',
-		        sortable: true,
-		        sortName: 'gdnum'
-		       
-		    }
-			,{
-		        field: 'lfnum',
-		        title: '料废数量',
-		        sortable: true,
-		        sortName: 'lfnum'
-		       
-		    }
-			,{
-		        field: 'gfnum',
-		        title: '工废数量',
-		        sortable: true,
-		        sortName: 'gfnum'
-		       
-		    }
-			,{
-		        field: 'fgnum',
-		        title: '返工数量',
-		        sortable: true,
-		        sortName: 'fgnum'
-		       
-		    }
-			,{
-		        field: 'bhgnum',
-		        title: '不合格数量',
-		        sortable: true,
-		        sortName: 'bhgnum'
-		       
-		    }
-			,{
-		        field: 'hgnum',
-		        title: '合格数量',
-		        sortable: true,
-		        sortName: 'hgnum'
-		       
-		    }
-			,{
-		        field: 'remarks',
-		        title: '备注信息',
-		        sortable: true,
-		        sortName: 'remarks'
-		       
-		    }
+				   }
+			   },
+			   formatter:  function operateFormatter(value, row, index) {
+				   return [
+					<% if(shiro.hasPermission("business:shengchan:paichan:dept:businessShengChanPaiChanDept:view")){ %>
+					   '<a class="view btn btn-icon waves-effect waves-light btn-custom btn-xs m-r-5"> <i class="fa fa-search"></i></a>',
+				   <% } %>
+				   <% if(shiro.hasPermission("business:shengchan:paichan:dept:businessShengChanPaiChanDept:edit")){ %>
+					   '<a class="edit btn btn-icon waves-effect waves-light btn-success btn-xs m-r-5"> <i class="fa fa-pencil"></i></a>',
+				   <% } %>
+				   <% if(shiro.hasPermission("business:shengchan:paichan:dept:businessShengChanPaiChanDept:del")){ %>
+					   '<a class="del btn btn-icon waves-effect waves-light btn-danger btn-xs"> <i class="fa fa-trash-o"></a>'
+				   <% } %>
+				   ].join('');
+			   }
+		   }
 		     ]
 		
 		});
 		
 
-	  $('#businessBaoGongRecordTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
+	  $('#businessShengChanPaiChanDeptTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
-            $('#remove').prop('disabled', ! $('#businessBaoGongRecordTable').bootstrapTable('getSelections').length);
-            $('#edit').prop('disabled', $('#businessBaoGongRecordTable').bootstrapTable('getSelections').length!=1);
+            $('#remove').prop('disabled', ! $('#businessShengChanPaiChanDeptTable').bootstrapTable('getSelections').length);
+            $('#edit').prop('disabled', $('#businessShengChanPaiChanDeptTable').bootstrapTable('getSelections').length!=1);
         });
 
 	 $("#import").click(function(){//显示导入面板
@@ -206,7 +150,7 @@ $(document).ready(function() {
 	 $("#btnImportExcel").click(function(){//导入Excel
 		 var importForm = $('#importForm')[0];
 		 jp.block('#import-collapse',"文件上传中...");
-		 jp.uploadFile(importForm,"${ctx}/business/baogong/record/businessBaoGongRecord/import",function (data) {
+		 jp.uploadFile(importForm,"${ctx}/business/shengchan/paichan/dept/businessShengChanPaiChanDept/import",function (data) {
 			 if(data.success){
 				 jp.toastr_success(data.msg);
 				 refresh();
@@ -218,15 +162,15 @@ $(document).ready(function() {
 	  })
 
 	 $("#btnDownloadTpl").click(function(){//下载模板文件
-            jp.downloadFile('${ctx}/business/baogong/record/businessBaoGongRecord/import/template');
+            jp.downloadFile('${ctx}/business/shengchan/paichan/dept/businessShengChanPaiChanDept/import/template');
 		})
 
 	$("#export").click(function(){//导出Excel文件
 	        var searchParam = $("#searchForm").serializeJSON();
 	        searchParam.pageNo = 1;
 	        searchParam.pageSize = -1;
-            var sortName = $('#businessBaoGongRecordTable').bootstrapTable("getOptions", "none").sortName;
-            var sortOrder = $('#businessBaoGongRecordTable').bootstrapTable("getOptions", "none").sortOrder;
+            var sortName = $('#businessShengChanPaiChanDeptTable').bootstrapTable("getOptions", "none").sortName;
+            var sortOrder = $('#businessShengChanPaiChanDeptTable').bootstrapTable("getOptions", "none").sortOrder;
             var values = "";
             for(var key in searchParam){
                 values = values + key + "=" + searchParam[key] + "&";
@@ -235,7 +179,7 @@ $(document).ready(function() {
                 values = values + "orderBy=" + sortName + " "+sortOrder;
             }
 
-			jp.downloadFile('${ctx}/business/baogong/record/businessBaoGongRecord/export?'+values);
+			jp.downloadFile('${ctx}/business/shengchan/paichan/dept/businessShengChanPaiChanDept/export?'+values);
 	  })
 
 	  $("#search").click("click", function() {// 绑定查询按扭
@@ -250,17 +194,12 @@ $(document).ready(function() {
 		  refresh();
 		});
 
-	 $('#bgdate').datepicker({//日期控件初始化
-			toggleActive: true,
-			language:"zh-CN",
-    			format:"yyyy-mm-dd"
-		});
 		
 	});
 
 	//获取选中行
   function getIdSelections() {
-        return $.map($("#businessBaoGongRecordTable").bootstrapTable('getSelections'), function (row) {
+        return $.map($("#businessShengChanPaiChanDeptTable").bootstrapTable('getSelections'), function (row) {
             return row.id
         });
     }
@@ -270,9 +209,9 @@ $(document).ready(function() {
      if(!ids){
           ids = getIdSelections();
      }
-	 jp.confirm('确认要删除该员工报工记录吗？', function(){
+	 jp.confirm('确认要删除该排产部门记录吗？', function(){
 		var index =jp.loading();
-		jp.get("${ctx}/business/baogong/record/businessBaoGongRecord/delete?ids=" + ids, function(data){
+		jp.get("${ctx}/business/shengchan/paichan/dept/businessShengChanPaiChanDept/delete?ids=" + ids, function(data){
 				if(data.success){
 					refresh();
 					jp.toastr_success(data.msg);
@@ -288,25 +227,25 @@ $(document).ready(function() {
 
     //刷新列表
   function refresh() {
-      $('#businessBaoGongRecordTable').bootstrapTable('refresh');
+      $('#businessShengChanPaiChanDeptTable').bootstrapTable('refresh');
   }
 
    //新增表单页面
  function add() {
-     jp.openSaveDialog('新增员工报工', "${ctx}/business/baogong/record/businessBaoGongRecord/form/add",'90%', '90%');
+     jp.openSaveDialog('新增排产部门', "${ctx}/business/shengchan/paichan/dept/businessShengChanPaiChanDept/form/add",'800px', '500px');
  }
   //编辑表单页面
   function edit(id){
       if(!id){
           id = getIdSelections();
       }
-	  jp.openSaveDialog('编辑员工报工', "${ctx}/business/baogong/record/businessBaoGongRecord/form/edit?id="+id,'90%', '90%');
+	  jp.openSaveDialog('编辑排产部门', "${ctx}/business/shengchan/paichan/dept/businessShengChanPaiChanDept/form/edit?id="+id,'800px', '500px');
   }
   //查看表单页面
   function view(id) {
       if(!id){
           id = getIdSelections();
       }
-      jp.openViewDialog('查看员工报工', "${ctx}/business/baogong/record/businessBaoGongRecord/form/view?id="+id,'90%', '90%');
+      jp.openViewDialog('查看排产部门', "${ctx}/business/shengchan/paichan/dept/businessShengChanPaiChanDept/form/view?id="+id,'800px', '500px');
   }
 </script>
