@@ -69,5 +69,9 @@ public class BusinessShengChanBeiLiaoService extends CrudService<BusinessShengCh
 		super.delete(businessShengChanBeiLiao);
 		businessShengChanBeiLiaoMxMapper.delete(new BusinessShengChanBeiLiaoMx(businessShengChanBeiLiao));
 	}
-	
+
+	public boolean isSure(String blid){
+		Integer i = mapper.isSure(blid);
+		return i!=null&&i==1?true:false;
+	}
 }

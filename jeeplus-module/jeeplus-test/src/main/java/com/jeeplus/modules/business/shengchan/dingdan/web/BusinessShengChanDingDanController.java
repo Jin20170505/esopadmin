@@ -19,6 +19,10 @@ import com.jeeplus.modules.business.product.archive.entity.BusinessProductTypeOn
 import com.jeeplus.modules.business.ruku.product.entity.BusinessRuKuProduct;
 import com.jeeplus.modules.business.ruku.product.entity.BusinessRuKuProductMx;
 import com.jeeplus.modules.business.ruku.product.entity.ProductTagBean;
+import com.jeeplus.modules.business.shengchan.beiliao.apply.entity.BusinessShengChanBeiLiaoApply;
+import com.jeeplus.modules.business.shengchan.beiliao.apply.entity.BusinessShengchanBeiliaoApplyMx;
+import com.jeeplus.modules.business.shengchan.beiliao.apply.mapper.BusinessShengChanBeiLiaoApplyMapper;
+import com.jeeplus.modules.business.shengchan.beiliao.apply.service.BusinessShengChanBeiLiaoApplyService;
 import com.jeeplus.modules.business.shengchan.bom.entity.BusinessShengChanBom;
 import com.jeeplus.modules.business.shengchan.bom.service.BusinessShengChanDingdanMxService;
 import com.jeeplus.modules.business.shengchan.dingdan.entity.BusinessShengChanDingDanMingXi;
@@ -150,6 +154,48 @@ public class BusinessShengChanDingDanController extends BaseController {
 
 	@Autowired
 	private BusinessShengChanDingdanMxService businessShengChanDingdanMxService;
+
+	@Autowired
+	private BusinessShengChanBeiLiaoApplyService applyService;
+	@RequestMapping("goScBeiLiao")
+	public String goScBeiLiao(String rid,Model model){
+		BusinessShengChanDingDanMingXi mingXi = businessShengChanDingDanService.getMxId(rid);
+		Double num = mingXi.getNum();
+		Double donenum = applyService.getDoneNum(rid);
+		if(donenum==null){
+			donenum = 0.0;
+		}
+		model.addAttribute("hmx",mingXi);
+		model.addAttribute("donenum",donenum);
+		model.addAttribute("doingnum",(num-donenum));
+		return "modules/business/shengchan/dingdan/list/beiliao";
+	}
+	@RequestMapping("doScBeiLiao")
+	@ResponseBody
+	public AjaxJson doScBeiLiao(String rid,Double donum){
+		AjaxJson json = new AjaxJson();
+		BusinessShengChanDingDanMingXi main = businessShengChanDingDanService.getMxId(rid);
+		BusinessShengChanBeiLiaoApply apply = new BusinessShengChanBeiLiaoApply();
+		apply.setBatchno(main.getBatchno()).setStartdate(main.getStartdate()).setEnddate(main.getEnddate()).setSchid(rid);
+		apply.setScid(main.getP().getId());apply.setSccode(main.getP().getCode());apply.setScline(main.getNo()+"");
+		apply.setCinvcode(main.getCinv().getCode());apply.setCinvname(main.getCinvname());apply.setCinvstd(main.getStd());
+		apply.setNum(donum);apply.setUnit(main.getUnit());apply.setDept(main.getDept());
+		apply.setRemarks(main.getRemarks());
+		double r = donum/main.getNum();
+		List<BusinessShengChanBom> boms = businessShengChanDingdanMxService.findBomList(rid);
+		if(boms!=null&&!boms.isEmpty()){
+			boms.forEach(d->{
+				BusinessShengchanBeiliaoApplyMx mx = new BusinessShengchanBeiliaoApplyMx();
+				mx.setId("");mx.setDelFlag("0");
+				mx.setNo(Integer.valueOf(d.getNo()));mx.setCinvcode(d.getCinvcode());mx.setCinvname(d.getCinvname());
+				mx.setCinvstd(d.getCinvstd());mx.setNum(r*d.getNum());mx.setUnit(d.getUnitname());
+				mx.setHw(d.getHw());
+				apply.getBusinessShengchanBeiliaoApplyMxList().add(mx);
+			});
+		}
+		applyService.save(apply);
+		return json;
+	}
 
 	@RequestMapping("goToBeiLiaoPrint")
 	public String goToBeiLiaoPrint(String rid,Model model){

@@ -13,10 +13,10 @@ public class ApiBeiLiaoSureController {
     private BusinessShengChanDingDanService businessShengChanDingDanService;
 
     @RequestMapping("getBeiLiaoInfo")
-    public AjaxJson getZhiJianInfo(String schid){
+    public AjaxJson getZhiJianInfo(String blid){
         AjaxJson json = new AjaxJson();
         try {
-            json.put("info",businessShengChanDingDanService.getBeiLiaoInfo(schid));
+            json.put("info",businessShengChanDingDanService.getBeiLiaoInfo(blid));
             json.setSuccess(true);
             json.setMsg("查询成功");
         }catch (Exception e){
@@ -28,10 +28,10 @@ public class ApiBeiLiaoSureController {
     }
 
     @RequestMapping("do")
-    public AjaxJson sure(String schid){
+    public AjaxJson sure(String blid){
         AjaxJson json = new AjaxJson();
         try{
-            businessShengChanDingDanService.sureBeiLiao(schid);
+            businessShengChanDingDanService.sureBeiLiao(blid);
             json.setSuccess(true);
             json.setMsg("确认成功。");
         }catch (Exception e){

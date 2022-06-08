@@ -1,0 +1,68 @@
+<%
+layout("/include/_dialog.html"){
+%>
+<script type="text/javascript">
+
+    $(document).ready(function() {
+    });
+
+    function save() {
+        var isValidate = jp.validateForm('#inputForm');//校验表单
+        if(!isValidate){
+            return false;
+        }else{
+            var index = jp.loading();
+            jp.post("${ctx}/business/shengchan/dingdan/businessShengChanDingDan/doScBeiLiao",$('#inputForm').serialize(),function(data){
+                if(data.success){
+                    jp.getParent().refresh();
+                    var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                    parent.layer.close(dialogIndex);
+                    jp.toastr_success(data.msg)
+
+                }else{
+                    jp.toastr_error(data.msg);
+                }
+                jp.close(index);
+            })
+        }
+
+    }
+</script>
+<form id="inputForm"  method="post"  class="form-horizontal p-15">
+    <input type="hidden" name="rid" value="${hmx.id!}"/>
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <td class="width-15 active"><label class="pull-right">生产单号：</label></td>
+            <td class="width-35">
+                <input name="p.code" value="${hmx.p.code!}" readonly   class="form-control required"/>
+            </td>
+            <td class="width-15 active"><label class="pull-right">生产单号：</label></td>
+            <td class="width-35">
+                <input name="no" value="${hmx.no!}"  readonly  class="form-control required"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="width-15 active"><label class="pull-right">生产数量：</label></td>
+            <td class="width-35">
+                <input name="num" id="num" value="${hmx.num!}"  readonly  class="form-control"/>
+            </td>
+            <td class="width-15 active"><label class="pull-right">已备数量：</label></td>
+            <td class="width-35">
+                <input name="donenum"  id="donenum" value="${donenum!}"  readonly  class="form-control"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="width-15 active"><label class="pull-right">待备数量：</label></td>
+            <td class="width-35">
+                <input name="doingnum"  id="doingnum" value="${doingnum!}"  readonly  class="form-control"/>
+            </td>
+            <td class="width-15 active"><label class="pull-right">备料数量：</label></td>
+            <td class="width-35">
+                <input name="donum" value=""  type="number"  class="form-control required"/>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+<% } %>

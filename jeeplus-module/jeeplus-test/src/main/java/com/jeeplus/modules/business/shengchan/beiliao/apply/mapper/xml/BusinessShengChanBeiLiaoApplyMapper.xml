@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jeeplus.modules.business.shengchan.beiliao.mapper.BusinessShengChanBeiLiaoMapper">
+<mapper namespace="com.jeeplus.modules.business.shengchan.beiliao.apply.mapper.BusinessShengChanBeiLiaoApplyMapper">
     
-	<sql id="businessShengChanBeiLiaoColumns">
+	<sql id="businessShengChanBeiLiaoApplyColumns">
 		a.id AS "id",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
@@ -12,38 +12,39 @@
 		a.del_flag AS "delFlag",
 		a.sccode AS "sccode",
 		a.scline AS "scline",
+		a.scdept AS "dept.id",
 		a.cinvcode AS "cinvcode",
 		a.cinvname AS "cinvname",
 		a.cinvstd AS "cinvstd",
 		a.num AS "num",
+		a.startdate as "startdate",
+		a.enddate as "enddate",
+		a.batchno as "batchno",
 		a.unit AS "unit",
-		a.dept AS "dept.id",
-		a.schid AS "schid",
 		a.scid AS "scid",
-		a.u8code AS "u8code",
-		a.blid as "blid",
+		a.schid AS "schid",
+		a.printstatus AS "printstatus",
 		dept.name AS "dept.name"
 	</sql>
 	
-	<sql id="businessShengChanBeiLiaoJoins">
-		
-		LEFT JOIN sys_office dept ON dept.id = a.dept
+	<sql id="businessShengChanBeiLiaoApplyJoins">
+		LEFT JOIN sys_office dept ON dept.id = a.scdept
 	</sql>
 	
     
-	<select id="get" resultType="BusinessShengChanBeiLiao" >
+	<select id="get" resultType="BusinessShengChanBeiLiaoApply" >
 		SELECT 
-			<include refid="businessShengChanBeiLiaoColumns"/>
-		FROM business_shengchan_beiliao a
-		<include refid="businessShengChanBeiLiaoJoins"/>
+			<include refid="businessShengChanBeiLiaoApplyColumns"/>
+		FROM business_shengchan_beiliao_apply a
+		<include refid="businessShengChanBeiLiaoApplyJoins"/>
 		WHERE a.id = #{id}
 	</select>
 	
-	<select id="findList" resultType="BusinessShengChanBeiLiao" >
+	<select id="findList" resultType="BusinessShengChanBeiLiaoApply" >
 		SELECT 
-			<include refid="businessShengChanBeiLiaoColumns"/>
-		FROM business_shengchan_beiliao a
-		<include refid="businessShengChanBeiLiaoJoins"/>
+			<include refid="businessShengChanBeiLiaoApplyColumns"/>
+		FROM business_shengchan_beiliao_apply a
+		<include refid="businessShengChanBeiLiaoApplyJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
@@ -54,7 +55,19 @@
 				AND a.scline = #{scline}
 			</if>
 			<if test="dept != null and dept.id != null and dept.id != ''">
-				AND a.dept = #{dept.id}
+				AND a.scdept = #{dept.id}
+			</if>
+			<if test="cinvcode != null and cinvcode != ''">
+				AND a.cinvcode = #{cinvcode}
+			</if>
+			<if test="cinvname != null and cinvname != ''">
+				AND a.cinvname = #{cinvname}
+			</if>
+			<if test="cinvstd != null and cinvstd != ''">
+				AND a.cinvstd = #{cinvstd}
+			</if>
+			<if test="printstatus != null and printstatus != ''">
+				and a.printstatus = #{printstatus}
 			</if>
 		</where>
 		<choose>
@@ -67,11 +80,11 @@
 		</choose>
 	</select>
 	
-	<select id="findAllList" resultType="BusinessShengChanBeiLiao" >
+	<select id="findAllList" resultType="BusinessShengChanBeiLiaoApply" >
 		SELECT 
-			<include refid="businessShengChanBeiLiaoColumns"/>
-		FROM business_shengchan_beiliao a
-		<include refid="businessShengChanBeiLiaoJoins"/>
+			<include refid="businessShengChanBeiLiaoApplyColumns"/>
+		FROM business_shengchan_beiliao_apply a
+		<include refid="businessShengChanBeiLiaoApplyJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
@@ -87,8 +100,8 @@
 	</select>
 	
 	<insert id="insert">
-		INSERT INTO business_shengchan_beiliao(
-			id,
+		INSERT INTO business_shengchan_beiliao_apply(
+			id,printstatus,
 			create_by,
 			create_date,
 			update_by,
@@ -97,17 +110,18 @@
 			del_flag,
 			sccode,
 			scline,
+			scdept,
 			cinvcode,
 			cinvname,
 			cinvstd,
 			num,
 			unit,
-			dept,
-			schid,
-			scid,blid,
-			u8code
+			scid,batchno,
+			startdate,
+			enddate,
+			schid
 		) VALUES (
-			#{id},
+			#{id},'未打印',
 			#{createBy.id},
 			#{createDate},
 			#{updateBy.id},
@@ -116,55 +130,55 @@
 			#{delFlag},
 			#{sccode},
 			#{scline},
+			#{dept.id},
 			#{cinvcode},
 			#{cinvname},
 			#{cinvstd},
 			#{num},
 			#{unit},
-			#{dept.id},
-			#{schid},
-			#{scid},#{blid},
-			#{u8code}
+			#{scid},#{batchno},
+			#{startdate},
+			#{enddate},
+			#{schid}
 		)
 	</insert>
 	
 	<update id="update">
-		UPDATE business_shengchan_beiliao SET 	
+		UPDATE business_shengchan_beiliao_apply SET 	
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
 			remarks = #{remarks},
 			sccode = #{sccode},
 			scline = #{scline},
+			scdept = #{dept.id},
 			cinvcode = #{cinvcode},
 			cinvname = #{cinvname},
 			cinvstd = #{cinvstd},
 			num = #{num},
 			unit = #{unit},
-			dept = #{dept.id},
-			schid = #{schid},
 			scid = #{scid},
-			u8code = #{u8code}
+			schid = #{schid}
 		WHERE id = #{id}
 	</update>
 	
 	
 	<!--物理删除-->
 	<update id="delete">
-		DELETE FROM business_shengchan_beiliao
+		DELETE FROM business_shengchan_beiliao_apply
 		WHERE id = #{id}
 	</update>
 	
 	<!--逻辑删除-->
 	<update id="deleteByLogic">
-		UPDATE business_shengchan_beiliao SET 
+		UPDATE business_shengchan_beiliao_apply SET 
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
 	
 	
 	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
-	<select id="findUniqueByProperty" resultType="BusinessShengChanBeiLiao" statementType="STATEMENT">
-		select * FROM business_shengchan_beiliao  where ${propertyName} = '${value}'
+	<select id="findUniqueByProperty" resultType="BusinessShengChanBeiLiaoApply" statementType="STATEMENT">
+		select * FROM business_shengchan_beiliao_apply  where ${propertyName} = '${value}'
 	</select>
 	
 </mapper>

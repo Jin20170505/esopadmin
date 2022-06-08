@@ -7,6 +7,7 @@ import java.util.List;
  * 备料
  */
 public class BeiLiaoBean {
+    private String blid;
     private String schid;
     private String sccode;
     private String scline;
@@ -16,6 +17,16 @@ public class BeiLiaoBean {
     private Double num;
     private String unit;
     private String remarks;
+
+    public String getBlid() {
+        return blid;
+    }
+
+    public BeiLiaoBean setBlid(String blid) {
+        this.blid = blid;
+        return this;
+    }
+
     private List<BeiLiaoItem> beiLiaoItems=new ArrayList<>();
     public String getUnit() {
         return unit;
@@ -72,6 +83,9 @@ public class BeiLiaoBean {
     }
 
     public String getCinvstd() {
+        if(cinvstd==null){
+            cinvstd = "";
+        }
         return cinvstd;
     }
 
@@ -90,6 +104,9 @@ public class BeiLiaoBean {
     }
 
     public String getRemarks() {
+        if(remarks==null){
+            remarks ="";
+        }
         return remarks;
     }
 

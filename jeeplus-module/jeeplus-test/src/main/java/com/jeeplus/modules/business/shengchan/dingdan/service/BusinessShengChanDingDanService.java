@@ -17,6 +17,9 @@ import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDanBom;
 import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDanMingXi;
 import com.jeeplus.modules.business.jihuadingdan.service.BusinessJiHuaGongDanService;
 import com.jeeplus.modules.business.product.archive.entity.BusinessProduct;
+import com.jeeplus.modules.business.shengchan.beiliao.apply.entity.BusinessShengChanBeiLiaoApply;
+import com.jeeplus.modules.business.shengchan.beiliao.apply.entity.BusinessShengchanBeiliaoApplyMx;
+import com.jeeplus.modules.business.shengchan.beiliao.apply.service.BusinessShengChanBeiLiaoApplyService;
 import com.jeeplus.modules.business.shengchan.beiliao.entity.BusinessShengChanBeiLiao;
 import com.jeeplus.modules.business.shengchan.beiliao.entity.BusinessShengChanBeiLiaoMx;
 import com.jeeplus.modules.business.shengchan.beiliao.service.BusinessShengChanBeiLiaoService;
@@ -68,20 +71,25 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 		return businessShengChanDingDanMingXiMapper.get(xmid);
 	}
 
-
-	public BeiLiaoBean getBeiLiaoInfo(String schid){
-		BusinessShengChanDingDanMingXi mx = businessShengChanDingDanMingXiMapper.get(schid);
+	@Autowired
+	private BusinessShengChanBeiLiaoApplyService businessShengChanBeiLiaoApplyService;
+	public BeiLiaoBean getBeiLiaoInfo(String blid){
+		if(businessShengChanBeiLiaoService.isSure(blid)){
+			throw new RuntimeException("该单已经确认");
+		}
+		BusinessShengChanBeiLiaoApply mx = businessShengChanBeiLiaoApplyService.get(blid);
 		BeiLiaoBean bean = new BeiLiaoBean();
-		bean.setCinvcode(mx.getCinv().getCode());
-		bean.setSchid(schid).setUnit(mx.getUnit());
-		bean.setCinvname(mx.getCinvname()).setCinvstd(mx.getStd()).setRemarks(mx.getRemarks()).
-				setNum(mx.getNum()).setSccode(mx.getP().getCode()).setScline(mx.getNo()+"");
-		List<BusinessShengChanBom> boms = businessShengChanDingdanMxService.findBomList(schid);
+		bean.setBlid(mx.getId());
+		bean.setCinvcode(mx.getCinvcode());
+		bean.setSchid(mx.getSchid()).setUnit(mx.getUnit());
+		bean.setCinvname(mx.getCinvname()).setCinvstd(mx.getCinvstd()).setRemarks(mx.getRemarks()).
+				setNum(mx.getNum()).setSccode(mx.getSccode()).setScline(mx.getScline());
+		List<BusinessShengchanBeiliaoApplyMx> boms = mx.getBusinessShengchanBeiliaoApplyMxList();
 		if(boms!=null){
 			boms.forEach(d->{
 				BeiLiaoItem item = new BeiLiaoItem();
-				item.setCinvcode(d.getCinvcode()).setCinvname(d.getCinvname()).setCinvstd(d.getCinvstd()).setNo(d.getNo())
-						.setNum(d.getNum()).setUnit(d.getUnitname());
+				item.setCinvcode(d.getCinvcode()).setCinvname(d.getCinvname()).setCinvstd(d.getCinvstd()).setNo(d.getNo()+"")
+						.setNum(d.getNum()).setUnit(d.getUnit());
 				bean.getBeiLiaoItems().add(item);
 			});
 		}
@@ -91,22 +99,23 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 	@Autowired
 	private BusinessShengChanBeiLiaoService businessShengChanBeiLiaoService;
 	@Transactional(readOnly = false)
-	public void sureBeiLiao(String schid){
-		BusinessShengChanDingDanMingXi mx = businessShengChanDingDanMingXiMapper.get(schid);
+	public void sureBeiLiao(String blid){
+		BusinessShengChanBeiLiaoApply mx = businessShengChanBeiLiaoApplyService.get(blid);
 		BusinessShengChanBeiLiao beiLiao = new BusinessShengChanBeiLiao();
-		beiLiao.setCinvstd(mx.getStd());beiLiao.setCinvcode(mx.getCinv().getCode());
+		beiLiao.setBlid(blid);
+		beiLiao.setCinvstd(mx.getCinvstd());beiLiao.setCinvcode(mx.getCinvcode());
 		beiLiao.setCinvname(mx.getCinvname());beiLiao.setDept(mx.getDept());
-		beiLiao.setNum(mx.getNum());beiLiao.setSchid(schid);beiLiao.setSccode(mx.getP().getCode());
-		beiLiao.setScid(mx.getP().getId());beiLiao.setScline(mx.getNo()+"");
+		beiLiao.setNum(mx.getNum());beiLiao.setSchid(mx.getSchid());beiLiao.setSccode(mx.getSccode());
+		beiLiao.setScid(mx.getScid());beiLiao.setScline(mx.getScline());
 		beiLiao.setUnit(mx.getUnit());
-		List<BusinessShengChanBom> boms = businessShengChanDingdanMxService.findBomList(schid);
+		List<BusinessShengchanBeiliaoApplyMx> boms = mx.getBusinessShengchanBeiliaoApplyMxList();
 		if(boms!=null){
 			boms.forEach(d->{
 				BusinessShengChanBeiLiaoMx b=new BusinessShengChanBeiLiaoMx();
 				b.setId("");b.setDelFlag("0");
 				b.setCinvcode(d.getCinvcode());b.setCinvname(d.getCinvname());
 				b.setCinvstd(d.getCinvstd());b.setNo(Integer.valueOf(d.getNo()));
-				b.setNum(d.getNum());b.setUnit(d.getUnitname());
+				b.setNum(d.getNum());b.setUnit(d.getUnit());
 				b.setHw(d.getHw());
 				beiLiao.getBusinessShengChanBeiLiaoMxList().add(b);
 			});

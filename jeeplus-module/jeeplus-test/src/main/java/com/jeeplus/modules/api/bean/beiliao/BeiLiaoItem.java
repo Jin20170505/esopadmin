@@ -36,6 +36,9 @@ public class BeiLiaoItem {
     }
 
     public String getCinvstd() {
+        if(cinvstd==null){
+            cinvstd = "";
+        }
         return cinvstd;
     }
 

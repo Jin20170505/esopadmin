@@ -116,6 +116,13 @@ layout("/include/_dialog.html"){
 		         	<#checkbox path="roleIdList" values="${user.roleIdList}" items="${allRoles}" itemLabel="name" itemValue="id" class="required"/>
 		         	<label id="roleIdList-error" class="error"></label>
 		         </td>
+				  <% if(shiro.hasPermission("sys:user:add")){ %>
+				  <td class="active"><label class="pull-right">移动端菜单:</label></td>
+				  <td>
+					  <#checkbox path="remarks" values="${user.remarks!}" items="${fn.getDictList('menuofpda')}" itemLabel="label" itemValue="value" class=""/>
+					  <label id="remarks-error" class="error"></label>
+				  </td>
+				  <% } %>
 		      </tr>
 		      </tbody>
 		      </table>

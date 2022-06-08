@@ -25,7 +25,6 @@ layout("/include/_container.html", {title:"明细列表", parent:"生产订单"}
         <i class="fa fa-times"></i>
     </a>
     <form id="searchForm" class="form-inline">
-
         <div class="form-group m-b-10 m-r-10">
             <label class="m-r-10" title="生产单号：">生产单号：</label>
             <input name="p.code"  maxlength="64"  class=" form-control"/>
@@ -93,8 +92,8 @@ layout("/include/_container.html", {title:"明细列表", parent:"生产订单"}
             手工拆单
         </button>
         <% } %>
-        <button id="print" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="printbl()">
-            <i class="fa fa-print"></i> 打印备料单
+        <button id="print" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="scbl()">
+            <i class="fa fa-print"></i> 生产备料
         </button>
     </div>
     <!-- 表格 -->

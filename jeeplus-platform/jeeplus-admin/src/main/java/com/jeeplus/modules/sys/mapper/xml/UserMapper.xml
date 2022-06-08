@@ -10,6 +10,7 @@
 		<result property="no" column="no" />
 		<result property="createDate" column="create_date" />
 		<result property="name" column="name" />
+		<result property="remarks" column="remarks" />
 		<result property="email" column="email" />
 		<result property="phone" column="phone" />
 		<result property="mobile" column="mobile" />
@@ -80,6 +81,7 @@
 	<select id="getByNo" resultType="User">
 		select a.id,
 			   a.login_name AS "loginName",
+		       a.remarks AS "remarks",
 			   a.password,
 			   a.no,
 			   a.name,

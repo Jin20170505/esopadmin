@@ -115,7 +115,7 @@
 			type,
 			indate
 		) VALUES (
-			#{id},#{usehw},
+			#{code},#{usehw},
 			#{createBy.id},
 			#{createDate},
 			#{updateBy.id},

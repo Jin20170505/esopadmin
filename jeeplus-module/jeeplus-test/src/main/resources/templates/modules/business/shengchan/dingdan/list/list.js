@@ -199,11 +199,13 @@
   return row
 });
 }
-  // 打印备料单
-  function printbl(){
+
+function scbl(){
   var rid = getIdSelections();
-  jp.windowOpen('${ctx}/business/shengchan/dingdan/businessShengChanDingDan/goToBeiLiaoPrint?rid='+rid,"备料单--打印",window.screen.height,window.screen.width);
+  jp.openSaveDialog('生产备料', "${ctx}/business/shengchan/dingdan/businessShengChanDingDan/goScBeiLiao?rid="+rid,'80%', '70%');
 }
+
+
     // 生成计划工单
   function jihua(){
     var rid = getIdSelections();

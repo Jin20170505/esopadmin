@@ -28,6 +28,9 @@ public interface UserMapper extends BaseMapper<User> {
 	@Select("select case when exists (select 1 from sys_user where no = #{code} and del_flag = '0')  then 1 else 0 end")
 	boolean isCode(@Param("code") String code);
 
+	@Select("select remarks from sys_user where id = #{userid}")
+	String getAppMenu(@Param("userid") String userid);
+
 	/**
 	 * 根据工号查询用户
 	 * @param no

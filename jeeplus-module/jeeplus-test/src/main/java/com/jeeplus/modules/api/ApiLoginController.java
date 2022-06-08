@@ -1,6 +1,7 @@
 package com.jeeplus.modules.api;
 
 import com.jeeplus.common.json.AjaxJson;
+import com.jeeplus.common.utils.StringUtils;
 import com.jeeplus.modules.sys.entity.User;
 import com.jeeplus.modules.sys.mapper.UserMapper;
 import com.jeeplus.modules.sys.service.SystemService;
@@ -41,4 +42,18 @@ public class ApiLoginController {
         return json;
     }
 
+    @RequestMapping("getMenus")
+    public AjaxJson getMenus(String userid){
+        AjaxJson json = new AjaxJson();
+        String menus = userMapper.getAppMenu(userid);
+        if(StringUtils.isEmpty(menus)){
+            json.setMsg("该账号没有菜单权限，请设置后再操作");
+            json.setSuccess(false);
+            return json;
+        }
+        json.setSuccess(true);
+        json.put("menus",menus);
+        json.setMsg("成功");
+        return json;
+    }
 }

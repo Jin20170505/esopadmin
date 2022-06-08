@@ -9,6 +9,7 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 import com.jeeplus.common.utils.SpringContextHolder;
+import com.jeeplus.common.utils.StringUtils;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 
@@ -289,7 +290,18 @@ public class User extends DataEntity<User> {
 			roleList.add(role);
 		}
 	}
-	
+
+	public List<String> getPdaRole(){
+		List<String> pdaRole = Lists.newArrayList();
+		if(StringUtils.isNotEmpty(remarks)){
+			String[] rs = remarks.split(",");
+			for(String r : rs){
+				pdaRole.add(r);
+			}
+		}
+		return pdaRole;
+	}
+
 	/**
 	 * 用户拥有的角色名称字符串, 多个角色名称用','分隔.
 	 */

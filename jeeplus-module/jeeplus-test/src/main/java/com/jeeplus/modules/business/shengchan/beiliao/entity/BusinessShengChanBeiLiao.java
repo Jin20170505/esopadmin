@@ -28,6 +28,17 @@ public class BusinessShengChanBeiLiao extends DataEntity<BusinessShengChanBeiLia
 	private String schid;		// 生产行ID
 	private String scid;		// 生产ID
 	private String u8code;		// U8编号
+	private String blid;// 备料ID
+
+	public String getBlid() {
+		return blid;
+	}
+
+	public BusinessShengChanBeiLiao setBlid(String blid) {
+		this.blid = blid;
+		return this;
+	}
+
 	private List<BusinessShengChanBeiLiaoMx> businessShengChanBeiLiaoMxList = Lists.newArrayList();		// 子表列表
 	
 	public BusinessShengChanBeiLiao() {
