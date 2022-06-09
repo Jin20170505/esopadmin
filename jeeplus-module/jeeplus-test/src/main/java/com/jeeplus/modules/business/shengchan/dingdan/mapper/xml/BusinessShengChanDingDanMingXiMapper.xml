@@ -192,7 +192,7 @@
 			std=VALUES(std),
 		 num=VALUES(num),
 		 unit=VALUES(unit),
-			dept = values(dept)
+		dept = values(dept)
 	</insert>
 	
 	<update id="update">

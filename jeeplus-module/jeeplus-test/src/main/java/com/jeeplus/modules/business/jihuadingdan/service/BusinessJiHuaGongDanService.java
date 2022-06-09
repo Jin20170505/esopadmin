@@ -138,7 +138,7 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 	public  void shengchengbaogongdan(String id){
 		boolean flag = businessBaoGongOrderService.hasScOrderFromPlan(id);
 		if(flag){
-			throw new RuntimeException("该计划工单以生成报工单。请勿多次生成.");
+			throw new RuntimeException("该计划工单已生成报工单。请勿多次生成.");
 		}
 		BusinessJiHuaGongDan jiHuaGongDan = get(id);
 		if("未下发".equals(jiHuaGongDan.getStatus())){
@@ -167,12 +167,7 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 		order.setNum(jiHuaGongDan.getGdnum());
 		order.setUnit(jiHuaGongDan.getUnit());
 		sb.append("\"num\":\"").append(order.getNum()).append("\",");
-		String code="";
-		synchronized (this){
-			code = "BGD"+ DateUtils.getDate("yyyyMMddHHmmss")+ RandomUtil.nextInt(100,999);
-		}
 
-		order.setBgcode(code);
 		sb.append("\"bgcode\":\"").append(order.getBgcode()).append("\"");
 		sb.append("}");
 		order.setQrcode(sb.toString());
@@ -186,7 +181,13 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 			order.getBusinessBaoGongOrderMingXiList().add(xi);
 		});
 		mapper.updateisshengcheng(id,"已生成");
-		businessBaoGongOrderService.save(order);
+		String code="";
+		synchronized (this){
+			code = businessBaoGongOrderService.getCurrentCode(DateUtils.getDate("yyyyMMdd"));
+			order.setBgcode(code);
+			businessBaoGongOrderService.save(order);
+		}
+
 	}
 
 	public Double getSumnumByScYid(String scyid){

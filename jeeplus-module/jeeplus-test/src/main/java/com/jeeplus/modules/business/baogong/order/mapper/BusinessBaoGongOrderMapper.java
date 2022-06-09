@@ -43,4 +43,7 @@ public interface BusinessBaoGongOrderMapper extends BaseMapper<BusinessBaoGongOr
     void restOrder(@Param("id") String id);
     @Update("update business_baogong_order_mingxi set complete = '0' where pid = #{bgid}")
     void restOrderMx(@Param("bgid") String bgid);
+
+    @Select("select max(bgcode) from business_baogao_order where bgcode like concat('BGD',#{ymd},'%')")
+    String getMaxCode(@Param("ymd") String ymd);
 }

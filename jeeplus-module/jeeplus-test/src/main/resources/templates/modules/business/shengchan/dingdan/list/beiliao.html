@@ -11,6 +11,12 @@ layout("/include/_dialog.html"){
         if(!isValidate){
             return false;
         }else{
+            var doingnum = $("#doingnum").val();
+            var donum  = $("#donum").val();
+            if((doingnum-donum)<0){
+                jp.warning("备料数量不可大于待备料数量");
+                return false;
+            }
             var index = jp.loading();
             jp.post("${ctx}/business/shengchan/dingdan/businessShengChanDingDan/doScBeiLiao",$('#inputForm').serialize(),function(data){
                 if(data.success){
@@ -59,7 +65,7 @@ layout("/include/_dialog.html"){
             </td>
             <td class="width-15 active"><label class="pull-right">备料数量：</label></td>
             <td class="width-35">
-                <input name="donum" value=""  type="number"  class="form-control required"/>
+                <input name="donum" id="donum" value=""  type="number"  class="form-control required"/>
             </td>
         </tr>
         </tbody>

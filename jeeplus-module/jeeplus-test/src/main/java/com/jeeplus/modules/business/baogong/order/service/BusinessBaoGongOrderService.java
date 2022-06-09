@@ -115,6 +115,31 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		return order;
 	}
 
+
+	public String getCurrentCode(String ymd){
+		String maxcode  = mapper.getMaxCode(ymd);
+		String code = "";
+		if(StringUtils.isEmpty(maxcode)){
+			code = "BGD" +ymd + "00001";
+		}else {
+			code = maxcode.substring(0,9);
+			int c =  Integer.valueOf(maxcode.substring(9));
+			c = c+1;
+			if(c<10){
+				code = code +"0000"+c;
+			}else if(10<=c && c<100){
+				code = code +"000"+c;
+			}else if(100<=c && c<1000) {
+				code = code +"00"+c;
+			}else if(1000<=c && c<10000){
+				code = code +"0"+c;
+			}else {
+				code = code+c;
+			}
+		}
+		return code;
+	}
+
 	public void findDoingBaoGaoItem(BusinessBaoGongOrder order,String bgid,double gdnum){
 		BusinessBaoGongOrderMingXi mingXi = new BusinessBaoGongOrderMingXi();
 		mingXi.setComplete("0");
