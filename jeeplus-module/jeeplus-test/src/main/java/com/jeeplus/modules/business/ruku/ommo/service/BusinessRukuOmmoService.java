@@ -157,8 +157,8 @@ public class BusinessRukuOmmoService extends CrudService<BusinessRukuOmmoMapper,
 			mx.setWdhid(j.getString("id"));mx.setWdid(wdid);
 			main.getBusinessRukuOmmoMxList().add(mx);
 		});
-		String ckcode = cangKuMapper.getCodeById(ckid);
 		save(main);
+		String ckcode = cangKuMapper.getCodeById(ckid);
 		YT_Rd01 rd01 = new YT_Rd01();
 		rd01.setCode(main.getCode());
 		rd01.setcBusType("委外订单");

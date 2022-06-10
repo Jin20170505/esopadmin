@@ -119,11 +119,9 @@ public class BusinessFaLiaoService extends CrudService<BusinessFaLiaoMapper, Bus
 	public void faliao(String userid,String fromck,String tock,String mxJson){
 		BusinessFaLiao businessFaLiao = new BusinessFaLiao();
 		// businessFaLiao.setCode("FLD"+ DateUtils.getDate("yyyyMMddHHmmss"));
-		businessFaLiao.preInsert();
 		businessFaLiao.setCreateBy(new User(userid));
 		businessFaLiao.setFromck(new BaseCangKu(fromck));
 		businessFaLiao.setTock(new BaseCangKu(tock));
-		mapper.insert(businessFaLiao);
 		JSONObject json = JSONObject.fromObject(mxJson);
 		JSONArray jsonArray = json.getJSONArray("list");
 		List<BusinessFaLiaoMx>  mxes = new ArrayList<>();
@@ -140,10 +138,11 @@ public class BusinessFaLiaoService extends CrudService<BusinessFaLiaoMapper, Bus
 			mx.setBatchno(o.optString("batchno"));
 			mx.setScdate(o.optString("scdate"));
 			mx.setHuowei(new BaseHuoWei(o.optString("hwid")));
+			mx.setId("");mx.setDelFlag("0");
 			mxes.add(mx);
-			mx.preInsert();
-			businessFaLiaoMxMapper.insert(mx);
+			businessFaLiao.getBusinessFaLiaoMxList().add(mx);
 		});
+		save(businessFaLiao);
 		try {
 			String ockcdoe = cangKuMapper.getCodeById(fromck);
 			String tckcode = cangKuMapper.getCodeById(tock);

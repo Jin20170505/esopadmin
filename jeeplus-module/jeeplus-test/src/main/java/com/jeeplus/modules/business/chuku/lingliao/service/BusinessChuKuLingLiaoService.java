@@ -122,7 +122,7 @@ public class BusinessChuKuLingLiaoService extends CrudService<BusinessChuKuLingL
 		lingLiao.setCinvname(cinvname);lingLiao.setCinvstd(cinvstd);lingLiao.setNum(num);lingLiao.setUnit(unit);
 		lingLiao.setCk(new BaseCangKu(ckid));lingLiao.setRemarks(remarks);
 		// lingLiao.setCode("LLD"+ DateUtils.getDate("yyyyMMddHHmmss"));
-		lingLiao.preInsert();
+//		lingLiao.preInsert();
 		lingLiao.setCreateBy(new User(userid));
 		mapper.insert(lingLiao);
 		List<BusinessChuKuLingLiaoMx> mxes = Lists.newArrayList();
@@ -141,10 +141,11 @@ public class BusinessChuKuLingLiaoService extends CrudService<BusinessChuKuLingL
 			mx.setCinvstd(j.getString("cinvstd"));
 			mx.setP(lingLiao);
 			mx.setSych("0");
-			mx.preInsert();
 			mxes.add(mx);
-			businessChuKuLingLiaoMxMapper.insert(mx);
+			mx.setId("");mx.setDelFlag("0");
+			lingLiao.getBusinessChuKuLingLiaoMxList().add(mx);
 		});
+		save(lingLiao);
 		try {
 			String ckcdoe = cangKuMapper.getCodeById(ckid);
 			//TODO 向U8抛数据 （材料出库）
