@@ -106,7 +106,7 @@ $(document).ready(function() {
 		        field: 'dd.code',
 		        title: '生产订单号',
 		        sortable: true,
-		        sortName: 'dd.code'
+		        sortName: 'order_code'
 		       
 		    }
 			,{
@@ -223,8 +223,8 @@ $(document).ready(function() {
 
 	  $('#businessJiHuaGongDanTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
-            $('#remove').prop('disabled', ! $('#businessJiHuaGongDanTable').bootstrapTable('getSelections').length);
-            $('#edit,#xiafa,#chehui,#shengchengbaogongdan').prop('disabled', $('#businessJiHuaGongDanTable').bootstrapTable('getSelections').length!=1);
+            $('#remove,#xiafa,#chehui').prop('disabled', ! $('#businessJiHuaGongDanTable').bootstrapTable('getSelections').length);
+            $('#edit,#shengchengbaogongdan').prop('disabled', $('#businessJiHuaGongDanTable').bootstrapTable('getSelections').length!=1);
         });
 
 	 $("#import").click(function(){//显示导入面板

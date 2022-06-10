@@ -122,8 +122,8 @@ $(document).ready(function() {
 
 	  $('#businessShengChanDingDanTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
-            $('#remove').prop('disabled', ! $('#businessShengChanDingDanTable').bootstrapTable('getSelections').length);
-            $('#edit,#jihua,#shenhe,#fanshen').prop('disabled', $('#businessShengChanDingDanTable').bootstrapTable('getSelections').length!=1);
+            $('#remove,#shenhe,#fanshen').prop('disabled', ! $('#businessShengChanDingDanTable').bootstrapTable('getSelections').length);
+            $('#edit,#jihua').prop('disabled', $('#businessShengChanDingDanTable').bootstrapTable('getSelections').length!=1);
         });
 
 	 $("#import").click(function(){//显示导入面板

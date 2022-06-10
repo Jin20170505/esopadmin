@@ -145,17 +145,12 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 			throw new RuntimeException("该计划工单的状态：未下发.不可生成。请审核后再操作");
 		}
 		BusinessBaoGongOrder order = new BusinessBaoGongOrder();
-		StringBuffer sb = new StringBuffer("{");
 		order.setBatchno(jiHuaGongDan.getBatchno());
-		sb.append("\"batchno\":\"").append(order.getBatchno()).append("\",");
 		order.setOrderlineid(jiHuaGongDan.getDd().getId());
 		order.setOrderline(jiHuaGongDan.getOrderno());
 		order.setOrdercode(jiHuaGongDan.getDd().getCode());
-		sb.append("\"sccode\":\"").append(order.getOrdercode()).append("\",");
-		sb.append("\"lineno\":\"").append(order.getOrderline()).append("\",");
 		order.setPlanid(jiHuaGongDan.getId());
 		order.setPlancode(jiHuaGongDan.getCode());
-		sb.append("\"plancode\":\"").append(order.getPlancode()).append("\",");
 		order.setDept(jiHuaGongDan.getDept().getId());
 		order.setDeptName(jiHuaGongDan.getDept().getName());
 		order.setCinvcode(jiHuaGongDan.getCinvcode());
@@ -166,11 +161,6 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 		order.setComplate("0");
 		order.setNum(jiHuaGongDan.getGdnum());
 		order.setUnit(jiHuaGongDan.getUnit());
-		sb.append("\"num\":\"").append(order.getNum()).append("\",");
-
-		sb.append("\"bgcode\":\"").append(order.getBgcode()).append("\"");
-		sb.append("}");
-		order.setQrcode(sb.toString());
 		// 子表
 		jiHuaGongDan.getBusinessJiHuaGongDanMingXiList().forEach(mx->{
 			BusinessBaoGongOrderMingXi xi = new BusinessBaoGongOrderMingXi();
@@ -185,9 +175,17 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 		synchronized (this){
 			code = businessBaoGongOrderService.getCurrentCode(DateUtils.getDate("yyyyMMdd"));
 			order.setBgcode(code);
+			StringBuffer sb = new StringBuffer("{");
+			sb.append("\"batchno\":\"").append(order.getBatchno()).append("\",");
+			sb.append("\"sccode\":\"").append(order.getOrdercode()).append("\",");
+			sb.append("\"lineno\":\"").append(order.getOrderline()).append("\",");
+			sb.append("\"plancode\":\"").append(order.getPlancode()).append("\",");
+			sb.append("\"num\":\"").append(order.getNum()).append("\",");
+			sb.append("\"bgcode\":\"").append(order.getBgcode()).append("\"");
+			sb.append("}");
+			order.setQrcode(sb.toString());
 			businessBaoGongOrderService.save(order);
 		}
-
 	}
 
 	public Double getSumnumByScYid(String scyid){

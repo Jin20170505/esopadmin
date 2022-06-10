@@ -15,6 +15,7 @@ import com.jeeplus.modules.base.route.service.BaseRoteMainService;
 import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDan;
 import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDanBom;
 import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDanMingXi;
+import com.jeeplus.modules.business.jihuadingdan.mapper.BusinessJiHuaGongDanBomMapper;
 import com.jeeplus.modules.business.jihuadingdan.service.BusinessJiHuaGongDanService;
 import com.jeeplus.modules.business.product.archive.entity.BusinessProduct;
 import com.jeeplus.modules.business.shengchan.beiliao.apply.entity.BusinessShengChanBeiLiaoApply;
@@ -405,18 +406,23 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 		}
 		businessShengChanDingDanMingXiMapper.updateChaidan(rid);
 		jiHuaGongDans.forEach(d->businessJiHuaGongDanService.save(d));
-		//weichaCheck(rid);
 	}
-
-
+	@Autowired
+	private BusinessJiHuaGongDanBomMapper jiHuaGongDanBomMapper;
+	// 尾差计算
 	@Transactional(readOnly = false)
-	public void weichaCheck1(String rid){
+	public void weichaCheck(String rid){
 		List<BusinessShengChanBom> boms = businessShengChanDingdanMxService.findBomList(rid);
 		if(boms!=null){
 			boms.forEach(d->{
 				Double sum = businessJiHuaGongDanService.getSumnumByScYid(d.getId());
 				if((d.getNum()-sum) >0){
-					businessJiHuaGongDanService.updateWeiCha(d.getId(),d.getNum()-sum);
+					String lastid = jiHuaGongDanBomMapper.getIdByCreateDate(d.getId());
+					Double fnum = jiHuaGongDanBomMapper.getSumnumByScYidCid(d.getId(),lastid);
+					if(fnum==null){
+						fnum = 0.0;
+					}
+					jiHuaGongDanBomMapper.updateWeiCha(lastid,d.getNum()-fnum);
 				}
 			});
 		}

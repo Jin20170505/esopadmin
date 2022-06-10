@@ -262,6 +262,7 @@ public class BusinessShengChanDingDanController extends BaseController {
 		AjaxJson json = new AjaxJson();
 		try {
 			businessShengChanDingDanService.chaidan(rid,num);
+			businessShengChanDingDanService.weichaCheck(rid);
 			json.setMsg("生成成功");
 			json.setSuccess(true);
 		}catch (Exception e){
@@ -313,6 +314,9 @@ public class BusinessShengChanDingDanController extends BaseController {
 		AjaxJson json = new AjaxJson();
 		try {
 			businessShengChanDingDanService.handlerPlan(rid,gdnum,nonum,num);
+			if(nonum<=nonum){
+				businessShengChanDingDanService.weichaCheck(rid);
+			}
 			json.setMsg("拆单成功");
 			json.setSuccess(true);
 		}catch (Exception e){

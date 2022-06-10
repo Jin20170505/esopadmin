@@ -21,6 +21,7 @@ public class BusinessJiHuaGongDan extends DataEntity<BusinessJiHuaGongDan> {
 	private static final long serialVersionUID = 1L;
 	private String code;		// 单号
 	private BusinessShengChanDingDan dd;		// 生产订单号
+	private String sccode;	// 生产单号
 	private String orderno;		// 生产订单行号
 	private String batchno;		// 生产批号
 	private String cinvcode;		// 存货编码
@@ -64,7 +65,16 @@ public class BusinessJiHuaGongDan extends DataEntity<BusinessJiHuaGongDan> {
 	public void setCode(String code) {
 		this.code = code;
 	}
-	
+
+	public String getSccode() {
+		return sccode;
+	}
+
+	public BusinessJiHuaGongDan setSccode(String sccode) {
+		this.sccode = sccode;
+		return this;
+	}
+
 	@ExcelField(title="生产订单号", fieldType=BusinessShengChanDingDan.class, value="dd.code", align=2, sort=8)
 	public BusinessShengChanDingDan getDd() {
 		return dd;
