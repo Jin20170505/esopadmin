@@ -58,7 +58,11 @@ public class BusinessFaLiaoService extends CrudService<BusinessFaLiaoMapper, Bus
 	}
 	
 	@Transactional(readOnly = false)
-	public void save(BusinessFaLiao businessFaLiao) {
+	public synchronized void save(BusinessFaLiao businessFaLiao) {
+		if(StringUtils.isEmpty(businessFaLiao.getCode())){
+			String code = getCurrentCode(DateUtils.getDate("yyyyMMdd"));
+			businessFaLiao.setCode(code);
+		}
 		super.save(businessFaLiao);
 		for (BusinessFaLiaoMx businessFaLiaoMx : businessFaLiao.getBusinessFaLiaoMxList()){
 			if (businessFaLiaoMx.getId() == null){
@@ -78,7 +82,29 @@ public class BusinessFaLiaoService extends CrudService<BusinessFaLiaoMapper, Bus
 			}
 		}
 	}
-	
+	public String getCurrentCode(String ymd){
+		String maxcode  = mapper.getMaxCode(ymd);
+		String code = "";
+		if(StringUtils.isEmpty(maxcode)){
+			code = "FLD" +ymd + "00001";
+		}else {
+			code = maxcode.substring(0,9);
+			int c =  Integer.valueOf(maxcode.substring(9));
+			c = c+1;
+			if(c<10){
+				code = code +"0000"+c;
+			}else if(10<=c && c<100){
+				code = code +"000"+c;
+			}else if(100<=c && c<1000) {
+				code = code +"00"+c;
+			}else if(1000<=c && c<10000){
+				code = code +"0"+c;
+			}else {
+				code = code+c;
+			}
+		}
+		return code;
+	}
 	@Transactional(readOnly = false)
 	public void delete(BusinessFaLiao businessFaLiao) {
 		super.delete(businessFaLiao);
@@ -92,7 +118,7 @@ public class BusinessFaLiaoService extends CrudService<BusinessFaLiaoMapper, Bus
 	@Transactional(readOnly = false)
 	public void faliao(String userid,String fromck,String tock,String mxJson){
 		BusinessFaLiao businessFaLiao = new BusinessFaLiao();
-		businessFaLiao.setCode("FLD"+ DateUtils.getDate("yyyyMMddHHmmss"));
+		// businessFaLiao.setCode("FLD"+ DateUtils.getDate("yyyyMMddHHmmss"));
 		businessFaLiao.preInsert();
 		businessFaLiao.setCreateBy(new User(userid));
 		businessFaLiao.setFromck(new BaseCangKu(fromck));

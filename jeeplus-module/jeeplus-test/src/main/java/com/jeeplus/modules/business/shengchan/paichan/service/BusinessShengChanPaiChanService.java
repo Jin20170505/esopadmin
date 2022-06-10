@@ -46,7 +46,11 @@ public class BusinessShengChanPaiChanService extends CrudService<BusinessShengCh
 	}
 	
 	@Transactional(readOnly = false)
-	public void save(BusinessShengChanPaiChan businessShengChanPaiChan) {
+	public synchronized void save(BusinessShengChanPaiChan businessShengChanPaiChan) {
+		if(StringUtils.isEmpty(businessShengChanPaiChan.getCode())){
+			String code = getCurrentCode(DateUtils.getDate("yyyyMMdd"));
+			businessShengChanPaiChan.setCode(code);
+		}
 		super.save(businessShengChanPaiChan);
 		for (BusinessShengChanPaiChaiMx businessShengChanPaiChaiMx : businessShengChanPaiChan.getBusinessShengChanPaiChaiMxList()){
 			if (businessShengChanPaiChaiMx.getId() == null){
@@ -72,7 +76,29 @@ public class BusinessShengChanPaiChanService extends CrudService<BusinessShengCh
 		super.delete(businessShengChanPaiChan);
 		businessShengChanPaiChaiMxMapper.delete(new BusinessShengChanPaiChaiMx(businessShengChanPaiChan));
 	}
-
+	public String getCurrentCode(String ymd){
+		String maxcode  = mapper.getMaxCode(ymd);
+		String code = "";
+		if(StringUtils.isEmpty(maxcode)){
+			code = "SCPC" +ymd + "00001";
+		}else {
+			code = maxcode.substring(0,10);
+			int c =  Integer.valueOf(maxcode.substring(10));
+			c = c+1;
+			if(c<10){
+				code = code +"0000"+c;
+			}else if(10<=c && c<100){
+				code = code +"000"+c;
+			}else if(100<=c && c<1000) {
+				code = code +"00"+c;
+			}else if(1000<=c && c<10000){
+				code = code +"0"+c;
+			}else {
+				code = code+c;
+			}
+		}
+		return code;
+	}
 	@Autowired
 	private BusinessShengChanPaiChanDeptMapper chanPaiChanDeptMapper;
 	public void checckPaiChan(String dept,String sccode, String scline, Date scdate){

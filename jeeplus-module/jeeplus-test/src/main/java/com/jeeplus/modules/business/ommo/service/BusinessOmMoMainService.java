@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.google.common.collect.Lists;
+import com.jeeplus.common.utils.DateUtils;
 import com.jeeplus.modules.base.vendor.entity.BaseVendor;
 import com.jeeplus.modules.business.shengchan.dingdan.entity.BusinessShengChanDingDan;
 import com.jeeplus.modules.u8data.ommo.entity.U8OmMoMain;
@@ -58,7 +59,11 @@ public class BusinessOmMoMainService extends CrudService<BusinessOmMoMainMapper,
 	}
 	
 	@Transactional(readOnly = false)
-	public void save(BusinessOmMoMain businessOmMoMain) {
+	public synchronized void save(BusinessOmMoMain businessOmMoMain) {
+		if(StringUtils.isEmpty(businessOmMoMain.getCode())){
+			String code = getCurrentCode(DateUtils.getDate("yyyyMMdd"));
+			businessOmMoMain.setCode(code);
+		}
 		super.save(businessOmMoMain);
 		for (BusinessOmMoDetail businessOmMoDetail : businessOmMoMain.getBusinessOmMoDetailList()){
 			if (businessOmMoDetail.getId() == null){
@@ -78,7 +83,29 @@ public class BusinessOmMoMainService extends CrudService<BusinessOmMoMainMapper,
 			}
 		}
 	}
-	
+	public String getCurrentCode(String ymd){
+		String maxcode  = mapper.getMaxCode(ymd);
+		String code = "";
+		if(StringUtils.isEmpty(maxcode)){
+			code = "WWDD" +ymd + "00001";
+		}else {
+			code = maxcode.substring(0,10);
+			int c =  Integer.valueOf(maxcode.substring(10));
+			c = c+1;
+			if(c<10){
+				code = code +"0000"+c;
+			}else if(10<=c && c<100){
+				code = code +"000"+c;
+			}else if(100<=c && c<1000) {
+				code = code +"00"+c;
+			}else if(1000<=c && c<10000){
+				code = code +"0"+c;
+			}else {
+				code = code+c;
+			}
+		}
+		return code;
+	}
 	@Transactional(readOnly = false)
 	public void delete(BusinessOmMoMain businessOmMoMain) {
 		super.delete(businessOmMoMain);

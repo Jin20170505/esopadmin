@@ -18,6 +18,8 @@ import com.jeeplus.modules.business.chuku.ommo.entity.BusinessChuKuWeiWai;
 @Repository
 public interface BusinessChuKuWeiWaiMapper extends BaseMapper<BusinessChuKuWeiWai> {
 
+    @Select("select max(code) from business_chuku_weiwai where code like concat('WWFL',#{ymd},'%')")
+    String getMaxCode(@Param("ymd") String ymd);
 
     @Select("select 1 from business_chuku_weiwai  where mohid = #{wwhid} limit 1")
     Integer hasByWwHid(@Param("wwhid") String wwhid);

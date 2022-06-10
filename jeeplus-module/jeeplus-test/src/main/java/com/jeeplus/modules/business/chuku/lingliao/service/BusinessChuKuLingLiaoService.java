@@ -58,7 +58,11 @@ public class BusinessChuKuLingLiaoService extends CrudService<BusinessChuKuLingL
 	}
 	
 	@Transactional(readOnly = false)
-	public void save(BusinessChuKuLingLiao businessChuKuLingLiao) {
+	public synchronized void save(BusinessChuKuLingLiao businessChuKuLingLiao) {
+		if(StringUtils.isEmpty(businessChuKuLingLiao.getCode())){
+			String code = getCurrentCode(DateUtils.getDate("yyyyMMdd"));
+			businessChuKuLingLiao.setCode(code);
+		}
 		super.save(businessChuKuLingLiao);
 		for (BusinessChuKuLingLiaoMx businessChuKuLingLiaoMx : businessChuKuLingLiao.getBusinessChuKuLingLiaoMxList()){
 			if (businessChuKuLingLiaoMx.getId() == null){
@@ -78,7 +82,29 @@ public class BusinessChuKuLingLiaoService extends CrudService<BusinessChuKuLingL
 			}
 		}
 	}
-	
+	public String getCurrentCode(String ymd){
+		String maxcode  = mapper.getMaxCode(ymd);
+		String code = "";
+		if(StringUtils.isEmpty(maxcode)){
+			code = "LLD" +ymd + "00001";
+		}else {
+			code = maxcode.substring(0,9);
+			int c =  Integer.valueOf(maxcode.substring(9));
+			c = c+1;
+			if(c<10){
+				code = code +"0000"+c;
+			}else if(10<=c && c<100){
+				code = code +"000"+c;
+			}else if(100<=c && c<1000) {
+				code = code +"00"+c;
+			}else if(1000<=c && c<10000){
+				code = code +"0"+c;
+			}else {
+				code = code+c;
+			}
+		}
+		return code;
+	}
 	@Transactional(readOnly = false)
 	public void delete(BusinessChuKuLingLiao businessChuKuLingLiao) {
 		super.delete(businessChuKuLingLiao);
@@ -95,7 +121,7 @@ public class BusinessChuKuLingLiaoService extends CrudService<BusinessChuKuLingL
 		lingLiao.setBgid(bgid);lingLiao.setSccode(sccode);lingLiao.setSclinecode(scline).setCinvcode(cinvcode);
 		lingLiao.setCinvname(cinvname);lingLiao.setCinvstd(cinvstd);lingLiao.setNum(num);lingLiao.setUnit(unit);
 		lingLiao.setCk(new BaseCangKu(ckid));lingLiao.setRemarks(remarks);
-		lingLiao.setCode("LLD"+ DateUtils.getDate("yyyyMMddHHmmss"));
+		// lingLiao.setCode("LLD"+ DateUtils.getDate("yyyyMMddHHmmss"));
 		lingLiao.preInsert();
 		lingLiao.setCreateBy(new User(userid));
 		mapper.insert(lingLiao);

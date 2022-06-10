@@ -23,4 +23,7 @@ public interface BusinessRuKuProductMapper extends BaseMapper<BusinessRuKuProduc
 	String getMaxBatchno(@Param("ymd") String yyyymmdd);
 	@Select("select 1 from business_ruku_product where bgid = #{bgid} limit 1")
 	Integer hasByBgid(@Param("bgid")String bgid);
+
+	@Select("select max(code) from business_ruku_product where code like concat('CPRK',#{ymd},'%')")
+	String getMaxCode(@Param("ymd") String ymd);
 }

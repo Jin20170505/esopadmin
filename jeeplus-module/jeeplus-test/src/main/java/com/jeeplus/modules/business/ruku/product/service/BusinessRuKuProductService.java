@@ -59,9 +59,34 @@ public class BusinessRuKuProductService extends CrudService<BusinessRuKuProductM
 	public Page<BusinessRuKuProduct> findPage(Page<BusinessRuKuProduct> page, BusinessRuKuProduct businessRuKuProduct) {
 		return super.findPage(page, businessRuKuProduct);
 	}
-	
+	public String getCurrentCode(String ymd){
+		String maxcode  = mapper.getMaxCode(ymd);
+		String code = "";
+		if(StringUtils.isEmpty(maxcode)){
+			code = "CPRU" +ymd + "00001";
+		}else {
+			code = maxcode.substring(0,10);
+			int c =  Integer.valueOf(maxcode.substring(10));
+			c = c+1;
+			if(c<10){
+				code = code +"0000"+c;
+			}else if(10<=c && c<100){
+				code = code +"000"+c;
+			}else if(100<=c && c<1000) {
+				code = code +"00"+c;
+			}else if(1000<=c && c<10000){
+				code = code +"0"+c;
+			}else {
+				code = code+c;
+			}
+		}
+		return code;
+	}
 	@Transactional(readOnly = false)
-	public void save(BusinessRuKuProduct businessRuKuProduct) {
+	public synchronized void save(BusinessRuKuProduct businessRuKuProduct) {
+		if(StringUtils.isEmpty(businessRuKuProduct.getCode())){
+			businessRuKuProduct.setCode(getCurrentCode(DateUtils.getDate("yyyyMMdd")));
+		}
 		super.save(businessRuKuProduct);
 		for (BusinessRuKuProductMx businessRuKuProductMx : businessRuKuProduct.getBusinessRuKuProductMxList()){
 			if (businessRuKuProductMx.getId() == null){
@@ -153,7 +178,7 @@ public class BusinessRuKuProductService extends CrudService<BusinessRuKuProductM
 		product.setCinvcode(order.getCinvcode());
 		product.setCinvname(order.getCinvname());
 		product.setCinvstd(order.getCinvstd());
-		product.setCode("CPRK"+ DateUtils.getDate("yyyyMMddHHmmss"));
+		//product.setCode("CPRK"+ DateUtils.getDate("yyyyMMddHHmmss"));
 		product.setNum(rukunum);
 		product.setSych("0");
 		product.setSccode(order.getOrdercode());
@@ -172,25 +197,15 @@ public class BusinessRuKuProductService extends CrudService<BusinessRuKuProductM
 		mx.setNum(rukunum);
 		mx.setSych("1");
 		mx.setRemarks(remarks);
-		mx.preInsert();
 		mx.setCreateBy(new User(userid));
-		mapper.insert(product);
-		businessRuKuProductMxMapper.insert(mx);
+		mx.setId("");mx.setDelFlag("0");
+		product.getBusinessRuKuProductMxList().add(mx);
+//		mapper.insert(product);
+//		businessRuKuProductMxMapper.insert(mx);
+		save(product);
 		BusinessShengChanDingDanMingXi shengChanDingDanMingXi = shengChanDingDanMingXiMapper.getInfo(mx.getSchid());
 		// TODO 判断入库数量 是否大于生产数量 关闭单据
-//		Double scnum = shengChanDingDanMingXi.getNum();
-//		if(scnum==null){
-//			scnum =0.0;
-//		}
-//		Double rkSum = businessRuKuProductMxMapper.getRuKuSumByScHid(mx.getSchid());
-//		if(rkSum==null){
-//			rkSum=0.0;
-//		}
-//		if(rkSum>=scnum){
-//			shengChanDingDanMingXiMapper.
-//		}
 		User user = UserUtils.get(userid);
-		// TODO U8成品入库
 		try{
 			YT_Rd10 rd10 = new YT_Rd10();
 			rd10.setcBusType("成品入库");

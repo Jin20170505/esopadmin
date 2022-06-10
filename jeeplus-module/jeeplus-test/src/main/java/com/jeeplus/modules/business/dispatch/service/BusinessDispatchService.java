@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.google.common.collect.Lists;
+import com.jeeplus.common.utils.DateUtils;
 import com.jeeplus.modules.base.cangku.entity.BaseCangKu;
 import com.jeeplus.modules.base.cangku.mapper.BaseCangKuMapper;
 import com.jeeplus.modules.base.customer.entity.BaseCustomer;
@@ -58,7 +59,11 @@ public class BusinessDispatchService extends CrudService<BusinessDispatchMapper,
 		mapper.print(rid);
 	}
 	@Transactional(readOnly = false)
-	public void save(BusinessDispatch businessDispatch) {
+	public synchronized void save(BusinessDispatch businessDispatch) {
+		if(StringUtils.isEmpty(businessDispatch.getCode())){
+			String code = getCurrentCode(DateUtils.getDate("yyyyMMdd"));
+			businessDispatch.setCode(code);
+		}
 		super.save(businessDispatch);
 		for (BusinessDispatchMx businessDispatchMx : businessDispatch.getBusinessDispatchMxList()){
 			if (businessDispatchMx.getId() == null){
@@ -69,7 +74,6 @@ public class BusinessDispatchService extends CrudService<BusinessDispatchMapper,
 				businessDispatchMx.setCustomer(businessDispatch.getCustomer());
 				businessDispatch.setDept(businessDispatch.getDept());
 				if (StringUtils.isBlank(businessDispatchMx.getId())){
-
 					businessDispatchMx.preInsert();
 					businessDispatchMxMapper.insert(businessDispatchMx);
 				}else{
@@ -81,7 +85,29 @@ public class BusinessDispatchService extends CrudService<BusinessDispatchMapper,
 			}
 		}
 	}
-	
+	public String getCurrentCode(String ymd){
+		String maxcode  = mapper.getMaxCode(ymd);
+		String code = "";
+		if(StringUtils.isEmpty(maxcode)){
+			code = "XSFH" +ymd + "00001";
+		}else {
+			code = maxcode.substring(0,10);
+			int c =  Integer.valueOf(maxcode.substring(10));
+			c = c+1;
+			if(c<10){
+				code = code +"0000"+c;
+			}else if(10<=c && c<100){
+				code = code +"000"+c;
+			}else if(100<=c && c<1000) {
+				code = code +"00"+c;
+			}else if(1000<=c && c<10000){
+				code = code +"0"+c;
+			}else {
+				code = code+c;
+			}
+		}
+		return code;
+	}
 	@Transactional(readOnly = false)
 	public void delete(BusinessDispatch businessDispatch) {
 		super.delete(businessDispatch);

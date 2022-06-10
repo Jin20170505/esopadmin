@@ -20,4 +20,7 @@ public interface BusinessChuKuLingLiaoMapper extends BaseMapper<BusinessChuKuLin
 
     @Select("select 1 from business_chuku_lingliao where bgid = #{bgid} limit 1")
 	Integer isDoneLingLiao(@Param("bgid") String bgid);
+
+    @Select("select max(code) from business_chuku_lingliao where code like concat('LLD',#{ymd},'%')")
+    String getMaxCode(@Param("ymd") String ymd);
 }

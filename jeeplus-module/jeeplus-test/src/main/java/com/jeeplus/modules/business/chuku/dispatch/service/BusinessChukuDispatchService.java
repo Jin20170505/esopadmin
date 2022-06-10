@@ -56,7 +56,11 @@ public class BusinessChukuDispatchService extends CrudService<BusinessChukuDispa
 	}
 	
 	@Transactional(readOnly = false)
-	public void save(BusinessChukuDispatch businessChukuDispatch) {
+	public synchronized void save(BusinessChukuDispatch businessChukuDispatch) {
+		if(StringUtils.isEmpty(businessChukuDispatch.getCode())){
+			String code = getCurrentCode(DateUtils.getDate("yyyyMMdd"));
+			businessChukuDispatch.setCode(code);
+		}
 		super.save(businessChukuDispatch);
 		for (BusinessChukuDispatchMx businessChukuDispatchMx : businessChukuDispatch.getBusinessChukuDispatchMxList()){
 			if (businessChukuDispatchMx.getId() == null){
@@ -76,7 +80,29 @@ public class BusinessChukuDispatchService extends CrudService<BusinessChukuDispa
 			}
 		}
 	}
-	
+	public String getCurrentCode(String ymd){
+		String maxcode  = mapper.getMaxCode(ymd);
+		String code = "";
+		if(StringUtils.isEmpty(maxcode)){
+			code = "XSCK" +ymd + "00001";
+		}else {
+			code = maxcode.substring(0,10);
+			int c =  Integer.valueOf(maxcode.substring(10));
+			c = c+1;
+			if(c<10){
+				code = code +"0000"+c;
+			}else if(10<=c && c<100){
+				code = code +"000"+c;
+			}else if(100<=c && c<1000) {
+				code = code +"00"+c;
+			}else if(1000<=c && c<10000){
+				code = code +"0"+c;
+			}else {
+				code = code+c;
+			}
+		}
+		return code;
+	}
 	@Transactional(readOnly = false)
 	public void delete(BusinessChukuDispatch businessChukuDispatch) {
 		super.delete(businessChukuDispatch);
@@ -91,7 +117,7 @@ public class BusinessChukuDispatchService extends CrudService<BusinessChukuDispa
 		main.setDept(dispatch.getDept());
 		main.setDispatchcode(dispatch.getCode());
 		main.setFahuoDate(dispatch.getFahuodate());
-		main.setCode("XSCK"+DateUtils.getDate("yyyyMMddHHmmss"));
+		//  main.setCode("XSCK"+DateUtils.getDate("yyyyMMddHHmmss"));
 		JSONObject js = JSONObject.fromObject(mxJson);
 		JSONArray array = js.getJSONArray("list");
 		array.forEach(e->{

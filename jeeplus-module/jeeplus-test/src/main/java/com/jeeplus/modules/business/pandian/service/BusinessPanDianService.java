@@ -62,7 +62,11 @@ public class BusinessPanDianService extends CrudService<BusinessPanDianMapper, B
 	}
 	
 	@Transactional(readOnly = false)
-	public void save(BusinessPanDian businessPanDian) {
+	public synchronized  void save(BusinessPanDian businessPanDian) {
+		if(StringUtils.isEmpty(businessPanDian.getCode())){
+			String code = getCurrentCode(DateUtils.getDate("yyyyMMdd"));
+			businessPanDian.setCode(code);
+		}
 		super.save(businessPanDian);
 		for (BusinessPanDianMx businessPanDianMx : businessPanDian.getBusinessPanDianMxList()){
 			if (businessPanDianMx.getId() == null){
@@ -82,7 +86,29 @@ public class BusinessPanDianService extends CrudService<BusinessPanDianMapper, B
 			}
 		}
 	}
-	
+	public String getCurrentCode(String ymd){
+		String maxcode  = mapper.getMaxCode(ymd);
+		String code = "";
+		if(StringUtils.isEmpty(maxcode)){
+			code = "PDD" +ymd + "00001";
+		}else {
+			code = maxcode.substring(0,9);
+			int c =  Integer.valueOf(maxcode.substring(9));
+			c = c+1;
+			if(c<10){
+				code = code +"0000"+c;
+			}else if(10<=c && c<100){
+				code = code +"000"+c;
+			}else if(100<=c && c<1000) {
+				code = code +"00"+c;
+			}else if(1000<=c && c<10000){
+				code = code +"0"+c;
+			}else {
+				code = code+c;
+			}
+		}
+		return code;
+	}
 	@Transactional(readOnly = false)
 	public void delete(BusinessPanDian businessPanDian) {
 		super.delete(businessPanDian);
@@ -103,11 +129,11 @@ public class BusinessPanDianService extends CrudService<BusinessPanDianMapper, B
 		main.setDdate(ddate);
 		main.setDuser(user);
 		main.setCk(cangKu);main.setHw(huoWei);
-		String code = "";
-		synchronized (this){
-			code = "PDD"+DateUtils.getDate("yyyyMMddHHmmss")+ RandomUtil.nextInt(100,999);
-		}
-		main.setCode(code);
+//		String code = "";
+//		synchronized (this){
+//			code = "PDD"+DateUtils.getDate("yyyyMMddHHmmss")+ RandomUtil.nextInt(100,999);
+//		}
+//		main.setCode(code);
 		// 其他出库
 		List<BusinessPanDianMx> outck = Lists.newArrayList();
 		// 其他入库
@@ -145,7 +171,7 @@ public class BusinessPanDianService extends CrudService<BusinessPanDianMapper, B
 		if(inck.size()>0){
 			U8OtherInCkMain m = new U8OtherInCkMain();
 			m.setcDepCode(user.getOffice().getCode()).setcWhCode(ckcode).setcMaker(user.getName()).setcMemo("")
-					.setCrdcode("14").setcCode(code).setMesCode(code).setdDate(ddate);
+					.setCrdcode("14").setcCode(main.getCode()).setMesCode(main.getCode()).setdDate(ddate);
 			try{
 				inck.forEach(d->{
 					U8OtherInCkMx x = new U8OtherInCkMx();
@@ -166,7 +192,7 @@ public class BusinessPanDianService extends CrudService<BusinessPanDianMapper, B
 		if(outck.size()>0){
 			U8OtherOutCkMain m = new U8OtherOutCkMain();
 			m.setcDepCode(user.getOffice().getCode()).setcWhCode(ckcode).setcMaker(user.getName()).setcMemo("")
-					.setCrdcode("24").setcCode(code).setMesCode(code).setdDate(ddate);
+					.setCrdcode("24").setcCode(main.getCode()).setMesCode(main.getCode()).setdDate(ddate);
 			try{
 				outck.forEach(d->{
 					U8OtherOutCkMx x = new U8OtherOutCkMx();

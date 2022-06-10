@@ -138,15 +138,35 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 		page.setList(businessShengChanDingDanMingXiMapper.findShengChanDingDanMingXi(businessShengChanDingDanMingXi));
 		return page;
 	}
-
+	public String getCurrentCode(String ymd){
+		String maxcode  = mapper.getMaxCode(ymd);
+		String code = "";
+		if(StringUtils.isEmpty(maxcode)){
+			code = "SCDD" +ymd + "00001";
+		}else {
+			code = maxcode.substring(0,10);
+			int c =  Integer.valueOf(maxcode.substring(10));
+			c = c+1;
+			if(c<10){
+				code = code +"0000"+c;
+			}else if(10<=c && c<100){
+				code = code +"000"+c;
+			}else if(100<=c && c<1000) {
+				code = code +"00"+c;
+			}else if(1000<=c && c<10000){
+				code = code +"0"+c;
+			}else {
+				code = code+c;
+			}
+		}
+		return code;
+	}
 	@Autowired
 	private BusinessShengChanBomMapper businessShengChanBomMapper;
 	@Transactional(readOnly = false)
-	public void save(BusinessShengChanDingDan businessShengChanDingDan) {
-		if(StringUtils.isEmpty(businessShengChanDingDan.getId())){
-			synchronized (this){
-
-			}
+	public synchronized void save(BusinessShengChanDingDan businessShengChanDingDan) {
+		if(StringUtils.isEmpty(businessShengChanDingDan.getCode())){
+			businessShengChanDingDan.setCode(getCurrentCode(DateUtils.getDate("yyyyMMdd")));
 		}
 		super.save(businessShengChanDingDan);
 		for (BusinessShengChanDingDanMingXi businessShengChanDingDanMingXi :

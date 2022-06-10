@@ -61,7 +61,11 @@ public class BusinessRukuCaiGouService extends CrudService<BusinessRukuCaiGouMap
 	}
 	
 	@Transactional(readOnly = false)
-	public void save(BusinessRukuCaiGou businessRukuCaiGou) {
+	public synchronized void save(BusinessRukuCaiGou businessRukuCaiGou) {
+		if(StringUtils.isEmpty(businessRukuCaiGou.getCode())){
+			String code = getCurrentCode(DateUtils.getDate("yyyyMMdd"));
+			businessRukuCaiGou.setCode(code);
+		}
 		super.save(businessRukuCaiGou);
 		for (BusinessRukuCaigouMx businessRukuCaigouMx : businessRukuCaiGou.getBusinessRukuCaigouMxList()){
 			if (businessRukuCaigouMx.getId() == null){
@@ -81,7 +85,29 @@ public class BusinessRukuCaiGouService extends CrudService<BusinessRukuCaiGouMap
 			}
 		}
 	}
-	
+	public String getCurrentCode(String ymd){
+		String maxcode  = mapper.getMaxCode(ymd);
+		String code = "";
+		if(StringUtils.isEmpty(maxcode)){
+			code = "CGRK" +ymd + "00001";
+		}else {
+			code = maxcode.substring(0,10);
+			int c =  Integer.valueOf(maxcode.substring(10));
+			c = c+1;
+			if(c<10){
+				code = code +"0000"+c;
+			}else if(10<=c && c<100){
+				code = code +"000"+c;
+			}else if(100<=c && c<1000) {
+				code = code +"00"+c;
+			}else if(1000<=c && c<10000){
+				code = code +"0"+c;
+			}else {
+				code = code+c;
+			}
+		}
+		return code;
+	}
 	@Transactional(readOnly = false)
 	public void delete(BusinessRukuCaiGou businessRukuCaiGou) {
 		super.delete(businessRukuCaiGou);
@@ -101,7 +127,7 @@ public class BusinessRukuCaiGouService extends CrudService<BusinessRukuCaiGouMap
 		businessRukuCaiGou.setArrivaldate(DateUtils.formatDate(vouch.getArriveDate()));
 		businessRukuCaiGou.setHw(new BaseHuoWei(hwid));
 		businessRukuCaiGou.setCk(new BaseCangKu(ckid));
-		businessRukuCaiGou.setCode("CGRKD"+DateUtils.getDate("yyyyMMddHHmmss"));
+		// businessRukuCaiGou.setCode("CGRKD"+DateUtils.getDate("yyyyMMddHHmmss"));
 		businessRukuCaiGou.setU8code(businessRukuCaiGou.getCode());
 		JSONObject json = JSONObject.fromObject(mxJson);
 		JSONArray array = json.getJSONArray("list");

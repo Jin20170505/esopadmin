@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.jeeplus.common.utils.DateUtils;
 import com.jeeplus.modules.base.vendor.entity.BaseVendor;
 import com.jeeplus.modules.business.ommo.entity.BusinessOmMoDetail;
 import com.jeeplus.modules.business.ommo.entity.BusinessOmMoMain;
@@ -50,7 +51,11 @@ public class BusinessOmmoArrivalVouchService extends CrudService<BusinessOmmoArr
 	}
 	
 	@Transactional(readOnly = false)
-	public void save(BusinessOmmoArrivalVouch businessOmmoArrivalVouch) {
+	public synchronized void save(BusinessOmmoArrivalVouch businessOmmoArrivalVouch) {
+		if(StringUtils.isEmpty(businessOmmoArrivalVouch.getCode())){
+			String code = getCurrentCode(DateUtils.getDate("yyyyMMdd"));
+			businessOmmoArrivalVouch.setCode(code);
+		}
 		super.save(businessOmmoArrivalVouch);
 		for (BusinessOmmoArrivalvouchMx businessOmmoArrivalvouchMx : businessOmmoArrivalVouch.getBusinessOmmoArrivalvouchMxList()){
 			if (businessOmmoArrivalvouchMx.getId() == null){
@@ -70,7 +75,29 @@ public class BusinessOmmoArrivalVouchService extends CrudService<BusinessOmmoArr
 			}
 		}
 	}
-	
+	public String getCurrentCode(String ymd){
+		String maxcode  = mapper.getMaxCode(ymd);
+		String code = "";
+		if(StringUtils.isEmpty(maxcode)){
+			code = "WWDH" +ymd + "00001";
+		}else {
+			code = maxcode.substring(0,10);
+			int c =  Integer.valueOf(maxcode.substring(10));
+			c = c+1;
+			if(c<10){
+				code = code +"0000"+c;
+			}else if(10<=c && c<100){
+				code = code +"000"+c;
+			}else if(100<=c && c<1000) {
+				code = code +"00"+c;
+			}else if(1000<=c && c<10000){
+				code = code +"0"+c;
+			}else {
+				code = code+c;
+			}
+		}
+		return code;
+	}
 	@Transactional(readOnly = false)
 	public void delete(BusinessOmmoArrivalVouch businessOmmoArrivalVouch) {
 		super.delete(businessOmmoArrivalVouch);

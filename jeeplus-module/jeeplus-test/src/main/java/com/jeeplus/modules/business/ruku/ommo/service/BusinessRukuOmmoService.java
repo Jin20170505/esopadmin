@@ -57,9 +57,35 @@ public class BusinessRukuOmmoService extends CrudService<BusinessRukuOmmoMapper,
 	public Page<BusinessRukuOmmo> findPage(Page<BusinessRukuOmmo> page, BusinessRukuOmmo businessRukuOmmo) {
 		return super.findPage(page, businessRukuOmmo);
 	}
-	
+	public String getCurrentCode(String ymd){
+		String maxcode  = mapper.getMaxCode(ymd);
+		String code = "";
+		if(StringUtils.isEmpty(maxcode)){
+			code = "WWRK" +ymd + "00001";
+		}else {
+			code = maxcode.substring(0,10);
+			int c =  Integer.valueOf(maxcode.substring(10));
+			c = c+1;
+			if(c<10){
+				code = code +"0000"+c;
+			}else if(10<=c && c<100){
+				code = code +"000"+c;
+			}else if(100<=c && c<1000) {
+				code = code +"00"+c;
+			}else if(1000<=c && c<10000){
+				code = code +"0"+c;
+			}else {
+				code = code+c;
+			}
+		}
+		return code;
+	}
 	@Transactional(readOnly = false)
 	public void save(BusinessRukuOmmo businessRukuOmmo) {
+		if(StringUtils.isEmpty(businessRukuOmmo.getCode())){
+			String code = getCurrentCode(DateUtils.getDate("yyyyMMdd"));
+			businessRukuOmmo.setCode(code);
+		}
 		super.save(businessRukuOmmo);
 		for (BusinessRukuOmmoMx businessRukuOmmoMx : businessRukuOmmo.getBusinessRukuOmmoMxList()){
 			if (businessRukuOmmoMx.getId() == null){
@@ -106,11 +132,11 @@ public class BusinessRukuOmmoService extends CrudService<BusinessRukuOmmoMapper,
 		main.setVendor(vouch.getVendor());
 		main.setDdate(DateUtils.formatDate(vouch.getDdate()));
 		main.setCk(new BaseCangKu(ckid));
-		String code = "";
-		synchronized (this){
-			code = "WWRKD"+ DateUtils.getDate("yyyyMMddHHmmss")+ RandomUtil.nextInt(100,999);
-		}
-		main.setCode(code);
+//		String code = "";
+//		synchronized (this){
+//			code = "WWRKD"+ DateUtils.getDate("yyyyMMddHHmmss")+ RandomUtil.nextInt(100,999);
+//		}
+//		main.setCode(code);
 		main.setU8code(main.getCode());
 		JSONObject json = JSONObject.fromObject(mxJson);
 		JSONArray array = json.getJSONArray("list");

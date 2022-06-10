@@ -59,7 +59,11 @@ public class BusinessChuKuWeiWaiService extends CrudService<BusinessChuKuWeiWaiM
 	}
 	
 	@Transactional(readOnly = false)
-	public void save(BusinessChuKuWeiWai businessChuKuWeiWai) {
+	public synchronized void save(BusinessChuKuWeiWai businessChuKuWeiWai) {
+		if(StringUtils.isEmpty(businessChuKuWeiWai.getCode())){
+			String code = getCurrentCode(DateUtils.getDate("yyyyMMdd"));
+			businessChuKuWeiWai.setCode(code);
+		}
 		super.save(businessChuKuWeiWai);
 		for (BusinessChuKuWeiWaiMx businessChuKuWeiWaiMx : businessChuKuWeiWai.getBusinessChuKuWeiWaiMxList()){
 			if (businessChuKuWeiWaiMx.getId() == null){
@@ -79,7 +83,29 @@ public class BusinessChuKuWeiWaiService extends CrudService<BusinessChuKuWeiWaiM
 			}
 		}
 	}
-	
+	public String getCurrentCode(String ymd){
+		String maxcode  = mapper.getMaxCode(ymd);
+		String code = "";
+		if(StringUtils.isEmpty(maxcode)){
+			code = "WWFL" +ymd + "00001";
+		}else {
+			code = maxcode.substring(0,10);
+			int c =  Integer.valueOf(maxcode.substring(10));
+			c = c+1;
+			if(c<10){
+				code = code +"0000"+c;
+			}else if(10<=c && c<100){
+				code = code +"000"+c;
+			}else if(100<=c && c<1000) {
+				code = code +"00"+c;
+			}else if(1000<=c && c<10000){
+				code = code +"0"+c;
+			}else {
+				code = code+c;
+			}
+		}
+		return code;
+	}
 	@Transactional(readOnly = false)
 	public void delete(BusinessChuKuWeiWai businessChuKuWeiWai) {
 		super.delete(businessChuKuWeiWai);
@@ -97,10 +123,10 @@ public class BusinessChuKuWeiWaiService extends CrudService<BusinessChuKuWeiWaiM
 	public void weiwaichuku(String wwid, String wwhid,String ckid, BussinessOmMoDetailOnly info, String userid, String mxJson){
 		User user = UserUtils.get(userid);
 		BusinessChuKuWeiWai businessChuKuWeiWai = new BusinessChuKuWeiWai();
-		String code = "";
-		synchronized (this){
-			code = "WWFL"+ DateUtils.getDate("yyyyMMddHHmmss")+ RandomUtil.nextInt(100,999);
-		}
+//		String code = "";
+//		synchronized (this){
+//			code = "WWFL"+ DateUtils.getDate("yyyyMMddHHmmss")+ RandomUtil.nextInt(100,999);
+//		}
 		businessChuKuWeiWai.setMoid(wwid);
 		businessChuKuWeiWai.setMohid(wwhid);
 		businessChuKuWeiWai.setArrivedate(info.getArrivedate());
@@ -111,7 +137,7 @@ public class BusinessChuKuWeiWaiService extends CrudService<BusinessChuKuWeiWaiM
 		businessChuKuWeiWai.setCinvcode(info.getCinvcode());
 		businessChuKuWeiWai.setCinvname(info.getCinvname());
 		businessChuKuWeiWai.setCinvstd(info.getCinvstd());
-		businessChuKuWeiWai.setCode(code);
+//		businessChuKuWeiWai.setCode(code);
 		businessChuKuWeiWai.setNum(info.getNum());
 		businessChuKuWeiWai.setUnit(info.getUnit());
 		businessChuKuWeiWai.setVendor(new BaseVendor(info.getVendorid()));

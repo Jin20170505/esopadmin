@@ -23,4 +23,7 @@ public interface BusinessDispatchMapper extends BaseMapper<BusinessDispatch> {
 
     @Update("update business_dispatch set printstatus='已打印' where id = #{id}")
     void print(@Param("id") String id);
+
+    @Select("select max(code) from business_dispatch where code like concat('XSFH',#{ymd},'%')")
+    String getMaxCode(@Param("ymd") String ymd);
 }

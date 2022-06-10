@@ -26,7 +26,9 @@ public interface BusinessArrivalVouchMapper extends BaseMapper<BusinessArrivalVo
     @Update("update business_arrivalvouch set printstatus = '已打印' where id = #{id}")
     void print(@Param("id") String id);
 
-
     void batchInsert(List<BusinessArrivalVouch> list);
+
+    @Select("select max(code) from business_arrivalvouch where code like concat('CGDH',#{ymd},'%')")
+    String getMaxCode(@Param("ymd") String ymd);
 
 }

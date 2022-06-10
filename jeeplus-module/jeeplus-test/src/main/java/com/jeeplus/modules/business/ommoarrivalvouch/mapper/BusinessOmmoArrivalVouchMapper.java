@@ -4,6 +4,7 @@
 package com.jeeplus.modules.business.ommoarrivalvouch.mapper;
 
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 import com.jeeplus.core.persistence.BaseMapper;
@@ -24,4 +25,7 @@ public interface BusinessOmmoArrivalVouchMapper extends BaseMapper<BusinessOmmoA
     void print(@Param("id") String id);
 
     void batchInsert(List<BusinessOmmoArrivalVouch> list);
+
+    @Select("select max(code) from business_ommo_arrivalvouch where code like concat('WWDH',#{ymd},'%')")
+    String getMaxCode(@Param("ymd") String ymd);
 }
