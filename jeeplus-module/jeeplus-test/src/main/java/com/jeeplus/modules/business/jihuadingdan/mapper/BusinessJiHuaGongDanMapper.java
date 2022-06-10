@@ -31,4 +31,7 @@ public interface BusinessJiHuaGongDanMapper extends BaseMapper<BusinessJiHuaGong
 
     @Update("update business_jihua_gongdan set isshengcheng = #{isshengcheng} where id = #{id}")
     void updateisshengcheng(@Param("id") String id,@Param("isshengcheng") String isshengcheng);
+
+    @Select("select max(code) from business_jihua_gongdan where code like concat('JHGD',#{ymd},'%')")
+    String getMaxCode(@Param("ymd") String ymd);
 }

@@ -73,9 +73,9 @@ layout("/include/_dialog.html"){
 		<table class="table table-bordered">
 		   <tbody>
 				<tr>
-					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>出库单号：</label></td>
+					<td class="width-15 active"><label class="pull-right">出库单号：</label></td>
 					<td class="width-35">
-						<input name="code" value="${businessChukuDispatch.code!}"    class="form-control required"/>
+						<input name="code" value="${businessChukuDispatch.code!}"    readonly placeholder="系统自动生成" class="form-control"/>
 				</td>
 					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>发货单号：</label></td>
 					<td class="width-35">

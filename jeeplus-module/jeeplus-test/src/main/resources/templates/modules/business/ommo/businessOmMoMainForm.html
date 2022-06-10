@@ -82,9 +82,9 @@ layout("/include/_dialog.html"){
 		<table class="table table-bordered">
 		   <tbody>
 				<tr>
-					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>订单编号：</label></td>
+					<td class="width-15 active"><label class="pull-right">订单编号：</label></td>
 					<td class="width-35">
-						<input name="code" value="${businessOmMoMain.code!}"    class="form-control required"/>
+						<input name="code" value="${businessOmMoMain.code!}"   readonly placeholder="系统自动生成"    class="form-control"/>
 				</td>
 					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>供应商：</label></td>
 					<td class="width-35">

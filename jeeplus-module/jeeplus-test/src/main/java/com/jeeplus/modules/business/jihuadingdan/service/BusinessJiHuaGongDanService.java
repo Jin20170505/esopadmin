@@ -5,7 +5,6 @@ package com.jeeplus.modules.business.jihuadingdan.service;
 
 import com.jeeplus.common.utils.DateUtils;
 import com.jeeplus.common.utils.StringUtils;
-import com.jeeplus.common.utils.number.RandomUtil;
 import com.jeeplus.core.persistence.Page;
 import com.jeeplus.core.service.CrudService;
 import com.jeeplus.modules.business.baogong.order.entity.BusinessBaoGongOrder;
@@ -57,8 +56,14 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 	}
 
 	@Transactional(readOnly = false)
-	public void save(BusinessJiHuaGongDan businessJiHuaGongDan) {
-		super.save(businessJiHuaGongDan);
+	public synchronized void  save(BusinessJiHuaGongDan businessJiHuaGongDan) {
+		if (StringUtils.isEmpty(businessJiHuaGongDan.getId())){
+			String code = getCurrentCode(DateUtils.getDate("yyyyMMdd"));
+			businessJiHuaGongDan.setCode(code);
+			super.save(businessJiHuaGongDan);
+		}else {
+			super.save(businessJiHuaGongDan);
+		}
 		for (BusinessJiHuaGongDanMingXi businessJiHuaGongDanMingXi : businessJiHuaGongDan.getBusinessJiHuaGongDanMingXiList()){
 			if (businessJiHuaGongDanMingXi.getId() == null){
 				continue;
@@ -187,7 +192,29 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 			businessBaoGongOrderService.save(order);
 		}
 	}
-
+	public String getCurrentCode(String ymd){
+		String maxcode  = mapper.getMaxCode(ymd);
+		String code = "";
+		if(StringUtils.isEmpty(maxcode)){
+			code = "JHGD" +ymd + "00001";
+		}else {
+			code = maxcode.substring(0,10);
+			int c =  Integer.valueOf(maxcode.substring(10));
+			c = c+1;
+			if(c<10){
+				code = code +"0000"+c;
+			}else if(10<=c && c<100){
+				code = code +"000"+c;
+			}else if(100<=c && c<1000) {
+				code = code +"00"+c;
+			}else if(1000<=c && c<10000){
+				code = code +"0"+c;
+			}else {
+				code = code+c;
+			}
+		}
+		return code;
+	}
 	public Double getSumnumByScYid(String scyid){
 		return businessJiHuaGongDanBomMapper.getSumnumByScYid(scyid);
 	}

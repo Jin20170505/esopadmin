@@ -143,6 +143,11 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 	private BusinessShengChanBomMapper businessShengChanBomMapper;
 	@Transactional(readOnly = false)
 	public void save(BusinessShengChanDingDan businessShengChanDingDan) {
+		if(StringUtils.isEmpty(businessShengChanDingDan.getId())){
+			synchronized (this){
+
+			}
+		}
 		super.save(businessShengChanDingDan);
 		for (BusinessShengChanDingDanMingXi businessShengChanDingDanMingXi :
 				businessShengChanDingDan.getBusinessShengChanDingDanMingXiList()){
@@ -223,9 +228,7 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 		businessShengChanPaiChanService.checckPaiChan(mingXi.getDept().getId(),mingXi.getP().getCode(),mingXi.getNo().toString(),new Date());
 		List<BusinessJiHuaGongDan> jiHuaGongDans = Lists.newArrayList();
 		double sum = mingXi.getNum();
-		String code = "JHGD"+ DateUtils.getDate("yyyyMMddHHmmss");
 		BusinessJiHuaGongDan jiHuaGongDan = new BusinessJiHuaGongDan();
-		jiHuaGongDan.setCode(code+"001");
 		jiHuaGongDan.setRoute(roteMain);
 		jiHuaGongDan.setDept(mingXi.getDept());
 		jiHuaGongDan.setBatchno(mingXi.getBatchno());
@@ -303,10 +306,8 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 		businessShengChanPaiChanService.checckPaiChan(mingXi.getDept().getId(),mingXi.getP().getCode(),mingXi.getNo().toString(),new Date());
 		List<BusinessJiHuaGongDan> jiHuaGongDans = Lists.newArrayList();
 		double sum = mingXi.getNum();
-		String code = "JHGD"+ DateUtils.getDate("yyyyMMddHHmmss");
 		if(sum<=num){
 			BusinessJiHuaGongDan jiHuaGongDan = new BusinessJiHuaGongDan();
-			jiHuaGongDan.setCode(code+"001");
 			jiHuaGongDan.setRoute(roteMain);
 			jiHuaGongDan.setDept(mingXi.getDept());
 			jiHuaGongDan.setBatchno(mingXi.getBatchno());
@@ -339,7 +340,6 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 			double s = sum;
 			while (sum>num){
 				BusinessJiHuaGongDan jiHuaGongDan = new BusinessJiHuaGongDan();
-				jiHuaGongDan.setCode(code+getcode(idx));
 				jiHuaGongDan.setRoute(roteMain);
 				jiHuaGongDan.setDept(mingXi.getDept());
 				jiHuaGongDan.setBatchno(mingXi.getBatchno());
@@ -373,7 +373,6 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 			}
 			if(sum>0){
 				BusinessJiHuaGongDan jiHuaGongDan = new BusinessJiHuaGongDan();
-				jiHuaGongDan.setCode(code+getcode(idx));
 				jiHuaGongDan.setRoute(roteMain);
 				jiHuaGongDan.setDept(mingXi.getDept());
 				jiHuaGongDan.setBatchno(mingXi.getBatchno());
@@ -454,10 +453,8 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 			businessShengChanPaiChanService.checckPaiChan(mingXi.getDept().getId(),mingXi.getP().getCode(),mingXi.getNo().toString(),new Date());
 		}
 		List<BusinessJiHuaGongDan> jiHuaGongDans = Lists.newArrayList();
-		String code = "JHGD"+ DateUtils.getDate("yyyyMMddHHmmss");
 		if(num>=nonum){
 			BusinessJiHuaGongDan jiHuaGongDan = new BusinessJiHuaGongDan();
-			jiHuaGongDan.setCode(code+"001");
 			jiHuaGongDan.setRoute(roteMain);
 			jiHuaGongDan.setDept(mingXi.getDept());
 			jiHuaGongDan.setBatchno(mingXi.getBatchno());
@@ -487,10 +484,8 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 			jiHuaGongDans.add(jiHuaGongDan);
 			businessShengChanDingDanMingXiMapper.updateChaidan(rid);
 			jiHuaGongDans.forEach(d->businessJiHuaGongDanService.save(d));
-			//weichaCheck(rid);
 		}else {
 			BusinessJiHuaGongDan jiHuaGongDan = new BusinessJiHuaGongDan();
-			jiHuaGongDan.setCode(code+"001");
 			jiHuaGongDan.setRoute(roteMain);
 			jiHuaGongDan.setDept(mingXi.getDept());
 			jiHuaGongDan.setBatchno(mingXi.getBatchno());

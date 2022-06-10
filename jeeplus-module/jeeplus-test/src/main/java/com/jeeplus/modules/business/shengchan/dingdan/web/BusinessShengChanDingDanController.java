@@ -3,29 +3,25 @@
  */
 package com.jeeplus.modules.business.shengchan.dingdan.web;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.ConstraintViolationException;
-
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.jeeplus.common.json.AjaxJson;
+import com.jeeplus.common.utils.DateUtils;
 import com.jeeplus.common.utils.QRCodeUtil;
-import com.jeeplus.modules.business.product.archive.entity.BusinessProductTypeOnlyRead;
-import com.jeeplus.modules.business.ruku.product.entity.BusinessRuKuProduct;
-import com.jeeplus.modules.business.ruku.product.entity.BusinessRuKuProductMx;
+import com.jeeplus.common.utils.StringUtils;
+import com.jeeplus.common.utils.excel.ExportExcel;
+import com.jeeplus.common.utils.excel.ImportExcel;
+import com.jeeplus.core.persistence.Page;
+import com.jeeplus.core.web.BaseController;
 import com.jeeplus.modules.business.ruku.product.entity.ProductTagBean;
 import com.jeeplus.modules.business.shengchan.beiliao.apply.entity.BusinessShengChanBeiLiaoApply;
 import com.jeeplus.modules.business.shengchan.beiliao.apply.entity.BusinessShengchanBeiliaoApplyMx;
-import com.jeeplus.modules.business.shengchan.beiliao.apply.mapper.BusinessShengChanBeiLiaoApplyMapper;
 import com.jeeplus.modules.business.shengchan.beiliao.apply.service.BusinessShengChanBeiLiaoApplyService;
 import com.jeeplus.modules.business.shengchan.bom.entity.BusinessShengChanBom;
 import com.jeeplus.modules.business.shengchan.bom.service.BusinessShengChanDingdanMxService;
+import com.jeeplus.modules.business.shengchan.dingdan.entity.BusinessShengChanDingDan;
 import com.jeeplus.modules.business.shengchan.dingdan.entity.BusinessShengChanDingDanMingXi;
+import com.jeeplus.modules.business.shengchan.dingdan.service.BusinessShengChanDingDanService;
 import com.jeeplus.modules.u8data.morder.entity.U8Moallocate;
 import com.jeeplus.modules.u8data.morder.entity.U8Morder;
 import com.jeeplus.modules.u8data.morder.service.U8MoallocateService;
@@ -35,24 +31,17 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.common.collect.Lists;
-import com.jeeplus.common.utils.DateUtils;
-import com.jeeplus.common.json.AjaxJson;
-import com.jeeplus.core.persistence.Page;
-import com.jeeplus.core.web.BaseController;
-import com.jeeplus.common.utils.StringUtils;
-import com.jeeplus.common.utils.excel.ExportExcel;
-import com.jeeplus.common.utils.excel.ImportExcel;
-import com.jeeplus.modules.business.shengchan.dingdan.entity.BusinessShengChanDingDan;
-import com.jeeplus.modules.business.shengchan.dingdan.service.BusinessShengChanDingDanService;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 生产订单Controller
@@ -314,7 +303,7 @@ public class BusinessShengChanDingDanController extends BaseController {
 		AjaxJson json = new AjaxJson();
 		try {
 			businessShengChanDingDanService.handlerPlan(rid,gdnum,nonum,num);
-			if(nonum<=nonum){
+			if(nonum<=num){
 				businessShengChanDingDanService.weichaCheck(rid);
 			}
 			json.setMsg("拆单成功");
