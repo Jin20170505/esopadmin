@@ -46,7 +46,7 @@
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
 			<if test="code != null and code != ''">
-				AND a.code = #{code}
+				AND a.code like concat('%',#{code},'%')
 			</if>
 			<if test="beginDdate != null and beginDdate != '' and endDdate != null and endDdate != ''">
 				AND a.ddate BETWEEN #{beginDdate} AND #{endDdate}

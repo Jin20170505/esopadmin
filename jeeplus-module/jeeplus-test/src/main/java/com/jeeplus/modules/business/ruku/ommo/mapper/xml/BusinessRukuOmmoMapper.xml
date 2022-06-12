@@ -18,21 +18,8 @@
 		a.rdate AS "rdate",
 		a.ck AS "ck.id",
 		a.u8code AS "u8code",
-				
-				
-				
-				
-				
-				
-				
-				
-				
 		dept.name AS "dept.name",
-				
 		vendor.name AS "vendor.name",
-				
-				
-				
 		ck.name AS "ck.name"
 	</sql>
 	
@@ -61,10 +48,10 @@
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
 			<if test="code != null and code != ''">
-				AND a.code = #{code}
+				AND a.code like concat('%',#{code},'%')
 			</if>
 			<if test="wdcode != null and wdcode != ''">
-				AND a.wdcode = #{wdcode}
+				AND a.wdcode like concat('%',#{wdcode},'%')
 			</if>
 			<if test="dept != null and dept.id != null and dept.id != ''">
 				AND a.dept = #{dept.id}

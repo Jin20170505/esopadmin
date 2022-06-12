@@ -58,12 +58,11 @@
 				AND a.dept = #{dept.id}
 			</if>
 			<if test="sccode != null  and sccode != ''">
-				AND a.order_code = #{sccode}
+				AND a.order_code like concat('%',#{sccode},'%')
 			</if>
-			<if test="cinvcode != null  and cinvcode != ''">
-				AND a.cinvcode = #{cinvcode}
+			<if test="cinvcode != null and cinvcode != ''">
+				AND a.cinvcode like concat('%',#{cinvcode},'%')
 			</if>
-
 			<if test="cinvname != null  and cinvname != ''">
 				AND a.cinvname like concat('%',#{cinvname},'%')
 			</if>

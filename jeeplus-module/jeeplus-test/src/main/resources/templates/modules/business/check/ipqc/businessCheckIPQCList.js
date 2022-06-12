@@ -167,6 +167,13 @@ $(document).ready(function() {
 		        sortName: 'badnum'
 		       
 		    }
+            ,{
+            field: 'hglv',
+            title: '合格率'
+            ,formatter:function(value, row , index){
+            return (value-0).toFixed(2);
+            }
+            }
 			,{
 		        field: 'remarks',
 		        title: '备注信息',

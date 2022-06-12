@@ -42,7 +42,7 @@
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
 			<if test="code != null and code != ''">
-				AND a.code = #{code}
+				AND a.code like concat('%',#{code},'%')
 			</if>
 			<if test="vendor != null and vendor.id != null and vendor.id != ''">
 				AND a.vendor = #{vendor.id}

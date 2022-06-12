@@ -61,13 +61,13 @@
 				AND a.bgdate BETWEEN #{beginBgdate} AND #{endBgdate}
 			</if>
 			<if test="bgcode != null and bgcode != ''">
-				AND a.bgcode = #{bgcode}
+				AND a.bgcode like concat('%',#{bgcode},'%')
 			</if>
 			<if test="ordercode != null and ordercode != ''">
-				AND a.ordercode = #{ordercode}
+				AND a.ordercode like concat('%',#{ordercode},'%')
 			</if>
 			<if test="cinvcode != null  and cinvcode != ''">
-				AND a.cinvcode = #{cinvcode}
+				AND a.cinvcode like concat('%',#{cinvcode},'%')
 			</if>
 			<if test="cinvname != null  and cinvname != ''">
 				AND a.cinvname like concat('%',#{cinvname},'%')
@@ -76,7 +76,7 @@
 				AND a.cinvstd like concat('%',#{cinvstd},'%')
 			</if>
 			<if test="username != null and username != ''">
-				AND a.username = #{username}
+				AND a.username like concat('%',#{username},'%')
 			</if>
 			<if test="douser != null and douser.id!=null and douser.id !=''">
 				and a.do_user = #{douser.id}

@@ -48,16 +48,19 @@
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
 			<if test="code != null and code != ''">
-				AND a.code = #{code}
+				AND a.code like concat('%',#{code},'%')
 			</if>
 			<if test="sccode != null and sccode != ''">
-				AND a.sccode = #{sccode}
+				AND a.sccode like concat('%',#{sccode},'%')
 			</if>
 			<if test="cinvcode != null and cinvcode != ''">
-				AND a.cinvcode = #{cinvcode}
+				AND a.cinvcode like concat('%',#{cinvcode},'%')
 			</if>
 			<if test="cinvname != null and cinvname != ''">
 				AND a.cinvname LIKE concat('%',#{cinvname},'%')
+			</if>
+			<if test="cinvstd != null and cinvstd != ''">
+				AND a.cinvstd LIKE concat('%',#{cinvstd},'%')
 			</if>
 			<if test="batchno != null and batchno != ''">
 				AND a.batchno = #{batchno}

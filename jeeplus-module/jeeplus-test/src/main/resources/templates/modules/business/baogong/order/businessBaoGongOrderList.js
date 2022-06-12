@@ -107,6 +107,8 @@ $(document).ready(function() {
                	if(params.sort && params.order){
                     searchParam.orderBy = params.sort+ " "+  params.order;
 				}
+               	var deptId = $('#deptId').val();
+               	searchParam.dept = deptId;
 			    return searchParam;
                },
                onShowSearch: function () {
@@ -247,6 +249,9 @@ $(document).ready(function() {
 	        var searchParam = $("#searchForm").serializeJSON();
 	        searchParam.pageNo = 1;
 	        searchParam.pageSize = -1;
+
+            var deptId = $('#deptId').val();
+            searchParam.dept = deptId;
             var sortName = $('#businessBaoGongOrderTable').bootstrapTable("getOptions", "none").sortName;
             var sortOrder = $('#businessBaoGongOrderTable').bootstrapTable("getOptions", "none").sortOrder;
             var values = "";

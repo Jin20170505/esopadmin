@@ -32,6 +32,7 @@ public class BusinessCheckIPQC extends DataEntity<BusinessCheckIPQC> {
 	private Double hegenum;		// 合格数量
 	private Double nohegenum;		// 不合格数量
 	private Double badnum;		// 不良品数量
+	private Double hglv;	// 合格率
 	private Date beginCheckdate;		// 开始 质检日期
 	private Date endCheckdate;		// 结束 质检日期
 	private List<BusinessCheckIPQCFile> businessCheckIPQCFileList = Lists.newArrayList();
@@ -180,5 +181,18 @@ public class BusinessCheckIPQC extends DataEntity<BusinessCheckIPQC> {
 	public void setEndCheckdate(Date endCheckdate) {
 		this.endCheckdate = endCheckdate;
 	}
-		
+
+	public Double getHglv() {
+		if(hegenum==null||checknum==null||checknum<0.00001){
+			hglv=0.00;
+		}else {
+			hglv = hegenum/checknum;
+		}
+		return hglv;
+	}
+
+	public BusinessCheckIPQC setHglv(Double hglv) {
+		this.hglv = hglv;
+		return this;
+	}
 }

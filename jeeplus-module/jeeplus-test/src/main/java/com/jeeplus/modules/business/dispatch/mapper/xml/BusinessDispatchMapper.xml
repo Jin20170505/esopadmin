@@ -19,18 +19,7 @@
 		a.u8status AS "u8status",
 		a.printstatus AS "printstatus",
 		a.fahuo_date AS "fahuodate",
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
 		dept.name AS "dept.name",
-				
 		customer.name AS "customer.name"
 	</sql>
 	
@@ -57,10 +46,10 @@
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
 			<if test="code != null and code != ''">
-				AND a.code = #{code}
+				AND a.code like concat('%',#{code},'%')
 			</if>
 			<if test="u8code != null and u8code != ''">
-				AND a.u8code = #{u8code}
+				AND a.u8code like concat('%',#{u8code},'%')
 			</if>
 			<if test="dept != null and dept.id != null and dept.id != ''">
 				AND a.dept = #{dept.id}

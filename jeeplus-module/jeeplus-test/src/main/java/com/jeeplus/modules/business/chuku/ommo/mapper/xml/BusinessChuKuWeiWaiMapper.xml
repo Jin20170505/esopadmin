@@ -47,7 +47,7 @@
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
 			<if test="mocode != null and mocode != ''">
-				AND a.mocode = #{mocode}
+				AND a.mocode like concat('%',#{mocode},'%')
 			</if>
 			<if test="mono != null and mono != ''">
 				AND a.mono = #{mono}
@@ -55,11 +55,15 @@
 			<if test="vendor != null and vendor.id != null and vendor.id != ''">
 				AND a.vendor = #{vendor.id}
 			</if>
+
 			<if test="cinvcode != null and cinvcode != ''">
-				AND a.cinvcode = #{cinvcode}
+				AND a.cinvcode like concat('%',#{cinvcode},'%')
 			</if>
-			<if test="cinvname != null and cinvname != ''">
-				AND a.cinvname = #{cinvname}
+			<if test="cinvname != null  and cinvname != ''">
+				AND a.cinvname like concat('%',#{cinvname},'%')
+			</if>
+			<if test="cinvstd != null  and cinvstd != ''">
+				AND a.cinvstd like concat('%',#{cinvstd},'%')
 			</if>
 			<if test="beginStartdate != null and endStartdate != null ">
 				AND a.startdate BETWEEN #{beginStartdate} AND #{endStartdate}

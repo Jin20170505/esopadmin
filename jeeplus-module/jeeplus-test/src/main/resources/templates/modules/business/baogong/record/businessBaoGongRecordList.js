@@ -75,6 +75,12 @@ $(document).ready(function() {
 		        sortName: 'bgdate'
 		       
 		    }
+           ,{
+               field: 'douser.name',
+               title: '实际报工人',
+               sortable: true,
+               sortName: 'douser.name'
+           }
 			,{
 		        field: 'bgcode',
 		        title: '报工单号',
@@ -177,8 +183,14 @@ $(document).ready(function() {
 		        title: '合格数量',
 		        sortable: true,
 		        sortName: 'hgnum'
-		       
 		    }
+           ,{
+               field: 'hglv',
+               title: '合格率'
+               ,formatter:function(value, row , index){
+                    return (value-0).toFixed(2);
+               }
+           }
 			,{
 		        field: 'remarks',
 		        title: '备注信息',

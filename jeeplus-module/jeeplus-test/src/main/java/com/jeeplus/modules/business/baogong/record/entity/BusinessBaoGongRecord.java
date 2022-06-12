@@ -35,6 +35,7 @@ public class BusinessBaoGongRecord extends DataEntity<BusinessBaoGongRecord> {
 	private Double fgnum;		// 返工数量
 	private Double bhgnum;		// 不合格数量
 	private Double hgnum;		// 合格数量
+	private Double hglv;	// 合格率
 	private String cinvcode;	// 存货编码
 	private String cinvname;	// 存货名称
 	private String cinvstd;		// 规格型号
@@ -262,6 +263,34 @@ public class BusinessBaoGongRecord extends DataEntity<BusinessBaoGongRecord> {
 
 	public BusinessBaoGongRecord setCinvstd(String cinvstd) {
 		this.cinvstd = cinvstd;
+		return this;
+	}
+
+	public Double getHglv() {
+		double sum = 0.0;
+//		if(this.lfnum!=null){
+//			sum += this.lfnum;
+//		}
+//		if(this.gfnum!=null){
+//			sum += this.gfnum;
+//		}
+//		if(this.fgnum != null){
+//			sum += this.fgnum;
+//		}
+		if(this.bhgnum != null){
+			sum += this.bhgnum;
+		}
+		if(this.hgnum==null){
+			hglv = 0.00;
+		}else {
+			sum += this.hgnum;
+		}
+		hglv = this.hgnum/sum;
+		return hglv;
+	}
+
+	public BusinessBaoGongRecord setHglv(Double hglv) {
+		this.hglv = hglv;
 		return this;
 	}
 }

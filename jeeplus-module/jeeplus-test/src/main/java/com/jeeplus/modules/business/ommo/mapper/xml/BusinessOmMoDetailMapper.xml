@@ -49,10 +49,10 @@
 				AND a.moid = #{mo.id}
 			</if>
 			<if test="mo != null and mo.code != null and mo.code != ''">
-				AND b.code = #{mo.code}
+				AND b.code like concat('%',#{mo.code},'%')
 			</if>
 			<if test="cinvcode != null  and cinvcode != ''">
-				AND a.cinvcode = #{cinvcode}
+				AND a.cinvcode like concat('%',#{cinvcode},'%')
 			</if>
 			<if test="cinvname != null  and cinvname != ''">
 				AND a.cinvname like concat('%',#{cinvname},'%')
