@@ -139,4 +139,9 @@ public class BusinessBaoGongRecordService extends CrudService<BusinessBaoGongRec
 	public Boolean hasBgId(String bgid){
 		return  null != mapper.hasBgId(bgid);
 	}
+
+	@Transactional(readOnly = false)
+	public void updateFromEdit(BusinessBaoGongRecord record){
+		mapper.updateFromEdit(record);
+	}
 }

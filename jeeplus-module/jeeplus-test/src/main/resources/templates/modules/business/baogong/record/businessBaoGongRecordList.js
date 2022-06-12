@@ -276,7 +276,12 @@ $(document).ready(function() {
             return row.id
         });
     }
-
+    function bgedit(id){
+        if(!id){
+        id = getIdSelections();
+    }
+    jp.openSaveDialog('编辑报工修改', "${ctx}/business/baogong/change/businessBaoGongChange/form/edit?recordid="+id,'800px', '500px');
+}
   //删除
   function del(ids){
      if(!ids){

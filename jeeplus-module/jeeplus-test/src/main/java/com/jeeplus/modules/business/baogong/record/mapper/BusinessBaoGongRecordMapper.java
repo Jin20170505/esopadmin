@@ -25,4 +25,6 @@ public interface BusinessBaoGongRecordMapper extends BaseMapper<BusinessBaoGongR
     void deleteByBgid(@Param("bgid") String bgid);
     @Delete("select 1 from business_baogong_record where bgid = #{bgid} and del_flag = '0' limit 1")
     Integer hasBgId(@Param("bgid") String bgid);
+
+    void updateFromEdit(BusinessBaoGongRecord record);
 }

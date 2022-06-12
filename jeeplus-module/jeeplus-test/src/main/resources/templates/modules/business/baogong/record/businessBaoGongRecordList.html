@@ -77,9 +77,9 @@ layout("/include/_container.html", {title:"列表", parent:"员工报工"}){
 <!--				</button>-->
 			<% } %>
 			 <% if(shiro.hasPermission("business:baogong:record:businessBaoGongRecord:edit") ){ %>
-<!--			    <button id="edit" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="edit()">-->
-<!--	            	<i class="fa fa-edit"></i> 修改-->
-<!--	        	</button>-->
+			    <button id="edit" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="bgedit()">
+	            	<i class="fa fa-edit"></i> 修改
+	        	</button>
 			<% } %>
 		<% if(shiro.hasPermission("business:baogong:record:businessBaoGongRecord:del") ){ %>
 				<button id="remove" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="del()">

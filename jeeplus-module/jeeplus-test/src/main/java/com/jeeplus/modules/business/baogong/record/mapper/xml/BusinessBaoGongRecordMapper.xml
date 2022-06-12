@@ -177,6 +177,17 @@
 			remarks = #{remarks}
 		WHERE id = #{id}
 	</update>
+
+	<update id="updateFromEdit">
+		UPDATE business_baogong_record SET
+		   lfnum = #{lfnum},
+		   gfnum = #{gfnum},
+		   fgnum = #{fgnum},
+		   bhgnum = #{bhgnum},
+		   hgnum = #{hgnum},
+		   do_user = #{douser.id}
+		WHERE id = #{id}
+	</update>
 	
 	
 	<!--物理删除-->
