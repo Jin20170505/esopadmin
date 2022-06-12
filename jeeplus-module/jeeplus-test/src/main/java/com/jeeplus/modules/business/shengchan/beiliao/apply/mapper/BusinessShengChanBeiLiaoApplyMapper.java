@@ -20,7 +20,8 @@ import com.jeeplus.modules.business.shengchan.beiliao.apply.entity.BusinessSheng
 public interface BusinessShengChanBeiLiaoApplyMapper extends BaseMapper<BusinessShengChanBeiLiaoApply> {
     @Update("update business_shengchan_beiliao_apply set printstatus = '已打印' where id = #{id}")
     void print(@Param("id") String id);
-
     @Select("select sum(num) from business_shengchan_beiliao_apply where schid = #{schid}")
     Double getDoneNum(@Param("schid") String schid);
+    @Select("select 1 from business_shengchan_beiliao_apply where schid = #{schid} limit 1;")
+    Integer hasScOrder(@Param("schid") String schid);
 }

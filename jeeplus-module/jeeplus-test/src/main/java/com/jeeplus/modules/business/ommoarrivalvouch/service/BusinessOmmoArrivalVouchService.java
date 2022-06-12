@@ -11,6 +11,7 @@ import com.jeeplus.common.utils.DateUtils;
 import com.jeeplus.modules.base.vendor.entity.BaseVendor;
 import com.jeeplus.modules.business.ommo.entity.BusinessOmMoDetail;
 import com.jeeplus.modules.business.ommo.entity.BusinessOmMoMain;
+import com.jeeplus.modules.business.ruku.ommo.mapper.BusinessRukuOmmoMxMapper;
 import com.jeeplus.modules.sys.entity.Office;
 import com.jeeplus.modules.u8data.ommoarrivalvouch.entity.U8OmmoArrivalVouch;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,8 @@ public class BusinessOmmoArrivalVouchService extends CrudService<BusinessOmmoArr
 	public Page<BusinessOmmoArrivalVouch> findPage(Page<BusinessOmmoArrivalVouch> page, BusinessOmmoArrivalVouch businessOmmoArrivalVouch) {
 		return super.findPage(page, businessOmmoArrivalVouch);
 	}
-	
+	@Autowired
+	private BusinessRukuOmmoMxMapper rukuOmmoMxMapper;
 	@Transactional(readOnly = false)
 	public synchronized void save(BusinessOmmoArrivalVouch businessOmmoArrivalVouch) {
 		if(StringUtils.isEmpty(businessOmmoArrivalVouch.getCode())){
@@ -71,6 +73,10 @@ public class BusinessOmmoArrivalVouchService extends CrudService<BusinessOmmoArr
 					businessOmmoArrivalvouchMxMapper.update(businessOmmoArrivalvouchMx);
 				}
 			}else{
+				Integer i = rukuOmmoMxMapper.hasWdhid(businessOmmoArrivalvouchMx.getId());
+				if(i!=null && i==1){
+					throw new RuntimeException("删除失败，原因：序号为【"+businessOmmoArrivalvouchMx.getNo()+"】的委外到货单明细有对应的委外入库单");
+				}
 				businessOmmoArrivalvouchMxMapper.delete(businessOmmoArrivalvouchMx);
 			}
 		}
@@ -100,6 +106,10 @@ public class BusinessOmmoArrivalVouchService extends CrudService<BusinessOmmoArr
 	}
 	@Transactional(readOnly = false)
 	public void delete(BusinessOmmoArrivalVouch businessOmmoArrivalVouch) {
+		Integer i = rukuOmmoMxMapper.hasWdid(businessOmmoArrivalVouch.getId());
+		if(i!=null && i==1){
+			throw new RuntimeException("删除失败，原因：【"+businessOmmoArrivalVouch.getCode()+"】的委外到货单有对应的委外入库单");
+		}
 		super.delete(businessOmmoArrivalVouch);
 		businessOmmoArrivalvouchMxMapper.delete(new BusinessOmmoArrivalvouchMx(businessOmmoArrivalVouch));
 	}

@@ -5,6 +5,7 @@ package com.jeeplus.modules.business.shengchan.beiliao.apply.service;
 
 import java.util.List;
 
+import com.jeeplus.modules.business.shengchan.beiliao.mapper.BusinessShengChanBeiLiaoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,9 +64,13 @@ public class BusinessShengChanBeiLiaoApplyService extends CrudService<BusinessSh
 			}
 		}
 	}
-	
+	@Autowired
+	private BusinessShengChanBeiLiaoMapper shengChanBeiLiaoMapper;
 	@Transactional(readOnly = false)
 	public void delete(BusinessShengChanBeiLiaoApply businessShengChanBeiLiaoApply) {
+		if(shengChanBeiLiaoMapper.isSure(businessShengChanBeiLiaoApply.getId())!=null){
+			throw new RuntimeException("删除失败，原因：该生产备料单有对应备料确认记录存在。");
+		}
 		super.delete(businessShengChanBeiLiaoApply);
 		businessShengchanBeiliaoApplyMxMapper.delete(new BusinessShengchanBeiliaoApplyMx(businessShengChanBeiLiaoApply));
 	}
@@ -80,5 +85,9 @@ public class BusinessShengChanBeiLiaoApplyService extends CrudService<BusinessSh
 
     public Double getDoneNum(String schid){
 		return mapper.getDoneNum(schid);
+	}
+
+	public Boolean hasScOrder(String schid){
+		return mapper.hasScOrder(schid) !=null;
 	}
 }

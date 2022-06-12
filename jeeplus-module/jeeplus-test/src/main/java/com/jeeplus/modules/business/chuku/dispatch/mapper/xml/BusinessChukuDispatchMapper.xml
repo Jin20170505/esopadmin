@@ -18,24 +18,11 @@
 		a.customer AS "customer.id",
 		a.status AS "status",
 		a.u8status AS "u8status",
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
 		dept.name AS "dept.name",
-				
 		customer.name AS "customer.name"
 	</sql>
 	
 	<sql id="businessChukuDispatchJoins">
-		
 		LEFT JOIN sys_office dept ON dept.id = a.dept
 		LEFT JOIN base_customer customer ON customer.id = a.customer
 	</sql>

@@ -192,6 +192,10 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		if(rk!=null && 1 ==rk){
 			throw new RuntimeException("已进行了入库，无法删除.");
 		}
+		Integer ll = businessChuKuLingLiaoMapper.isDoneLingLiao(businessBaoGongOrder.getId());
+		if(ll!=null && 1 ==ll){
+			throw new RuntimeException("已进行了领料，无法删除.");
+		}
 		businessBaoGongRecordService.deleteByBgid(businessBaoGongOrder.getId());
 		super.delete(businessBaoGongOrder);
 		businessBaoGongOrderMingXiMapper.delete(new BusinessBaoGongOrderMingXi(businessBaoGongOrder));

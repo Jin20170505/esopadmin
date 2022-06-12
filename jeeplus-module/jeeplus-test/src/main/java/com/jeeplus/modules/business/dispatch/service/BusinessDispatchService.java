@@ -15,6 +15,7 @@ import com.jeeplus.modules.base.huowei.entity.BaseHuoWei;
 import com.jeeplus.modules.base.vendor.entity.BaseVendor;
 import com.jeeplus.modules.business.arrivalvouch.entity.BusinessArrivalVouch;
 import com.jeeplus.modules.business.arrivalvouch.entity.BusinessArrivalVouchMx;
+import com.jeeplus.modules.business.chuku.dispatch.mapper.BusinessChukuDispatchMapper;
 import com.jeeplus.modules.business.chuku.dispatch.mapper.BusinessChukuDispatchMxMapper;
 import com.jeeplus.modules.sys.entity.Office;
 import com.jeeplus.modules.u8data.dispatch.entity.U8Dispatch;
@@ -58,6 +59,8 @@ public class BusinessDispatchService extends CrudService<BusinessDispatchMapper,
 	public void print(String rid){
 		mapper.print(rid);
 	}
+	@Autowired
+	private BusinessChukuDispatchMapper businessChukuDispatchMapper;
 	@Transactional(readOnly = false)
 	public synchronized void save(BusinessDispatch businessDispatch) {
 		if(StringUtils.isEmpty(businessDispatch.getCode())){
@@ -81,6 +84,10 @@ public class BusinessDispatchService extends CrudService<BusinessDispatchMapper,
 					businessDispatchMxMapper.update(businessDispatchMx);
 				}
 			}else{
+				Integer i = chukuDispatchMxMapper.hasChuKu(businessDispatchMx.getId());
+				if(i!=null && i==1){
+					throw new RuntimeException("删除失败，原因：【"+businessDispatchMx.getNo()+"】的明细有对应的销售出库单");
+				}
 				businessDispatchMxMapper.delete(businessDispatchMx);
 			}
 		}
@@ -110,6 +117,10 @@ public class BusinessDispatchService extends CrudService<BusinessDispatchMapper,
 	}
 	@Transactional(readOnly = false)
 	public void delete(BusinessDispatch businessDispatch) {
+		Integer i = businessChukuDispatchMapper.hasXSFHCode(businessDispatch.getCode());
+		if(i!=null && i==1){
+			throw new RuntimeException("删除失败，原因：【"+businessDispatch.getCode()+"】的工单有对应的销售出库单");
+		}
 		super.delete(businessDispatch);
 		businessDispatchMxMapper.delete(new BusinessDispatchMx(businessDispatch));
 	}

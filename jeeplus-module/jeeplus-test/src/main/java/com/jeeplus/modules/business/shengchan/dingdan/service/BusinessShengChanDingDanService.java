@@ -185,6 +185,9 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 					businessShengChanDingDanMingXiMapper.update(businessShengChanDingDanMingXi);
 				}
 			}else{
+				if(businessJiHuaGongDanService.hasScddLineid(businessShengChanDingDanMingXi.getId())){
+					throw new RuntimeException("删除失败，原因：序号为【"+businessShengChanDingDanMingXi.getNo()+"】的明细有对应计划工单存在。");
+				}
 				businessShengChanDingDanMingXiMapper.delete(businessShengChanDingDanMingXi);
 				businessShengChanBomMapper.deleteBySchid(businessShengChanDingDanMingXi.getId());
 			}
@@ -193,6 +196,9 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 	
 	@Transactional(readOnly = false)
 	public void delete(BusinessShengChanDingDan businessShengChanDingDan) {
+		if(businessJiHuaGongDanService.hasScCode(businessShengChanDingDan.getCode())){
+			throw new RuntimeException("删除失败，原因：该生产订单有对应计划工单存在。");
+		}
 		super.delete(businessShengChanDingDan);
 		List<String> ids = businessShengChanDingDanMingXiMapper.findIdsByPid(businessShengChanDingDan.getId());
 		if(ids!=null || ids.isEmpty()){
@@ -446,7 +452,6 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 			});
 		}
 	}
-
 	// 手工车拆单
 	@Transactional(readOnly = false)
 	public void handlerPlan(String rid,Double gdnum,Double nonum,Double num){
@@ -538,19 +543,6 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 		}
 
 	}
-
-	private String getcode(int num){
-		if(num<10){
-			return "00"+num;
-		}else if(num<100){
-			return "0"+num;
-		}else {
-			return num+"";
-		}
-	}
-
-
-
 	@Transactional(readOnly = false)
 	public List<String> sychu8(List<U8Morder> data){
 		List<BusinessShengChanDingDan> dingDans= new ArrayList<>();
@@ -607,7 +599,6 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 		});
 		return  rs;
 	}
-
 
 	public BusinessShengChanDingDan getShengChanDingDan(String code,List<BusinessShengChanDingDan> list){
 		Optional<BusinessShengChanDingDan> optional = list.stream().filter(d->code.equals(d.getCode())).findAny();

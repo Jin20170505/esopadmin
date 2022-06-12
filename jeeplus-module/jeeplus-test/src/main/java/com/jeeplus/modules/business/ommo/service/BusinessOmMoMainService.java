@@ -9,6 +9,7 @@ import java.util.Optional;
 import com.google.common.collect.Lists;
 import com.jeeplus.common.utils.DateUtils;
 import com.jeeplus.modules.base.vendor.entity.BaseVendor;
+import com.jeeplus.modules.business.chuku.ommo.mapper.BusinessChuKuWeiWaiMapper;
 import com.jeeplus.modules.business.shengchan.dingdan.entity.BusinessShengChanDingDan;
 import com.jeeplus.modules.u8data.ommo.entity.U8OmMoMain;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +58,9 @@ public class BusinessOmMoMainService extends CrudService<BusinessOmMoMainMapper,
 		page.setList(businessOmMoDetailMapper.findList(businessOmMoDetail));
 		return page;
 	}
-	
+	@Autowired
+	private BusinessChuKuWeiWaiMapper chuKuWeiWaiMapper;
+
 	@Transactional(readOnly = false)
 	public synchronized void save(BusinessOmMoMain businessOmMoMain) {
 		if(StringUtils.isEmpty(businessOmMoMain.getCode())){
@@ -75,14 +78,20 @@ public class BusinessOmMoMainService extends CrudService<BusinessOmMoMainMapper,
 					businessOmMoDetail.preInsert();
 					businessOmMoDetailMapper.insert(businessOmMoDetail);
 				}else{
+					businessOmMoDetail.setMo(businessOmMoMain);
 					businessOmMoDetail.preUpdate();
 					businessOmMoDetailMapper.update(businessOmMoDetail);
 				}
 			}else{
+				Integer i = chuKuWeiWaiMapper.hasByWwHid(businessOmMoDetail.getId());
+				if(i!=null && i==1){
+					throw new RuntimeException("删除失败，原因：【"+businessOmMoDetail.getNo()+"】的明细有对应的委外发料单");
+				}
 				businessOmMoDetailMapper.delete(businessOmMoDetail);
 			}
 		}
 	}
+
 	public String getCurrentCode(String ymd){
 		String maxcode  = mapper.getMaxCode(ymd);
 		String code = "";
@@ -108,6 +117,10 @@ public class BusinessOmMoMainService extends CrudService<BusinessOmMoMainMapper,
 	}
 	@Transactional(readOnly = false)
 	public void delete(BusinessOmMoMain businessOmMoMain) {
+		Integer i = chuKuWeiWaiMapper.hasByWwid(businessOmMoMain.getId());
+		if(i!=null && i==1){
+			throw new RuntimeException("删除失败，原因：【"+businessOmMoMain.getCode()+"】的委外订单有对应的委外发料单");
+		}
 		super.delete(businessOmMoMain);
 		businessOmMoDetailMapper.delete(new BusinessOmMoDetail(businessOmMoMain));
 	}

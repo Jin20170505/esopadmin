@@ -20,4 +20,7 @@ import com.jeeplus.modules.business.ruku.caigou.entity.BusinessRukuCaiGou;
 public interface BusinessRukuCaiGouMapper extends BaseMapper<BusinessRukuCaiGou> {
     @Select("select max(code) from business_ruku_caigou where code like concat('CGRK',#{ymd},'%')")
     String getMaxCode(@Param("ymd") String ymd);
+
+    @Select("select 1 from business_ruku_caigou where arrival_code = #{ghdcode} limit 1")
+    Integer hasDhdCode(@Param("ghdcode") String ghdcode);
 }

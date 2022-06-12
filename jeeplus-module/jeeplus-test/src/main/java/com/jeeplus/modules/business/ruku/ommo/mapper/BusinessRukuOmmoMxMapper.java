@@ -20,4 +20,11 @@ import com.jeeplus.modules.business.ruku.ommo.entity.BusinessRukuOmmoMx;
 public interface BusinessRukuOmmoMxMapper extends BaseMapper<BusinessRukuOmmoMx> {
     @Select("select sum(rukunum) from business_ruku_ommo_mx where wdhid = #{wdhid}")
     Double sumRukuNumByWwhid(@Param("wdhid") String wdhid);
+
+    @Select("select 1 from business_ruku_ommo_mx where wdid = #{wdid} limit 1")
+    Integer hasWdid(@Param("wdid") String wdid);
+
+    @Select("select 1 from business_ruku_ommo_mx where wdhid = #{wdhid} limit 1")
+    Integer hasWdhid(@Param("wdhid") String wdhid);
+
 }

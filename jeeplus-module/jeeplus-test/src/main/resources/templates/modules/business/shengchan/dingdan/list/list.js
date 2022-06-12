@@ -265,36 +265,41 @@ function scbl(){
     var rows = getRowSelections();
     var row = rows[0];
     var gdnum = row.num;
-    var nonum = row.num - row.donenum;
-    var n = nonum + '';
-    if(n.indexOf('.')>0){
-      nonum = nonum.toFixed(2);
-    }
-    top.layer.open({
-      type: 1,
-      area: ['500px', '300px'],
-      title:"输入拆单数量",
-      auto:true,
-      maxmin: true, //开启最大化最小化按钮
-      content: $('#handlerform').html(),
-      btn: ['确定', '关闭'],
-      yes: function(index, layero){
-      var num = $(layero).find("#handnum").val();
-      if(!num){
-      jp.warning("请输入数量");
-      return false;
-    }
-      doHandler(row.id,gdnum,nonum,num);
-      top.layer.close(index);
-    },
-      cancel: function(index){
-      top.layer.close(index);
-    },
+  jp.get("${ctx}//business/jihuadingdan/businessJiHuaGongDan/getSyGdNum?scddlineid="+row.id,function (rs){
+    if(rs.success){
+  var nonum = rs.body.num;
+  var n = nonum + '';
+  if(n.indexOf('.')>0){
+  nonum = nonum.toFixed(2);
+}
+  top.layer.open({
+  type: 1,
+  area: ['500px', '300px'],
+  title:"输入拆单数量",
+  auto:true,
+  maxmin: true, //开启最大化最小化按钮
+  content: $('#handlerform').html(),
+  btn: ['确定', '关闭'],
+  yes: function(index, layero){
+  var num = $(layero).find("#handnum").val();
+  if(!num){
+  jp.warning("请输入数量");
+  return false;
+}
+  doHandler(row.id,gdnum,nonum,num);
+  top.layer.close(index);
+},
+  cancel: function(index){
+  top.layer.close(index);
+},
   success: function(layero, index){
   $(layero).find("#gdnum").val(gdnum);
   $(layero).find("#nonum").val(nonum);
 }
+});
+    }
   });
+
   }
   function doHandler(rid,gdnum,nonum,num){
   var index  =  jp.loading('处理中...');

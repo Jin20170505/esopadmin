@@ -11,6 +11,8 @@ import com.jeeplus.common.utils.DateUtils;
 import com.jeeplus.modules.base.cangku.entity.BaseCangKu;
 import com.jeeplus.modules.base.huowei.entity.BaseHuoWei;
 import com.jeeplus.modules.base.vendor.entity.BaseVendor;
+import com.jeeplus.modules.business.ruku.caigou.mapper.BusinessRukuCaiGouMapper;
+import com.jeeplus.modules.business.ruku.caigou.mapper.BusinessRukuCaigouMxMapper;
 import com.jeeplus.modules.business.shengchan.dingdan.entity.BusinessShengChanDingDan;
 import com.jeeplus.modules.sys.entity.Office;
 import com.jeeplus.modules.u8data.arrivalvouch.entity.U8ArrivalVouch;
@@ -50,7 +52,10 @@ public class BusinessArrivalVouchService extends CrudService<BusinessArrivalVouc
 	public Page<BusinessArrivalVouch> findPage(Page<BusinessArrivalVouch> page, BusinessArrivalVouch businessArrivalVouch) {
 		return super.findPage(page, businessArrivalVouch);
 	}
-	
+	@Autowired
+	private BusinessRukuCaiGouMapper businessRukuCaiGouMapper;
+	@Autowired
+	private BusinessRukuCaigouMxMapper businessRukuCaigouMxMapper;
 	@Transactional(readOnly = false)
 	public synchronized void save(BusinessArrivalVouch businessArrivalVouch) {
 		if(StringUtils.isEmpty(businessArrivalVouch.getCode())){
@@ -67,14 +72,18 @@ public class BusinessArrivalVouchService extends CrudService<BusinessArrivalVouc
 				businessArrivalVouchMx.setDept(businessArrivalVouch.getDept());
 				businessArrivalVouchMx.setVendor(businessArrivalVouch.getVendor());
 				if (StringUtils.isBlank(businessArrivalVouchMx.getId())){
-
 					businessArrivalVouchMx.preInsert();
 					businessArrivalVouchMxMapper.insert(businessArrivalVouchMx);
 				}else{
+					businessArrivalVouchMx.setP(businessArrivalVouch);
 					businessArrivalVouchMx.preUpdate();
 					businessArrivalVouchMxMapper.update(businessArrivalVouchMx);
 				}
 			}else{
+				Integer i = businessRukuCaigouMxMapper.hasCghid(businessArrivalVouchMx.getId());
+				if(i!=null && i==1){
+					throw new RuntimeException("删除失败，原因：【"+businessArrivalVouchMx.getNo()+"】的明细有对应的采购入库单");
+				}
 				businessArrivalVouchMxMapper.delete(businessArrivalVouchMx);
 			}
 		}
@@ -104,6 +113,10 @@ public class BusinessArrivalVouchService extends CrudService<BusinessArrivalVouc
 	}
 	@Transactional(readOnly = false)
 	public void delete(BusinessArrivalVouch businessArrivalVouch) {
+		Integer i = businessRukuCaiGouMapper.hasDhdCode(businessArrivalVouch.getCode());
+		if(i!=null && i==1){
+			throw new RuntimeException("删除失败，原因：【"+businessArrivalVouch.getCode()+"】的工单有对应的采购入库单");
+		}
 		super.delete(businessArrivalVouch);
 		businessArrivalVouchMxMapper.delete(new BusinessArrivalVouchMx(businessArrivalVouch));
 	}

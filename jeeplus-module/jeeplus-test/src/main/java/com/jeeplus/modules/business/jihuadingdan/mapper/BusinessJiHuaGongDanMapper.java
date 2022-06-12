@@ -21,10 +21,11 @@ public interface BusinessJiHuaGongDanMapper extends BaseMapper<BusinessJiHuaGong
 
     @Select("select 1 from business_jihua_gongdan where order_id = #{scddlineid}  limit 1")
     Integer hasScdd(@Param("scddlineid") String scddlineid);
+    @Select("select 1 from business_jihua_gongdan where order_code = #{ordercode}  limit 1")
+    Integer hasScddByOrderCode(@Param("ordercode") String ordercode);
 
     @Select("select sum(gdnum) from business_jihua_gongdan where order_id = #{scddlineid}")
     Double getSumNum(@Param("scddlineid") String scddlineid);
-
 
     @Update("update business_jihua_gongdan set status = #{status} where id = #{id}")
     void updateSatus(@Param("id") String id,@Param("status") String status);

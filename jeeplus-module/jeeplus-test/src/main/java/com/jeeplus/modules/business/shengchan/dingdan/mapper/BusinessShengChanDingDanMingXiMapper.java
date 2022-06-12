@@ -45,4 +45,7 @@ public interface BusinessShengChanDingDanMingXiMapper extends BaseMapper<Busines
 
 	@Update("update business_shengchan_dingdan_mingxi set ischaidan = '未拆完',donenum = donenum+ #{num} where id = #{id}")
 	void updateDoneNum(@Param("id") String id,@Param("num") Double num);
+
+	@Update("update business_shengchan_dingdan_mingxi set ischaidan = '未拆完' where id = #{id}")
+	void updateChaidanStatus(@Param("id") String id,@Param("status") String status);
 }

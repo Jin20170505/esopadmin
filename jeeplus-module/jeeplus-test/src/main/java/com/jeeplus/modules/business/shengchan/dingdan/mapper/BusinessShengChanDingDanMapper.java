@@ -23,4 +23,7 @@ public interface BusinessShengChanDingDanMapper extends BaseMapper<BusinessSheng
     Integer hasById(@Param("id") String id);
     @Update("update business_shengchan_dingdan set status = #{status} where id = #{id}")
     void updateStatus(@Param("id") String id,@Param("status") String status);
+
+    @Select("select max(code) from business_shengchan_dingdan where code like concat('SCDD',#{ymd},'%')")
+    String getMaxCode(@Param("ymd") String ymd);
 }

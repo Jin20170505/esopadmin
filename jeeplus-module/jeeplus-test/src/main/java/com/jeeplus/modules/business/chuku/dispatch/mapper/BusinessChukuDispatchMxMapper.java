@@ -19,6 +19,6 @@ import com.jeeplus.modules.business.chuku.dispatch.entity.BusinessChukuDispatchM
 @Repository
 public interface BusinessChukuDispatchMxMapper extends BaseMapper<BusinessChukuDispatchMx> {
 
-    @Select("select 1 from business_chuku_dispatch_mx where fid = #{xsfhid}")
+    @Select("select 1 from business_chuku_dispatch_mx where fid = #{xsfhid} limit 1")
     Integer hasChuKu(@Param("xsfhid") String xsfhid);
 }

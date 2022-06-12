@@ -3,6 +3,7 @@
  */
 package com.jeeplus.modules.business.ruku.caigou.mapper;
 
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 import com.jeeplus.core.persistence.BaseMapper;
@@ -20,4 +21,7 @@ public interface BusinessRukuCaigouMxMapper extends BaseMapper<BusinessRukuCaigo
 
     @Select("select sum(num) from business_ruku_caigou_mx where cghid = #{cghid}")
     Double sumRukuNumByCghid(String cghid);
+
+    @Select("select 1 from business_ruku_caigou_mx where cghid = #{cghid} limit 1")
+    Integer hasCghid(@Param("cghid") String cghid);
 }

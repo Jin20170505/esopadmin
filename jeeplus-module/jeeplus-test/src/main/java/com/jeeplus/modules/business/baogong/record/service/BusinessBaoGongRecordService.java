@@ -56,6 +56,7 @@ public class BusinessBaoGongRecordService extends CrudService<BusinessBaoGongRec
 	private BusinessBaoGongOrderMingXiMapper businessBaoGongOrderMingXiMapper;
 	@Autowired
 	private BusinessBaoGongOrderMapper businessBaoGongOrderMapper;
+
 	@Transactional(readOnly = false)
 	public void delete(BusinessBaoGongRecord businessBaoGongRecord) {
 		mapper.deleteByLogic(businessBaoGongRecord);
@@ -133,5 +134,9 @@ public class BusinessBaoGongRecordService extends CrudService<BusinessBaoGongRec
 	@Transactional(readOnly = false)
 	public void deleteByBgid(String bgid){
 		mapper.deleteByBgid(bgid);
+	}
+
+	public Boolean hasBgId(String bgid){
+		return  null != mapper.hasBgId(bgid);
 	}
 }

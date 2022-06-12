@@ -35,7 +35,6 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 	private BusinessJiHuaGongDanMingXiMapper businessJiHuaGongDanMingXiMapper;
 	@Autowired
 	private BusinessJiHuaGongDanBomMapper businessJiHuaGongDanBomMapper;
-
 	public BusinessJiHuaGongDan get(String id) {
 		BusinessJiHuaGongDan businessJiHuaGongDan = super.get(id);
 		businessJiHuaGongDan.setBusinessJiHuaGongDanMingXiList(businessJiHuaGongDanMingXiMapper.findList(new BusinessJiHuaGongDanMingXi(businessJiHuaGongDan)));
@@ -106,6 +105,10 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 
 	@Transactional(readOnly = false)
 	public void delete(BusinessJiHuaGongDan businessJiHuaGongDan) {
+		if(businessBaoGongOrderService.hasScOrderFromPlan(businessJiHuaGongDan.getId())){
+			throw new RuntimeException("删除失败，原因：该计划工单有对应的报工单存在。");
+		}
+		shengChanDingDanMingXiMapper.updateChaidanStatus(businessJiHuaGongDan.getDd().getId(),"未拆完");
 		super.delete(businessJiHuaGongDan);
 		businessJiHuaGongDanMingXiMapper.delete(new BusinessJiHuaGongDanMingXi(businessJiHuaGongDan));
 		businessJiHuaGongDanBomMapper.delete(new BusinessJiHuaGongDanBom(businessJiHuaGongDan));
@@ -115,6 +118,12 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 		Integer num = mapper.hasScdd(lineid);
 		return num!=null;
 	}
+
+	public Boolean hasScCode(String sccode){
+		Integer num = mapper.hasScddByOrderCode(sccode);
+		return num !=null;
+	}
+
 	@Autowired
 	private BusinessShengChanDingDanMingXiMapper shengChanDingDanMingXiMapper;
 	public Double getGdNum(String scddlineid){
