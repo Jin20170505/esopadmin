@@ -217,6 +217,10 @@ public class BusinessArrivalVouchService extends CrudService<BusinessArrivalVouc
 	}
 
 	public BusinessArrivalVouchMx getMxByCinvcodeAndBatchno(String pid,String cinvcode,String batchno,String scdate){
+		int count = businessArrivalVouchMxMapper.countMxByCinvcodeAndBatchno(pid, cinvcode, batchno, scdate);
+		if(count >1){
+			throw new RuntimeException("到货明细存在相同的存货，无法入库，需要修改");
+		}
 		return businessArrivalVouchMxMapper.getMxByCinvcodeAndBatchno(pid,cinvcode,batchno,scdate);
 	}
 

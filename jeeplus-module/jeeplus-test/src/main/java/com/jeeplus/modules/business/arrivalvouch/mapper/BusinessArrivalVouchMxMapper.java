@@ -35,5 +35,7 @@ public interface BusinessArrivalVouchMxMapper extends BaseMapper<BusinessArrival
 
     BusinessArrivalVouchMx getMxByCinvcodeAndBatchno(@Param("pid") String pid,@Param("cinvcode") String cinvcode,@Param("batchno") String batchno,@Param("scdate") String scdate);
 
+    int countMxByCinvcodeAndBatchno(@Param("pid") String pid,@Param("cinvcode") String cinvcode,@Param("batchno") String batchno,@Param("scdate") String scdate);
+
     void batchInsert(List<BusinessArrivalVouchMx> list);
 }
