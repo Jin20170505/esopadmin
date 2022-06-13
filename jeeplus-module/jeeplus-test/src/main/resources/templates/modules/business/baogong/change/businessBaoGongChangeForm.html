@@ -1,0 +1,103 @@
+<%
+layout("/include/_dialog.html"){
+%>
+	<script type="text/javascript">
+
+		$(document).ready(function() {
+					});
+
+		function save() {
+            var isValidate = jp.validateForm('#inputForm');//校验表单
+            if(!isValidate){
+                return false;
+			}else{
+                var index = jp.loading();
+                jp.post("${ctx}/business/baogong/change/businessBaoGongChange/save",$('#inputForm').serialize(),function(data){
+                    if(data.success){
+                        jp.getParent().refresh();
+                        var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                        parent.layer.close(dialogIndex);
+                        jp.toastr_success(data.msg)
+
+                    }else{
+                        jp.toastr_error(data.msg);
+                    }
+                    jp.close(index);
+                })
+			}
+
+        }
+	</script>
+<form id="inputForm"  method="post"  class="form-horizontal p-15">
+    <input type="hidden" name="id" value="${businessBaoGongChange.id!}"/>
+    <input name="recordid" type="hidden"  value="${businessBaoGongChange.recordid!}" />
+    <input name="bghid" type="hidden"  value="${businessBaoGongChange.bghid!}"/>
+    <input name="gbid" type="hidden" value="${businessBaoGongChange.gbid!}"/>
+    <table class="table table-bordered">
+       <tbody>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">报工单号：</label></td>
+                <td class="width-35">
+                    <input name="bgcode" value="${businessBaoGongChange.bgcode!}" readonly   class="form-control "/>
+                </td>
+                <td class="width-15 active"><label class="pull-right">工序名称：</label></td>
+                <td class="width-35">
+                    <input name="site" value="${businessBaoGongChange.site!}" readonly   class="form-control "/>
+                </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">料废数量(原)：</label></td>
+                <td class="width-35">
+                    <input name="ylfnum" value="${businessBaoGongChange.ylfnum!}" readonly   class="form-control "/>
+                </td>
+                <td class="width-15 active"><label class="pull-right">工废数量(原)：</label></td>
+                <td class="width-35">
+                    <input name="ygfnum" value="${businessBaoGongChange.ygfnum!}"  readonly  class="form-control "/>
+                </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">返工数量(原)：</label></td>
+                <td class="width-35">
+                    <input name="yfgnum" value="${businessBaoGongChange.yfgnum!}"  readonly  class="form-control "/>
+                </td>
+                <td class="width-15 active"><label class="pull-right">合格数量(原)：</label></td>
+                <td class="width-35">
+                    <input name="yhgnum" value="${businessBaoGongChange.yhgnum!}"  readonly  class="form-control "/>
+                </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">料废数量(现)：</label></td>
+                <td class="width-35">
+                    <input name="lfnum" value="${businessBaoGongChange.lfnum!}" type="number"   class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">工废数量(现)：</label></td>
+                <td class="width-35">
+                    <input name="gfnum" value="${businessBaoGongChange.gfnum!}"  type="number"  class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">返工数量(现)：</label></td>
+                <td class="width-35">
+                    <input name="fgnum" value="${businessBaoGongChange.fgnum!}" type="number"   class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">合格数量(现)：</label></td>
+                <td class="width-35">
+                    <input name="hgnum" value="${businessBaoGongChange.hgnum!}"  type="number"  class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">实际做工人(原)：</label></td>
+                <td class="width-35">
+                    <#userselect disabled="disabled" id="ydouser" name="ydouser.id" value="${businessBaoGongChange.ydouser.id!}" labelName="ydouser.name" labelValue="${businessBaoGongChange.ydouser.name!}"
+                    class="form-control "  allowClear="true"/>
+                </td>
+                <td class="width-15 active"><label class="pull-right">实际做工人(现)：</label></td>
+                <td class="width-35">
+                    <#userselect id="douser" name="douser.id" value="${businessBaoGongChange.douser.id!}" labelName="douser.name" labelValue="${businessBaoGongChange.douser.name!}"
+                            class="form-control "  allowClear="true"/>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<% } %>

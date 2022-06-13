@@ -60,6 +60,9 @@ public class BusinessChukuDispatchService extends CrudService<BusinessChukuDispa
 		if(StringUtils.isEmpty(businessChukuDispatch.getCode())){
 			String code = getCurrentCode(DateUtils.getDate("yyyyMMdd"));
 			businessChukuDispatch.setCode(code);
+			if("u8".equals(businessChukuDispatch.getRemarks())){
+				businessChukuDispatch.setU8code(code);
+			}
 		}
 		super.save(businessChukuDispatch);
 		for (BusinessChukuDispatchMx businessChukuDispatchMx : businessChukuDispatch.getBusinessChukuDispatchMxList()){
@@ -117,6 +120,7 @@ public class BusinessChukuDispatchService extends CrudService<BusinessChukuDispa
 		main.setDept(dispatch.getDept());
 		main.setDispatchcode(dispatch.getCode());
 		main.setFahuoDate(dispatch.getFahuodate());
+		main.setRemarks("u8");
 		//  main.setCode("XSCK"+DateUtils.getDate("yyyyMMddHHmmss"));
 		JSONObject js = JSONObject.fromObject(mxJson);
 		JSONArray array = js.getJSONArray("list");

@@ -17,6 +17,7 @@ import com.jeeplus.modules.business.baogong.order.service.BusinessBaoGongOrderSe
 import com.jeeplus.modules.business.baogong.record.service.BusinessBaoGongRecordService;
 import com.jeeplus.modules.business.shengchan.dingdan.entity.BusinessShengChanDingDanMingXi;
 import com.jeeplus.modules.business.shengchan.dingdan.mapper.BusinessShengChanDingDanMingXiMapper;
+import com.jeeplus.modules.sys.entity.Office;
 import com.jeeplus.modules.sys.entity.User;
 import com.jeeplus.modules.sys.utils.UserUtils;
 import net.sf.json.JSONObject;
@@ -151,10 +152,6 @@ public class BusinessRuKuProductService extends CrudService<BusinessRuKuProductM
 			throw new RuntimeException("报工单不存在啦");
 		}
 		// TODO 根据报工的最后一条工序的合格数量进行入库
-
-//		if(!"1".equals(order.getComplate())){
-//			throw new RuntimeException("此单报工未完成,不可入库");
-//		}
 		Double donerukunum = businessRuKuProductMapper.getRuKuNumByBgid(order.getId());
 		if(donerukunum==null){
 			donerukunum = 0.0;
@@ -171,6 +168,7 @@ public class BusinessRuKuProductService extends CrudService<BusinessRuKuProductM
 		}
 		BusinessRuKuProduct product = new BusinessRuKuProduct();
 		BusinessRuKuProductMx mx = new BusinessRuKuProductMx();
+		product.setDept(new Office(order.getDept()));
 		product.setBatchno(getBatchno(DateUtils.getDate("yyMMdd")));
 		product.setBgcode(order.getBgcode());
 		product.setBgid(order.getId());

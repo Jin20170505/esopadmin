@@ -66,6 +66,9 @@
 			<if test="ordercode != null and ordercode != ''">
 				AND a.ordercode like concat('%',#{ordercode},'%')
 			</if>
+			<if test="site != null and site != ''">
+				AND a.site like concat('%',#{site},'%')
+			</if>
 			<if test="cinvcode != null  and cinvcode != ''">
 				AND a.cinvcode like concat('%',#{cinvcode},'%')
 			</if>

@@ -61,6 +61,21 @@
 			AND a.scdate = #{scdate}
 		</if>
 	</select>
+
+	<select id="findMxByCinvcodeAndBatchno" resultType="BusinessArrivalVouchMx">
+		SELECT
+		<include refid="businessArrivalVouchMxColumns"/>
+		FROM business_arrivalvouch_mx a
+		<include refid="businessArrivalVouchMxJoins"/>
+		where a.pid = #{pid} and a.cinvcode = #{cinvcode}
+		<if test="batchno != null and batchno != ''">
+			AND a.batchno = #{batchno}
+		</if>
+		<if test="scdate != null and scdate != ''">
+			AND a.scdate = #{scdate}
+		</if>
+	</select>
+
 	<select id="getMxByCinvcodeAndBatchno" resultType="BusinessArrivalVouchMx">
 		SELECT
 		<include refid="businessArrivalVouchMxColumns"/>

@@ -164,8 +164,7 @@ public class BusinessRukuCaiGouService extends CrudService<BusinessRukuCaiGouMap
 		rd01.setcPersonCode("");
 		rd01.setcPTCode("01");
 		rd01.setcVenCode(vouch.getVendor().getCode());
-		System.out.println(vouch.getVendor().getCode());
-		rd01.setcMaker("demo");
+		rd01.setcMaker(user.getName());
 		rd01.setDnmaketim(DateUtils.getDate());
 		List<YT_Rds01> rd01s = new ArrayList<>();
 		businessRukuCaiGou.getBusinessRukuCaigouMxList().forEach(d->{

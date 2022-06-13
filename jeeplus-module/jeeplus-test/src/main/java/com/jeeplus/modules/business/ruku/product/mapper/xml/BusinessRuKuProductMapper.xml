@@ -11,6 +11,7 @@
 		a.del_flag AS "delFlag",
 		a.code AS "code",
 		a.sccode AS "sccode",
+		a.dept AS "dept.id",
 		a.cinvcode AS "cinvcode",
 		a.cinvname AS "cinvname",
 		a.cinvstd AS "cinvstd",
@@ -21,11 +22,13 @@
 		a.num as "num",
 		a.bgcode AS "bgcode",
 		a.sych AS "sych",
-		cangku.name AS "cangku.name"
+		cangku.name AS "cangku.name",
+		dept.name AS "dept.name"
 	</sql>
 	
 	<sql id="businessRuKuProductJoins">
 		LEFT JOIN base_cangku cangku ON cangku.id = a.cangku
+		LEFT JOIN sys_office dept ON dept.id = a.dept
 	</sql>
 	
     
@@ -67,6 +70,9 @@
 			</if>
 			<if test="cangku != null and cangku.id != null and cangku.id != ''">
 				AND a.cangku = #{cangku.id}
+			</if>
+			<if test="dept != null and dept.id != null and dept.id != ''">
+				AND a.dept = #{dept.id}
 			</if>
 		</where>
 		<choose>
@@ -116,7 +122,7 @@
 			remarks,
 			bgid,
 			bgcode,num,
-			sych
+			sych,dept
 		) VALUES (
 			#{id},
 			#{createBy.id},
@@ -134,7 +140,8 @@
 			#{remarks},
 			#{bgid},
 			#{bgcode},#{num},
-			#{sych}
+			#{sych},
+			#{dept.id}
 		)
 	</insert>
 	

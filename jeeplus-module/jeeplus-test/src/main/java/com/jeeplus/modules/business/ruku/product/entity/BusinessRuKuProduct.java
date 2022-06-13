@@ -10,6 +10,7 @@ import com.google.common.collect.Lists;
 
 import com.jeeplus.core.persistence.DataEntity;
 import com.jeeplus.common.utils.excel.annotation.ExcelField;
+import com.jeeplus.modules.sys.entity.Office;
 
 /**
  * 产成品入库Entity
@@ -20,6 +21,7 @@ public class BusinessRuKuProduct extends DataEntity<BusinessRuKuProduct> {
 	private static final long serialVersionUID = 1L;
 	private String code;		// 入库单号
 	private String sccode;		// 生产订单号
+	private Office dept; //	生产部门
 	private String cinvcode;		// 存货编码
 	private String cinvname;		// 存货名称
 	private String cinvstd;		// 规格型号
@@ -56,7 +58,16 @@ public class BusinessRuKuProduct extends DataEntity<BusinessRuKuProduct> {
 	public void setSccode(String sccode) {
 		this.sccode = sccode;
 	}
-	
+
+	public Office getDept() {
+		return dept;
+	}
+
+	public BusinessRuKuProduct setDept(Office dept) {
+		this.dept = dept;
+		return this;
+	}
+
 	@ExcelField(title="存货编码", align=2, sort=8)
 	public String getCinvcode() {
 		return cinvcode;

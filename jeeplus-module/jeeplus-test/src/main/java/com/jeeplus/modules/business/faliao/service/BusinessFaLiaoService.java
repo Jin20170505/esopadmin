@@ -13,6 +13,7 @@ import com.jeeplus.modules.base.cangku.mapper.BaseCangKuMapper;
 import com.jeeplus.modules.base.huowei.entity.BaseHuoWei;
 import com.jeeplus.modules.base.huowei.mapper.BaseHuoWeiMapper;
 import com.jeeplus.modules.sys.entity.User;
+import com.jeeplus.modules.sys.utils.UserUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.jeeplus.u8.webservice.U8Post;
@@ -119,7 +120,8 @@ public class BusinessFaLiaoService extends CrudService<BusinessFaLiaoMapper, Bus
 	public void faliao(String userid,String fromck,String tock,String mxJson){
 		BusinessFaLiao businessFaLiao = new BusinessFaLiao();
 		// businessFaLiao.setCode("FLD"+ DateUtils.getDate("yyyyMMddHHmmss"));
-		businessFaLiao.setCreateBy(new User(userid));
+		User user = UserUtils.get(userid);
+		businessFaLiao.setCreateBy(user);
 		businessFaLiao.setFromck(new BaseCangKu(fromck));
 		businessFaLiao.setTock(new BaseCangKu(tock));
 		JSONObject json = JSONObject.fromObject(mxJson);

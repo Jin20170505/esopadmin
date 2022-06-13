@@ -24,7 +24,6 @@ public class ApiBaoGongController {
     public AjaxJson getBaoGongInfo(String bgcode){
         AjaxJson json = new AjaxJson();
         try {
-            // 是否领料
             json.put("info",businessBaoGongOrderService.getBaoGongInfo(bgcode));
             json.setSuccess(true);
             json.setMsg("查询成功");

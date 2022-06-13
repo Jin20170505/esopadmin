@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.business.baogong.change.mapper.BusinessBaoGongChangeMapper">
+    
+	<sql id="businessBaoGongChangeColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.bgid AS "gbid",
+		a.bghid AS "bghid",
+		a.recordid AS "recordid",
+		a.bgcode AS "bgcode",
+		a.site AS "site",
+		a.ylfnum AS "ylfnum",
+		a.ygfnum AS "ygfnum",
+		a.yfgnum AS "yfgnum",
+		a.yhgnum AS "yhgnum",
+		a.ydouser AS "ydouser.id",
+		a.lfnum AS "lfnum",
+		a.gfnum AS "gfnum",
+		a.fgnum AS "fgnum",
+		a.hgnum AS "hgnum",
+		a.douser AS "douser.id",
+		ydouser.name AS "ydouser.name",
+		douser.name AS "douser.name",
+		createby.name AS "createBy.name"
+	</sql>
+	
+	<sql id="businessBaoGongChangeJoins">
+		LEFT JOIN sys_user createby ON createby.id = a.create_by
+		LEFT JOIN sys_user ydouser ON ydouser.id = a.ydouser
+		LEFT JOIN sys_user douser ON douser.id = a.douser
+	</sql>
+	
+    
+	<select id="get" resultType="BusinessBaoGongChange" >
+		SELECT 
+			<include refid="businessBaoGongChangeColumns"/>
+		FROM business_baogong_change a
+		<include refid="businessBaoGongChangeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BusinessBaoGongChange" >
+		SELECT 
+			<include refid="businessBaoGongChangeColumns"/>
+		FROM business_baogong_change a
+		<include refid="businessBaoGongChangeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="bgcode != null and bgcode != ''">
+				AND a.bgcode LIKE
+				    <if test="_databaseId == 'postgre'">'%'||#{bgcode}||'%'</if>
+					<if test="_databaseId == 'oracle'">'%'||#{bgcode}||'%'</if>
+					<if test="_databaseId == 'mssql'">'%'+#{bgcode}+'%'</if>
+					<if test="_databaseId == 'mysql'">concat('%',#{bgcode},'%')</if>
+			</if>
+			<if test="site != null and site != ''">
+				AND a.site LIKE
+				    <if test="_databaseId == 'postgre'">'%'||#{site}||'%'</if>
+					<if test="_databaseId == 'oracle'">'%'||#{site}||'%'</if>
+					<if test="_databaseId == 'mssql'">'%'+#{site}+'%'</if>
+					<if test="_databaseId == 'mysql'">concat('%',#{site},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BusinessBaoGongChange" >
+		SELECT 
+			<include refid="businessBaoGongChangeColumns"/>
+		FROM business_baogong_change a
+		<include refid="businessBaoGongChangeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO business_baogong_change(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			bgid,
+			bghid,
+			recordid,
+			bgcode,
+			site,
+			ylfnum,
+			ygfnum,
+			yfgnum,
+			yhgnum,
+			ydouser,
+			lfnum,
+			gfnum,
+			fgnum,
+			hgnum,
+			douser
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{gbid},
+			#{bghid},
+			#{recordid},
+			#{bgcode},
+			#{site},
+			#{ylfnum},
+			#{ygfnum},
+			#{yfgnum},
+			#{yhgnum},
+			#{ydouser.id},
+			#{lfnum},
+			#{gfnum},
+			#{fgnum},
+			#{hgnum},
+			#{douser.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE business_baogong_change SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			bgid = #{gbid},
+			bghid = #{bghid},
+			recordid = #{recordid},
+			bgcode = #{bgcode},
+			site = #{site},
+			ylfnum = #{ylfnum},
+			ygfnum = #{ygfnum},
+			yfgnum = #{yfgnum},
+			yhgnum = #{yhgnum},
+			ydouser = #{ydouser.id},
+			lfnum = #{lfnum},
+			gfnum = #{gfnum},
+			fgnum = #{fgnum},
+			hgnum = #{hgnum},
+			douser = #{douser.id}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM business_baogong_change
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE business_baogong_change SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="BusinessBaoGongChange" statementType="STATEMENT">
+		select * FROM business_baogong_change  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

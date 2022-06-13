@@ -27,31 +27,21 @@ public class ApiCaiGouController {
     public AjaxJson getMxDetail(String cgid,String cinvcode,String batchno,String scdate,Double num){
         AjaxJson json = new AjaxJson();
         try{
-            BusinessArrivalVouchMx mx = arrivalVouchService.getMxByCinvcodeAndBatchno(cgid,cinvcode,batchno,scdate);
-            if(mx==null|| StringUtils.isEmpty(mx.getId())){
+            List<BusinessArrivalVouchMx> mxList = arrivalVouchService.findMxByCinvcodeAndBatchno(cgid,cinvcode,batchno,scdate);
+            if(mxList==null){
                 json.setMsg("此存货不在该采购单中。");
                 json.setSuccess(false);
                 return json;
             }
-            Double rukuSum = businessRukuCaiGouService.getRukuNum(mx.getId());
-            if(rukuSum!=null){
-                double yl = mx.getNum()  - rukuSum ;
-                if(yl<0){
-                    json.setMsg("入库数量超出，不可出库");
-                    json.setSuccess(false);
-                    return json;
-                }
-                if(yl<num){
-                    json.setMsg("此物品还可以入的数量为："+yl+"，此条码数量超出");
-                    json.setSuccess(false);
-                    return json;
-                }
-                json.put("yl",yl);
-            }else {
-                json.put("yl",mx.getNum());
+            if(mxList.isEmpty()){
+                json.setMsg("此存货已经入库。");
+                json.setSuccess(false);
+                return json;
             }
+            Double yl = mxList.stream().mapToDouble(BusinessArrivalVouchMx::getNum).sum();
+            json.put("yl",yl);
             json.setSuccess(true);
-            json.put("info",mx);
+            json.put("info",mxList);
         }catch (Exception e){
             e.printStackTrace();
             json.setSuccess(false);

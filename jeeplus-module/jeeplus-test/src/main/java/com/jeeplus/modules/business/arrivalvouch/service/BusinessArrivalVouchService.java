@@ -224,6 +224,25 @@ public class BusinessArrivalVouchService extends CrudService<BusinessArrivalVouc
 		return businessArrivalVouchMxMapper.getMxByCinvcodeAndBatchno(pid,cinvcode,batchno,scdate);
 	}
 
+	public List<BusinessArrivalVouchMx> findMxByCinvcodeAndBatchno(String pid,String cinvcode,String batchno,String scdate){
+		List<BusinessArrivalVouchMx> list = businessArrivalVouchMxMapper.findMxByCinvcodeAndBatchno(pid, cinvcode, batchno, scdate);
+		if(list==null || list.isEmpty()){
+			return null;
+		}
+		List<BusinessArrivalVouchMx> data = Lists.newArrayList();
+		list.forEach(d->{
+			Double num = businessRukuCaigouMxMapper.sumRukuNumByCghid(d.getId());
+			if(num==null){
+				num=0.0;
+			}
+			if(d.getNum()>num){
+				d.setNum(d.getNum()-num);
+				data.add(d);
+			}
+		});
+		return data;
+	}
+
 	@Transactional(readOnly = false)
 	public void mainPrint(String id){
 		mapper.print(id);
