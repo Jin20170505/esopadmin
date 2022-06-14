@@ -23,4 +23,8 @@ public interface BusinessJiHuaGongDanBomMapper extends BaseMapper<BusinessJiHuaG
 
     @Update("update business_jihua_gongdan_bom set num = #{num} where id = #{id}")
     void updateWeiCha(@Param("id") String id,@Param("num") double num);
+
+    @Select("select 1 from business_jihua_gongdan_bom where scyid = #{scyid} limit 1")
+    Integer hasScYid(@Param("scyid") String scyid);
+
 }

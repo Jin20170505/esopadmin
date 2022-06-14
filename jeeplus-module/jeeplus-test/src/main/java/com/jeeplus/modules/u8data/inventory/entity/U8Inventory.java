@@ -17,6 +17,7 @@ public class U8Inventory extends DataEntity<U8Inventory> {
     private String cWhName; // 仓库名称
     private String bPropertyCheck; // 是否质检
     private String bProxyForeign; // 是否委外
+    private String daynum; // 每日产量
     private Date dSDate;  // 启用日期
     private Date dEDate; // 停用日期
 
@@ -125,6 +126,15 @@ public class U8Inventory extends DataEntity<U8Inventory> {
 
     public U8Inventory setbProxyForeign(String bProxyForeign) {
         this.bProxyForeign = bProxyForeign;
+        return this;
+    }
+
+    public String getDaynum() {
+        return daynum;
+    }
+
+    public U8Inventory setDaynum(String daynum) {
+        this.daynum = daynum;
         return this;
     }
 

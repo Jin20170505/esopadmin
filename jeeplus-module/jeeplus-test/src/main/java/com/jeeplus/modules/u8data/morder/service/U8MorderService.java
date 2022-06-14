@@ -14,8 +14,12 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class U8MorderService extends CrudService<U8MorderMapper, U8Morder> {
 
-
     public List<U8Morder> findList(U8Morder morder){
         return mapper.findList(morder);
     }
+
+    public U8Morder getMainInfo(String moId) {
+        return mapper.getMainInfo(moId);
+    }
+
 }

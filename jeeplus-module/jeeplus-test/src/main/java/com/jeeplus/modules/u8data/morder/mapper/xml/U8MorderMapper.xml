@@ -29,6 +29,14 @@
 
     </sql>
 
+    <select id="getMainInfo" resultType="U8Morder">
+        select top(1)
+        <include refid="orderColumns"/>
+        from YT_API_ERP_view_Morder a
+        <include refid="orderJoins"/>
+        where a.moId = #{moId}
+    </select>
+
     <select id="findList" resultType="U8Morder">
         select
         <include refid="orderColumns"/>
@@ -43,6 +51,12 @@
             </if>
             <if test="moCode!=null and moCode !=''">
                 and a.moCode = #{moCode}
+            </if>
+            <if test="moId != null and moId !=''">
+                and a.moId = #{moId}
+            </if>
+            <if test="modid != null and modid !=''">
+                and a.modid = #{modid}
             </if>
         </where>
     </select>

@@ -21,7 +21,6 @@
 	</sql>
 	
 	<sql id="businessShengchanBeiliaoApplyMxJoins">
-		
 			LEFT JOIN business_shengchan_beiliao_apply b ON b.id = a.pid
 	</sql>
 	

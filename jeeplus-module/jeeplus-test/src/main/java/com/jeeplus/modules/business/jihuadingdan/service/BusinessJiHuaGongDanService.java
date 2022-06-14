@@ -142,7 +142,9 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 	}
 	@Transactional(readOnly = false)
 	public void chehui(String id){
-		//TODO 检查是否可以回撤
+		if(businessBaoGongOrderService.hasScOrderFromPlan(id)){
+			throw new RuntimeException("撤回失败，原因：该计划工单有对应的报工单存在。");
+		}
 		mapper.updateSatus(id,"未下发");
 	}
 	/**  生成 报工单 **/

@@ -15,6 +15,7 @@
 		a.name AS "name",
 		a.specification AS "specification",
 		a.unit AS "unit",
+		a.daynum as "daynum",
 		a.remarks AS "remarks",
 		a.sccall as "sccall",
 		b.name AS "type.name"
@@ -101,6 +102,7 @@
 			name,
 			specification,
 			unit,
+			daynum,
 			sccall,
 			remarks
 		) VALUES
@@ -118,6 +120,7 @@
 				#{item.name},
 				#{item.specification},
 				#{item.unit},
+			 	#{item.daynum},
 				'0',
 				#{item.remarks}
 			)
@@ -131,6 +134,7 @@
 		name=VALUES(name),
 		specification=VALUES(specification),
 		unit=VALUES(unit),
+		daynum=#{daynum},
 		remarks=VALUES(remarks)
 	</insert>
 	<insert id="insert">

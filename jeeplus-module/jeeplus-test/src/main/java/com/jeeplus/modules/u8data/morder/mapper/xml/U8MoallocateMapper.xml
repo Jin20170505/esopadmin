@@ -33,6 +33,9 @@
             <if test="moDId != null and moDId != ''">
                 and a.MoDId = #{moDId}
             </if>
+            <if test="allocateId != null and allocateId != ''">
+                and a.AllocateId = #{allocateId}
+            </if>
         </where>
     </select>
 

@@ -119,7 +119,7 @@ public class BusinessBaoGongRecordService extends CrudService<BusinessBaoGongRec
 		record.setPlanid(order.getPlanid());
 		record.setLineid(order.getOrderlineid());
 		record.setUnit(order.getUnit());
-		if("1".equals(complete)){
+		if("1".equals(complete) && dbnum<=hgnum){
 			if(StringUtils.isEmpty(bghid)){
 			}else {
 				baoGongOrderService.completeBg(bghid);

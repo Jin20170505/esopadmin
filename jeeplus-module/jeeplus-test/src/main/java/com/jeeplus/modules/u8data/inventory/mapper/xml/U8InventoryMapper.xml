@@ -12,6 +12,7 @@
         a.cComUnitName as "cComUnitName",
         a.cDefWareHouse as "cDefWareHouse",
         a.cWhName as "cWhName",
+        a.cInvDefine11 as "daynum",
         a.bPropertyCheck as "bPropertyCheck",
         a.bProxyForeign as "bProxyForeign",
         a.dSDate as "dSDate",

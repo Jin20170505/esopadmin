@@ -608,4 +608,66 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 		return null;
 	}
 
+	/**  U8Api 修改 检验 **/
+	public void editCheckMid(String mid){
+		BusinessShengChanDingDan dd = mapper.get(mid);
+		if(businessJiHuaGongDanService.hasScCode(dd.getCode())){
+			throw new RuntimeException("不可修改，原因：该生产订单有对应计划工单存在。");
+		}
+
+	}
+
+	public void editCheckMxid(String mxids){
+		Arrays.asList(mxids.split(",")).forEach(mxid->{
+			if(businessJiHuaGongDanService.hasScddLineid(mxid)){
+				BusinessShengChanDingDanMingXi mx = businessShengChanDingDanMingXiMapper.get(mxid);
+				throw new RuntimeException("不可修改，原因：序号为【"+mx.getNo()+"】的明细有对应计划工单存在。");
+			}
+		});
+	}
+
+	public void editCheckBomid(String bomids){
+		Arrays.asList(bomids.split(",")).forEach(bomid->{
+			Integer i = jiHuaGongDanBomMapper.hasScYid(bomid);
+			if(i!=null && i==1){
+				throw new RuntimeException("不可修改，原因：生产订单已经拆单，子件有对应计划工单子件存在。");
+			}
+		});
+	}
+	/**  U8Api 删除 检验 **/
+	@Transactional(readOnly = false)
+	public void deleteCheckMid(String mid){
+		BusinessShengChanDingDan dd = mapper.get(mid);
+		if(businessJiHuaGongDanService.hasScCode(dd.getCode())){
+			throw new RuntimeException("删除失败，原因：该生产订单有对应计划工单存在。");
+		}
+
+	}
+
+	@Transactional(readOnly = false)
+	public void deleteCheckMxid(String mxids){
+		Arrays.asList(mxids.split(",")).forEach(mxid->{
+			if(businessJiHuaGongDanService.hasScddLineid(mxid)){
+				BusinessShengChanDingDanMingXi mx = businessShengChanDingDanMingXiMapper.get(mxid);
+				throw new RuntimeException("删除失败，原因：序号为【"+mx.getNo()+"】的明细有对应计划工单存在。");
+			}
+		});
+		Arrays.asList(mxids.split(",")).forEach(mxid->{
+			businessShengChanDingDanMingXiMapper.delete(new BusinessShengChanDingDanMingXi(mxid));
+			businessShengChanBomMapper.deleteBySchid(mxid);
+		});
+	}
+
+	@Transactional(readOnly = false)
+	public void deleteCheckBomid(String bomids){
+		Arrays.asList(bomids.split(",")).forEach(bomid->{
+			Integer i = jiHuaGongDanBomMapper.hasScYid(bomid);
+			if(i!=null && i==1){
+				throw new RuntimeException("删除失败，原因：生产订单已经拆单，子件有对应计划工单子件存在。");
+			}
+		});
+		Arrays.asList(bomids.split(",")).forEach(bomid->{
+			businessShengChanBomMapper.delete(new BusinessShengChanBom(bomid));
+		});
+	}
 }

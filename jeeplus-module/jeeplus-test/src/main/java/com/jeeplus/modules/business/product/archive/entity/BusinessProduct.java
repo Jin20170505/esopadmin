@@ -16,11 +16,12 @@ public class BusinessProduct extends DataEntity<BusinessProduct> {
 	
 	private static final long serialVersionUID = 1L;
 	private BusinessProductTypeOnlyRead type;		// 存货分类 父类
-	private String cinvaddcode;
+	private String cinvaddcode; // 代码
 	private String code;		// 存货编码
 	private String name;		// 存货名称
 	private String specification;		// 规格型号
 	private String unit;		// 计量单位
+	private String daynum; // 日生产量
 	private String sccall;	// 是否生产叫料
 	public BusinessProduct() {
 		super();
@@ -77,7 +78,16 @@ public class BusinessProduct extends DataEntity<BusinessProduct> {
 	public void setSpecification(String specification) {
 		this.specification = specification;
 	}
-	
+
+	public String getDaynum() {
+		return daynum;
+	}
+
+	public BusinessProduct setDaynum(String daynum) {
+		this.daynum = daynum;
+		return this;
+	}
+
 	@ExcelField(title="计量单位", align=2, sort=10)
 	public String getUnit() {
 		return unit;
