@@ -54,18 +54,10 @@
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
 			<if test="bgcode != null and bgcode != ''">
-				AND a.bgcode LIKE
-				    <if test="_databaseId == 'postgre'">'%'||#{bgcode}||'%'</if>
-					<if test="_databaseId == 'oracle'">'%'||#{bgcode}||'%'</if>
-					<if test="_databaseId == 'mssql'">'%'+#{bgcode}+'%'</if>
-					<if test="_databaseId == 'mysql'">concat('%',#{bgcode},'%')</if>
+				AND a.bgcode LIKE concat('%',#{bgcode},'%')
 			</if>
 			<if test="site != null and site != ''">
-				AND a.site LIKE
-				    <if test="_databaseId == 'postgre'">'%'||#{site}||'%'</if>
-					<if test="_databaseId == 'oracle'">'%'||#{site}||'%'</if>
-					<if test="_databaseId == 'mssql'">'%'+#{site}+'%'</if>
-					<if test="_databaseId == 'mysql'">concat('%',#{site},'%')</if>
+				AND a.site LIKE concat('%',#{site},'%')
 			</if>
 		</where>
 		<choose>

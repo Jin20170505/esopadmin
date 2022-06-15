@@ -49,7 +49,7 @@
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
 			<if test="sccode != null and sccode != ''">
-				AND a.sccode = #{sccode}
+				AND a.sccode  like concat('%',#{sccode},'%')
 			</if>
 			<if test="scline != null and scline != ''">
 				AND a.scline = #{scline}
@@ -58,13 +58,13 @@
 				AND a.scdept = #{dept.id}
 			</if>
 			<if test="cinvcode != null and cinvcode != ''">
-				AND a.cinvcode = #{cinvcode}
+				AND a.cinvcode  like concat('%',#{cinvcode},'%')
 			</if>
 			<if test="cinvname != null and cinvname != ''">
-				AND a.cinvname = #{cinvname}
+				AND a.cinvname  like concat('%',#{cinvname},'%')
 			</if>
 			<if test="cinvstd != null and cinvstd != ''">
-				AND a.cinvstd = #{cinvstd}
+				AND a.cinvstd  like concat('%',#{cinvstd},'%')
 			</if>
 			<if test="printstatus != null and printstatus != ''">
 				and a.printstatus = #{printstatus}

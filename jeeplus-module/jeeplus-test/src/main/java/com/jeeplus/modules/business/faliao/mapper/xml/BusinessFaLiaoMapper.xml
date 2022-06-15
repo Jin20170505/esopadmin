@@ -45,7 +45,7 @@
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
 			<if test="code != null and code != ''">
-				AND a.code = #{code}
+				AND a.code like concat('%',#{code},'%')
 			</if>
 			<if test="fromck != null and fromck.id != null and fromck.id != ''">
 				AND a.from_ck = #{fromck.id}

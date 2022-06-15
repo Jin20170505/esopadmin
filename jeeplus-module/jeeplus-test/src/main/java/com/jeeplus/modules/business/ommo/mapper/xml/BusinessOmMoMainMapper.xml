@@ -47,10 +47,10 @@
 			<if test="vendor != null and vendor.id != null and vendor.id != ''">
 				AND a.vendor = #{vendor.id}
 			</if>
-			<if test="beginDcreatedate != null and beginDcreatedate != '' and endDcreatedate != null  and endDcreatedate != '' ">
+			<if test="beginDcreatedate != null  and endDcreatedate != null  ">
 				AND a.dcreatedate BETWEEN #{beginDcreatedate} AND #{endDcreatedate}
 			</if>
-			<if test="beginDdate != null and beginDdate != '' and endDdate != null and endDdate != '' ">
+			<if test="beginDdate != null  and endDdate != null  ">
 				AND a.ddate BETWEEN #{beginDdate} AND #{endDdate}
 			</if>
 		</where>

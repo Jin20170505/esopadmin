@@ -48,7 +48,7 @@
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
 			<if test="sccode != null and sccode != ''">
-				AND a.sccode = #{sccode}
+				AND a.sccode like concat('%',#{sccode},'%')
 			</if>
 			<if test="scline != null and scline != ''">
 				AND a.scline = #{scline}

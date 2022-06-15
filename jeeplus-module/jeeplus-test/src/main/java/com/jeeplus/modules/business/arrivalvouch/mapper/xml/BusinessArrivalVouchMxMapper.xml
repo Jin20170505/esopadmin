@@ -106,11 +106,11 @@
 			<if test="p != null and p.id != null and p.id != ''">
 				AND a.pid = #{p.id}
 			</if>
-			<if test="beginArriveDate != null and beginArriveDate != '' and endArriveDate != null and endArriveDate != ''">
+			<if test="beginArriveDate != null  and endArriveDate != null ">
 			AND b.arrive_date BETWEEN #{beginArriveDate} AND #{endArriveDate}
 		</if>
 			<if test="p != null and p.code != null and p.code != ''">
-				AND b.code = #{p.code}
+				AND b.code  like concat('%',#{p.code},'%')
 			</if>
 			<if test="ck != null and ck.id != null and ck.id != ''">
 				AND a.ck_id = #{ck.id}
@@ -119,7 +119,7 @@
 				AND a.hw_id = #{hw.id}
 			</if>
 			<if test="cinvcode != null and cinvcode != ''">
-				AND a.cinvcode = #{cinvcode}
+				AND a.cinvcode like concat('%',#{cinvcode},'%')
 			</if>
 			<if test="cinvname != null  and cinvname != ''">
 				AND a.cinvname like concat('%',#{cinvname},'%')
@@ -128,7 +128,7 @@
 				AND a.cinvstd like concat('%',#{cinvstd},'%')
 			</if>
 			<if test="batchno != null and batchno != ''">
-				AND a.batchno = #{batchno}
+				AND a.batchno like concat('%',#{batchno},'%')
 			</if>
 			<if test="dept != null and dept.id != null and dept.id != ''">
 				AND a.dept = #{dept.id}

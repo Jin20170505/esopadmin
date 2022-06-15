@@ -48,7 +48,7 @@
 			<if test="code != null and code != ''">
 				AND a.code like concat('%',#{code},'%')
 			</if>
-			<if test="beginDdate != null and beginDdate != '' and endDdate != null and endDdate != ''">
+			<if test="beginDdate != null and endDdate != null ">
 				AND a.ddate BETWEEN #{beginDdate} AND #{endDdate}
 			</if>
 			<if test="vendor != null and vendor.id != null and vendor.id != ''">
@@ -58,7 +58,7 @@
 				AND a.dept = #{dept.id}
 			</if>
 			<if test="cmarker != null and cmarker != ''">
-				AND a.cmarker = #{cmarker}
+				AND a.cmarker like concat('%',#{cmarker},'%')
 			</if>
 			<if test="printstatus != null and printstatus != ''">
 				AND a.printstatus = #{printstatus}

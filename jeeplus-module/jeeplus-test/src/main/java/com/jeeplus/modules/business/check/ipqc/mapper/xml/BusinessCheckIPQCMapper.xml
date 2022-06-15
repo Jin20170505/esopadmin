@@ -54,6 +54,15 @@
 			<if test="beginCheckdate != null and endCheckdate != null ">
 				AND a.check_date BETWEEN #{beginCheckdate} AND #{endCheckdate}
 			</if>
+			<if test="checkname != null and checkname != ''">
+				AND a.checkname like concat('%',#{checkname},'%')
+			</if>
+			<if test="cinvcode != null  and cinvcode != ''">
+				AND a.cinvcode like concat('%',#{cinvcode},'%')
+			</if>
+			<if test="cinvname != null  and cinvname != ''">
+				AND a.cinvname like concat('%',#{cinvname},'%')
+			</if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
