@@ -28,4 +28,6 @@ public interface BaseRoteMainMapper extends BaseMapper<BaseRoteMain> {
 
     @Select("select 1 from base_route_main where id = #{id}")
     Integer hasById(@Param("id") String id);
+
+    void batchInsert(List<BaseRoteMain> list);
 }

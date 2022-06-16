@@ -124,7 +124,7 @@ public class BusinessChuKuLingLiaoService extends CrudService<BusinessChuKuLingL
 		// lingLiao.setCode("LLD"+ DateUtils.getDate("yyyyMMddHHmmss"));
 //		lingLiao.preInsert();
 		lingLiao.setCreateBy(new User(userid));
-		mapper.insert(lingLiao);
+		// mapper.insert(lingLiao);
 		List<BusinessChuKuLingLiaoMx> mxes = Lists.newArrayList();
 		JSONObject json = JSONObject.fromObject(mxJson);
 		JSONArray list = json.getJSONArray("list");

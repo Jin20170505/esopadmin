@@ -99,16 +99,13 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 				businessJiHuaGongDanBomMapper.delete(businessJiHuaGongDanBom);
 			}
 		}
-
 	}
-
-
 	@Transactional(readOnly = false)
 	public void delete(BusinessJiHuaGongDan businessJiHuaGongDan) {
 		if(businessBaoGongOrderService.hasScOrderFromPlan(businessJiHuaGongDan.getId())){
 			throw new RuntimeException("删除失败，原因：该计划工单有对应的报工单存在。");
 		}
-		shengChanDingDanMingXiMapper.updateChaidanStatus(businessJiHuaGongDan.getDd().getId(),"未拆完");
+		shengChanDingDanMingXiMapper.updateDoneNum(businessJiHuaGongDan.getDd().getId(),0-businessJiHuaGongDan.getGdnum());
 		super.delete(businessJiHuaGongDan);
 		businessJiHuaGongDanMingXiMapper.delete(new BusinessJiHuaGongDanMingXi(businessJiHuaGongDan));
 		businessJiHuaGongDanBomMapper.delete(new BusinessJiHuaGongDanBom(businessJiHuaGongDan));

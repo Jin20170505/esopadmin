@@ -15,8 +15,9 @@ public class U8ProutingDetail extends DataEntity<U8ProutingDetail> {
     private Date effEndDate; // 失效日期
     private String subFlag; // 是否委外工序
     private String lastFlag; // 是否末道工序
-    private String define25; // 工时
-    private String define26; // 工价
+    private String define26; // 工时
+    private String define27; // 工价
+    private String define34; // 日产量
     private String feeFlag; // 是否计费点
     private String bfflag; // 是否倒冲工序
     private Double changeRate; // 换算率
@@ -116,12 +117,12 @@ public class U8ProutingDetail extends DataEntity<U8ProutingDetail> {
         return this;
     }
 
-    public String getDefine25() {
-        return define25;
+    public String getDefine27() {
+        return define27;
     }
 
-    public U8ProutingDetail setDefine25(String define25) {
-        this.define25 = define25;
+    public U8ProutingDetail setDefine27(String define27) {
+        this.define27 = define27;
         return this;
     }
 
@@ -131,6 +132,15 @@ public class U8ProutingDetail extends DataEntity<U8ProutingDetail> {
 
     public U8ProutingDetail setDefine26(String define26) {
         this.define26 = define26;
+        return this;
+    }
+
+    public String getDefine34() {
+        return define34;
+    }
+
+    public U8ProutingDetail setDefine34(String define34) {
+        this.define34 = define34;
         return this;
     }
 

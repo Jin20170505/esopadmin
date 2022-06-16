@@ -12,6 +12,9 @@
 		a.product_id AS "product.id",
 		a.no AS "no",
 		a.site_id AS "site.id",
+		a.gtime as "gtime",
+		a.gprice as "gprice",
+		a.daynum AS "daynum",
 		a.filename as "filename",
 		a.file_url AS "fileurl",
 		a.version AS "version",
@@ -73,10 +76,53 @@
 			</otherwise>
 		</choose>
 	</select>
-	
+	<insert id="batchInsert" parameterType="java.util.List">
+		INSERT INTO base_route(
+		id,
+		create_by,
+		create_date,
+		update_by,
+		update_date,
+		del_flag,
+		product_id,
+		no,
+		site_id,gtime,gprice,daynum,
+		file_url,filename,
+		version,
+		pid,
+		remarks
+		) VALUES
+		<foreach collection="list" separator="," item="item">
+			(
+			#{item.id},
+			#{item.createBy.id},
+			#{item.createDate},
+			#{item.updateBy.id},
+			#{item.updateDate},
+			#{item.delFlag},
+			#{item.product.id},
+			#{item.no},
+			#{item.site.id},#{item.gtime},#{item.gprice},#{item.daynum},
+			#{item.fileurl},#{item.filename},
+			#{item.version},
+			#{item.p.id},
+			#{item.remarks}
+			)
+		</foreach>
+		on duplicate key update
+		id = values(id),
+		update_date= VALUES(update_date),
+		product_id=VALUES(product_id),
+		version = values(version),
+		no = values(no),
+		site_id = values(site_id),
+		gtime = values(gtime),
+		gprice = values(gprice),
+		daynum = values(daynum)
+	</insert>
 	<insert id="insert">
 		INSERT INTO base_route(
-		                       id,
+		   	id,
 			create_by,
 			create_date,
 			update_by,
@@ -84,13 +130,13 @@
 			del_flag,
 			product_id,
 			no,
-			site_id,
+			site_id,gtime,gprice,daynum,
 			file_url,filename,
 			version,
 			pid,
 			remarks
 		) VALUES (
-		          #{id},
+		    #{id},
 			#{createBy.id},
 			#{createDate},
 			#{updateBy.id},
@@ -98,7 +144,7 @@
 			#{delFlag},
 			#{product.id},
 			#{no},
-			#{site.id},
+			#{site.id},#{gtime},#{gprice},#{daynum},
 			#{fileurl},#{filename},
 			#{version},
 			#{p.id},

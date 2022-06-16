@@ -83,7 +83,47 @@
 			</otherwise>
 		</choose>
 	</select>
-	
+
+	<insert id="batchInsert" parameterType="java.util.List">
+		INSERT INTO base_route_main(
+		id,
+		create_by,
+		update_by,
+		del_flag,
+		code,
+		product_id,
+		std,
+		version,
+		enable,
+		remarks,
+		create_date,
+		update_date
+		) VALUES
+		<foreach collection="list" separator="," item="item">
+			(
+			#{item.id},
+			#{item.createBy.id},
+			#{item.updateBy.id},
+			#{item.delFlag},
+			#{item.code},
+			#{item.product.id},
+			#{item.std},
+			#{item.version},
+			#{item.enable},
+			#{item.remarks},
+			#{item.createDate},
+			#{item.updateDate}
+			)
+		</foreach>
+		on duplicate key update
+		id = values(id),
+		update_date= VALUES(update_date),
+		code=VALUES(code),
+		product_id=VALUES(product_id),
+		version = values(version),
+		std = values(std)
+	</insert>
+
 	<insert id="insert">
 		INSERT INTO base_route_main(
 			id,

@@ -22,6 +22,6 @@ import java.util.Date;
 public interface BusinessShengChanPaiChaiMxMapper extends BaseMapper<BusinessShengChanPaiChaiMx> {
 
     @Select("select pdate from business_shengchan_paichan where id = " +
-            "(select pid from business_shengchan_paichan_mx where sccode = #{sccode} and scline = #{scline} limit 1)")
+            "(select pid from business_shengchan_paichan_mx where sccode = #{sccode} and scline = #{scline} order by create_date desc limit 1)")
     Date getPanChanDate(@Param("sccode") String sccode,@Param("scline") String scline);
 }

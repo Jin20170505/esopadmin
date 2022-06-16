@@ -22,6 +22,9 @@ public class BaseRoute extends DataEntity<BaseRoute> {
 	private BusinessProduct product;		// 存货档案
 	private Integer no;		// 序号
 	private BaseSite site;		// 工作站
+	private String gtime;  // 工时
+	private String gprice; // 工价
+	private String daynum; // 日产量
 	private String fileurl;		// 指导书
 	private String filename;	// 文件名称
 	private String version;		// 版本号
@@ -68,7 +71,34 @@ public class BaseRoute extends DataEntity<BaseRoute> {
 	public void setSite(BaseSite site) {
 		this.site = site;
 	}
-	
+
+	public String getGtime() {
+		return gtime;
+	}
+
+	public BaseRoute setGtime(String gtime) {
+		this.gtime = gtime;
+		return this;
+	}
+
+	public String getGprice() {
+		return gprice;
+	}
+
+	public BaseRoute setGprice(String gprice) {
+		this.gprice = gprice;
+		return this;
+	}
+
+	public String getDaynum() {
+		return daynum;
+	}
+
+	public BaseRoute setDaynum(String daynum) {
+		this.daynum = daynum;
+		return this;
+	}
+
 	@ExcelField(title="指导书", align=2, sort=9)
 	public String getFileurl() {
 		return fileurl;

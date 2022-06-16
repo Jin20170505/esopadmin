@@ -3,10 +3,13 @@
  */
 package com.jeeplus.modules.base.route.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Lists;
 import com.jeeplus.modules.base.site.entity.BaseSite;
+import com.jeeplus.modules.business.arrivalvouch.entity.BusinessArrivalVouch;
+import com.jeeplus.modules.business.arrivalvouch.entity.BusinessArrivalVouchMx;
 import com.jeeplus.modules.business.product.archive.entity.BusinessProduct;
 import com.jeeplus.modules.u8data.prouting.entity.U8Prouting;
 import com.jeeplus.modules.u8data.prouting.entity.U8ProutingDetail;
@@ -91,7 +94,8 @@ public class BaseRoteMainService extends CrudService<BaseRoteMainMapper, BaseRot
 
 	@Transactional(readOnly = false)
     public void sychU8(List<U8Prouting> data, List<U8ProutingDetail> details) {
-		data.stream().filter(d->null==mapper.hasById(d.getProutingid())).forEach(d->{
+		List<BaseRoteMain> mains = new ArrayList<>(data.size());
+		data.stream().forEach(d->{
 			BaseRoteMain m = new BaseRoteMain();
 			m.preInsert();
 			m.setId(d.getProutingid());
@@ -103,17 +107,52 @@ public class BaseRoteMainService extends CrudService<BaseRoteMainMapper, BaseRot
 			m.setStd(d.getCinvstd());
 			m.setEnable("0");
 			m.setCode(d.getCinvcode());
-			mapper.insert(m);
+			mains.add(m);
 		});
-
-		details.stream().filter(d->null==baseRouteMapper.hasById(d.getProutingDId())).forEach(d->{
+		List<BaseRoute> routes = new ArrayList<>(details.size());
+		details.stream().forEach(d->{
 			BaseRoute r = new BaseRoute();
 			r.preInsert();
 			r.setId(d.getProutingDId());
 			r.setNo(d.getOpSeq());
 			r.setP(new BaseRoteMain(d.getProutingId()));
 			r.setSite(new BaseSite(d.getOperationId()));
-			baseRouteMapper.insert(r);
+			r.setGtime(d.getDefine26());r.setGprice(d.getDefine27()).setDaynum(d.getDefine34());
+			routes.add(r);
 		});
+		saveU8Data(mains,routes);
     }
+
+	@Transactional(readOnly = false)
+	public void saveU8Data(List<BaseRoteMain> mains, List<BaseRoute> details){
+		if(!mains.isEmpty()){
+			int i = 0;
+			int j = 0;
+			int mlen = mains.size();
+			while (i<mlen){
+				j = i;
+				i = i+300;
+				if(i>=mlen){
+					mapper.batchInsert(mains.subList(j,mlen));
+				}else {
+					mapper.batchInsert(mains.subList(j,i));
+				}
+			}
+		}
+		if(!details.isEmpty()){
+			int i = 0;
+			int j = 0;
+			int mlen = details.size();
+			while (i<mlen){
+				j = i;
+				i = i+300;
+				if(i>=mlen){
+					baseRouteMapper.batchInsert(details.subList(j,mlen));
+				}else {
+					baseRouteMapper.batchInsert(details.subList(j,i));
+				}
+			}
+		}
+	}
+
 }

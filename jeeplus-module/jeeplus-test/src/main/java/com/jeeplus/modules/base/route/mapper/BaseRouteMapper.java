@@ -10,6 +10,8 @@ import com.jeeplus.core.persistence.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import com.jeeplus.modules.base.route.entity.BaseRoute;
 
+import java.util.List;
+
 /**
  * 工艺路线MAPPER接口
  * @author Jin
@@ -21,4 +23,8 @@ public interface BaseRouteMapper extends BaseMapper<BaseRoute> {
 
     @Select("select 1 from base_route  where id = #{id}")
     Integer hasById(@Param("id") String id);
+
+
+    void batchInsert(List<BaseRoute> list);
+
 }
