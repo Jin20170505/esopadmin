@@ -123,10 +123,6 @@ public class BusinessChuKuWeiWaiService extends CrudService<BusinessChuKuWeiWaiM
 	public void weiwaichuku(String wwid, String wwhid,String ckid, BussinessOmMoDetailOnly info, String userid, String mxJson){
 		User user = UserUtils.get(userid);
 		BusinessChuKuWeiWai businessChuKuWeiWai = new BusinessChuKuWeiWai();
-//		String code = "";
-//		synchronized (this){
-//			code = "WWFL"+ DateUtils.getDate("yyyyMMddHHmmss")+ RandomUtil.nextInt(100,999);
-//		}
 		businessChuKuWeiWai.setMoid(wwid);
 		businessChuKuWeiWai.setMohid(wwhid);
 		businessChuKuWeiWai.setArrivedate(info.getArrivedate());
@@ -137,7 +133,6 @@ public class BusinessChuKuWeiWaiService extends CrudService<BusinessChuKuWeiWaiM
 		businessChuKuWeiWai.setCinvcode(info.getCinvcode());
 		businessChuKuWeiWai.setCinvname(info.getCinvname());
 		businessChuKuWeiWai.setCinvstd(info.getCinvstd());
-//		businessChuKuWeiWai.setCode(code);
 		businessChuKuWeiWai.setNum(info.getNum());
 		businessChuKuWeiWai.setUnit(info.getUnit());
 		businessChuKuWeiWai.setVendor(new BaseVendor(info.getVendorid()));

@@ -177,6 +177,7 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 		// 子表
 		jiHuaGongDan.getBusinessJiHuaGongDanMingXiList().forEach(mx->{
 			BusinessBaoGongOrderMingXi xi = new BusinessBaoGongOrderMingXi();
+			xi.setRouteid(mx.getRouteid()).setDaynum(mx.getDaynum()).setGprice(mx.getGprice()).setGtime(mx.getGtime());
 			xi.setClassgroup(mx.getClassgroup().getName());
 			xi.setNo(mx.getNo());xi.setNum(mx.getNum());xi.setSite(mx.getSite().getName());
 			xi.setComplete("0");xi.setOpcode(mx.getUserno());xi.setOpname(mx.getUsername());

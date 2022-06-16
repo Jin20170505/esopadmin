@@ -70,15 +70,20 @@ $(document).ready(function() {
 		        checkbox: true
 		       
 		    }
-			,{
+           ,{
+               field: 'code',
+               title: '单号',
+               sortable: true,
+               sortName: 'code'
+               ,formatter:function(value, row , index){
+                   return "<a  href='#' onclick='view(\""+row.id+"\")'>"+value+"</a>";
+               }
+
+           },{
 		        field: 'mocode',
 		        title: '委外单号',
 		        sortable: true,
 		        sortName: 'mocode'
-		        ,formatter:function(value, row , index){
-                           return "<a  href='#' onclick='view(\""+row.id+"\")'>"+value+"</a>";
-		         }
-		       
 		    }
 			,{
 		        field: 'mono',

@@ -15,6 +15,10 @@ import com.jeeplus.common.utils.excel.annotation.ExcelField;
 public class BusinessBaoGongOrderMingXi extends DataEntity<BusinessBaoGongOrderMingXi> {
 	
 	private static final long serialVersionUID = 1L;
+	private String routeid; // 工艺路线明细ID
+	private String gtime; // 工时
+	private String gprice; // 工价
+	private String daynum;// 日产量
 	private Integer no;		// 序号
 	private String site;		// 工作站
 	private String opname;		// 操作人
@@ -126,6 +130,42 @@ public class BusinessBaoGongOrderMingXi extends DataEntity<BusinessBaoGongOrderM
 			classgroup ="";
 		}
 		this.classgroup = classgroup;
+		return this;
+	}
+
+	public String getRouteid() {
+		return routeid;
+	}
+
+	public BusinessBaoGongOrderMingXi setRouteid(String routeid) {
+		this.routeid = routeid;
+		return this;
+	}
+
+	public String getGtime() {
+		return gtime;
+	}
+
+	public BusinessBaoGongOrderMingXi setGtime(String gtime) {
+		this.gtime = gtime;
+		return this;
+	}
+
+	public String getGprice() {
+		return gprice;
+	}
+
+	public BusinessBaoGongOrderMingXi setGprice(String gprice) {
+		this.gprice = gprice;
+		return this;
+	}
+
+	public String getDaynum() {
+		return daynum;
+	}
+
+	public BusinessBaoGongOrderMingXi setDaynum(String daynum) {
+		this.daynum = daynum;
 		return this;
 	}
 }

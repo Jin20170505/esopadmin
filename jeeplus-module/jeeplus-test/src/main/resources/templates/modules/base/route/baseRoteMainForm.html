@@ -125,6 +125,9 @@ layout("/include/_dialog.html"){
 						<th class="hide"></th>
 						<th><font color="red">*</font>序号</th>
 						<th><font color="red">*</font>工作站</th>
+						<th>工时</th>
+						<th>工价</th>
+						<th>日产量</th>
 						<th>指导书名称</th>
 						<th>指导书</th>
 						<th>备注信息</th>
@@ -146,6 +149,15 @@ layout("/include/_dialog.html"){
 					<td>
 						<#gridselect url="${ctx}/base/site/baseSite/data" id="baseRouteList{{idx}}_site" name="baseRouteList[{{idx}}].site.id" value="{{row.site.id}}" labelName="baseRouteList{{idx}}.site.name" labelValue="{{row.site.name}}"
 							 title="选择工作站" class="form-control  required" fieldLabels="编码|名称" fieldKeys="id|name" searchLabels="编码|名称" searchKeys="id|name" />
+					</td>
+					<td>
+						<input id="baseRouteList{{idx}}_gtime" name="baseRouteList[{{idx}}].gtime" type="text" value="{{row.gtime}}"    class="form-control "/>
+					</td>
+					<td>
+						<input id="baseRouteList{{idx}}_gprice" name="baseRouteList[{{idx}}].gprice" type="text" value="{{row.gprice}}"    class="form-control "/>
+					</td>
+					<td>
+						<input id="baseRouteList{{idx}}_daynum" name="baseRouteList[{{idx}}].daynum" type="text" value="{{row.daynum}}"    class="form-control "/>
 					</td>
 					<td>
 						<input id="baseRouteList{{idx}}_filename" name="baseRouteList[{{idx}}].filename" type="text" value="{{row.filename}}"    class="form-control "/>

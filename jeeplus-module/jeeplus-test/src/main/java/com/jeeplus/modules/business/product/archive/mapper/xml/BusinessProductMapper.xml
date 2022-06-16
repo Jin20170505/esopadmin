@@ -134,7 +134,7 @@
 		name=VALUES(name),
 		specification=VALUES(specification),
 		unit=VALUES(unit),
-		daynum=#{daynum},
+		daynum=values(daynum),
 		remarks=VALUES(remarks)
 	</insert>
 	<insert id="insert">

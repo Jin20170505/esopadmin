@@ -20,6 +20,10 @@ public class BusinessJiHuaGongDanMingXi extends DataEntity<BusinessJiHuaGongDanM
 	
 	private static final long serialVersionUID = 1L;
 	private BusinessJiHuaGongDan p;		// 计划工单 父类
+	private String routeid; // 工艺路线明细ID
+	private String gtime; // 工时
+	private String gprice; // 工价
+	private String daynum;// 日产量
 	private Integer no;		// 序号
 	private BaseSite site;		// 工作站
 	private Double num;		// 加工数量
@@ -126,5 +130,40 @@ public class BusinessJiHuaGongDanMingXi extends DataEntity<BusinessJiHuaGongDanM
 	public void setQrcade(String qrcade) {
 		this.qrcade = qrcade;
 	}
-	
+
+	public String getRouteid() {
+		return routeid;
+	}
+
+	public BusinessJiHuaGongDanMingXi setRouteid(String routeid) {
+		this.routeid = routeid;
+		return this;
+	}
+
+	public String getGtime() {
+		return gtime;
+	}
+
+	public BusinessJiHuaGongDanMingXi setGtime(String gtime) {
+		this.gtime = gtime;
+		return this;
+	}
+
+	public String getGprice() {
+		return gprice;
+	}
+
+	public BusinessJiHuaGongDanMingXi setGprice(String gprice) {
+		this.gprice = gprice;
+		return this;
+	}
+
+	public String getDaynum() {
+		return daynum;
+	}
+
+	public BusinessJiHuaGongDanMingXi setDaynum(String daynum) {
+		this.daynum = daynum;
+		return this;
+	}
 }

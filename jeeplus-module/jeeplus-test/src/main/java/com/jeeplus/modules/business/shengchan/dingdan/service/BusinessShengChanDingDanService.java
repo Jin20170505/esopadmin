@@ -272,6 +272,7 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 		jiHuaGongDan.setStatus("未下发");
 		routes.forEach(r->{
 			BusinessJiHuaGongDanMingXi mx = new BusinessJiHuaGongDanMingXi();
+			mx.setRouteid(r.getId()).setDaynum(r.getDaynum()).setGprice(r.getGprice()).setGtime(r.getGtime());
 			mx.setIncomplete("0");
 			mx.setId("");
 			mx.setNo(r.getNo());
@@ -351,6 +352,7 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 			jiHuaGongDan.setStatus("未下发");
 			routes.forEach(r->{
 				BusinessJiHuaGongDanMingXi mx = new BusinessJiHuaGongDanMingXi();
+				mx.setRouteid(r.getId()).setDaynum(r.getDaynum()).setGprice(r.getGprice()).setGtime(r.getGtime());
 				mx.setIncomplete("0");
 				mx.setId("");
 				mx.setNo(r.getNo());
@@ -383,6 +385,7 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 				jiHuaGongDan.setStatus("未下发");
 				routes.forEach(r->{
 					BusinessJiHuaGongDanMingXi mx = new BusinessJiHuaGongDanMingXi();
+					mx.setRouteid(r.getId()).setDaynum(r.getDaynum()).setGprice(r.getGprice()).setGtime(r.getGtime());
 					mx.setIncomplete("0");
 					mx.setId("");
 					mx.setNo(r.getNo());
@@ -416,6 +419,7 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 				jiHuaGongDan.setStatus("未下发");
 				routes.forEach(r->{
 					BusinessJiHuaGongDanMingXi mx = new BusinessJiHuaGongDanMingXi();
+					mx.setRouteid(r.getId()).setDaynum(r.getDaynum()).setGprice(r.getGprice()).setGtime(r.getGtime());
 					mx.setIncomplete("0");
 					mx.setId("");
 					mx.setNo(r.getNo());
@@ -497,6 +501,7 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 			jiHuaGongDan.setStatus("未下发");
 			routes.forEach(r->{
 				BusinessJiHuaGongDanMingXi mx = new BusinessJiHuaGongDanMingXi();
+				mx.setRouteid(r.getId()).setDaynum(r.getDaynum()).setGprice(r.getGprice()).setGtime(r.getGtime());
 				mx.setIncomplete("0");
 				mx.setId("");
 				mx.setNo(r.getNo());
@@ -528,6 +533,7 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 			jiHuaGongDan.setStatus("未下发");
 			routes.forEach(r->{
 				BusinessJiHuaGongDanMingXi mx = new BusinessJiHuaGongDanMingXi();
+				mx.setRouteid(r.getId()).setDaynum(r.getDaynum()).setGprice(r.getGprice()).setGtime(r.getGtime());
 				mx.setIncomplete("0");
 				mx.setId("");
 				mx.setNo(r.getNo());

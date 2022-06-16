@@ -121,7 +121,6 @@ public class BusinessChukuDispatchService extends CrudService<BusinessChukuDispa
 		main.setDispatchcode(dispatch.getCode());
 		main.setFahuoDate(dispatch.getFahuodate());
 		main.setRemarks("u8");
-		//  main.setCode("XSCK"+DateUtils.getDate("yyyyMMddHHmmss"));
 		JSONObject js = JSONObject.fromObject(mxJson);
 		JSONArray array = js.getJSONArray("list");
 		array.forEach(e->{
