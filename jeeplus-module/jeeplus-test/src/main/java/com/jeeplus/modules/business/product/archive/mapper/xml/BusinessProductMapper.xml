@@ -43,21 +43,16 @@
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
                     <if test="type != null  and type.id != null and type.id != ''">
-                        AND (b.id = #{type.id} OR b.parent_ids LIKE
-                        <if test="_databaseId == 'postgre'">'%,'||#{type.id}||',%')</if>
-                        <if test="_databaseId == 'oracle'">'%,'||#{type.id}||',%')</if>
-                        <if test="_databaseId == 'mysql'">CONCAT('%,', #{type.id}, ',%'))</if>
-                        <if test="_databaseId == 'mssql'">'%'+#{type.id}+'%')</if>
+                        AND (b.id = #{type.id} OR b.parent_ids LIKE CONCAT('%,', #{type.id}, ',%'))
                     </if>
 			<if test="code != null and code != ''">
-				AND a.code = #{code}
+				AND a.code LIKE CONCAT('%,', #{code}, ',%')
 			</if>
 			<if test="name != null and name != ''">
-				AND a.name LIKE
-				    <if test="_databaseId == 'postgre'">'%'||#{name}||'%'</if>
-					<if test="_databaseId == 'oracle'">'%'||#{name}||'%'</if>
-					<if test="_databaseId == 'mssql'">'%'+#{name}+'%'</if>
-					<if test="_databaseId == 'mysql'">concat('%',#{name},'%')</if>
+				AND a.name LIKE concat('%',#{name},'%')
+			</if>
+			<if test="specification != null and specification != ''">
+				AND a.specification LIKE concat('%',#{specification},'%')
 			</if>
 		</where>
 		<choose>

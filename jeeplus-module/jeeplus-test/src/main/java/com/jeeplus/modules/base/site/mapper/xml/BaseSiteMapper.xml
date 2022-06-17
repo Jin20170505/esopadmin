@@ -21,7 +21,6 @@
 	</sql>
 	
 	<sql id="baseSiteJoins">
-		
 		LEFT JOIN base_factory factory ON factory.id = a.factory_id
 		LEFT JOIN base_workshop workshop ON workshop.id = a.workshop_id
 		LEFT JOIN base_productionline line ON line.id = a.line_id
@@ -91,10 +90,41 @@
 			</otherwise>
 		</choose>
 	</select>
-	
+	<insert id="batchInsert" parameterType="java.util.List">
+		INSERT INTO base_site(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+		    code,
+			name,
+			remarks
+		) VALUES
+		<foreach collection="list" separator="," item="item">
+			(
+			#{item.id},
+			#{item.createBy.id},
+			#{item.createDate},
+			#{item.updateBy.id},
+			#{item.updateDate},
+			#{item.delFlag},
+			#{item.code},
+			#{item.name},
+			#{item.remarks}
+			)
+		</foreach>
+		on duplicate key update
+		id = values(id),
+		update_date= VALUES(update_date),
+		code=VALUES(code),
+		name = values(name),
+		remarks = values(remarks)
+	</insert>
 	<insert id="insert">
 		INSERT INTO base_site(
-		                      id,
+		    id,
 			create_by,
 			create_date,
 			update_by,
@@ -106,7 +136,7 @@
 			name,
 			remarks
 		) VALUES (
-		          #{id},
+		    #{id},
 			#{createBy.id},
 			#{createDate},
 			#{updateBy.id},

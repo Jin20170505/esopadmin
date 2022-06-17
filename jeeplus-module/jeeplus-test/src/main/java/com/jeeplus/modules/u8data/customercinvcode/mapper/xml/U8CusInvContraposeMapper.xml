@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.u8data.customercinvcode.mapper.U8CusInvContraposeMapper">
+    <sql id="customercinvcodeColumns">
+    a.cInvCode as "cinvcode",
+    a.cCusCode as "customercode",
+    a.cCusInvCode as "customercinvcode",
+    a.cCusInvName as "customercinvname"
+    </sql>
+    <sql id="customercinvcodeJoins">
+
+    </sql>
+
+    <select id="findList" resultType="U8CusInvContrapose">
+        select
+        <include refid="customercinvcodeColumns"/>
+        from YT_API_ERP_view_CusInvContrapose a
+        <include refid="customercinvcodeJoins"/>
+        <where>
+            <if test="cinvcode !=null and cinvcode != ''">
+                and a.cInvCode = #{cinvcode}
+            </if>
+            <if test="customercode !=null and customercode != ''">
+                and a.cCusCode = #{customercode}
+            </if>
+        </where>
+    </select>
+</mapper>

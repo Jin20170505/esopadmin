@@ -1,0 +1,108 @@
+<%
+layout("/include/_container.html", {title:"明细列表", parent:"生产订单"}){
+%>
+        <!-- 搜索框-->
+        <div id="search-collapse" class="white-box collapse m-b-5">
+            <form id="searchForm" class="form-inline">
+            </form>
+        </div>
+        <div class="white-box">
+            <!-- 工具栏 -->
+            <div id="toolbar">
+            </div>
+            <!-- 表格 -->
+            <table id="table" class="table-bordered"   data-toolbar="#toolbar"></table>
+        </div>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('#table').bootstrapTable({
+                    //请求方法
+                    method: 'post',
+                    //类型json
+                    dataType: "json",
+                    contentType: "application/x-www-form-urlencoded",
+                    //移动端自适应
+                    mobileResponsive: false,
+                    //允许列拖动大小
+                    resizable: false,
+                    //固定表头
+                    stickyHeader: false,
+                    stickyHeaderOffsetY: 0,
+                    //显示检索按钮
+                    showSearch: false,
+                    //显示刷新按钮
+                    showRefresh: true,
+                    //显示切换手机试图按钮
+                    showToggle: false,
+                    //显示 内容列下拉框
+                    showColumns: false,
+                    //显示到处按钮
+                    showExport: false,
+                    //显示切换分页按钮
+                    showPaginationSwitch: false,
+                    //最低显示2行
+                    minimumCountColumns: 2,
+                    //是否显示行间隔色
+                    striped: true,
+                    rightFixedColumns: false, //右侧冻结列
+                    rightFixedNumber: 1,
+                    //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性(*)
+                    cache: false,
+                    //是否显示分页(*)
+                    pagination: true,
+                    //分页方式: client客户端分页，server服务端分页(*)
+                    sidePagination: "server",
+                    //排序方式
+                    sortOrder: "asc",
+                    pageNumber: 1,
+                    //每页的记录行数(*)
+                    pageSize: 10,
+                    //可供选择的每页的行数(*)
+                    pageList: [10, 25, 50, 100],
+                    url: "${ctx}/business/shengchan/dingdan/businessShengChanDingDan/bomsearchdata?schid=${schid}",
+                    queryParams: function (params) {
+                        var searchParam = $("#searchForm").serializeJSON();
+                        searchParam.pageNo = params.limit === undefined ? "1" : params.offset / params.limit + 1;
+                        searchParam.pageSize = params.limit === undefined ? -1 : params.limit;
+                        if (params.sort && params.order) {
+                            searchParam.orderBy = params.sort + " " + params.order;
+                        }
+                        return searchParam;
+                    },
+                    onShowSearch: function () {
+                        $("#search-collapse").fadeToggle();
+                    },
+                    columns: [{
+                            field: 'no',
+                            title: '行号'
+                        }
+                        ,{
+                            field: 'cinvcode',
+                            title: '存货编号'
+                        }
+                        , {
+                            field: 'cinvname',
+                            title: '存货名称'
+                        }
+                        ,{
+                            field: 'cinvstd',
+                            title: '规格型号'
+                        },{
+                            field: 'num',
+                            title: '数量'
+                        }
+                        ,{
+                            field: 'unitname',
+                            title: '计量单位'
+                        }
+                        ,{
+                            field: 'donenum',
+                            title: '现存量'
+                        }
+                    ]
+
+                });
+            });
+        </script>
+
+    <% } %>

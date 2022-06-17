@@ -166,7 +166,7 @@
     $('#table').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
             $('#remove,#jihua').prop('disabled', ! $('#table').bootstrapTable('getSelections').length);
-            $('#chaidan,#print,#handler').prop('disabled', $('#table').bootstrapTable('getSelections').length!=1);
+            $('#chaidan,#print,#handler,#bomsearch').prop('disabled', $('#table').bootstrapTable('getSelections').length!=1);
         });
 
     $("#search").click("click", function() {// 绑定查询按扭
@@ -205,6 +205,10 @@ function scbl(){
   jp.openSaveDialog('生产备料', "${ctx}/business/shengchan/dingdan/businessShengChanDingDan/goScBeiLiao?rid="+rid,'80%', '70%');
 }
 
+function bomsearch(){
+  var rid = getIdSelections();
+  jp.openViewDialog('生产齐套查看', "${ctx}/business/shengchan/dingdan/businessShengChanDingDan/gotobomsearch?rid="+rid,'80%', '70%');
+}
 
     // 生成计划工单
   function jihua(){

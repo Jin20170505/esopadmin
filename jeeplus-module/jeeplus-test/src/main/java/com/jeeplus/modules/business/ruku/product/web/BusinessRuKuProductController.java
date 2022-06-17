@@ -20,6 +20,7 @@ import com.jeeplus.common.utils.QRCodeUtil;
 import com.jeeplus.modules.business.arrivalvouch.entity.BusinessArrivalVouchMx;
 import com.jeeplus.modules.business.ruku.product.entity.BusinessRuKuProductMx;
 import com.jeeplus.modules.business.ruku.product.entity.ProductTagBean;
+import com.jeeplus.modules.u8data.customercinvcode.service.U8CusInvContraposeService;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,8 +67,22 @@ public class BusinessRuKuProductController extends BaseController {
 		}
 		return entity;
 	}
+
+	@RequestMapping("goToPrintcustomer")
+	public String goToPrintcustomer(String rid,Model model){
+		BusinessRuKuProduct bean = businessRuKuProductService.get(rid);
+		if(bean.getBusinessRuKuProductMxList()==null || bean.getBusinessRuKuProductMxList().isEmpty()){
+			throw new RuntimeException("入库明细缺失，无法打印。");
+		}
+		BusinessRuKuProductMx mx = bean.getBusinessRuKuProductMxList().get(0);
+		model.addAttribute("rid",rid);
+		model.addAttribute("cinvcode",mx.getCinvcode());
+		return "modules/business/ruku/product/printcustomer";
+	}
+	@Autowired
+	private U8CusInvContraposeService u8CusInvContraposeService;
 	@RequestMapping("goToTagPrint")
-	public String goToTagPrint(String rid,Integer num,Model model){
+	public String goToTagPrint(String rid,String customercinvcode,Integer num,Integer hdnum,Model model){
 		BusinessRuKuProduct bean = businessRuKuProductService.get(rid);
 		if(num==null){
 			num=1;
@@ -78,19 +93,48 @@ public class BusinessRuKuProductController extends BaseController {
 		BusinessRuKuProductMx mx = bean.getBusinessRuKuProductMxList().get(0);
 		List<ProductTagBean> tagBeans = Lists.newArrayList();
 		double gdnum = bean.getNum();
+		String customercinvname = "";
+		if(StringUtils.isNotEmpty(customercinvcode)){
+			customercinvname = u8CusInvContraposeService.getCusCinvName(customercinvcode);
+		}
+		if(hdnum!=null){
+			ProductTagBean tagBean = new ProductTagBean();
+			tagBean.setBatchno(bean.getBatchno()).setCinvstd(mx.getCinvstd())
+					.setNum(hdnum+"").setUnit(mx.getUnit()).setId(bean.getId())
+					.setDate(DateUtils.getDate("YYYY-MM-dd"));
+			if(StringUtils.isNotEmpty(customercinvcode)){
+				tagBean.setCinvcode(customercinvcode).setCinvname(customercinvname);
+			}else {
+				tagBean.setCinvcode(mx.getCinvcode()).setCinvname(mx.getCinvname());
+			}
+			tagBeans.add(tagBean);
+			model.addAttribute("beans", tagBeans);
+			return "modules/business/ruku/product/tagprint";
+		}
+
 		while (gdnum>num){
 			ProductTagBean tagBean = new ProductTagBean();
-			tagBean.setBatchno(bean.getBatchno()).setCinvcode(mx.getCinvcode()).setCinvname(mx.getCinvname()).setCinvstd(mx.getCinvstd())
+			tagBean.setBatchno(bean.getBatchno()).setCinvstd(mx.getCinvstd())
 					.setNum(num+"").setUnit(mx.getUnit()).setId(bean.getId())
 					.setDate(DateUtils.getDate("YYYY-MM-dd"));
+			if(StringUtils.isNotEmpty(customercinvcode)){
+				tagBean.setCinvcode(customercinvcode).setCinvname(customercinvname);
+			}else {
+				tagBean.setCinvcode(mx.getCinvcode()).setCinvname(mx.getCinvname());
+			}
 			tagBeans.add(tagBean);
 			gdnum = gdnum - num;
 		}
 		if(gdnum>0.0001){
 			ProductTagBean tagBean = new ProductTagBean();
-			tagBean.setBatchno(bean.getBatchno()).setCinvcode(mx.getCinvcode()).setCinvname(mx.getCinvname()).setCinvstd(mx.getCinvstd())
+			tagBean.setBatchno(bean.getBatchno()).setCinvstd(mx.getCinvstd())
 					.setNum(gdnum+"").setUnit(mx.getUnit()).setId(bean.getId())
 					.setDate(DateUtils.getDate("YYYY-MM-dd"));
+			if(StringUtils.isNotEmpty(customercinvcode)){
+				tagBean.setCinvcode(customercinvcode).setCinvname(customercinvname);
+			}else {
+				tagBean.setCinvcode(mx.getCinvcode()).setCinvname(mx.getCinvname());
+			}
 			tagBeans.add(tagBean);
 		}
 
@@ -99,15 +143,24 @@ public class BusinessRuKuProductController extends BaseController {
 	}
 
 	@RequestMapping("/qr")
-	public void getQrImage(String rid,String num, HttpServletResponse response) throws IOException {
+	public void getQrImage(String rid,String num,String customercinvcode, HttpServletResponse response) throws IOException {
 		response.reset();
 		response.setContentType("image/jpg");
 		ServletOutputStream out = null;
+		String customercinvname ="";
+		if(StringUtils.isNotEmpty(customercinvcode)){
+			customercinvname = u8CusInvContraposeService.getCusCinvName(customercinvcode);
+		}
 		try{
 			BusinessRuKuProduct bean = businessRuKuProductService.get(rid);
 			BusinessRuKuProductMx mx = bean.getBusinessRuKuProductMxList().get(0);
 			ProductTagBean tagBean = new ProductTagBean();
-			tagBean.setBatchno(bean.getBatchno()).setCinvcode(mx.getCinvcode()).setCinvname(mx.getCinvname()).setCinvstd(mx.getCinvstd())
+			if(StringUtils.isNotEmpty(customercinvcode)){
+				tagBean.setCinvcode(customercinvcode).setCinvname(customercinvname);
+			}else {
+				tagBean.setCinvcode(mx.getCinvcode()).setCinvname(mx.getCinvname());
+			}
+			tagBean.setBatchno(bean.getBatchno()).setCinvstd(mx.getCinvstd())
 					.setNum(num+"").setUnit(mx.getUnit()).setId(bean.getId())
 					.setDate(DateUtils.getDate("YYYY-MM-dd"));
 			String qr = "'cinvcode':'"+tagBean.getCinvcode()+"','cinvcodename':'"+tagBean.getCinvname()+"','batchno':'"+tagBean.getBatchno()+"','date':'"+tagBean.getDate()+"','num':'"+tagBean.getNum()+"','unit':'"+tagBean.getUnit()+"'";

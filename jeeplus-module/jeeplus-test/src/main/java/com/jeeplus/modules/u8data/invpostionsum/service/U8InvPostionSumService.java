@@ -22,4 +22,8 @@ public class U8InvPostionSumService extends CrudService<U8InvPostionSumMapper, U
     public Page<U8InvPostionSum> findPage(Page<U8InvPostionSum> page, U8InvPostionSum sum){
         return super.findPage(page,sum);
     }
+
+    public Double getSumNumByCinvcode(String cinvcode){
+        return mapper.getSumNumByCinvcode(cinvcode);
+    }
 }

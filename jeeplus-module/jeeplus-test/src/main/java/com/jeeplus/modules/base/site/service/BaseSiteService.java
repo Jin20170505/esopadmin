@@ -3,6 +3,7 @@
  */
 package com.jeeplus.modules.base.site.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.jeeplus.modules.u8data.operation.entity.U8Operation;
@@ -54,13 +55,15 @@ public class BaseSiteService extends CrudService<BaseSiteMapper, BaseSite> {
 
 	@Transactional(readOnly = false)
 	public void sychU8(List<U8Operation> data) {
+		List<BaseSite> list = new ArrayList<>(data.size());
 		data.forEach(d->{
 			BaseSite site = new BaseSite();
 			site.preInsert();
 			site.setId(d.getOperationid());
 			site.setName(d.getDescription());
 			site.setCode(d.getOpCode());
-			mapper.insert(site);
+			list.add(site);
 		});
+
 	}
 }

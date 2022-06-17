@@ -150,7 +150,7 @@ $(document).ready(function() {
 	  $('#businessRuKuProductTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
             $('#remove').prop('disabled', ! $('#businessRuKuProductTable').bootstrapTable('getSelections').length);
-            $('#edit,#print').prop('disabled', $('#businessRuKuProductTable').bootstrapTable('getSelections').length!=1);
+            $('#edit,#print,#printcustomer').prop('disabled', $('#businessRuKuProductTable').bootstrapTable('getSelections').length!=1);
         });
 
 	 $("#import").click(function(){//显示导入面板
@@ -215,6 +215,12 @@ $(document).ready(function() {
             return row.id
         });
     }
+    /** 打印客户标签 */
+    function printcustomer(){
+    var rid = getIdSelections();
+    jp.openSaveDialog('打印客户标签', "${ctx}/business/ruku/product/businessRuKuProduct/goToPrintcustomer?rid="+rid,'90%', '90%');
+    }
+
 
     function printbq(){
     var rid = getIdSelections();
@@ -228,26 +234,22 @@ $(document).ready(function() {
     btn: ['确定', '关闭'],
     yes: function(index, layero){
     var num = $(layero).find("#num").val();
-    if(!num){
-    jp.warning("请输入数量");
-    return false;
-}
-    if((num-0)<=0){
-    jp.warning("请输入大于0的数字");
-    return false;
-}
-    doPrint(rid,num);
+    var hdnum = $(layero).find("#hdnum").val();
+    if(!num && !hdnum){
+        jp.warning("请输入数量或合单数量");
+        return false;
+    }
+    doPrint(rid,num,hdnum);
     top.layer.close(index);
 },
     cancel: function(index){
     top.layer.close(index);
 }
 });
-
     }
 
-    function doPrint(rid,num){
-    jp.windowOpen('${ctx}/business/ruku/product/businessRuKuProduct/goToTagPrint?rid='+rid+'&num='+num,"产品标签--打印",1200,1200);
+    function doPrint(rid,num,hdnum){
+    jp.windowOpen('${ctx}/business/ruku/product/businessRuKuProduct/goToTagPrint?rid='+rid+'&num='+num+"&hdnum="+hdnum,"产品标签--打印",1200,1200);
 }
   //删除
   function del(ids){

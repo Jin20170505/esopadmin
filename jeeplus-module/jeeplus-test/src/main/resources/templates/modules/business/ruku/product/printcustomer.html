@@ -1,0 +1,63 @@
+<%
+layout("/include/_dialog.html"){
+%>
+<script type="text/javascript">
+
+    $(document).ready(function() {
+    });
+
+    function save() {
+        var isValidate = jp.validateForm('#inputForm');//校验表单
+        if(!isValidate){
+            return false;
+        }else{
+            var rid = $("#rid").val();
+            var customercinvcode = $("#customercinvcode").val();
+            var num = $("#num").val();
+            var hdnum = $('#hdnum').val();
+            if(!hdnum && !num){
+                jp.warning("请填写包装数量或者合单数量");
+                return false;
+            }
+            jp.windowOpen('${ctx}/business/ruku/product/businessRuKuProduct/goToTagPrint?rid='+rid+'&num='+num+"&customercinvcode="+customercinvcode+"&hdnum="+hdnum,"产品标签--打印",1200,1200);
+            var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+            parent.layer.close(dialogIndex);
+        }
+    }
+    function selectCall(items,tagid){
+        var item = items[0];
+        $("#customercinvcode").val(item.customercinvcode);
+        $("#customercinvname").val(item.customercinvname);
+    }
+</script>
+<form id="inputForm"  method="post"  class="form-horizontal p-15">
+    <input type="hidden" name="rid" id="rid" value="${rid}"/>
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <td class="width-15 active"><label class="pull-right">客户存货编码：</label></td>
+            <td class="width-35">
+                <input id="customercinvcode" name="customercinvcode" value=""  readonly placeholder="请选择客户存货" class="form-control "/>
+            </td>
+            <td class="width-15 active"><label class="pull-right"><font color="red">*</font>客户存货名称：</label></td>
+            <td class="width-35">
+                <input type="hidden" id="customercinvname" name="customercinvname"/>
+                <#gridselect callback="selectCall" url="${ctx}/u8data/U8CusInvContrapose/data?cinvcode=${cinvcode}" id="cangku" name="cangku.id" value="" labelName="k.customercinvname"
+                labelValue="" title="选择客户存货" class="form-control required"
+                fieldLabels="存货编码|客户编码|客户存货编码|客户存货名称" fieldKeys="cinvcode|customercode|customercinvcode|customercinvname" searchLabels="客户编码" searchKeys="customercode" />
+            </td>
+        </tr>
+        <tr>
+            <td class="width-15 active"><label class="pull-right">最小包装数(一包多少)：</label></td>
+            <td class="width-35">
+                <input name="num" value="" type="number" id="num"   class="form-control"/>
+            </td>
+            <td class="width-15 active"><label class="pull-right">合单数量：</label></td>
+            <td class="width-35">
+                <input name="hdnum" id="hdnum" value="" type="number"   class="form-control "/>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+<% } %>

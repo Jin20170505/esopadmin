@@ -20,7 +20,6 @@ import com.jeeplus.modules.business.shengchan.dingdan.mapper.BusinessShengChanDi
 import com.jeeplus.modules.sys.entity.Office;
 import com.jeeplus.modules.sys.entity.User;
 import com.jeeplus.modules.sys.utils.UserUtils;
-import net.sf.json.JSONObject;
 import org.jeeplus.u8.webservice.U8Post;
 import org.jeeplus.u8.webservice.U8Url;
 import org.jeeplus.u8.webservice.YT_Rd10;
@@ -64,7 +63,7 @@ public class BusinessRuKuProductService extends CrudService<BusinessRuKuProductM
 		String maxcode  = mapper.getMaxCode(ymd);
 		String code = "";
 		if(StringUtils.isEmpty(maxcode)){
-			code = "CPRU" +ymd + "00001";
+			code = "CPRK" +ymd + "00001";
 		}else {
 			code = maxcode.substring(0,10);
 			int c =  Integer.valueOf(maxcode.substring(10));
@@ -176,12 +175,10 @@ public class BusinessRuKuProductService extends CrudService<BusinessRuKuProductM
 		product.setCinvcode(order.getCinvcode());
 		product.setCinvname(order.getCinvname());
 		product.setCinvstd(order.getCinvstd());
-		//product.setCode("CPRK"+ DateUtils.getDate("yyyyMMddHHmmss"));
 		product.setNum(rukunum);
 		product.setSych("0");
 		product.setSccode(order.getOrdercode());
 		product.setRemarks(remarks);
-		product.preInsert();
 		product.setCreateBy(new User(userid));
 		mx.setP(product);
 		mx.setHuowei(new BaseHuoWei(hwid));
@@ -198,8 +195,6 @@ public class BusinessRuKuProductService extends CrudService<BusinessRuKuProductM
 		mx.setCreateBy(new User(userid));
 		mx.setId("");mx.setDelFlag("0");
 		product.getBusinessRuKuProductMxList().add(mx);
-//		mapper.insert(product);
-//		businessRuKuProductMxMapper.insert(mx);
 		save(product);
 		BusinessShengChanDingDanMingXi shengChanDingDanMingXi = shengChanDingDanMingXiMapper.getInfo(mx.getSchid());
 		// TODO 判断入库数量 是否大于生产数量 关闭单据
@@ -224,7 +219,7 @@ public class BusinessRuKuProductService extends CrudService<BusinessRuKuProductM
 			r.setcPosition(hwcode);
 			r.setIrowno("1");
 			r.setBatch(product.getBatchno());
-			r.setCbMemo("");
+			r.setCbMemo(order.getBgcode());
 			r.setdMadeDate(DateUtils.getDate());
 			if(shengChanDingDanMingXi!=null){
 				r.setCmocode(shengChanDingDanMingXi.getP().getCode());

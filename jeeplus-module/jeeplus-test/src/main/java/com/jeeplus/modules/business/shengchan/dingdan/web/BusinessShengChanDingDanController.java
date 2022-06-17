@@ -22,6 +22,7 @@ import com.jeeplus.modules.business.shengchan.bom.service.BusinessShengChanDingd
 import com.jeeplus.modules.business.shengchan.dingdan.entity.BusinessShengChanDingDan;
 import com.jeeplus.modules.business.shengchan.dingdan.entity.BusinessShengChanDingDanMingXi;
 import com.jeeplus.modules.business.shengchan.dingdan.service.BusinessShengChanDingDanService;
+import com.jeeplus.modules.u8data.invpostionsum.service.U8InvPostionSumService;
 import com.jeeplus.modules.u8data.morder.entity.U8Moallocate;
 import com.jeeplus.modules.u8data.morder.entity.U8Morder;
 import com.jeeplus.modules.u8data.morder.service.U8MoallocateService;
@@ -39,6 +40,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -117,6 +119,34 @@ public class BusinessShengChanDingDanController extends BaseController {
 		}
 		return json;
 	}
+
+	/***
+	 * 齐套查看
+	 */
+	@RequestMapping("gotobomsearch")
+	public String gotobomsearch(String rid,Model model){
+		model.addAttribute("schid",rid);
+		return "modules/business/shengchan/dingdan/list/bomsearch";
+	}
+	@Autowired
+	private U8InvPostionSumService u8InvPostionSumService;
+	@ResponseBody
+	@RequestMapping(value = "bomsearchdata")
+	public Map<String, Object> bomsearchdata(String schid) {
+		Page<BusinessShengChanBom> page = new Page<>();
+		List<BusinessShengChanBom> list = businessShengChanDingdanMxService.findBomList(schid);
+		if(list==null){
+			list = new ArrayList<>(0);
+		}
+		list.forEach(d->{
+			d.setDonenum(u8InvPostionSumService.getSumNumByCinvcode(d.getCinvcode()));
+		});
+		page.setList(list);
+		page.setCount(list.size());
+		page.setPageSize(-1);
+		return getBootstrapData(page);
+	}
+
 
 	@RequestMapping("goToDateSelect")
 	public String goToDateSelect(){
