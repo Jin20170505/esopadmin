@@ -132,6 +132,25 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 		return super.findPage(page, businessShengChanDingDan);
 	}
 
+
+	public Page<BusinessShengChanDingDanMingXi> findShengChanDingDanMingXiByPaiChanPage(Page<BusinessShengChanDingDanMingXi> page,
+														 BusinessShengChanDingDanMingXi businessShengChanDingDanMingXi){
+		businessShengChanDingDanMingXi.setPage(page);
+		List<BusinessShengChanDingDanMingXi> list = businessShengChanDingDanMingXiMapper.findShengChanDingDanMingXiByPaiChan(businessShengChanDingDanMingXi);
+		if(list!=null){
+			list.forEach(d->{
+				BusinessShengChanBom bom = businessShengChanBomMapper.getBomPaiChan(d.getId());
+				if(bom!=null){
+					d.setIschaidan(bom.getCinvcode()).setSoseq(bom.getCinvname()).setType(bom.getCinvstd());
+				}else {
+					d.setIschaidan("").setSoseq("").setType("");
+				}
+			});
+		}
+		page.setList(list);
+		return page;
+	}
+
 	public Page<BusinessShengChanDingDanMingXi> findPage(Page<BusinessShengChanDingDanMingXi> page,
 														 BusinessShengChanDingDanMingXi businessShengChanDingDanMingXi){
 		businessShengChanDingDanMingXi.setPage(page);

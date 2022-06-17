@@ -41,6 +41,13 @@
 		WHERE a.id = #{id}
 	</select>
 
+	<select id="getBomPaiChan" resultType="BusinessShengChanBom" >
+		select a.cinvcode AS "cinvcode",
+			   a.cinvname AS "cinvname",
+			   a.cinvstd AS "cinvstd"
+		FROM business_shengchan_bom a
+		where a.schid = #{schid} and (a.cinvcode like 'D05%' or a.cinvcode like 'D10%') limit 1;
+	</select>
 	<select id="findList" resultType="BusinessShengChanBom" >
 		SELECT 
 			<include refid="businessShengChanBomColumns"/>

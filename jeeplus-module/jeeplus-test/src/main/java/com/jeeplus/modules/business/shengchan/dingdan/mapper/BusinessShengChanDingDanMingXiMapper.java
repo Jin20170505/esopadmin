@@ -22,6 +22,9 @@ import java.util.List;
 @Repository
 public interface BusinessShengChanDingDanMingXiMapper extends BaseMapper<BusinessShengChanDingDanMingXi> {
 
+	/** 用于排产 */
+	List<BusinessShengChanDingDanMingXi> findShengChanDingDanMingXiByPaiChan(BusinessShengChanDingDanMingXi businessShengChanDingDanMingXi);
+
 	List<BusinessShengChanDingDanMingXi> findShengChanDingDanMingXi(BusinessShengChanDingDanMingXi businessShengChanDingDanMingXi);
 
 	@Update("update business_shengchan_dingdan_mingxi set status = '开立' where pid = #{pid} and status = '锁定'")

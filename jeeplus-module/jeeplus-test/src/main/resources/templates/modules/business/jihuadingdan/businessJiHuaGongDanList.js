@@ -115,13 +115,14 @@ $(document).ready(function() {
 		        sortable: true,
 		        sortName: 'orderno'
 		       
-		    },{
-                field: 'batchno',
-                title: '生产批号',
-                sortable: true,
-                sortName: 'batchno'
+		    }
+            ,{
+            field: 'dept.name',
+            title: '生产部门',
+            sortable: true,
+            sortName: 'dept.name'
 
-                }
+            }
 			,{
 		        field: 'cinvcode',
 		        title: '存货编码',
@@ -177,14 +178,13 @@ $(document).ready(function() {
 		        sortable: true,
 		        sortName: 'gdnum'
 		       
-		    }
-			,{
-		        field: 'dept.name',
-		        title: '生产部门',
-		        sortable: true,
-		        sortName: 'dept.name'
-		       
-		    }
+		    },{
+            field: 'batchno',
+            title: '生产批号',
+            sortable: true,
+            sortName: 'batchno'
+
+            }
 			,{
 			   field: 'operate',
 			   title: '操作',

@@ -1,6 +1,6 @@
 <script>
 $(document).ready(function() {
-	$('#businessCheckIPQCTable').bootstrapTable({
+	$('#baseSiteHegelvTable').bootstrapTable({
 		 
 		  //请求方法
                method: 'post',
@@ -47,7 +47,7 @@ $(document).ready(function() {
                //可供选择的每页的行数(*)
                pageList: [10, 25, 50, 100],
                //这个接口需要处理bootstrap table传递的固定参数,并返回特定格式的json数据  
-               url: "${ctx}/business/check/ipqc/businessCheckIPQC/data",
+               url: "${ctx}/base/site/hegelv/baseSiteHegelv/data",
                //默认值为 'limit',传给服务端的参数为：limit, offset, search, sort, order Else
                //queryParamsType:'',   
                ////查询参数,每次调用是会带上这个参数，可自定义                         
@@ -69,18 +69,18 @@ $(document).ready(function() {
 		       
 		    }
 			,{
-		        field: 'code',
-		        title: '单号',
+		        field: 'sitecode',
+		        title: '工序编码',
 		        sortable: true,
-		        sortName: 'code'
+		        sortName: 'sitecode'
 		        ,formatter:function(value, row , index){
-		        	  <% if(shiro.hasPermission("business:check:ipqc:businessCheckIPQC:edit") ){ %>
+		        	  <% if(shiro.hasPermission("base:site:hegelv:baseSiteHegelv:edit") ){ %>
 					   if(!value){
 						  return "<a  href='#' onclick='edit(\""+row.id+"\")'>-</a>";
 					   }else{
 						  return "<a  href='#' onclick='edit(\""+row.id+"\")'>"+value+"</a>";
 						}
-                     <% }else if(shiro.hasPermission("business:check:ipqc:businessCheckIPQC:view")){ %>
+                     <% }else if(shiro.hasPermission("base:site:hegelv:baseSiteHegelv:view")){ %>
 					   if(!value){
 						  return "<a  href='#' onclick='view(\""+row.id+"\")'>-</a>";
                        }else{
@@ -93,92 +93,24 @@ $(document).ready(function() {
 		       
 		    }
 			,{
-		        field: 'sccode',
-		        title: '生产订单号',
+		        field: 'sitename',
+		        title: '工序名称',
 		        sortable: true,
-		        sortName: 'sccode'
+		        sortName: 'sitename'
 		       
 		    }
 			,{
-		        field: 'linecode',
-		        title: '行号',
+		        field: 'workshop',
+		        title: '工作中心',
 		        sortable: true,
-		        sortName: 'linecode'
+		        sortName: 'workshop'
 		       
 		    }
 			,{
-		        field: 'username',
-		        title: '工号',
+		        field: 'hegelv',
+		        title: '合格率',
 		        sortable: true,
-		        sortName: 'username'
-		       
-		    }
-			,{
-		        field: 'checkname',
-		        title: '质检人',
-		        sortable: true,
-		        sortName: 'checkname'
-		       
-		    },{
-    field: 'cinvcode',
-    title: '存货编码',
-    sortable: true,
-    sortName: 'cinvcode'
-
-    },{
-    field: 'cinvname',
-    title: '存货名称',
-    sortable: true,
-    sortName: 'cinvname'
-
-    }
-			,{
-		        field: 'checkdate',
-		        title: '质检日期',
-		        sortable: true,
-		        sortName: 'checkdate'
-		       
-		    }
-			,{
-		        field: 'checknum',
-		        title: '检验数量',
-		        sortable: true,
-		        sortName: 'checknum'
-		       
-		    }
-			,{
-		        field: 'hegenum',
-		        title: '合格数量',
-		        sortable: true,
-		        sortName: 'hegenum'
-		       
-		    }
-			,{
-		        field: 'nohegenum',
-		        title: '不合格数量',
-		        sortable: true,
-		        sortName: 'nohegenum'
-		       
-		    }
-			,{
-		        field: 'badnum',
-		        title: '不良品数量',
-		        sortable: true,
-		        sortName: 'badnum'
-		       
-		    }
-            ,{
-            field: 'hglv',
-            title: '合格率'
-            ,formatter:function(value, row , index){
-            return ((value-0).toFixed(4) * 100).toFixed(2) +"%";
-            }
-            }
-			,{
-		        field: 'remarks',
-		        title: '备注信息',
-		        sortable: true,
-		        sortName: 'remarks'
+		        sortName: 'hegelv'
 		       
 		    }
 			,{
@@ -200,13 +132,13 @@ $(document).ready(function() {
 			   },
 			   formatter:  function operateFormatter(value, row, index) {
 				   return [
-					<% if(shiro.hasPermission("business:check:ipqc:businessCheckIPQC:view")){ %>
+					<% if(shiro.hasPermission("base:site:hegelv:baseSiteHegelv:view")){ %>
 					   '<a class="view btn btn-icon waves-effect waves-light btn-custom btn-xs m-r-5"> <i class="fa fa-search"></i></a>',
 				   <% } %>
-				   <% if(shiro.hasPermission("business:check:ipqc:businessCheckIPQC:edit")){ %>
+				   <% if(shiro.hasPermission("base:site:hegelv:baseSiteHegelv:edit")){ %>
 					   '<a class="edit btn btn-icon waves-effect waves-light btn-success btn-xs m-r-5"> <i class="fa fa-pencil"></i></a>',
 				   <% } %>
-				   <% if(shiro.hasPermission("business:check:ipqc:businessCheckIPQC:del")){ %>
+				   <% if(shiro.hasPermission("base:site:hegelv:baseSiteHegelv:del")){ %>
 					   '<a class="del btn btn-icon waves-effect waves-light btn-danger btn-xs"> <i class="fa fa-trash-o"></a>'
 				   <% } %>
 				   ].join('');
@@ -217,10 +149,10 @@ $(document).ready(function() {
 		});
 		
 
-	  $('#businessCheckIPQCTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
+	  $('#baseSiteHegelvTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
-            $('#remove').prop('disabled', ! $('#businessCheckIPQCTable').bootstrapTable('getSelections').length);
-            $('#edit').prop('disabled', $('#businessCheckIPQCTable').bootstrapTable('getSelections').length!=1);
+            $('#remove').prop('disabled', ! $('#baseSiteHegelvTable').bootstrapTable('getSelections').length);
+            $('#edit').prop('disabled', $('#baseSiteHegelvTable').bootstrapTable('getSelections').length!=1);
         });
 
 	 $("#import").click(function(){//显示导入面板
@@ -232,7 +164,7 @@ $(document).ready(function() {
 	 $("#btnImportExcel").click(function(){//导入Excel
 		 var importForm = $('#importForm')[0];
 		 jp.block('#import-collapse',"文件上传中...");
-		 jp.uploadFile(importForm,"${ctx}/business/check/ipqc/businessCheckIPQC/import",function (data) {
+		 jp.uploadFile(importForm,"${ctx}/base/site/hegelv/baseSiteHegelv/import",function (data) {
 			 if(data.success){
 				 jp.toastr_success(data.msg);
 				 refresh();
@@ -244,15 +176,15 @@ $(document).ready(function() {
 	  })
 
 	 $("#btnDownloadTpl").click(function(){//下载模板文件
-            jp.downloadFile('${ctx}/business/check/ipqc/businessCheckIPQC/import/template');
+            jp.downloadFile('${ctx}/base/site/hegelv/baseSiteHegelv/import/template');
 		})
 
 	$("#export").click(function(){//导出Excel文件
 	        var searchParam = $("#searchForm").serializeJSON();
 	        searchParam.pageNo = 1;
 	        searchParam.pageSize = -1;
-            var sortName = $('#businessCheckIPQCTable').bootstrapTable("getOptions", "none").sortName;
-            var sortOrder = $('#businessCheckIPQCTable').bootstrapTable("getOptions", "none").sortOrder;
+            var sortName = $('#baseSiteHegelvTable').bootstrapTable("getOptions", "none").sortName;
+            var sortOrder = $('#baseSiteHegelvTable').bootstrapTable("getOptions", "none").sortOrder;
             var values = "";
             for(var key in searchParam){
                 values = values + key + "=" + searchParam[key] + "&";
@@ -261,7 +193,7 @@ $(document).ready(function() {
                 values = values + "orderBy=" + sortName + " "+sortOrder;
             }
 
-			jp.downloadFile('${ctx}/business/check/ipqc/businessCheckIPQC/export?'+values);
+			jp.downloadFile('${ctx}/base/site/hegelv/baseSiteHegelv/export?'+values);
 	  })
 
 	  $("#search").click("click", function() {// 绑定查询按扭
@@ -276,17 +208,12 @@ $(document).ready(function() {
 		  refresh();
 		});
 
-	 $('#checkdate').datepicker({//日期控件初始化
-			toggleActive: true,
-			language:"zh-CN",
-    			format:"yyyy-mm-dd"
-		});
 		
 	});
 
 	//获取选中行
   function getIdSelections() {
-        return $.map($("#businessCheckIPQCTable").bootstrapTable('getSelections'), function (row) {
+        return $.map($("#baseSiteHegelvTable").bootstrapTable('getSelections'), function (row) {
             return row.id
         });
     }
@@ -296,9 +223,9 @@ $(document).ready(function() {
      if(!ids){
           ids = getIdSelections();
      }
-	 jp.confirm('确认要删除该IPQC检验记录吗？', function(){
+	 jp.confirm('确认要删除该工序合格率记录吗？', function(){
 		var index =jp.loading();
-		jp.get("${ctx}/business/check/ipqc/businessCheckIPQC/delete?ids=" + ids, function(data){
+		jp.get("${ctx}/base/site/hegelv/baseSiteHegelv/delete?ids=" + ids, function(data){
 				if(data.success){
 					refresh();
 					jp.toastr_success(data.msg);
@@ -314,25 +241,25 @@ $(document).ready(function() {
 
     //刷新列表
   function refresh() {
-      $('#businessCheckIPQCTable').bootstrapTable('refresh');
+      $('#baseSiteHegelvTable').bootstrapTable('refresh');
   }
 
    //新增表单页面
  function add() {
-     jp.openSaveDialog('新增IPQC检验', "${ctx}/business/check/ipqc/businessCheckIPQC/form/add",'90%', '90%');
+     jp.openSaveDialog('新增工序合格率', "${ctx}/base/site/hegelv/baseSiteHegelv/form/add",'800px', '500px');
  }
   //编辑表单页面
   function edit(id){
       if(!id){
           id = getIdSelections();
       }
-	  jp.openSaveDialog('编辑IPQC检验', "${ctx}/business/check/ipqc/businessCheckIPQC/form/edit?id="+id,'90%', '90%');
+	  jp.openSaveDialog('编辑工序合格率', "${ctx}/base/site/hegelv/baseSiteHegelv/form/edit?id="+id,'800px', '500px');
   }
   //查看表单页面
   function view(id) {
       if(!id){
           id = getIdSelections();
       }
-      jp.openViewDialog('查看IPQC检验', "${ctx}/business/check/ipqc/businessCheckIPQC/form/view?id="+id,'90%', '90%');
+      jp.openViewDialog('查看工序合格率', "${ctx}/base/site/hegelv/baseSiteHegelv/form/view?id="+id,'800px', '500px');
   }
 </script>

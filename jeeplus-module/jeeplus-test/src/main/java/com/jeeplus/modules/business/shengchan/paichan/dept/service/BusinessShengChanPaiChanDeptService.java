@@ -42,5 +42,9 @@ public class BusinessShengChanPaiChanDeptService extends CrudService<BusinessShe
 	public void delete(BusinessShengChanPaiChanDept businessShengChanPaiChanDept) {
 		super.delete(businessShengChanPaiChanDept);
 	}
-	
+
+	public boolean hasPaichanDept(String dept){
+		Integer i = mapper.hasPaichanDept(dept);
+		return i!=null && i==1;
+	}
 }

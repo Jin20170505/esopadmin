@@ -81,6 +81,9 @@
 			<if test="username != null and username != ''">
 				AND a.username like concat('%',#{username},'%')
 			</if>
+			<if test="orderline != null and orderline !=''">
+				and a.orderline = #{orderline}
+			</if>
 			<if test="douser != null and douser.id!=null and douser.id !=''">
 				and a.do_user = #{douser.id}
 			</if>

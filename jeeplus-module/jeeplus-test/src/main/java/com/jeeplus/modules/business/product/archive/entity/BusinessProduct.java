@@ -22,6 +22,7 @@ public class BusinessProduct extends DataEntity<BusinessProduct> {
 	private String specification;		// 规格型号
 	private String unit;		// 计量单位
 	private String daynum; // 日生产量
+	private String kezhong; // 克重/单重
 	private String sccall;	// 是否生产叫料
 	public BusinessProduct() {
 		super();
@@ -95,6 +96,15 @@ public class BusinessProduct extends DataEntity<BusinessProduct> {
 
 	public void setUnit(String unit) {
 		this.unit = unit;
+	}
+
+	public String getKezhong() {
+		return kezhong;
+	}
+
+	public BusinessProduct setKezhong(String kezhong) {
+		this.kezhong = kezhong;
+		return this;
 	}
 
 	public String getSccall() {

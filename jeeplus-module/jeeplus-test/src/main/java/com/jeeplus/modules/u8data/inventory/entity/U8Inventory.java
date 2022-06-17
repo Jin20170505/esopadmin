@@ -20,6 +20,7 @@ public class U8Inventory extends DataEntity<U8Inventory> {
     private String daynum; // 每日产量
     private Date dSDate;  // 启用日期
     private Date dEDate; // 停用日期
+    private String kezhong; // 克重/单重
 
     public String getcInvAddCode() {
         return cInvAddCode;
@@ -153,6 +154,15 @@ public class U8Inventory extends DataEntity<U8Inventory> {
 
     public U8Inventory setdEDate(Date dEDate) {
         this.dEDate = dEDate;
+        return this;
+    }
+
+    public String getKezhong() {
+        return kezhong;
+    }
+
+    public U8Inventory setKezhong(String kezhong) {
+        this.kezhong = kezhong;
         return this;
     }
 }

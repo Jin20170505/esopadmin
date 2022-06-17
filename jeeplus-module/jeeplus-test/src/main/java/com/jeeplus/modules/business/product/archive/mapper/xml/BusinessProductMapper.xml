@@ -16,6 +16,7 @@
 		a.specification AS "specification",
 		a.unit AS "unit",
 		a.daynum as "daynum",
+		a.kezhong as "kezhong",
 		a.remarks AS "remarks",
 		a.sccall as "sccall",
 		b.name AS "type.name"
@@ -42,9 +43,9 @@
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
-                    <if test="type != null  and type.id != null and type.id != ''">
-                        AND (b.id = #{type.id} OR b.parent_ids LIKE CONCAT('%,', #{type.id}, ',%'))
-                    </if>
+			<if test="type != null  and type.id != null and type.id != ''">
+				AND (b.id = #{type.id} OR b.parent_ids LIKE CONCAT('%,', #{type.id}, ',%'))
+			</if>
 			<if test="code != null and code != ''">
 				AND a.code LIKE CONCAT('%,', #{code}, ',%')
 			</if>
@@ -98,6 +99,7 @@
 			specification,
 			unit,
 			daynum,
+		    kezhong,
 			sccall,
 			remarks
 		) VALUES
@@ -116,6 +118,7 @@
 				#{item.specification},
 				#{item.unit},
 			 	#{item.daynum},
+			 	#{item.kezhong},
 				'0',
 				#{item.remarks}
 			)
@@ -130,6 +133,7 @@
 		specification=VALUES(specification),
 		unit=VALUES(unit),
 		daynum=values(daynum),
+		kezhong = values(kezhong),
 		remarks=VALUES(remarks)
 	</insert>
 	<insert id="insert">

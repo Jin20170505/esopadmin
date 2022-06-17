@@ -10,6 +10,8 @@ import com.jeeplus.core.persistence.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import com.jeeplus.modules.business.shengchan.bom.entity.BusinessShengChanBom;
 
+import java.util.List;
+
 /**
  * 生产订单子件MAPPER接口
  * @author Jin
@@ -21,4 +23,6 @@ public interface BusinessShengChanBomMapper extends BaseMapper<BusinessShengChan
 
     @Delete("delete from business_shengchan_bom where schid = #{schid}")
     void deleteBySchid(@Param("schid") String schid);
+
+    BusinessShengChanBom getBomPaiChan(@Param("schid") String schid);
 }

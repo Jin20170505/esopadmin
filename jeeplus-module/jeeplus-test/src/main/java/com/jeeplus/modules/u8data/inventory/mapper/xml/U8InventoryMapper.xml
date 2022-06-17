@@ -15,6 +15,7 @@
         a.cInvDefine11 as "daynum",
         a.bPropertyCheck as "bPropertyCheck",
         a.bProxyForeign as "bProxyForeign",
+        a.cInvDefine13 as "kezhong",
         a.dSDate as "dSDate",
         a.dEDate as "dEDate"
     </sql>

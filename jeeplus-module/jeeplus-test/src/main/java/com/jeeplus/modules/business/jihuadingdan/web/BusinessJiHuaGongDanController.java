@@ -132,12 +132,12 @@ public class BusinessJiHuaGongDanController extends BaseController {
 	// 生成报工单
 	@ResponseBody
 	@RequestMapping("shengchengbaogongdan")
-	public AjaxJson shengchengbaogongdan(String rids){
+	public AjaxJson shengchengbaogongdan(String rids,String yaocode){
 		AjaxJson json = new AjaxJson();
 		try {
 			List<String> idArray = Arrays.asList(rids.split(","));
 			for(String id:idArray){
-				businessJiHuaGongDanService.shengchengbaogongdan(id);
+				businessJiHuaGongDanService.shengchengbaogongdan(id,yaocode);
 			}
 			json.setSuccess(true);
 			json.setMsg("操作成功.");

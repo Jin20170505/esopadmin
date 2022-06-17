@@ -75,6 +75,9 @@
 			<if test="startdate!=null and startdate !='' ">
 				and a.start_date = #{startdate}
 			</if>
+			<if test="orderno != null and orderno != ''">
+				and a.order_no = #{orderno}
+			</if>
 			<if test="status != null and status != ''">
 				and a.status = #{status}
 			</if>

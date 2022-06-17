@@ -115,6 +115,19 @@ public class BusinessShengChanPaiChanDeptController extends BaseController {
 		return j;
 	}
 
+	@RequestMapping("isYaoHao")
+	@ResponseBody
+	public AjaxJson isYaoHao(String deptid){
+		AjaxJson json = new AjaxJson();
+		try {
+			json.setSuccess(businessShengChanPaiChanDeptService.hasPaichanDept(deptid));
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setMsg(e.getMessage());
+			json.setSuccess(false);
+		}
+		return json;
+	}
 	
 	/**
 	 * 批量删除排产部门

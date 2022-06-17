@@ -264,6 +264,13 @@ public class BusinessShengChanDingDanController extends BaseController {
 		return getBootstrapData(page);
 	}
 
+	@ResponseBody
+	@RequestMapping(value = "mxdatapaichan")
+	public Map<String, Object> mxdatapaichan(BusinessShengChanDingDanMingXi businessShengChanDingDanMingXi, HttpServletRequest request, HttpServletResponse response, Model model) {
+		Page<BusinessShengChanDingDanMingXi> page = businessShengChanDingDanService.findShengChanDingDanMingXiByPaiChanPage(new Page<BusinessShengChanDingDanMingXi>(request, response), businessShengChanDingDanMingXi);
+		return getBootstrapData(page);
+	}
+
 	/**
 	 * 查看，增加，编辑生产订单表单页面
 	 * params:

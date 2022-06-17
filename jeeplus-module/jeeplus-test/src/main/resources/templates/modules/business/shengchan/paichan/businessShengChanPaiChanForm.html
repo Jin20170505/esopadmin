@@ -95,8 +95,8 @@ layout("/include/_dialog.html"){
 				title:"生产信息",
 				auto:true,
 				name:'friend',
-				content: "${ctx}/tag/gridselect?url="+encodeURIComponent("${ctx}/business/shengchan/dingdan/businessShengChanDingDan/mxdata")+"&fieldLabels="
-						+encodeURIComponent("单号|行号|存货编码|存货名称|规格型号|单位|数量")+"&fieldKeys="+encodeURIComponent("p.code|no|cinv.code|cinvname|std|unit|num")
+				content: "${ctx}/tag/gridselect?url="+encodeURIComponent("${ctx}/business/shengchan/dingdan/businessShengChanDingDan/mxdatapaichan")+"&fieldLabels="
+						+encodeURIComponent("单号|行号|存货编码|存货名称|规格型号|单位|数量|子件存货编码|子件存货名称")+"&fieldKeys="+encodeURIComponent("p.code|no|cinv.code|cinvname|std|unit|num|ischaidan|soseq")
 						+"&searchLabels="+encodeURIComponent("生产单号|存货编码|存货名称")
 						+"&searchKeys="+encodeURIComponent("p.code|cinvcode|cinvstd")+"&isMultiSelected=true",
 				btn: ['确定', '关闭'],
@@ -207,8 +207,8 @@ layout("/include/_dialog.html"){
 						<input id="businessShengChanPaiChaiMxList{{idx}}_no" name="businessShengChanPaiChaiMxList[{{idx}}].no" type="text" value="{{row.no}}"    class="form-control "/>
 					</td>
 					<td>
-					<#gridselect callback="shengchanCallBack" url="${ctx}/business/shengchan/dingdan/businessShengChanDingDan/mxdata" id="businessShengChanPaiChaiMxList{{idx}}_dd" name="dd.id" value="" labelName="dd.code" labelValue="{{row.sccode}}"
-							 title="选择生产订单号" class="form-control " fieldLabels="单号|行号|存货编码|存货名称|规格型号|单位|数量" fieldKeys="p.code|no|cinv.code|cinvname|std|unit|num" searchLabels="生产单号" searchKeys="p.code" />
+					<#gridselect callback="shengchanCallBack" url="${ctx}/business/shengchan/dingdan/businessShengChanDingDan/mxdatapaichan" id="businessShengChanPaiChaiMxList{{idx}}_dd" name="dd.id" value="" labelName="dd.code" labelValue="{{row.sccode}}"
+							 title="选择生产订单号" class="form-control " fieldLabels="单号|行号|存货编码|存货名称|规格型号|单位|数量|子件存货编码|子件存货名称" fieldKeys="p.code|no|cinv.code|cinvname|std|unit|num" searchLabels="生产单号" searchKeys="p.code" />
 						<input  id="businessShengChanPaiChaiMxList{{idx}}_sccode" name="businessShengChanPaiChaiMxList[{{idx}}].sccode" type="hidden" value="{{row.sccode}}"    class="form-control "/>
 					</td>
 					
@@ -218,7 +218,7 @@ layout("/include/_dialog.html"){
 					</td>
 					<td>
 					<#gridselect callback="cinvCallBack" url="${ctx}/business/product/archive/businessProduct/data" id="businessShengChanPaiChaiMxList{{idx}}_cinv" name="businessShengChanPaiChaiMxList{{idx}}.cinv.id" value="" labelName="businessShengChanPaiChaiMxList[{{idx}}].cinv.code" labelValue="{{row.cinvcode}}"
-							 title="选择存货编码" class="form-control  required" fieldLabels="编号|名称|规格|单位" fieldKeys="code|name|specification|unit" searchLabels="编号|名称" searchKeys="code|name" />
+							 title="选择存货编码" class="form-control  required" fieldLabels="编号|名称|规格|单位" fieldKeys="code|name|specification|unit|ischaidan|soseq" searchLabels="编号|名称" searchKeys="code|name" />
 						<input id="businessShengChanPaiChaiMxList{{idx}}_cinvcode" name="businessShengChanPaiChaiMxList[{{idx}}].cinvcode" type="hidden" value="{{row.cinvcode}}"    class="form-control "/>
 					</td>
 					

@@ -20,6 +20,7 @@
 		a.cinvcode AS "cinvcode",
 		a.cinvname AS "cinvname",
 		a.cinvstd AS "cinvstd",
+		a.yaocode as "yaocode",
 		a.num AS "num",
 		a.unit as "unit",
 		a.start_date AS "startdate",
@@ -67,6 +68,9 @@
 			</if>
 			<if test="dept != null and dept != ''">
 				AND a.dept = #{dept}
+			</if>
+			<if test="orderline != null and orderline != ''">
+				AND a.orderline = #{orderline}
 			</if>
 			<if test="bgcode != null and bgcode != ''">
 				AND a.bgcode like concat('%',#{bgcode},'%')
@@ -129,7 +133,7 @@
 			del_flag,
 		    orderlineid,
 			ordercode,
-		    batchno,
+		    batchno,yaocode,
 			orderline,
 			planid,
 			plancode,
@@ -154,7 +158,7 @@
 			#{delFlag},
 			#{orderlineid},
 			#{ordercode},
-			#{batchno},
+			#{batchno},#{yaocode},
 			#{orderline},
 			#{planid},
 			#{plancode},

@@ -43,6 +43,10 @@ layout("/include/_container.html", {title:"列表", parent:"报工单"}){
 				<label class="m-r-10" title="生产订单号：">生产订单号：</label>
 				<input name="ordercode"  maxlength="64"  class=" form-control"/>
 			</div>
+			<div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="生产订单行号：">生产订单行号：</label>
+				<input name="orderline"  maxlength="64"  class=" form-control"/>
+			</div>
 			 <div class="form-group m-b-10 m-r-10">
 				<label class="m-r-10" title="计划单号：">计划单号：</label>
 				<input name="plancode"  maxlength="64"  class=" form-control"/>
@@ -114,9 +118,9 @@ layout("/include/_container.html", {title:"列表", parent:"报工单"}){
 			<% } %>
 
 				<% if(shiro.hasPermission("business:jihuadingdan:businessJiHuaGongDan:shengchengbaogongdan") ){ %>
-				<button id="shengchengbaogongdan" class="btn btn-white waves-effect w-xs waves-light"  onclick="shengchengbaogongdan()">
-					生成报工单
-				</button>
+<!--				<button id="shengchengbaogongdan" class="btn btn-white waves-effect w-xs waves-light"  onclick="shengchengbaogongdan()">-->
+<!--					生成报工单-->
+<!--				</button>-->
 				<% } %>
 		<% if(shiro.hasPermission("business:baogong:order:businessBaoGongOrder:print") ){ %>
 					    <button id="print" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="printbgd()">

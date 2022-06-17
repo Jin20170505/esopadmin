@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.base.dept.time.mapper.BaseDeptTimeMapper">
+    
+	<sql id="baseDeptTimeColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.deptcode AS "deptcode",
+		a.deptname AS "deptname",
+		a.worktime AS "worktime"
+	</sql>
+	
+	<sql id="baseDeptTimeJoins">
+		LEFT JOIN sys_office deptname ON deptname.id = a.deptname
+	</sql>
+	
+    
+	<select id="get" resultType="BaseDeptTime" >
+		SELECT 
+			<include refid="baseDeptTimeColumns"/>
+		FROM base_dept_time a
+		<include refid="baseDeptTimeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BaseDeptTime" >
+		SELECT 
+			<include refid="baseDeptTimeColumns"/>
+		FROM base_dept_time a
+		<include refid="baseDeptTimeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="deptcode != null and deptcode != ''">
+				AND a.deptcode LIKE concat('%',#{deptcode},'%')
+			</if>
+			<if test="deptname != null and deptname != ''">
+				AND a.deptname LIKE concat('%',#{deptname},'%')
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BaseDeptTime" >
+		SELECT 
+			<include refid="baseDeptTimeColumns"/>
+		FROM base_dept_time a
+		<include refid="baseDeptTimeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO base_dept_time(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			deptcode,
+			deptname,
+			worktime
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{deptcode},
+			#{deptname},
+			#{worktime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE base_dept_time SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			deptcode = #{deptcode},
+			deptname = #{deptname},
+			worktime = #{worktime}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM base_dept_time
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE base_dept_time SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="BaseDeptTime" statementType="STATEMENT">
+		select * FROM base_dept_time  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

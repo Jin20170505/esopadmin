@@ -24,8 +24,16 @@ layout("/include/_container.html", {title:"列表", parent:"计划工单"}){
         </a>
         <form id="searchForm" class="form-inline">
 			<div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="生产单号：">单号：</label>
+				<input name="code"  maxlength="64"  class=" form-control"/>
+			</div>
+			<div class="form-group m-b-10 m-r-10">
 				<label class="m-r-10" title="生产单号：">生产单号：</label>
 				<input name="sccode"  maxlength="64"  class=" form-control"/>
+			</div>
+			<div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="生产单号：">生产订单行号：</label>
+				<input name="orderno"  maxlength="64"  class=" form-control"/>
 			</div>
 			<div class="form-group m-b-10 m-r-10">
 				<label class="m-r-10" title="生产单号：">存货编码：</label>

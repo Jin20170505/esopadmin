@@ -1,0 +1,64 @@
+<%
+layout("/include/_dialog.html"){
+%>
+	<script type="text/javascript">
+
+		$(document).ready(function() {
+					});
+
+		function save() {
+            var isValidate = jp.validateForm('#inputForm');//校验表单
+            if(!isValidate){
+                return false;
+			}else{
+                var index = jp.loading();
+                jp.post("${ctx}/base/dept/time/baseDeptTime/save",$('#inputForm').serialize(),function(data){
+                    if(data.success){
+                        jp.getParent().refresh();
+                        var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                        parent.layer.close(dialogIndex);
+                        jp.toastr_success(data.msg)
+
+                    }else{
+                        jp.toastr_error(data.msg);
+                    }
+                    jp.close(index);
+                })
+			}
+        }
+        function deptcall(items,tagid){
+            var item = items[0];
+            $('#deptId').val(item.id);
+            $('#deptName').val(item.id);
+            $("#deptcode").val(item.id);
+            $('#deptname').val(item.text);
+        }
+	</script>
+<form id="inputForm"  method="post"  class="form-horizontal p-15">
+    <input type="hidden" name="id" value="${baseDeptTime.id!}"/>
+    <table class="table table-bordered">
+       <tbody>
+            <tr>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>部门编码：</label></td>
+                <td class="width-35">
+                    <input type="hidden" id="deptcode"  name="deptcode" value="${baseDeptTime.deptcode!}"    class="form-control required"/>
+                    <#treeselect callback="deptcall" id="dept" name="dept.id" value="" labelName="dept.id" labelValue="${baseDeptTime.deptcode!}"
+                    title="部门" url="/sys/office/treeData?type=2" class="form-control required" allowClear="true" notAllowSelectParent="true"/>
+            </td>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>部门名称：</label></td>
+                <td class="width-35">
+                    <input name="deptname" id="deptname" value="${baseDeptTime.deptname!}"    class="form-control required"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>工作时间：</label></td>
+                <td class="width-35">
+                    <input name="worktime" value="${baseDeptTime.worktime!}"    class="form-control required isFloatGteZero"/>
+            </td>
+                <td class="width-15 active"></td>
+                <td class="width-35" ></td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<% } %>

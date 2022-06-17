@@ -32,6 +32,7 @@ public class BusinessBaoGongOrder extends DataEntity<BusinessBaoGongOrder> {
 	private String startdate;		// 开始日期
 	private String enddate;		// 结束日期
 	private String bgcode;		// 报工单号
+	private String yaocode; // 窑炉号
 	private String isprint; // 是否打印
 	private String complate;		// 是否完成
 	private String qrcode;		// 二维码内容
@@ -150,6 +151,15 @@ public class BusinessBaoGongOrder extends DataEntity<BusinessBaoGongOrder> {
 
 	public BusinessBaoGongOrder setQrcode(String qrcode) {
 		this.qrcode = qrcode;
+		return this;
+	}
+
+	public String getYaocode() {
+		return yaocode;
+	}
+
+	public BusinessBaoGongOrder setYaocode(String yaocode) {
+		this.yaocode = yaocode;
 		return this;
 	}
 

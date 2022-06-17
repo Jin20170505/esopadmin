@@ -118,12 +118,9 @@ $(document).ready(function() {
 		        checkbox: true
 		       
 		    }
-                   ,{
-                       field: 'status',
-                       title: '状态',
-                       sortable: true,
-                       sortName: 'status'
-
+                   , {
+                       field: 'isshengcheng',
+                       title: '是否生产报工单'
                    }
 			,{
 		        field: 'code',
@@ -131,21 +128,11 @@ $(document).ready(function() {
 		        sortable: true,
 		        sortName: 'code'
 		        ,formatter:function(value, row , index){
-		        	  <% if(shiro.hasPermission("business:jihuadingdan:businessJiHuaGongDan:edit") ){ %>
-					   if(!value){
-						  return "<a  href='#' onclick='edit(\""+row.id+"\")'>-</a>";
-					   }else{
-						  return "<a  href='#' onclick='edit(\""+row.id+"\")'>"+value+"</a>";
-						}
-                     <% }else if(shiro.hasPermission("business:jihuadingdan:businessJiHuaGongDan:view")){ %>
-					   if(!value){
-						  return "<a  href='#' onclick='view(\""+row.id+"\")'>-</a>";
-                       }else{
-                          return "<a  href='#' onclick='view(\""+row.id+"\")'>"+value+"</a>";
-                       }
-                     <% }else{ %>
-					      return value;
-					 <% } %>
+                   if(!value){
+                       return "<a  href='#' onclick='view(\""+row.id+"\")'>-</a>";
+                   }else{
+                       return "<a  href='#' onclick='view(\""+row.id+"\")'>"+value+"</a>";
+                   }
 		         }
 		       
 		    }
@@ -162,13 +149,13 @@ $(document).ready(function() {
 		        sortable: true,
 		        sortName: 'orderno'
 		       
-		    },{
-                field: 'batchno',
-                title: '生产批号',
-                sortable: true,
-                sortName: 'batchno'
-
-                }
+		    }
+           ,{
+               field: 'dept.name',
+               title: '生产部门',
+               sortable: true,
+               sortName: 'dept.name'
+           }
 			,{
 		        field: 'cinvcode',
 		        title: '存货编码',
@@ -224,14 +211,13 @@ $(document).ready(function() {
 		        sortable: true,
 		        sortName: 'gdnum'
 		       
-		    }
-			,{
-		        field: 'dept.name',
-		        title: '生产部门',
-		        sortable: true,
-		        sortName: 'dept.name'
-		       
-		    }
+		    },{
+                       field: 'batchno',
+                       title: '生产批号',
+                       sortable: true,
+                       sortName: 'batchno'
+
+                   }
 		     ]
 		
 		});
@@ -337,28 +323,51 @@ function chehui(){
 	 })
 }
 // 生成报工单
-function shengchengbaogongdan(ids){
-     if(!ids){
-          ids = getIdSelections();
-     }
+function shengchengbaogongdan(){
+    var rows = getRowSelections();
+    var ids = rows[0].id;
+    var deptid  = rows[0].dept.id;
+    var deptname = rows[0].dept.name;
 	 jp.confirm('确认要生成报工单吗？', function(){
-		var index =jp.loading();
-		jp.get("${ctx}/business/jihuadingdan/businessJiHuaGongDan/shengchengbaogongdan?rids=" + ids, function(data){
-				if(data.success){
-					refresh();
-					jp.toastr_success(data.msg);
-				}else{
-					jp.toastr_error(data.msg);
-				}
-				jp.close(index);
-			})
+	     jp.get("${ctx}/business/shengchan/paichan/dept/businessShengChanPaiChanDept/isYaoHao?deptid="+deptid,function (rs){
+	         if(rs.success){
+                jp.prompt('请输入【'+deptname+'】对应的窑炉号',function(yaocode){
+                    if(yaocode){
+                        shengchan(ids,yaocode);
+                    }else{
+
+                    }
+                })
+            }else{
+                shengchan(ids,"");
+            }
+        });
 	 })
+}
+
+function shengchan(ids,yaocode){
+    var index =jp.loading();
+    jp.get("${ctx}/business/jihuadingdan/businessJiHuaGongDan/shengchengbaogongdan?rids=" + ids+"&yaocode="+yaocode, function(data){
+    if(data.success){
+    refresh();
+    jp.toastr_success(data.msg);
+}else{
+    jp.toastr_error(data.msg);
+}
+    jp.close(index);
+})
 }
 	//获取选中行
   function getIdSelections() {
         return $.map($("#businessJiHuaGongDanTable").bootstrapTable('getSelections'), function (row) {
             return row.id
         });
+    }
+
+    function getRowSelections() {
+        return $.map($("#businessJiHuaGongDanTable").bootstrapTable('getSelections'), function (row) {
+        return row
+    });
     }
 
   //删除

@@ -188,7 +188,7 @@ $(document).ready(function() {
                field: 'hglv',
                title: '合格率'
                ,formatter:function(value, row , index){
-                    return ((value-0).toFixed(4) * 100) +"%" ;
+                    return ((value-0).toFixed(4) * 100).toFixed(2) +"%" ;
                }
            }
 			,{
