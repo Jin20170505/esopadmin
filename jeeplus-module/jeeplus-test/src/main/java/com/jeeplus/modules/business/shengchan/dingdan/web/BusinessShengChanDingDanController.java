@@ -13,6 +13,7 @@ import com.jeeplus.common.utils.excel.ExportExcel;
 import com.jeeplus.common.utils.excel.ImportExcel;
 import com.jeeplus.core.persistence.Page;
 import com.jeeplus.core.web.BaseController;
+import com.jeeplus.modules.business.product.archive.mapper.BusinessProductMapper;
 import com.jeeplus.modules.business.ruku.product.entity.ProductTagBean;
 import com.jeeplus.modules.business.shengchan.beiliao.apply.entity.BusinessShengChanBeiLiaoApply;
 import com.jeeplus.modules.business.shengchan.beiliao.apply.entity.BusinessShengchanBeiliaoApplyMx;
@@ -263,11 +264,19 @@ public class BusinessShengChanDingDanController extends BaseController {
 		Page<BusinessShengChanDingDanMingXi> page = businessShengChanDingDanService.findPage(new Page<BusinessShengChanDingDanMingXi>(request, response), businessShengChanDingDanMingXi);
 		return getBootstrapData(page);
 	}
-
+	@Autowired
+	private BusinessProductMapper businessProductMapper;
 	@ResponseBody
 	@RequestMapping(value = "mxdatapaichan")
 	public Map<String, Object> mxdatapaichan(BusinessShengChanDingDanMingXi businessShengChanDingDanMingXi, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<BusinessShengChanDingDanMingXi> page = businessShengChanDingDanService.findShengChanDingDanMingXiByPaiChanPage(new Page<BusinessShengChanDingDanMingXi>(request, response), businessShengChanDingDanMingXi);
+		List<BusinessShengChanDingDanMingXi> list = page.getList();
+		if(list!=null){
+			list.forEach(d->{
+				d.setDonenum(u8InvPostionSumService.getSumNumByCinvcode(d.getIschaidan()));
+				d.setStatus(businessProductMapper.getKeZhongOfCinvcode(d.getIschaidan()));
+			});
+		}
 		return getBootstrapData(page);
 	}
 

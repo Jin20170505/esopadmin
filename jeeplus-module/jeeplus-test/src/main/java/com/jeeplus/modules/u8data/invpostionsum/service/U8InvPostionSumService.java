@@ -24,6 +24,7 @@ public class U8InvPostionSumService extends CrudService<U8InvPostionSumMapper, U
     }
 
     public Double getSumNumByCinvcode(String cinvcode){
-        return mapper.getSumNumByCinvcode(cinvcode);
+        Double num = mapper.getSumNumByCinvcode(cinvcode);
+        return num == null?0.0:num;
     }
 }

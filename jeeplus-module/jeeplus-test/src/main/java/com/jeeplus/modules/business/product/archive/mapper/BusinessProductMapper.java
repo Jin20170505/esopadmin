@@ -28,4 +28,7 @@ public interface BusinessProductMapper extends BaseMapper<BusinessProduct> {
     Integer hasByCode(@Param("code")String code);
 
     void batchInsert(List<BusinessProduct> list);
+
+    @Select("select kezhong from business_product where id = #{code}")
+    String getKeZhongOfCinvcode(String code);
 }

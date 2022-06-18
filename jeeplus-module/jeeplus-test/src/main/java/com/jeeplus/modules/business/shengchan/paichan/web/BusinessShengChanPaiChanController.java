@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
+import com.jeeplus.modules.u8data.invpostionsum.service.U8InvPostionSumService;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,12 +45,19 @@ public class BusinessShengChanPaiChanController extends BaseController {
 
 	@Autowired
 	private BusinessShengChanPaiChanService businessShengChanPaiChanService;
-	
+	@Autowired
+	private U8InvPostionSumService u8InvPostionSumService;
 	@ModelAttribute
 	public BusinessShengChanPaiChan get(@RequestParam(required=false) String id) {
 		BusinessShengChanPaiChan entity = null;
 		if (StringUtils.isNotBlank(id)){
 			entity = businessShengChanPaiChanService.get(id);
+			if(entity.getBusinessShengChanPaiChaiMxList()!=null){
+				entity.getBusinessShengChanPaiChaiMxList().forEach(d->{
+					Double num = u8InvPostionSumService.getSumNumByCinvcode(d.getCinvcode());
+					d.setRemarks(num+"");
+				});
+			}
 		}
 		if (entity == null){
 			entity = new BusinessShengChanPaiChan();

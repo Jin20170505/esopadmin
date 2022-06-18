@@ -4,33 +4,65 @@ layout("/include/_dialog.html"){
 	<script type="text/javascript">
 
 		$(document).ready(function() {
-					        $('#pdate').datetimepicker({
+			$('#pdate').datetimepicker({
 				 format:'Y-m-d'
 		    });
 		});
-
 		function save() {
             var isValidate = jp.validateForm('#inputForm');//校验表单
             if(!isValidate){
                 return false;
 			}else{
-                var index = jp.loading();
-                jp.post("${ctx}/business/shengchan/paichan/businessShengChanPaiChan/save",$('#inputForm').serialize(),function(data){
-                    if(data.success){
-                        jp.getParent().refresh();
-                        var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
-                        parent.layer.close(dialogIndex);
-                        jp.toastr_success(data.msg)
-
-                    }else{
-                        jp.toastr_error(data.msg);
-                    }
-                    jp.close(index);
-                })
+            	var sumJson = {};
+            	// 校验
+				$('.pcnum').each(function (){
+					var cinvcode = $(this).attr('data');
+					var num = this.value;
+					var cnum = sumJson[cinvcode];
+					if(cnum){
+						cnum = (cnum-0) + (num-0);
+					}else {
+						cnum = num;
+					}
+					sumJson[cinvcode] = cnum;
+				});
+				var flag = false;
+				var ermsg = "";
+				for(var key in sumJson){
+					var xcnum = xclJson[key];
+					var snum = sumJson[key];
+					xcnum = xcnum?xcnum-0:0;
+					snum = snum?snum-0:0;
+					if(xcnum<snum){
+						ermsg +="["+key+"]的现存量为："+xcnum+",排产总量为："+snum+".现存量不足。"
+						flag=true;
+					}
+				}
+				if(flag){
+					jp.confirm(ermsg+"确认继续操作吗？",function (){
+						dosave();
+					});
+					return false;
+				}else {
+					dosave();
+				}
 			}
-
         }
+		function dosave(){
+			var index = jp.loading();
+			jp.post("${ctx}/business/shengchan/paichan/businessShengChanPaiChan/save",$('#inputForm').serialize(),function(data){
+				if(data.success){
+					jp.getParent().refresh();
+					var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+					parent.layer.close(dialogIndex);
+					jp.toastr_success(data.msg)
 
+				}else{
+					jp.toastr_error(data.msg);
+				}
+				jp.close(index);
+			})
+		}
 		function addRow(list, idx, tpl, row){
 			$(list).append(Mustache.render(tpl, {
 				idx: idx, delBtn: true, row: row
@@ -83,7 +115,12 @@ layout("/include/_dialog.html"){
 			$('#'+idpre+'_sccode').val(item.p.code);
 			$('#'+idpre+'_scline').val(item.no);
 			$('#'+tagid+"Name").val(item.p.code);
-
+			$('#'+idpre+'_cinvcode').val(item.ischaidan);
+			$('#'+idpre+'_cinvname').val(item.soseq);
+			$('#'+idpre+'_cinvstd').val(item.type);
+			$('#'+idpre+'_kezhong').val(item.status);
+			xclJson[item.ischaidan] = item.donenum;
+			jssumweight();
 		}
 		/**
 		 * 生产信息选择
@@ -96,9 +133,9 @@ layout("/include/_dialog.html"){
 				auto:true,
 				name:'friend',
 				content: "${ctx}/tag/gridselect?url="+encodeURIComponent("${ctx}/business/shengchan/dingdan/businessShengChanDingDan/mxdatapaichan")+"&fieldLabels="
-						+encodeURIComponent("单号|行号|存货编码|存货名称|规格型号|单位|数量|子件存货编码|子件存货名称")+"&fieldKeys="+encodeURIComponent("p.code|no|cinv.code|cinvname|std|unit|num|ischaidan|soseq")
+						+encodeURIComponent("单号|行号|存货编码|存货名称|规格型号|单位|数量|子件存货编码|子件存货名称|子件规格|子件存货现存量|克重")+"&fieldKeys="+encodeURIComponent("p.code|no|cinv.code|cinvname|std|unit|num|ischaidan|soseq|type|donenum|status")
 						+"&searchLabels="+encodeURIComponent("生产单号|存货编码|存货名称")
-						+"&searchKeys="+encodeURIComponent("p.code|cinvcode|cinvstd")+"&isMultiSelected=true",
+						+"&searchKeys="+encodeURIComponent("p.code|cinvcode|cinvname")+"&isMultiSelected=true",
 				btn: ['确定', '关闭'],
 				yes: function(index, layero){
 					var iframeWin = layero.find('iframe')[0].contentWindow; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
@@ -109,11 +146,14 @@ layout("/include/_dialog.html"){
 					}
 					for(var i=0; i<items.length; i++){
 						var item = items[i];
+						if(!item.ischaidan){
+							continue;
+						}
 						businessShengChanPaiChaiMxRowIdx = businessShengChanPaiChaiMxRowIdx +1;
 						addRow('#businessShengChanPaiChaiMxList', businessShengChanPaiChaiMxRowIdx, businessShengChanPaiChaiMxTpl,
-								{'no':businessShengChanPaiChaiMxRowIdx,'sccode':item.p.code,'scline':item.no,'cinvcode':item.cinv.code,'cinvname':item.cinvname,
-								'cinvstd':item.std});
-
+								{'no':businessShengChanPaiChaiMxRowIdx,'sccode':item.p.code,'scline':item.no,'cinvcode':item.ischaidan,'cinvname':item.soseq,
+									'cinvstd':item.type,"kezhong":item.status});
+						xclJson[item.ischaidan] = item.donenum;
 					}
 					top.layer.close(index);//关闭对话框。
 				},
@@ -121,6 +161,7 @@ layout("/include/_dialog.html"){
 				}
 			});
 		}
+		var xclJson = {};
 	</script>
 <form id="inputForm"  method="post"  class="form-horizontal p-15">
 		<input type="hidden" name="id" value="${businessShengChanPaiChan.id!}"/>
@@ -208,28 +249,20 @@ layout("/include/_dialog.html"){
 					</td>
 					<td>
 					<#gridselect callback="shengchanCallBack" url="${ctx}/business/shengchan/dingdan/businessShengChanDingDan/mxdatapaichan" id="businessShengChanPaiChaiMxList{{idx}}_dd" name="dd.id" value="" labelName="dd.code" labelValue="{{row.sccode}}"
-							 title="选择生产订单号" class="form-control " fieldLabels="单号|行号|存货编码|存货名称|规格型号|单位|数量|子件存货编码|子件存货名称" fieldKeys="p.code|no|cinv.code|cinvname|std|unit|num" searchLabels="生产单号" searchKeys="p.code" />
+							 title="选择生产订单号" class="form-control " fieldLabels="单号|行号|存货编码|存货名称|规格型号|单位|数量|子件存货编码|子件存货名称子件规格|子件存货现存量|克重" fieldKeys="p.code|no|cinv.code|cinvname|std|unit|num|ischaidan|soseq|type|donenum|status" searchLabels="生产单号|存货编码|存货名称" searchKeys="p.code|cinvcode|cinvname" />
 						<input  id="businessShengChanPaiChaiMxList{{idx}}_sccode" name="businessShengChanPaiChaiMxList[{{idx}}].sccode" type="hidden" value="{{row.sccode}}"    class="form-control "/>
 					</td>
-					
-					
 					<td>
 						<input id="businessShengChanPaiChaiMxList{{idx}}_scline" name="businessShengChanPaiChaiMxList[{{idx}}].scline" type="text" value="{{row.scline}}"    class="form-control "/>
 					</td>
 					<td>
-					<#gridselect callback="cinvCallBack" url="${ctx}/business/product/archive/businessProduct/data" id="businessShengChanPaiChaiMxList{{idx}}_cinv" name="businessShengChanPaiChaiMxList{{idx}}.cinv.id" value="" labelName="businessShengChanPaiChaiMxList[{{idx}}].cinv.code" labelValue="{{row.cinvcode}}"
-							 title="选择存货编码" class="form-control  required" fieldLabels="编号|名称|规格|单位" fieldKeys="code|name|specification|unit|ischaidan|soseq" searchLabels="编号|名称" searchKeys="code|name" />
-						<input id="businessShengChanPaiChaiMxList{{idx}}_cinvcode" name="businessShengChanPaiChaiMxList[{{idx}}].cinvcode" type="hidden" value="{{row.cinvcode}}"    class="form-control "/>
+						<input id="businessShengChanPaiChaiMxList{{idx}}_cinvcode" name="businessShengChanPaiChaiMxList[{{idx}}].cinvcode" readonly value="{{row.cinvcode}}"    class="form-control "/>
 					</td>
-					
-					
 					<td>
-						<input id="businessShengChanPaiChaiMxList{{idx}}_cinvname" name="businessShengChanPaiChaiMxList[{{idx}}].cinvname" type="text" value="{{row.cinvname}}"    class="form-control "/>
+						<input id="businessShengChanPaiChaiMxList{{idx}}_cinvname" name="businessShengChanPaiChaiMxList[{{idx}}].cinvname" readonly type="text" value="{{row.cinvname}}"    class="form-control "/>
 					</td>
-					
-					
 					<td>
-						<input id="businessShengChanPaiChaiMxList{{idx}}_cinvstd" name="businessShengChanPaiChaiMxList[{{idx}}].cinvstd" type="text" value="{{row.cinvstd}}"    class="form-control "/>
+						<input id="businessShengChanPaiChaiMxList{{idx}}_cinvstd" name="businessShengChanPaiChaiMxList[{{idx}}].cinvstd" readonly type="text" value="{{row.cinvstd}}"    class="form-control "/>
 					</td>
 					
 					
@@ -254,7 +287,7 @@ layout("/include/_dialog.html"){
 					
 					
 					<td>
-						<input id="businessShengChanPaiChaiMxList{{idx}}_num" name="businessShengChanPaiChaiMxList[{{idx}}].num" type="number" value="{{row.num}}"  oninput="jsweight(this);"  class="form-control "/>
+						<input id="businessShengChanPaiChaiMxList{{idx}}_num" name="businessShengChanPaiChaiMxList[{{idx}}].num" type="number" value="{{row.num}}" data="{{row.cinvcode}}"  oninput="jsweight(this);"  class="form-control pcnum"/>
 					</td>
 					
 					
@@ -277,6 +310,8 @@ layout("/include/_dialog.html"){
 					</td>
 				</tr>//-->
 			</script>
+<!--		<#gridselect  callback="cinvCallBack" url="${ctx}/business/product/archive/businessProduct/data" id="businessShengChanPaiChaiMxList{{idx}}_cinv" name="businessShengChanPaiChaiMxList{{idx}}.cinv.id" value="" labelName="businessShengChanPaiChaiMxList[{{idx}}].cinv.code" labelValue="{{row.cinvcode}}"
+							 title="选择存货编码" class="form-control  required" fieldLabels="编号|名称|规格|单位" fieldKeys="code|name|specification|unit|ischaidan|soseq" searchLabels="编号|名称" searchKeys="code|name" />		-->
 			<script type="text/javascript">
 				function cinvCallBack(items,tagid){
 					var item = items[0];
@@ -316,6 +351,7 @@ layout("/include/_dialog.html"){
 				$(document).ready(function() {
 					var data = ${fn.toJson(businessShengChanPaiChan.businessShengChanPaiChaiMxList)};
 					for (var i=0; i<data.length; i++){
+						xclJson[data[i].cinvcode] = data[i].remarks;
 						addRow('#businessShengChanPaiChaiMxList', businessShengChanPaiChaiMxRowIdx, businessShengChanPaiChaiMxTpl, data[i]);
 						businessShengChanPaiChaiMxRowIdx = businessShengChanPaiChaiMxRowIdx + 1;
 					}
