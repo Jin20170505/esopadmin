@@ -148,7 +148,7 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 	@Autowired
 	private BusinessBaoGongOrderService businessBaoGongOrderService;
 	@Transactional(readOnly = false)
-	public  void shengchengbaogongdan(String id,String yaocode){
+	public synchronized void shengchengbaogongdan(String id,String yaocode){
 		boolean flag = businessBaoGongOrderService.hasScOrderFromPlan(id);
 		if(flag){
 			throw new RuntimeException("该计划工单已生成报工单。请勿多次生成.");
@@ -187,20 +187,19 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 		});
 		mapper.updateisshengcheng(id,"已生成");
 		String code="";
-		synchronized (this){
-			code = businessBaoGongOrderService.getCurrentCode(DateUtils.getDate("yyyyMMdd"));
-			order.setBgcode(code);
-			StringBuffer sb = new StringBuffer("{");
-			sb.append("\"batchno\":\"").append(order.getBatchno()).append("\",");
-			sb.append("\"sccode\":\"").append(order.getOrdercode()).append("\",");
-			sb.append("\"lineno\":\"").append(order.getOrderline()).append("\",");
-			sb.append("\"plancode\":\"").append(order.getPlancode()).append("\",");
-			sb.append("\"num\":\"").append(order.getNum()).append("\",");
-			sb.append("\"bgcode\":\"").append(order.getBgcode()).append("\"");
-			sb.append("}");
-			order.setQrcode(sb.toString());
-			businessBaoGongOrderService.save(order);
-		}
+		code = businessBaoGongOrderService.getCurrentCode(DateUtils.getDate("yyyyMMdd"));
+		order.setBgcode(code);
+		StringBuffer sb = new StringBuffer("{");
+		sb.append("\"batchno\":\"").append(order.getBatchno()).append("\",");
+		sb.append("\"sccode\":\"").append(order.getOrdercode()).append("\",");
+		sb.append("\"lineno\":\"").append(order.getOrderline()).append("\",");
+		sb.append("\"plancode\":\"").append(order.getPlancode()).append("\",");
+		sb.append("\"num\":\"").append(order.getNum()).append("\",");
+		sb.append("\"bgcode\":\"").append(order.getBgcode()).append("\"");
+		sb.append("}");
+		order.setQrcode(sb.toString());
+		businessBaoGongOrderService.save(order);
+
 	}
 	public String getCurrentCode(String ymd){
 		String maxcode  = mapper.getMaxCode(ymd);

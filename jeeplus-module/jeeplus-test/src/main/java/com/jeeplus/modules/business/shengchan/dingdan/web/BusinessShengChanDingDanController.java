@@ -19,6 +19,7 @@ import com.jeeplus.modules.business.shengchan.beiliao.apply.entity.BusinessSheng
 import com.jeeplus.modules.business.shengchan.beiliao.apply.entity.BusinessShengchanBeiliaoApplyMx;
 import com.jeeplus.modules.business.shengchan.beiliao.apply.service.BusinessShengChanBeiLiaoApplyService;
 import com.jeeplus.modules.business.shengchan.bom.entity.BusinessShengChanBom;
+import com.jeeplus.modules.business.shengchan.bom.entity.BusinessShengChanDingdanMx;
 import com.jeeplus.modules.business.shengchan.bom.service.BusinessShengChanDingdanMxService;
 import com.jeeplus.modules.business.shengchan.dingdan.entity.BusinessShengChanDingDan;
 import com.jeeplus.modules.business.shengchan.dingdan.entity.BusinessShengChanDingDanMingXi;
@@ -279,7 +280,12 @@ public class BusinessShengChanDingDanController extends BaseController {
 		}
 		return getBootstrapData(page);
 	}
-
+	@ResponseBody
+	@RequestMapping(value = "mxdatascbb")
+	public Map<String, Object> mxdatascbb(BusinessShengChanDingDanMingXi businessShengChanDingDanMingXi, HttpServletRequest request, HttpServletResponse response, Model model) {
+		Page<BusinessShengChanDingDanMingXi> page = businessShengChanDingDanService.findShengChanDingDanMingXiByShengChanBaoBiaoPage(new Page<BusinessShengChanDingDanMingXi>(request, response), businessShengChanDingDanMingXi);
+		return getBootstrapData(page);
+	}
 	/**
 	 * 查看，增加，编辑生产订单表单页面
 	 * params:

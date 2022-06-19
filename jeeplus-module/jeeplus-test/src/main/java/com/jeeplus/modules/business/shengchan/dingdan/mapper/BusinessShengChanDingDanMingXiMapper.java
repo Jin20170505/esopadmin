@@ -24,6 +24,8 @@ public interface BusinessShengChanDingDanMingXiMapper extends BaseMapper<Busines
 
 	/** 用于排产 */
 	List<BusinessShengChanDingDanMingXi> findShengChanDingDanMingXiByPaiChan(BusinessShengChanDingDanMingXi businessShengChanDingDanMingXi);
+	/** 用于车间生产报表**/
+	List<BusinessShengChanDingDanMingXi> findShengChanDingDanMingXiByShengChanBaoBiao(BusinessShengChanDingDanMingXi businessShengChanDingDanMingXi);
 
 	List<BusinessShengChanDingDanMingXi> findShengChanDingDanMingXi(BusinessShengChanDingDanMingXi businessShengChanDingDanMingXi);
 
@@ -51,4 +53,7 @@ public interface BusinessShengChanDingDanMingXiMapper extends BaseMapper<Busines
 
 	@Update("update business_shengchan_dingdan_mingxi set ischaidan = '未拆完' where id = #{id}")
 	void updateChaidanStatus(@Param("id") String id,@Param("status") String status);
+
+	@Select("select cinv_name as cinvname,cinv_code as cinvcode,remarks as remarks from business_shengchan_dingdan_mingxi where id = #{id} ")
+	BusinessShengChanDingDanMingXi getCinvInfo(@Param("id") String id);
 }

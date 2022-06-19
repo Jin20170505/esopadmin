@@ -185,7 +185,6 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 			}
 		}
 	}
-	
 	@Transactional(readOnly = false)
 	public void delete(BusinessBaoGongOrder businessBaoGongOrder) {
 		Integer rk = businessRuKuProductMapper.hasByBgid(businessBaoGongOrder.getId());
@@ -198,6 +197,7 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		}
 		businessBaoGongRecordService.deleteByBgid(businessBaoGongOrder.getId());
 		super.delete(businessBaoGongOrder);
+		businessJiHuaGongDanMapper.updateisshengcheng(businessBaoGongOrder.getPlanid(), "未生成");
 		businessBaoGongOrderMingXiMapper.delete(new BusinessBaoGongOrderMingXi(businessBaoGongOrder));
 	}
 
@@ -320,5 +320,14 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		businessBaoGongRecordService.deleteByBgid(rid);
 		mapper.restOrder(rid);
 		mapper.restOrderMx(rid);
+	}
+
+	/**
+	 * 根据生产行ID 查询 未做数量（最后一道工序未报工数量）
+	 * @param schid
+	 * @return
+	 */
+	public Double getNoDoneNumBySchid(String schid){
+		return mapper.getNoDoneNumBySchid(schid);
 	}
 }

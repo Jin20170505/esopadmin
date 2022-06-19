@@ -1,0 +1,157 @@
+<%
+layout("/include/_container.html", {title:"车间生产报表", parent:"报工单"}){
+%>
+<!-- 搜索框-->
+<div id="search-collapse" class="white-box  m-b-5">
+    <a class="jp-ti-close close" onclick="$('#search-collapse').fadeToggle()">
+        <i class="fa fa-times"></i>
+    </a>
+    <form id="searchForm" class="form-inline">
+        <div class="form-group m-b-10 m-r-10">
+            <label class="m-r-15" title="产品：">产品：</label>
+            <#gridselect callback="productCallBack" url="${ctx}/business/shengchan/dingdan/businessShengChanDingDan/mxdatascbb" id="dd" name="dd.id" value="" labelName="dd.cinvcode" labelValue=""
+            title="选择产品" isMultiSelected="true" class="form-control " fieldLabels="单号|行号|存货编码|存货名称|规格型号" fieldKeys="p.code|no|cinv.code|cinvname|std" searchLabels="生产单号|存货编码|存货名称" searchKeys="p.code|cinvcode|cinvname" />
+        </div>
+    </form>
+    <p id="htm"></p>
+</div>
+<script type="text/javascript">
+    var schids = [];
+    var cinvcodes = [];
+    function productCallBack(items){
+        schids = [];
+        cinvcodes = [];
+        var html = "产品编码：";
+        var htms = [];
+        for(var i=0,len=items.length;i<len;i++){
+            schids.push(items[i].id);
+            cinvcodes.push(items[i].cinv.code);
+           htms.push(`<b>`+items[i].cinv.code+`</b>`);
+        }
+        $("#htm").html(html+htms.join("|"));
+        $('#ddName').val(cinvcodes.join(","));
+    }
+    function baobiaoshengcheng(){
+        $('#table').bootstrapTable('refresh');
+    }
+</script>
+<div class="white-box">
+    <div id="toolbar">
+        <button id="add" class="btn btn-custom waves-effect w-xs waves-light" onclick="baobiaoshengcheng()">
+            <i class="fa fa-address-book"></i> 生成报表
+        </button>
+    </div>
+    <table id="table" class="table-bordered"   data-toolbar="#toolbar"></table>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#table').bootstrapTable({
+                //请求方法
+                method: 'post',
+                //类型json
+                dataType: "json",
+                contentType: "application/x-www-form-urlencoded",
+                //移动端自适应
+                mobileResponsive: false,
+                //允许列拖动大小
+                resizable: false,
+                //固定表头
+                stickyHeader: false,
+                stickyHeaderOffsetY: 0,
+                //显示检索按钮
+                showSearch: true,
+                //显示刷新按钮
+                showRefresh: true,
+                //显示切换手机试图按钮
+                showToggle: false,
+                //显示 内容列下拉框
+                showColumns: false,
+                //显示到处按钮
+                showExport: true,
+                //显示切换分页按钮
+                showPaginationSwitch: false,
+                //显示详情按钮
+                detailView: false,
+                //最低显示2行
+                minimumCountColumns: 2,
+                //是否显示行间隔色
+                striped: true,
+                //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性(*)
+                cache: false,
+                //是否显示分页(*)
+                pagination: true,
+                //分页方式: client客户端分页，server服务端分页(*)
+                sidePagination: "client",
+                //排序方式
+                sortOrder: "asc",
+                //初始化加载第一页，默认第一页
+                pageNumber:1,
+                //每页的记录行数(*)
+                pageSize: 10,
+                //可供选择的每页的行数(*)
+                pageList: [10, 25, 50, 100],
+                //这个接口需要处理bootstrap table传递的固定参数,并返回特定格式的json数据
+                url: "${ctx}/baobiao/cheJianShengChanBaoBiao",
+                //默认值为 'limit',传给服务端的参数为：limit, offset, search, sort, order Else
+                //queryParamsType:'',
+                ////查询参数,每次调用是会带上这个参数，可自定义
+                queryParams : function(params) {
+                    var searchParam = {};
+                    searchParam.schids = schids.join(",");
+                    searchParam.cinvcode = cinvcodes.join(",");
+                    return searchParam;
+                },
+                onShowSearch: function () {
+                    $("#import-collapse").hide();
+                    $("#search-collapse").fadeToggle();
+                },
+                columns: [{
+                        field: 'no',
+                        title: '序号'
+                    }
+                    ,{
+                        field: 'cinvcode',
+                        title: '产品编码'
+                    }
+                    ,{
+                        field: 'cinvname',
+                        title: '产品名称'
+                    }
+                    ,{
+                        field: 'nodonum',
+                        title: '系统订单'
+                    }
+                    ,{
+                        field: 'daynum',
+                        title: '每日产能'
+                    }
+                    ,{
+                        field: 'days',
+                        title: '消耗天数',
+                        formatter:function(value, row , index){
+                            var nonum = row.nonum;
+                            var daynum = row.daynum;
+                            var day = 0;
+                            if(!daynum){
+                                return day;
+                            }else {
+                                nonum = nonum?nonum:0;
+                                day = nonum/daynum;
+                                if(day>=7){
+                                    return `<font color="red">`+day.toFixed(2)+`</font>`
+                                }else {
+                                    return day.toFixed(2);
+                                }
+                            }
+                        }
+                    }
+                    ,{
+                        field: 'remarks',
+                        title: '备注'
+                    }
+                ]
+
+            });
+        });
+    </script>
+</div>
+<% } %>

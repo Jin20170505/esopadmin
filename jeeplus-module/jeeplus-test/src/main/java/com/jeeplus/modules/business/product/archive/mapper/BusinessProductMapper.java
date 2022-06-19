@@ -31,4 +31,7 @@ public interface BusinessProductMapper extends BaseMapper<BusinessProduct> {
 
     @Select("select kezhong from business_product where id = #{code}")
     String getKeZhongOfCinvcode(String code);
+
+    @Select("select daynum from business_product where id = #{code}")
+    String getDayNumOfCinvcode(String code);
 }
