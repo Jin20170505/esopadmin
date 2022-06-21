@@ -46,16 +46,11 @@
 	</select>
 
 	<select id="findShengChanDingDanMingXiByShengChanBaoBiao" resultType="BusinessShengChanDingDanMingXi">
-		select a.id as "id",a.batchno as "batchno",a.no AS "no",a.cinv_code AS "cinv.code",a.cinv_name AS "cinvname",a.std AS "std",
-		a.unit AS "unit",a.num AS "num",a.donenum as "donenum",p.code as "p.code",a.status as "status"
+		select distinct a.cinv_code AS "cinvcode",a.cinv_name AS "cinvname",a.std AS "std"
 		FROM business_shengchan_dingdan_mingxi a
 		left join business_shengchan_dingdan p on p.id = a.pid
 		<where>
-			a.del_flag = #{DEL_FLAG_NORMAL} and a.cinv_code like 'D13%'
-			${dataScope}
-			<if test="p != null and p.code != null and p.code != ''">
-				AND p.code like concat('%',#{p.code},'%')
-			</if>
+			a.del_flag = #{DEL_FLAG_NORMAL} and a.cinv_code like 'D13%' and a.status='开立'
 			<if test="cinvcode != null  and cinvcode != ''">
 				AND a.cinv_code like concat('%',#{cinvcode},'%')
 			</if>
@@ -71,7 +66,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY p.code desc,a.no ASC
+				ORDER BY a.cinv_code ASC
 			</otherwise>
 		</choose>
 	</select>

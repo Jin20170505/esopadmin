@@ -10,23 +10,23 @@ layout("/include/_container.html", {title:"车间生产报表", parent:"报工�
         <div class="form-group m-b-10 m-r-10">
             <label class="m-r-15" title="产品：">产品：</label>
             <#gridselect callback="productCallBack" url="${ctx}/business/shengchan/dingdan/businessShengChanDingDan/mxdatascbb" id="dd" name="dd.id" value="" labelName="dd.cinvcode" labelValue=""
-            title="选择产品" isMultiSelected="true" class="form-control " fieldLabels="单号|行号|存货编码|存货名称|规格型号" fieldKeys="p.code|no|cinv.code|cinvname|std" searchLabels="生产单号|存货编码|存货名称" searchKeys="p.code|cinvcode|cinvname" />
+            title="选择产品" isMultiSelected="true" class="form-control " fieldLabels="存货编码|存货名称|规格型号" fieldKeys="cinvcode|cinvname|std" searchLabels="存货编码|存货名称" searchKeys="cinvcode|cinvname" />
         </div>
     </form>
     <p id="htm"></p>
 </div>
 <script type="text/javascript">
-    var schids = [];
     var cinvcodes = [];
+    var cinvnames = [];
     function productCallBack(items){
-        schids = [];
         cinvcodes = [];
+        cinvnames = [];
         var html = "产品编码：";
         var htms = [];
         for(var i=0,len=items.length;i<len;i++){
-            schids.push(items[i].id);
-            cinvcodes.push(items[i].cinv.code);
-           htms.push(`<b>`+items[i].cinv.code+`</b>`);
+            cinvcodes.push(items[i].cinvcode);
+            cinvnames.push(items[i].cinvname);
+           htms.push(`<b>`+items[i].cinvcode+`</b>`);
         }
         $("#htm").html(html+htms.join("|"));
         $('#ddName').val(cinvcodes.join(","));
@@ -96,8 +96,8 @@ layout("/include/_container.html", {title:"车间生产报表", parent:"报工�
                 ////查询参数,每次调用是会带上这个参数，可自定义
                 queryParams : function(params) {
                     var searchParam = {};
-                    searchParam.schids = schids.join(",");
-                    searchParam.cinvcode = cinvcodes.join(",");
+                    searchParam.cinvcodes = cinvcodes.join(",");
+                    searchParam.cinvnames = cinvnames.join("\\");
                     return searchParam;
                 },
                 onShowSearch: function () {
@@ -128,7 +128,7 @@ layout("/include/_container.html", {title:"车间生产报表", parent:"报工�
                         field: 'days',
                         title: '消耗天数',
                         formatter:function(value, row , index){
-                            var nonum = row.nonum;
+                            var nonum = row.nodonum;
                             var daynum = row.daynum;
                             var day = 0;
                             if(!daynum){

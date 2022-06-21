@@ -122,26 +122,26 @@ layout("/include/_container.html", {title:"列表", parent:"报工单"}){
 <!--					生成报工单-->
 <!--				</button>-->
 				<% } %>
-		<% if(shiro.hasPermission("business:baogong:order:businessBaoGongOrder:print") ){ %>
-					    <button id="print" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="printbgd()">
-							<i class="fa fa-print"></i> 打印报工单
-			        	</button>
-		<% } %>
+			<% if(shiro.hasPermission("business:baogong:order:businessBaoGongOrder:print") ){ %>
+				<button id="print" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="printbgd()">
+					<i class="fa fa-print"></i> 打印报工单
+				</button>
+			<% } %>
 
-		<% if(shiro.hasPermission("business:baogong:order:businessBaoGongOrder:del") ){ %>
+			<% if(shiro.hasPermission("business:baogong:order:businessBaoGongOrder:del") ){ %>
 				<button id="remove" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="del()">
 	            	<i class="fa fa-remove"></i> 删除
 	        	</button>
 			<% } %>
-		<% if(shiro.hasPermission("business:baogong:order:businessBaoGongOrder:baogongchongzhi") ){ %>
-		<button id="baogongchongzhi" class="btn btn-white waves-effect w-xs waves-light"  disabled onclick="baogongchongzhi()">
-			报工重置
-		</button>
-		<% } %>
-			 <% if(shiro.hasPermission("business:baogong:order:businessBaoGongOrder:import") ){ %>
-<!--				<button id="import"  class="btn btn-white waves-effect w-xs waves-light" >-->
-<!--					<i class="fa fa-upload"></i> 导入-->
-<!--				</button>-->
+			<% if(shiro.hasPermission("business:baogong:order:businessBaoGongOrder:baogongchongzhi") ){ %>
+			<button id="baogongchongzhi" class="btn btn-white waves-effect w-xs waves-light"  disabled onclick="baogongchongzhi()">
+				报工重置
+			</button>
+			<% } %>
+			 <% if(shiro.hasPermission("business:baogong:order:businessBaoGongOrder:dealwithlingliao") ){ %>
+				<button id="lingliaodealwith"  class="btn btn-white waves-effect w-xs waves-light" onclick="lingliaodealwith();">
+					<i class="fa fa-adjust"></i> 材料出库领用数量不足处理
+				</button>
 			<% } %>
 			 <% if(shiro.hasPermission("business:baogong:order:businessBaoGongOrder:export") ){ %>
 <!--	        	<button id="export" class="btn btn-white waves-effect w-xs waves-light">-->

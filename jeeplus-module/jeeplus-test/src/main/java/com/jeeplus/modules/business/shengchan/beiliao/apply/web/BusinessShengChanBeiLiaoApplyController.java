@@ -17,6 +17,7 @@ import com.jeeplus.modules.business.ruku.product.entity.ProductTagBean;
 import com.jeeplus.modules.business.shengchan.beiliao.apply.entity.BusinessShengchanBeiliaoApplyMx;
 import com.jeeplus.modules.business.shengchan.bom.entity.BusinessShengChanBom;
 import com.jeeplus.modules.business.shengchan.dingdan.entity.BusinessShengChanDingDanMingXi;
+import com.jeeplus.modules.u8data.invpostionsum.service.U8InvPostionSumService;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,12 +75,18 @@ public class BusinessShengChanBeiLiaoApplyController extends BaseController {
 		j.setMsg("成功");
 		return j;
 	}
-
+	@Autowired
+	private U8InvPostionSumService u8InvPostionSumService;
 	@RequestMapping("goToBeiLiaoPrint")
 	public String goToBeiLiaoPrint(String rid,Model model){
 		BusinessShengChanBeiLiaoApply mingXi = businessShengChanBeiLiaoApplyService.get(rid);
 		model.addAttribute("hmx",mingXi);
 		List<BusinessShengchanBeiliaoApplyMx> boms = mingXi.getBusinessShengchanBeiliaoApplyMxList();
+		if(boms!=null && !boms.isEmpty()){
+			boms.forEach(d->{
+				d.setXcnum(u8InvPostionSumService.getSumNumByCinvcode(d.getCinvcode()));
+			});
+		}
 		model.addAttribute("boms",boms);
 		return "modules/business/shengchan/beiliao/apply/beiliaoprint";
 	}
@@ -123,7 +130,7 @@ public class BusinessShengChanBeiLiaoApplyController extends BaseController {
 	@RequiresPermissions("business:shengchan:beiliao:apply:businessShengChanBeiLiaoApply:list")
 	@RequestMapping(value = "data")
 	public Map<String, Object> data(BusinessShengChanBeiLiaoApply businessShengChanBeiLiaoApply, HttpServletRequest request, HttpServletResponse response, Model model) {
-		Page<BusinessShengChanBeiLiaoApply> page = businessShengChanBeiLiaoApplyService.findPage(new Page<BusinessShengChanBeiLiaoApply>(request, response), businessShengChanBeiLiaoApply); 
+		Page<BusinessShengChanBeiLiaoApply> page = businessShengChanBeiLiaoApplyService.findPage(new Page<BusinessShengChanBeiLiaoApply>(request, response), businessShengChanBeiLiaoApply);
 		return getBootstrapData(page);
 	}
 
@@ -204,7 +211,11 @@ public class BusinessShengChanBeiLiaoApplyController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "detail")
 	public BusinessShengChanBeiLiaoApply detail(String id) {
-		return businessShengChanBeiLiaoApplyService.get(id);
+		BusinessShengChanBeiLiaoApply apply = businessShengChanBeiLiaoApplyService.get(id);
+		apply.getBusinessShengchanBeiliaoApplyMxList().forEach(d->{
+			d.setXcnum(u8InvPostionSumService.getSumNumByCinvcode(d.getCinvcode()));
+		});
+		return apply;
 	}
 	
 

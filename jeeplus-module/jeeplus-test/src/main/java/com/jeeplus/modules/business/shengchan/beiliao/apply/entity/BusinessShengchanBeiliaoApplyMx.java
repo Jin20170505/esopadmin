@@ -23,6 +23,7 @@ public class BusinessShengchanBeiliaoApplyMx extends DataEntity<BusinessShengcha
 	private Double num;		// 数量
 	private String unit;		// 单位
 	private String hw;// 货位
+	private Double xcnum; // 现存量
 	
 	public BusinessShengchanBeiliaoApplyMx() {
 		super();
@@ -110,6 +111,15 @@ public class BusinessShengchanBeiliaoApplyMx extends DataEntity<BusinessShengcha
 
 	public BusinessShengchanBeiliaoApplyMx setHw(String hw) {
 		this.hw = hw;
+		return this;
+	}
+
+	public Double getXcnum() {
+		return xcnum;
+	}
+
+	public BusinessShengchanBeiliaoApplyMx setXcnum(Double xcnum) {
+		this.xcnum = xcnum;
 		return this;
 	}
 }

@@ -50,4 +50,8 @@ public interface BusinessBaoGongOrderMapper extends BaseMapper<BusinessBaoGongOr
     @Select("SELECT sum(a.num - IFNULL(b.hgnum,0)) FROM (SELECT a.id,max(a.no) as maxno,a.num,a.pid FROM business_baogong_order_mingxi a LEFT JOIN business_baogao_order b on a.pid = b.id where b.orderlineid = #{schid} GROUP BY a.pid,a.id " +
             ") a LEFT JOIN business_baogong_record b on a.id = b.bghid")
     Double getNoDoneNumBySchid(@Param("schid") String schid);
+    @Select("select id from business_shengchan_dingdan_mingxi where cinv_code =#{cinvcode} and status='开立'")
+    List<String> getSchidByCinvcode(@Param("cinvcode") String cinvcode);
+    @Select("select orderlineid from business_baogao_order where id=#{orderid}")
+    String getSchidByOrderid(@Param("orderid") String orderid);
 }

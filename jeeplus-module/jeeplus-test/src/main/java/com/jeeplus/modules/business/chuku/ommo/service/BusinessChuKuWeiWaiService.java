@@ -6,16 +6,14 @@ package com.jeeplus.modules.business.chuku.ommo.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jeeplus.common.utils.DateUtils;
-import com.jeeplus.common.utils.number.RandomUtil;
 import com.jeeplus.modules.base.cangku.mapper.BaseCangKuMapper;
-import com.jeeplus.modules.base.huowei.mapper.BaseHuoWeiMapper;
 import com.jeeplus.modules.base.vendor.entity.BaseVendor;
 import com.jeeplus.modules.business.ommo.bom.entity.BussinessOmMoDetailOnly;
 import com.jeeplus.modules.sys.entity.User;
 import com.jeeplus.modules.sys.utils.UserUtils;
 import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import org.jeeplus.u8.webservice.U8Post;
 import org.jeeplus.u8.webservice.U8Url;
 import org.jeeplus.u8.webservice.YT_Rd11;
@@ -136,10 +134,11 @@ public class BusinessChuKuWeiWaiService extends CrudService<BusinessChuKuWeiWaiM
 		businessChuKuWeiWai.setNum(info.getNum());
 		businessChuKuWeiWai.setUnit(info.getUnit());
 		businessChuKuWeiWai.setVendor(new BaseVendor(info.getVendorid()));
-		JSONObject json = JSONObject.fromObject(mxJson);
+		Object obj = JSONObject.parse(mxJson);
+		net.sf.json.JSONObject json = net.sf.json.JSONObject.fromObject(obj);
 		JSONArray array = json.getJSONArray("list");
 		array.forEach(a->{
-			JSONObject j = JSONObject.fromObject(a);
+			net.sf.json.JSONObject j = net.sf.json.JSONObject.fromObject(a);
 			BusinessChuKuWeiWaiMx mx = new BusinessChuKuWeiWaiMx();
 			mx.setBomid(j.optString("id"));
 			mx.setId("");mx.setDelFlag("0");
@@ -147,6 +146,7 @@ public class BusinessChuKuWeiWaiService extends CrudService<BusinessChuKuWeiWaiM
 			mx.setCinvcode(j.optString("cinvcode"));
 			mx.setCinvname(j.optString("cinvname"));
 			mx.setCinvstd(j.optString("cinvstd"));
+			mx.setRemarks(j.optString("num","0"));
 			mx.setNum(j.optDouble("num",0.0));
 			mx.setUnit(j.optString("unit"));
 			mx.setHw(j.optString("hwid"));
@@ -171,7 +171,7 @@ public class BusinessChuKuWeiWaiService extends CrudService<BusinessChuKuWeiWaiM
 			businessChuKuWeiWai.getBusinessChuKuWeiWaiMxList().forEach(d->{
 				YT_Rds11 r = new YT_Rds11();
 				r.setcInvCode(d.getCinvcode());
-				r.setiQuantity(d.getNum()+"");
+				r.setiQuantity(d.getRemarks());
 				r.setCmocode(info.getCode());
 				r.setImoseq(info.getNo()+"");
 				r.setInvcode(d.getCinvcode());

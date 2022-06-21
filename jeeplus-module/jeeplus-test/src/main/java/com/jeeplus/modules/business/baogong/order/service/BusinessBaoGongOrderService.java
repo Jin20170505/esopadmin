@@ -323,11 +323,29 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 	}
 
 	/**
-	 * 根据生产行ID 查询 未做数量（最后一道工序未报工数量）
-	 * @param schid
+	 * 根据产品编码 查询 未做数量（最后一道工序未报工数量）
+	 * @param cinvcode 产品存货编码
 	 * @return
 	 */
-	public Double getNoDoneNumBySchid(String schid){
-		return mapper.getNoDoneNumBySchid(schid);
+	public Double getNoDoneNumByCinvcode(String cinvcode){
+		List<String> schids = mapper.getSchidByCinvcode(cinvcode);
+		double sum = 0.0;
+		if(schids!=null){
+			for (String schid:schids){
+				sum += mapper.getNoDoneNumBySchid(schid);
+			}
+		}
+		return sum;
+	}
+
+	// 获取生产明细ID
+	public String getSchidByOrderid(String id){
+		return mapper.getSchidByOrderid(id);
+	}
+
+	@Transactional(readOnly = false)
+	public String lingliaodealwith(String bgid){
+
+		return "";
 	}
 }

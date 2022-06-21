@@ -11,6 +11,8 @@
 		a.del_flag AS "delFlag",
 		a.do_user as "douser.id",
 		a.bgdate AS "bgdate",
+		a.bgid as "bgid",
+		a.bghid as "bghid",
 		a.bgcode AS "bgcode",
 		a.ordercode AS "ordercode",
 		a.orderline AS "orderline",

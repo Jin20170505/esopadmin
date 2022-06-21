@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.business.huowei.change.mapper.BusinessHuoWeiChangeMapper">
+    
+	<sql id="businessHuoWeiChangeColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.code AS "code",
+		a.ck_id AS "ck.id",
+		a.ddate AS "ddate",
+		ck.name AS "ck.name",
+		a.cmaker AS "cmaker"
+	</sql>
+	
+	<sql id="businessHuoWeiChangeJoins">
+		LEFT JOIN base_cangku ck ON ck.id = a.ck_id
+	</sql>
+	
+    
+	<select id="get" resultType="BusinessHuoWeiChange" >
+		SELECT 
+			<include refid="businessHuoWeiChangeColumns"/>
+		FROM business_huowei_change a
+		<include refid="businessHuoWeiChangeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BusinessHuoWeiChange" >
+		SELECT 
+			<include refid="businessHuoWeiChangeColumns"/>
+		FROM business_huowei_change a
+		<include refid="businessHuoWeiChangeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="code != null and code != ''">
+				AND a.code LIKE concat('%',#{code},'%')
+			</if>
+			<if test="ck != null and ck.id != null and ck.id != ''">
+				AND a.ck_id = #{ck.id}
+			</if>
+			<if test="beginDdate != null and endDdate != null ">
+				AND a.ddate BETWEEN #{beginDdate} AND #{endDdate}
+			</if>
+			<if test="cmaker != null and cmaker != ''">
+				AND a.cmaker LIKE concat('%',#{cmaker},'%')
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BusinessHuoWeiChange" >
+		SELECT 
+			<include refid="businessHuoWeiChangeColumns"/>
+		FROM business_huowei_change a
+		<include refid="businessHuoWeiChangeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO business_huowei_change(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			code,
+			ck_id,
+			ddate,
+			cmaker
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{code},
+			#{ck.id},
+			#{ddate},
+			#{cmaker}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE business_huowei_change SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			code = #{code},
+			ck_id = #{ck.id},
+			ddate = #{ddate},
+			cmaker = #{cmaker}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM business_huowei_change
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE business_huowei_change SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="BusinessHuoWeiChange" statementType="STATEMENT">
+		select * FROM business_huowei_change  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

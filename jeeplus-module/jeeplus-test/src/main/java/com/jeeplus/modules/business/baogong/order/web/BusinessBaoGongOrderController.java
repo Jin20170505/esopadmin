@@ -103,6 +103,28 @@ public class BusinessBaoGongOrderController extends BaseController {
 			}
 		}
 	}
+
+	/**
+	 * 领料用量不足 处理
+	 * @param ids 报工ID
+	 * @return
+	 */
+	@RequestMapping("lingliaodealwith")
+	@ResponseBody
+	public AjaxJson lingliaodealwith(String ids){
+		AjaxJson json = new AjaxJson();
+		try{
+			String schid = businessBaoGongOrderService.getSchidByOrderid(ids);
+
+			json.setSuccess(true);
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setSuccess(false);
+			json.setMsg("处理失败，原因："+e.getMessage());
+		}
+		return json;
+	}
+
 	/**
 	 * 报工单列表页面
 	 */

@@ -1,52 +1,6 @@
 <script>
-    $(document).ready(function() {
-    var to = false;
-    $('#search_q').keyup(function () {
-    if(to) { clearTimeout(to); }
-    to = setTimeout(function () {
-    var v = $('#search_q').val();
-    $('#businessProductTypeOnlyReadjsTree').jstree(true).search(v);
-}, 250);
-});
-    $('#businessProductTypeOnlyReadjsTree').jstree({
-    'core' : {
-    "multiple": false,
-    "animation": 0,
-    "themes": {"icons": true, "stripes": false},
-    'data' : {
-    "url" : "${ctx}/business/baogong/order/businessBaoGongOrder/treeData",
-    "dataType" : "json"
-}
-},
-    "conditionalselect" : function (node, event) {
-    return false;
-},
-    'plugins': ['types', 'wholerow', "search"],
-    "types": {
-    "default": {
-    "icon": "fa fa-folder text-custom"
-},
-    "file": {
-    "icon": "fa fa-file text-success"
-}
-}
-
-}).bind("activate_node.jstree", function (obj, e) {
-    var node = $('#businessProductTypeOnlyReadjsTree').jstree(true).get_selected(true)[0];
-    var opt = {
-    silent: true,
-    query:{
-    'printstatus':node.id
-}
-};
-    $("#printstatus").val(node.id);
-    $('#businessShengChanBeiLiaoApplyTable').bootstrapTable('refresh',opt);
-}).on('loaded.jstree', function() {
-    $("#businessProductTypeOnlyReadjsTree").jstree('open_all');
-});
-});
 $(document).ready(function() {
-	$('#businessShengChanBeiLiaoApplyTable').bootstrapTable({
+	$('#businessHuoWeiChangeTable').bootstrapTable({
 		 
 		  //请求方法
                method: 'post',
@@ -95,7 +49,7 @@ $(document).ready(function() {
                //可供选择的每页的行数(*)
                pageList: [10, 25, 50, 100],
                //这个接口需要处理bootstrap table传递的固定参数,并返回特定格式的json数据  
-               url: "${ctx}/business/shengchan/beiliao/apply/businessShengChanBeiLiaoApply/data",
+               url: "${ctx}/business/huowei/change/businessHuoWeiChange/data",
                //默认值为 'limit',传给服务端的参数为：limit, offset, search, sort, order Else
                //queryParamsType:'',   
                ////查询参数,每次调用是会带上这个参数，可自定义                         
@@ -116,26 +70,19 @@ $(document).ready(function() {
 		        checkbox: true
 		       
 		    }
-                   ,{
-                       field: 'printstatus',
-                       title: '打印状态',
-                       sortable: true,
-                       sortName: 'printstatus'
-
-                   }
 			,{
-		        field: 'sccode',
-		        title: '生产编码',
+		        field: 'code',
+		        title: '单号',
 		        sortable: true,
-		        sortName: 'sccode'
+		        sortName: 'code'
 		        ,formatter:function(value, row , index){
-		        	  <% if(shiro.hasPermission("business:shengchan:beiliao:apply:businessShengChanBeiLiaoApply:edit") ){ %>
+		        	  <% if(shiro.hasPermission("business:huowei:change:businessHuoWeiChange:edit") ){ %>
 					   if(!value){
 						  return "<a  href='#' onclick='edit(\""+row.id+"\")'>-</a>";
 					   }else{
 						  return "<a  href='#' onclick='edit(\""+row.id+"\")'>"+value+"</a>";
 						}
-                     <% }else if(shiro.hasPermission("business:shengchan:beiliao:apply:businessShengChanBeiLiaoApply:view")){ %>
+                     <% }else if(shiro.hasPermission("business:huowei:change:businessHuoWeiChange:view")){ %>
 					   if(!value){
 						  return "<a  href='#' onclick='view(\""+row.id+"\")'>-</a>";
                        }else{
@@ -148,52 +95,24 @@ $(document).ready(function() {
 		       
 		    }
 			,{
-		        field: 'scline',
-		        title: '生产行号',
+		        field: 'ck.id',
+		        title: '仓库',
 		        sortable: true,
-		        sortName: 'scline'
+		        sortName: 'ck.id'
 		       
 		    }
 			,{
-		        field: 'dept.name',
-		        title: '生产部门',
+		        field: 'ddate',
+		        title: '调整时间',
 		        sortable: true,
-		        sortName: 'dept.name'
+		        sortName: 'ddate'
 		       
 		    }
 			,{
-		        field: 'cinvcode',
-		        title: '产品编码',
+		        field: 'cmaker',
+		        title: '调整人',
 		        sortable: true,
-		        sortName: 'cinvcode'
-		       
-		    }
-			,{
-		        field: 'cinvname',
-		        title: '产品名称',
-		        sortable: true,
-		        sortName: 'cinvname'
-		       
-		    }
-			,{
-		        field: 'cinvstd',
-		        title: '规格型号',
-		        sortable: true,
-		        sortName: 'cinvstd'
-		       
-		    }
-			,{
-		        field: 'num',
-		        title: '数量',
-		        sortable: true,
-		        sortName: 'num'
-		       
-		    }
-			,{
-		        field: 'unit',
-		        title: '单位',
-		        sortable: true,
-		        sortName: 'unit'
+		        sortName: 'cmaker'
 		       
 		    }
 			,{
@@ -215,13 +134,13 @@ $(document).ready(function() {
 			   },
 			   formatter:  function operateFormatter(value, row, index) {
 				   return [
-					<% if(shiro.hasPermission("business:shengchan:beiliao:apply:businessShengChanBeiLiaoApply:view")){ %>
+					<% if(shiro.hasPermission("business:huowei:change:businessHuoWeiChange:view")){ %>
 					   '<a class="view btn btn-icon waves-effect waves-light btn-custom btn-xs m-r-5"> <i class="fa fa-search"></i></a>',
 				   <% } %>
-				   <% if(shiro.hasPermission("business:shengchan:beiliao:apply:businessShengChanBeiLiaoApply:edit")){ %>
+				   <% if(shiro.hasPermission("business:huowei:change:businessHuoWeiChange:edit")){ %>
 					   '<a class="edit btn btn-icon waves-effect waves-light btn-success btn-xs m-r-5"> <i class="fa fa-pencil"></i></a>',
 				   <% } %>
-				   <% if(shiro.hasPermission("business:shengchan:beiliao:apply:businessShengChanBeiLiaoApply:del")){ %>
+				   <% if(shiro.hasPermission("business:huowei:change:businessHuoWeiChange:del")){ %>
 					   '<a class="del btn btn-icon waves-effect waves-light btn-danger btn-xs"> <i class="fa fa-trash-o"></a>'
 				   <% } %>
 				   ].join('');
@@ -232,10 +151,10 @@ $(document).ready(function() {
 		});
 		
 
-	  $('#businessShengChanBeiLiaoApplyTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
+	  $('#businessHuoWeiChangeTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
-            $('#remove').prop('disabled', ! $('#businessShengChanBeiLiaoApplyTable').bootstrapTable('getSelections').length);
-            $('#edit,#print').prop('disabled', $('#businessShengChanBeiLiaoApplyTable').bootstrapTable('getSelections').length!=1);
+            $('#remove').prop('disabled', ! $('#businessHuoWeiChangeTable').bootstrapTable('getSelections').length);
+            $('#edit').prop('disabled', $('#businessHuoWeiChangeTable').bootstrapTable('getSelections').length!=1);
         });
 
 	 $("#import").click(function(){//显示导入面板
@@ -247,7 +166,7 @@ $(document).ready(function() {
 	 $("#btnImportExcel").click(function(){//导入Excel
 		 var importForm = $('#importForm')[0];
 		 jp.block('#import-collapse',"文件上传中...");
-		 jp.uploadFile(importForm,"${ctx}/business/shengchan/beiliao/apply/businessShengChanBeiLiaoApply/import",function (data) {
+		 jp.uploadFile(importForm,"${ctx}/business/huowei/change/businessHuoWeiChange/import",function (data) {
 			 if(data.success){
 				 jp.toastr_success(data.msg);
 				 refresh();
@@ -259,15 +178,15 @@ $(document).ready(function() {
 	  })
 
 	 $("#btnDownloadTpl").click(function(){//下载模板文件
-            jp.downloadFile('${ctx}/business/shengchan/beiliao/apply/businessShengChanBeiLiaoApply/import/template');
+            jp.downloadFile('${ctx}/business/huowei/change/businessHuoWeiChange/import/template');
 		})
 
 	 $("#export").click(function(){//导出Excel文件
 	        var searchParam = $("#searchForm").serializeJSON();
 	        searchParam.pageNo = 1;
 	        searchParam.pageSize = -1;
-            var sortName = $('#businessShengChanBeiLiaoApplyTable').bootstrapTable("getOptions", "none").sortName;
-            var sortOrder = $('#businessShengChanBeiLiaoApplyTable').bootstrapTable("getOptions", "none").sortOrder;
+            var sortName = $('#businessHuoWeiChangeTable').bootstrapTable("getOptions", "none").sortName;
+            var sortOrder = $('#businessHuoWeiChangeTable').bootstrapTable("getOptions", "none").sortOrder;
             var values = "";
             for(var key in searchParam){
                 values = values + key + "=" + searchParam[key] + "&";
@@ -276,7 +195,7 @@ $(document).ready(function() {
                 values = values + "orderBy=" + sortName + " "+sortOrder;
             }
 
-			jp.downloadFile('${ctx}/business/shengchan/beiliao/apply/businessShengChanBeiLiaoApply/export?'+values);
+			jp.downloadFile('${ctx}/business/huowei/change/businessHuoWeiChange/export?'+values);
 	  })
 
 	  $("#search").click("click", function() {// 绑定查询按扭
@@ -291,28 +210,29 @@ $(document).ready(function() {
 		  refresh();
 		});
 
+	 $('#ddate').datepicker({//日期控件初始化
+			toggleActive: true,
+			language:"zh-CN",
+    			format:"yyyy-mm-dd"
+		});
 		
 	});
 
 	//获取选中行
   function getIdSelections() {
-        return $.map($("#businessShengChanBeiLiaoApplyTable").bootstrapTable('getSelections'), function (row) {
+        return $.map($("#businessHuoWeiChangeTable").bootstrapTable('getSelections'), function (row) {
             return row.id
         });
     }
- // 打印备料单
-  function printbl(){
-  var rid = getIdSelections();
-  jp.windowOpen('${ctx}/business/shengchan/beiliao/apply/businessShengChanBeiLiaoApply/goToBeiLiaoPrint?rid='+rid,"备料单--打印",window.screen.height,window.screen.width);
-}
+
   //删除
   function del(ids){
      if(!ids){
           ids = getIdSelections();
      }
-	 jp.confirm('确认要删除该生产备料记录吗？', function(){
+	 jp.confirm('确认要删除该货位调整记录吗？', function(){
 		var index =jp.loading();
-		jp.get("${ctx}/business/shengchan/beiliao/apply/businessShengChanBeiLiaoApply/delete?ids=" + ids, function(data){
+		jp.get("${ctx}/business/huowei/change/businessHuoWeiChange/delete?ids=" + ids, function(data){
 				if(data.success){
 					refresh();
 					jp.toastr_success(data.msg);
@@ -328,41 +248,41 @@ $(document).ready(function() {
 
     //刷新列表
   function refresh() {
-      $('#businessShengChanBeiLiaoApplyTable').bootstrapTable('refresh');
+      $('#businessHuoWeiChangeTable').bootstrapTable('refresh');
   }
 
    //新增表单页面
  function add() {
-     jp.openSaveDialog('新增生产备料', "${ctx}/business/shengchan/beiliao/apply/businessShengChanBeiLiaoApply/form/add",'90%', '90%');
+     jp.openSaveDialog('新增货位调整', "${ctx}/business/huowei/change/businessHuoWeiChange/form/add",'800px', '500px');
  }
   //编辑表单页面
   function edit(id){
       if(!id){
           id = getIdSelections();
       }
-	  jp.openSaveDialog('编辑生产备料', "${ctx}/business/shengchan/beiliao/apply/businessShengChanBeiLiaoApply/form/edit?id="+id,'90%', '90%');
+	  jp.openSaveDialog('编辑货位调整', "${ctx}/business/huowei/change/businessHuoWeiChange/form/edit?id="+id,'800px', '500px');
   }
   //查看表单页面
   function view(id) {
       if(!id){
           id = getIdSelections();
       }
-      jp.openViewDialog('查看生产备料', "${ctx}/business/shengchan/beiliao/apply/businessShengChanBeiLiaoApply/form/view?id="+id,'90%', '90%');
+      jp.openViewDialog('查看货位调整', "${ctx}/business/huowei/change/businessHuoWeiChange/form/view?id="+id,'800px', '500px');
   }
  //子表展示
 		   
   function detailFormatter(index, row) {
-	  var htmltpl =  $("#businessShengChanBeiLiaoApplyChildrenTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
+	  var htmltpl =  $("#businessHuoWeiChangeChildrenTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
 	  var html = Mustache.render(htmltpl, {
 			idx:row.id
 		});
-	  $.get("${ctx}/business/shengchan/beiliao/apply/businessShengChanBeiLiaoApply/detail?id="+row.id, function(businessShengChanBeiLiaoApply){
-    	var businessShengChanBeiLiaoApplyChild1RowIdx = 0, businessShengChanBeiLiaoApplyChild1Tpl = $("#businessShengChanBeiLiaoApplyChild1Tpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
-		var data1 =  businessShengChanBeiLiaoApply.businessShengchanBeiliaoApplyMxList;
+	  $.get("${ctx}/business/huowei/change/businessHuoWeiChange/detail?id="+row.id, function(businessHuoWeiChange){
+    	var businessHuoWeiChangeChild1RowIdx = 0, businessHuoWeiChangeChild1Tpl = $("#businessHuoWeiChangeChild1Tpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
+		var data1 =  businessHuoWeiChange.businessHuoWeiChangeMxList;
 		for (var i=0; i<data1.length; i++){
 			data1[i].dict = {};
-			addRow('#businessShengChanBeiLiaoApplyChild-'+row.id+'-1-List', businessShengChanBeiLiaoApplyChild1RowIdx, businessShengChanBeiLiaoApplyChild1Tpl, data1[i]);
-			businessShengChanBeiLiaoApplyChild1RowIdx = businessShengChanBeiLiaoApplyChild1RowIdx + 1;
+			addRow('#businessHuoWeiChangeChild-'+row.id+'-1-List', businessHuoWeiChangeChild1RowIdx, businessHuoWeiChangeChild1Tpl, data1[i]);
+			businessHuoWeiChangeChild1RowIdx = businessHuoWeiChangeChild1RowIdx + 1;
 		}
 				
       	  			
@@ -377,11 +297,11 @@ $(document).ready(function() {
 		}));
 	}
 </script>
-<script type="text/template" id="businessShengChanBeiLiaoApplyChildrenTpl">//<!--
+<script type="text/template" id="businessHuoWeiChangeChildrenTpl">//<!--
 	<div class="card card-tabs">
 	<div class="card-heading  pb-0">
 	    <ul class="nav nav-pills float-left" role="tablist">
-				<li class="nav-item"><a data-toggle="tab" class="nav-link show active" href="#tab-{{idx}}-1" aria-expanded="true">备料明细</a></li>
+				<li class="nav-item"><a data-toggle="tab" class="nav-link show active" href="#tab-{{idx}}-1" aria-expanded="true">货位调整明细</a></li>
 		</ul>
 		</div>
 		<div class="card-body">
@@ -394,12 +314,14 @@ $(document).ready(function() {
 								<th>存货编码</th>
 								<th>存货名称</th>
 								<th>规格型号</th>
+								<th>批号</th>
+								<th>生产日期</th>
+								<th>调整前货位</th>
+								<th>调整后货位</th>
 								<th>数量</th>
-								<th>单位</th>
-                                <th>现存量</th>
 							</tr>
 						</thead>
-						<tbody id="businessShengChanBeiLiaoApplyChild-{{idx}}-1-List">
+						<tbody id="businessHuoWeiChangeChild-{{idx}}-1-List">
 						</tbody>
 					</table>
 				</div>
@@ -407,7 +329,7 @@ $(document).ready(function() {
 		</div>
 		</div>//-->
 	</script>
-	<script type="text/template" id="businessShengChanBeiLiaoApplyChild1Tpl">//<!--
+	<script type="text/template" id="businessHuoWeiChangeChild1Tpl">//<!--
 				<tr>
 					<td>
 						{{row.no}}
@@ -422,13 +344,19 @@ $(document).ready(function() {
 						{{row.cinvstd}}
 					</td>
 					<td>
-						{{row.num}}
+						{{row.batchno}}
 					</td>
 					<td>
-						{{row.unit}}
+						{{row.scdate}}
 					</td>
-                    <td>
-                    {{row.xcnum}}
-                    </td>
+					<td>
+						{{row.hwbefore}}
+					</td>
+					<td>
+						{{row.hwafter}}
+					</td>
+					<td>
+						{{row.num}}
+					</td>
 				</tr>//-->
 	</script>
