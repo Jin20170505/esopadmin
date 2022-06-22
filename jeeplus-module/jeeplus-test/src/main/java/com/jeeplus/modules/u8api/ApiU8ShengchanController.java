@@ -223,4 +223,37 @@ public class ApiU8ShengchanController {
         return result;
     }
 
+    /**
+     * 订单关闭
+     * @param mid 主表ID
+     * @param mxids 明细ID
+     * @return
+     */
+    @RequestMapping("close")
+    public U8ApiResult close(String mid,String mxids){
+        U8ApiResult result = new U8ApiResult();
+        try{
+            if(StringUtils.isNotEmpty(mid)){
+                businessShengChanDingDanService.closeMid(mid);
+            }else if(StringUtils.isNotEmpty(mxids)){
+                businessShengChanDingDanService.closeMxid(mxids);
+            }else {
+                result.setCode("0");
+                result.setSuccess(false);
+                result.setMsg("缺少必要参数,[生产订单ID，生产订单明细ID，生产子件ID]");
+                return result;
+            }
+            result.setCode("1");
+            result.setSuccess(true);
+            result.setCode("1");
+            result.setSuccess(true);
+        }catch (Exception e){
+            e.printStackTrace();
+            result.setCode("0");
+            result.setSuccess(false);
+            result.setMsg(e.getMessage());
+        }
+        return result;
+
+    }
 }

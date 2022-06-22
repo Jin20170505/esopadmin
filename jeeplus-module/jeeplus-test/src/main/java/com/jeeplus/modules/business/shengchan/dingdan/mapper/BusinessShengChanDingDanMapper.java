@@ -26,4 +26,13 @@ public interface BusinessShengChanDingDanMapper extends BaseMapper<BusinessSheng
 
     @Select("select max(code) from business_shengchan_dingdan where code like concat('SCDD',#{ymd},'%')")
     String getMaxCode(@Param("ymd") String ymd);
+
+    @Update("update business_shengchan_dingdan set status = '关闭' where id = #{mid}")
+    void closeByMid(@Param("mid") String mid);
+
+    @Update("update business_shengchan_dingdan_mingxi set status = '关闭' where pid = #{mid}")
+    void closeMxByMid(@Param("mid") String mid);
+    @Update("update business_shengchan_dingdan_mingxi set status = '关闭' where id = #{mxid}")
+    void closeMxByMxid(@Param("mxid") String mxid);
+
 }

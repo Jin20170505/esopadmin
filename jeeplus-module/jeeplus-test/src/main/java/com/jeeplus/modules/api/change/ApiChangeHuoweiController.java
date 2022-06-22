@@ -2,7 +2,6 @@ package com.jeeplus.modules.api.change;
 
 import com.jeeplus.common.json.AjaxJson;
 import com.jeeplus.modules.business.huowei.change.service.BusinessHuoWeiChangeService;
-import com.jeeplus.modules.business.ommo.bom.entity.BussinessOmMoDetailOnly;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jeeplus.common.utils.DateUtils;
+import com.jeeplus.modules.base.cangku.entity.BaseCangKu;
 import com.jeeplus.modules.base.cangku.mapper.BaseCangKuMapper;
 import com.jeeplus.modules.business.chuku.ommo.entity.BusinessChuKuWeiWaiMx;
 import com.jeeplus.modules.sys.entity.User;
@@ -115,6 +116,7 @@ public class BusinessHuoWeiChangeService extends CrudService<BusinessHuoWeiChang
 	public void change(String ckid, String userid, String mxJson) {
 		User user = UserUtils.get(userid);
 		BusinessHuoWeiChange change = new BusinessHuoWeiChange();
+		change.setCk(new BaseCangKu(ckid));
 		change.setCmaker(user.getName());
 		change.setCreateBy(user);
 		change.setDdate(new Date());

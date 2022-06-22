@@ -319,6 +319,7 @@ $(document).ready(function() {
 								<th>调整前货位</th>
 								<th>调整后货位</th>
 								<th>数量</th>
+                                <th>单位</th>
 							</tr>
 						</thead>
 						<tbody id="businessHuoWeiChangeChild-{{idx}}-1-List">
@@ -358,5 +359,8 @@ $(document).ready(function() {
 					<td>
 						{{row.num}}
 					</td>
+                    <td>
+                    {{row.unit}}
+                    </td>
 				</tr>//-->
 	</script>

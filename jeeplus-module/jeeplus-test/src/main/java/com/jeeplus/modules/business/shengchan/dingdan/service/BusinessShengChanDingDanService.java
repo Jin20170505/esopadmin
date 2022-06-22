@@ -704,4 +704,17 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 			businessShengChanBomMapper.delete(new BusinessShengChanBom(bomid));
 		});
 	}
+
+	@Transactional(readOnly = false)
+	public void closeMid(String mid) {
+		mapper.closeByMid(mid);
+		mapper.closeMxByMid(mid);
+	}
+	@Transactional(readOnly = false)
+    public void closeMxid(String mxids) {
+		Arrays.asList(mxids.split(",")).forEach(mxid->{
+			mapper.closeMxByMxid(mxid);
+		});
+    }
+
 }
