@@ -11,6 +11,8 @@ import com.jeeplus.core.persistence.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDan;
 
+import java.util.List;
+
 /**
  * 计划工单MAPPER接口
  * @author Jin
@@ -35,4 +37,11 @@ public interface BusinessJiHuaGongDanMapper extends BaseMapper<BusinessJiHuaGong
 
     @Select("select max(code) from business_jihua_gongdan where code like concat('JHGD',#{ymd},'%')")
     String getMaxCode(@Param("ymd") String ymd);
+
+
+    @Select("select id from business_jihua_gongdan where order_id = #{schid}")
+    List<String> findPlainidBySchid(@Param("schid") String schid);
+
+    @Select("select id from business_jihua_gongdan where order_code = #{ordercode}")
+    List<String> findPlainidByOrderCode(@Param("ordercode") String ordercode);
 }

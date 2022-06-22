@@ -3,6 +3,7 @@
  */
 package com.jeeplus.modules.business.baogong.order.service;
 
+import com.google.common.collect.Lists;
 import com.jeeplus.common.utils.StringUtils;
 import com.jeeplus.core.persistence.Page;
 import com.jeeplus.core.service.CrudService;
@@ -24,6 +25,10 @@ import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDanBom;
 import com.jeeplus.modules.business.jihuadingdan.mapper.BusinessJiHuaGongDanBomMapper;
 import com.jeeplus.modules.business.jihuadingdan.mapper.BusinessJiHuaGongDanMapper;
 import com.jeeplus.modules.business.ruku.product.mapper.BusinessRuKuProductMapper;
+import com.jeeplus.modules.business.shengchan.bom.mapper.BusinessShengChanBomMapper;
+import com.jeeplus.modules.business.shengchan.dingdan.entity.BusinessShengChanDingDan;
+import com.jeeplus.modules.business.shengchan.dingdan.service.BusinessShengChanDingDanService;
+import com.jeeplus.modules.u8data.morder.entity.U8Moallocate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -200,6 +205,18 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		businessJiHuaGongDanMapper.updateisshengcheng(businessBaoGongOrder.getPlanid(), "未生成");
 		businessBaoGongOrderMingXiMapper.delete(new BusinessBaoGongOrderMingXi(businessBaoGongOrder));
 	}
+	@Transactional(readOnly = false)
+	public void deleteByPlanid(String planid){
+		List<String> bgids = mapper.findBgidByPlanid(planid);
+		if(bgids!=null){
+			bgids.forEach(id->{
+				BusinessBaoGongOrder businessBaoGongOrder = new BusinessBaoGongOrder(id);
+				businessBaoGongRecordService.deleteByBgid(businessBaoGongOrder.getId());
+				super.delete(businessBaoGongOrder);
+				businessBaoGongOrderMingXiMapper.delete(new BusinessBaoGongOrderMingXi(businessBaoGongOrder));
+			});
+		}
+	}
 
 	public boolean hasScOrderFromPlan(String planid){
 		Integer rownum = mapper.hasScOrderFromPlan(planid);
@@ -343,9 +360,57 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		return mapper.getSchidByOrderid(id);
 	}
 
+	@Autowired
+	private BusinessShengChanBomMapper businessShengChanBomMapper;
+	/**
+	 * 此方法为 材料领料 数量不足的情况。处理方法：
+	 * 根据报工单查询对应生产工单明细的子件信息（U8视图）
+	 * 1.如果生产订单明细对应的子件有删除 则需要删除mes的生产子件和计划子件，
+	 * 2.如果生产子件剩余领用数量为0，则删除对应生产子件和计划工单的对应子件，
+	 * 3.如果生产子件剩余领用数量不为0 （暂不处理）
+	 * a.查询是不是存在无对应报工单的领料出库单，则需要提示去U8删除对应的材料出库单后，然后删除mes的领料出库
+	 * b.是否存在尾差，消除尾差
+	 * @param bgid 报工ID
+	 * @param schid 生产明细ID
+	 * @param moallocates U8子件
+	 * @return
+	 */
 	@Transactional(readOnly = false)
-	public String lingliaodealwith(String bgid){
-
+	public String lingliaodealwith(String bgid,String schid,List<U8Moallocate> moallocates){
+		if(moallocates==null || moallocates.isEmpty()){
+			return "对应ERP生产明细无子件，请确认下";
+		}
+		String planid = mapper.getPlanidByOrderid(bgid);
+		List<String> bomids = businessShengChanBomMapper.findBomIds(schid);
+		List<String> delboms = Lists.newArrayList();
+		if(bomids==null||bomids.isEmpty()){
+			return "对应生产明细无子件，请确认下";
+		}
+		bomids.forEach(bomid->{
+			long c = moallocates.stream().filter(e->bomid.equals(e.getAllocateId())).count();
+			if(c==0){
+				delboms.add(bomid);
+			}
+		});
+		List<String> nolingids = Lists.newArrayList();
+		// erp剩余量为0 需要删除mes的删除子件和计划子件
+		moallocates.forEach(d->{
+			if(d.getQty()<=d.getIssqty()||(d.getQty()-d.getIssqty())<0.000000001){
+				delboms.add(d.getAllocateId());
+			}else {
+				nolingids.add(d.getAllocateId());
+			}
+		});
+		if(delboms.size()>0){
+			// ERP子件有删除 需要删除mes的删除子件和计划子件
+			delboms.forEach(bomid->{
+				businessShengChanBomMapper.deleteById(bomid);
+				businessJiHuaGongDanBomMapper.deleteBomByScyid(bomid);
+			});
+			return "";
+		}
+		// 尾差处理 只有已拆完的才可以处理，在拆单的时候，已经处理。此不可处理
+		// businessShengChanDingDanService.weichaCheck(schid);
 		return "";
 	}
 }

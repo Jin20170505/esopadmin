@@ -20,4 +20,8 @@ public class U8MoallocateService  extends CrudService<U8MoallocateMapper, U8Moal
    public List<U8Moallocate> findList(U8Moallocate moallocate){
         return mapper.findList(moallocate);
     }
+
+    public List<U8Moallocate> findBomIdAndSyNum(String schid){
+       return mapper.findBomIdAndSyNum(schid);
+    }
 }

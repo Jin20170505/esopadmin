@@ -26,4 +26,7 @@ public interface BusinessRuKuProductMapper extends BaseMapper<BusinessRuKuProduc
 
 	@Select("select max(code) from business_ruku_product where code like concat('CPRK',#{ymd},'%')")
 	String getMaxCode(@Param("ymd") String ymd);
+
+	@Select("select 1 from business_ruku_product where sccode = #{sccode} limit 1")
+	Integer hasBySccode(@Param("sccode") String sccode);
 }

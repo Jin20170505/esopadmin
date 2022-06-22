@@ -79,6 +79,9 @@ public class U8Moallocate extends DataEntity<U8Moallocate> {
     }
 
     public Double getQty() {
+        if (qty==null){
+            qty = 0.0;
+        }
         return qty;
     }
 
@@ -88,6 +91,9 @@ public class U8Moallocate extends DataEntity<U8Moallocate> {
     }
 
     public Double getIssqty() {
+        if (issqty==null){
+            issqty = 0.0;
+        }
         return issqty;
     }
 

@@ -12,12 +12,16 @@ import com.jeeplus.modules.api.bean.beiliao.BeiLiaoItem;
 import com.jeeplus.modules.base.route.entity.BaseRoteMain;
 import com.jeeplus.modules.base.route.entity.BaseRoute;
 import com.jeeplus.modules.base.route.service.BaseRoteMainService;
+import com.jeeplus.modules.business.chuku.lingliao.mapper.BusinessChuKuLingLiaoMapper;
+import com.jeeplus.modules.business.chuku.lingliao.mapper.BusinessChuKuLingLiaoMxMapper;
 import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDan;
 import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDanBom;
 import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDanMingXi;
 import com.jeeplus.modules.business.jihuadingdan.mapper.BusinessJiHuaGongDanBomMapper;
 import com.jeeplus.modules.business.jihuadingdan.service.BusinessJiHuaGongDanService;
 import com.jeeplus.modules.business.product.archive.entity.BusinessProduct;
+import com.jeeplus.modules.business.ruku.product.mapper.BusinessRuKuProductMapper;
+import com.jeeplus.modules.business.ruku.product.mapper.BusinessRuKuProductMxMapper;
 import com.jeeplus.modules.business.shengchan.beiliao.apply.entity.BusinessShengChanBeiLiaoApply;
 import com.jeeplus.modules.business.shengchan.beiliao.apply.entity.BusinessShengchanBeiliaoApplyMx;
 import com.jeeplus.modules.business.shengchan.beiliao.apply.service.BusinessShengChanBeiLiaoApplyService;
@@ -641,6 +645,12 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 		}
 		return null;
 	}
+	@Autowired
+	private BusinessRuKuProductMapper businessRuKuProductMapper;
+	@Autowired
+	private BusinessRuKuProductMxMapper businessRuKuProductMxMapper;
+	@Autowired
+	private BusinessChuKuLingLiaoMapper businessChuKuLingLiaoMapper;
 
 	/**  U8Api 修改 检验 **/
 	public void editCheckMid(String mid){
@@ -670,37 +680,47 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 	}
 	/**  U8Api 删除 检验 **/
 	@Transactional(readOnly = false)
-	public void deleteCheckMid(String mid){
+	public String deleteCheckMid(String mid){
 		BusinessShengChanDingDan dd = mapper.get(mid);
-		if(businessJiHuaGongDanService.hasScCode(dd.getCode())){
-			throw new RuntimeException("删除失败，原因：该生产订单有对应计划工单存在。");
+		if(businessChuKuLingLiaoMapper.hasBySccode(dd.getCode())!=null){
+			return "该订单已领料，不可删除";
 		}
-
+		if(businessRuKuProductMapper.hasBySccode(dd.getCode())!=null){
+			return "该订单已有对应的入库，不可删除";
+		}
+		// 删除生产 计划 报工
+		delete(dd);
+		businessJiHuaGongDanService.deleteBySccode(dd.getCode());
+		return "";
 	}
 
 	@Transactional(readOnly = false)
-	public void deleteCheckMxid(String mxids){
-		Arrays.asList(mxids.split(",")).forEach(mxid->{
-			if(businessJiHuaGongDanService.hasScddLineid(mxid)){
-				BusinessShengChanDingDanMingXi mx = businessShengChanDingDanMingXiMapper.get(mxid);
-				throw new RuntimeException("删除失败，原因：序号为【"+mx.getNo()+"】的明细有对应计划工单存在。");
+	public String deleteCheckMxid(String mxids){
+		List<String> mxidArr = Arrays.asList(mxids.split(","));
+		for (String mxid :mxidArr){
+			BusinessShengChanDingDanMingXi mx = businessShengChanDingDanMingXiMapper.get(mxid);
+			if(businessChuKuLingLiaoMapper.hasBySccodeAndLine(mx.getP().getCode(),mx.getNo().toString())!=null){
+				return "序号为【"+mx.getNo()+"】的明细已经有对应的领料，无法删除。";
 			}
-		});
+			if(businessRuKuProductMxMapper.hasByScHid(mxid)!=null){
+				return "序号为【"+mx.getNo()+"】的明细已经有对应的入库，无法删除。";
+			}
+		}
 		Arrays.asList(mxids.split(",")).forEach(mxid->{
 			businessShengChanDingDanMingXiMapper.delete(new BusinessShengChanDingDanMingXi(mxid));
 			businessShengChanBomMapper.deleteBySchid(mxid);
+			// 删除计划 报工
+			businessJiHuaGongDanService.deleteBySchid(mxid);
 		});
+		return "";
 	}
 
 	@Transactional(readOnly = false)
 	public void deleteCheckBomid(String bomids){
+		// 删除子件不要校验
 		Arrays.asList(bomids.split(",")).forEach(bomid->{
-			Integer i = jiHuaGongDanBomMapper.hasScYid(bomid);
-			if(i!=null && i==1){
-				throw new RuntimeException("删除失败，原因：生产订单已经拆单，子件有对应计划工单子件存在。");
-			}
-		});
-		Arrays.asList(bomids.split(",")).forEach(bomid->{
+			// 删除计划子件和生产子件
+			jiHuaGongDanBomMapper.deleteBomByScyid(bomid);
 			businessShengChanBomMapper.delete(new BusinessShengChanBom(bomid));
 		});
 	}

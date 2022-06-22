@@ -2,11 +2,10 @@ package com.jeeplus.modules.business.jihuadingdan.mapper;
 
 import com.jeeplus.core.persistence.BaseMapper;
 import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDanBom;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Mapper
 @Repository
@@ -26,5 +25,8 @@ public interface BusinessJiHuaGongDanBomMapper extends BaseMapper<BusinessJiHuaG
 
     @Select("select 1 from business_jihua_gongdan_bom where scyid = #{scyid} limit 1")
     Integer hasScYid(@Param("scyid") String scyid);
+
+    @Delete("delete from business_jihua_gongdan_bom where scyid = #{scyid}")
+    void deleteBomByScyid(@Param("scyid") String scyid);
 
 }

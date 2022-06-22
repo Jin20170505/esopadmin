@@ -17,6 +17,8 @@ import javax.validation.ConstraintViolationException;
 import com.google.common.collect.Maps;
 import com.jeeplus.common.utils.QRCodeUtil;
 import com.jeeplus.modules.sys.utils.FileKit;
+import com.jeeplus.modules.u8data.morder.entity.U8Moallocate;
+import com.jeeplus.modules.u8data.morder.service.U8MoallocateService;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,7 +105,8 @@ public class BusinessBaoGongOrderController extends BaseController {
 			}
 		}
 	}
-
+	@Autowired
+	private U8MoallocateService u8MoallocateService;
 	/**
 	 * 领料用量不足 处理
 	 * @param ids 报工ID
@@ -115,7 +118,14 @@ public class BusinessBaoGongOrderController extends BaseController {
 		AjaxJson json = new AjaxJson();
 		try{
 			String schid = businessBaoGongOrderService.getSchidByOrderid(ids);
-
+			List<U8Moallocate> moallocates = u8MoallocateService.findBomIdAndSyNum(schid);
+			String rs = businessBaoGongOrderService.lingliaodealwith(ids,schid,moallocates);
+			if(StringUtils.isNotEmpty(rs)){
+				json.setSuccess(false);
+				json.setMsg(rs);
+				return json;
+			}
+			json.setMsg("操作成功，请重新尝试领料");
 			json.setSuccess(true);
 		}catch (Exception e){
 			e.printStackTrace();

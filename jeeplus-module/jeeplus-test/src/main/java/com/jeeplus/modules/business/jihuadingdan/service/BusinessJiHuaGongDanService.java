@@ -232,4 +232,32 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 	public void updateWeiCha(String scyid,double num){
 		businessJiHuaGongDanBomMapper.updateWeiCha(scyid,num);
 	}
+
+	@Transactional(readOnly = false)
+	public void deleteBySccode(String sccode){
+		List<String> planids = mapper.findPlainidByOrderCode(sccode);
+		if(planids!=null){
+			planids.forEach(planid->{
+				BusinessJiHuaGongDan businessJiHuaGongDan = new BusinessJiHuaGongDan(planid);
+				super.delete(businessJiHuaGongDan);
+				businessJiHuaGongDanMingXiMapper.delete(new BusinessJiHuaGongDanMingXi(businessJiHuaGongDan));
+				businessJiHuaGongDanBomMapper.delete(new BusinessJiHuaGongDanBom(businessJiHuaGongDan));
+				businessBaoGongOrderService.deleteByPlanid(planid);
+			});
+		}
+	}
+
+	@Transactional(readOnly = false)
+	public void deleteBySchid(String schid){
+		List<String> planids = mapper.findPlainidBySchid(schid);
+		if(planids!=null){
+			planids.forEach(planid->{
+				BusinessJiHuaGongDan businessJiHuaGongDan = new BusinessJiHuaGongDan(planid);
+				super.delete(businessJiHuaGongDan);
+				businessJiHuaGongDanMingXiMapper.delete(new BusinessJiHuaGongDanMingXi(businessJiHuaGongDan));
+				businessJiHuaGongDanBomMapper.delete(new BusinessJiHuaGongDanBom(businessJiHuaGongDan));
+				businessBaoGongOrderService.deleteByPlanid(planid);
+			});
+		}
+	}
 }
