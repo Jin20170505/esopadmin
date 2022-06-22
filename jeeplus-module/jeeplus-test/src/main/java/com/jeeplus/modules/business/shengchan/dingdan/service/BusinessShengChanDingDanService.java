@@ -262,6 +262,9 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 	@Transactional(readOnly = false)
 	public String doPlan(String rid){
 		BusinessShengChanDingDanMingXi mingXi = businessShengChanDingDanMingXiMapper.get(rid);
+		if("关闭".equals(mingXi.getStatus())){
+			return mingXi.getP().getCode()+"-"+mingXi.getNo()+",此订单已关闭";
+		}
 		if("完工".equals(mingXi.getStatus())){
 			return mingXi.getP().getCode()+"-"+mingXi.getNo()+",此订单已完工";
 		}
@@ -338,6 +341,9 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 	@Transactional(readOnly = false)
 	public void chaidan(String rid,Double num){
 		BusinessShengChanDingDanMingXi mingXi = businessShengChanDingDanMingXiMapper.get(rid);
+		if("关闭".equals(mingXi.getStatus())){
+			throw new RuntimeException("此订单已关闭");
+		}
 		if("完工".equals(mingXi.getStatus())){
 			throw new RuntimeException("此订单已完工");
 		}
@@ -492,6 +498,9 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 	@Transactional(readOnly = false)
 	public void handlerPlan(String rid,Double gdnum,Double nonum,Double num){
 		BusinessShengChanDingDanMingXi mingXi = businessShengChanDingDanMingXiMapper.get(rid);
+		if("关闭".equals(mingXi.getStatus())){
+			throw new RuntimeException("此订单已关闭");
+		}
 		if("完工".equals(mingXi.getStatus())){
 			throw new RuntimeException("此订单已完工");
 		}

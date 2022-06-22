@@ -54,6 +54,6 @@ public interface BusinessShengChanDingDanMingXiMapper extends BaseMapper<Busines
 	@Update("update business_shengchan_dingdan_mingxi set ischaidan = '未拆完' where id = #{id}")
 	void updateChaidanStatus(@Param("id") String id,@Param("status") String status);
 
-	@Select("select cinv_name as cinvname,cinv_code as cinvcode,remarks as remarks from business_shengchan_dingdan_mingxi where id = #{id} ")
-	BusinessShengChanDingDanMingXi getCinvInfo(@Param("id") String id);
+	@Select("select status from business_shengchan_dingdan_mingxi where id = #{schid}")
+	String getStatus(@Param("schid") String schid);
 }

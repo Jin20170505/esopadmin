@@ -26,8 +26,7 @@ import com.jeeplus.modules.business.jihuadingdan.mapper.BusinessJiHuaGongDanBomM
 import com.jeeplus.modules.business.jihuadingdan.mapper.BusinessJiHuaGongDanMapper;
 import com.jeeplus.modules.business.ruku.product.mapper.BusinessRuKuProductMapper;
 import com.jeeplus.modules.business.shengchan.bom.mapper.BusinessShengChanBomMapper;
-import com.jeeplus.modules.business.shengchan.dingdan.entity.BusinessShengChanDingDan;
-import com.jeeplus.modules.business.shengchan.dingdan.service.BusinessShengChanDingDanService;
+import com.jeeplus.modules.business.shengchan.dingdan.mapper.BusinessShengChanDingDanMingXiMapper;
 import com.jeeplus.modules.u8data.morder.entity.U8Moallocate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,6 +48,9 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 	private BusinessBaoGongRecordService businessBaoGongRecordService;
 	@Autowired
 	private BusinessRuKuProductMapper businessRuKuProductMapper;
+	@Autowired
+	private BusinessShengChanDingDanMingXiMapper businessShengChanDingDanMingXiMapper;
+
 	public BusinessBaoGongOrder get(String id) {
 		BusinessBaoGongOrder businessBaoGongOrder = super.get(id);
 		businessBaoGongOrder.setBusinessBaoGongOrderMingXiList(businessBaoGongOrderMingXiMapper.findList(new BusinessBaoGongOrderMingXi(businessBaoGongOrder)));
@@ -64,6 +66,10 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		BusinessBaoGongOrder order = mapper.getByCode(bgcode);
 		if(order==null){
 			throw new RuntimeException("没有找到对应的报工单.");
+		}
+		String status = businessShengChanDingDanMingXiMapper.getStatus(order.getOrderlineid());
+		if("关闭".equals(status)){
+			throw new RuntimeException("对应的生产订单已关闭.");
 		}
 		LingLiaoBean bean = new LingLiaoBean();
 		bean.setPlancode(order.getPlancode()).setPlanid(order.getPlanid()).setBgid(order.getId())
@@ -232,6 +238,10 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		if(order==null){
 			throw new RuntimeException("没有找到对应的报工单.");
 		}
+		String status = businessShengChanDingDanMingXiMapper.getStatus(order.getOrderlineid());
+		if("关闭".equals(status)){
+			throw new RuntimeException("对应的生产订单已关闭.");
+		}
 		ZhiJianBean bean = new ZhiJianBean();
 		bean.setBatchno(order.getBatchno()).setBgcode(order.getBgcode()).setUnit(order.getUnit()).setBgid(order.getId())
 				.setCinvcode(order.getCinvcode()).setCinvname(order.getCinvname()).setCinvstd(order.getCinvstd()).setSccode(order.getOrdercode())
@@ -243,6 +253,10 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		BusinessBaoGongOrder order = mapper.getByCode(bgcode);
 		if(order==null){
 			throw new RuntimeException("没有找到对应的报工单.");
+		}
+		String status = businessShengChanDingDanMingXiMapper.getStatus(order.getOrderlineid());
+		if("关闭".equals(status)){
+			throw new RuntimeException("对应的生产订单已关闭.");
 		}
 		Double rukunum = businessRuKuProductMapper.getRuKuNumByBgid(order.getId());
 		if(rukunum==null){
@@ -276,6 +290,10 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		BusinessBaoGongOrder order = getBaoGongInfo(null,null,bgcode);
 		if(order==null){
 			throw new RuntimeException("没有找到对应的报工单.");
+		}
+		String status = businessShengChanDingDanMingXiMapper.getStatus(order.getOrderlineid());
+		if("关闭".equals(status)){
+			throw new RuntimeException("对应的生产订单已关闭.");
 		}
 		if("1".equals(order.getComplate())){
 			throw new RuntimeException("此单已完成.");
