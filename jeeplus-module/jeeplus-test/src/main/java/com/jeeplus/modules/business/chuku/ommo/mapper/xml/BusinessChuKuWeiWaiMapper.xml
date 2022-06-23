@@ -21,6 +21,7 @@
 		a.unit AS "unit",
 		a.startdate AS "startdate",
 		a.arrivedate AS "arrivedate",
+		a.cangku AS "ck.id",
 		a.moid AS "moid",
 		a.mohid AS "mohid",
 		vendor.name AS "vendor.name"
@@ -28,6 +29,7 @@
 	
 	<sql id="businessChuKuWeiWaiJoins">
 		LEFT JOIN base_vendor vendor ON vendor.id = a.vendor
+		LEFT JOIN base_cangku ck ON ck.id = a.cangku
 	</sql>
 	
     
@@ -104,7 +106,7 @@
 	
 	<insert id="insert">
 		INSERT INTO business_chuku_weiwai(
-			id,
+			id,cangku,
 			create_by,
 			create_date,
 			update_by,
@@ -125,7 +127,7 @@
 			moid,
 			mohid
 		) VALUES (
-			#{id},
+			#{id},#{ck.id}
 			#{createBy.id},
 			#{createDate},
 			#{updateBy.id},

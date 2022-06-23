@@ -149,7 +149,7 @@ $(document).ready(function() {
 
 	  $('#businessRuKuProductTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
-            $('#remove').prop('disabled', ! $('#businessRuKuProductTable').bootstrapTable('getSelections').length);
+            $('#remove,#u8ruku').prop('disabled', ! $('#businessRuKuProductTable').bootstrapTable('getSelections').length);
             $('#edit,#print,#printcustomer').prop('disabled', $('#businessRuKuProductTable').bootstrapTable('getSelections').length!=1);
         });
 
@@ -215,6 +215,27 @@ $(document).ready(function() {
             return row.id
         });
     }
+
+    function getCodeSelections() {
+        return $.map($("#businessRuKuProductTable").bootstrapTable('getSelections'), function (row) {
+            return row.code
+        });
+    }
+    function u8ruku(){
+        var rids = getIdSelections();
+        var codes = getCodeSelections();
+        var index =jp.loading();
+        jp.post("${ctx}/business/ruku/product/businessRuKuProduct/u8ruku",{"rids":rids+"","codes":codes+""},function (data){
+            if(data.success){
+                refresh();
+                jp.toastr_success(data.msg);
+            }else{
+                jp.alert(data.msg);
+            }
+            jp.close(index);
+        });
+    }
+
     /** 打印客户标签 */
     function printcustomer(){
     var rid = getIdSelections();

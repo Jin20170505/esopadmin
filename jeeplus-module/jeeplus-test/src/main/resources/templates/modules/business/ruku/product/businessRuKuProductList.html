@@ -89,12 +89,18 @@ layout("/include/_container.html", {title:"列表", parent:"产成品入库"}){
 <!--					<i class="fa fa-download"></i> 导出-->
 <!--				</button>-->
 			 <% } %>
+		<% if(shiro.hasPermission("business:ruku:product:businessRuKuProduct:u8ruku") ){ %>
+		<button id="u8ruku" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="u8ruku()">
+			<i class="fa"></i> 传入ERP
+		</button>
+		<% } %>
 		<button id="print" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="printbq()">
 			<i class="fa fa-print"></i> 打印标签
 		</button>
 		<button id="printcustomer" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="printcustomer()">
 			<i class="fa fa-print"></i> 打印客户标签
 		</button>
+
 		    </div>
 		
 	<!-- 表格 -->

@@ -11,6 +11,7 @@ import com.google.common.collect.Lists;
 
 import com.jeeplus.core.persistence.DataEntity;
 import com.jeeplus.common.utils.excel.annotation.ExcelField;
+import com.jeeplus.modules.base.vendor.entity.BaseVendor;
 
 /**
  * 采购入库Entity
@@ -22,6 +23,7 @@ public class BusinessRukuCaiGou extends DataEntity<BusinessRukuCaiGou> {
 	private String code;		// 单号
 	private String arrivalcode;		// 到货单号
 	private String arrivaldate;		// 到货日期
+	private BaseVendor vendor;		// 供应商
 	private BaseCangKu ck;		// 仓库
 	private BaseHuoWei hw;		// 货位
 	private String u8code;		// U8单号
@@ -97,5 +99,17 @@ public class BusinessRukuCaiGou extends DataEntity<BusinessRukuCaiGou> {
 
 	public void setBusinessRukuCaigouMxList(List<BusinessRukuCaigouMx> businessRukuCaigouMxList) {
 		this.businessRukuCaigouMxList = businessRukuCaigouMxList;
+	}
+
+	public BaseVendor getVendor() {
+		if(vendor==null){
+			vendor =new BaseVendor();
+		}
+		return vendor;
+	}
+
+	public BusinessRukuCaiGou setVendor(BaseVendor vendor) {
+		this.vendor = vendor;
+		return this;
 	}
 }

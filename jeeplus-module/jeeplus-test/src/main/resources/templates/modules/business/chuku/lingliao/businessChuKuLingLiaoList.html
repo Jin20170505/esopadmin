@@ -60,9 +60,9 @@ layout("/include/_container.html", {title:"列表", parent:"材料出库单"}){
 	<!-- 工具栏 -->
 	<div id="toolbar">
 			 <% if(shiro.hasPermission("business:chuku:lingliao:businessChuKuLingLiao:add") ){ %>
-			 	<button id="add" class="btn btn-custom waves-effect w-xs waves-light" onclick="add()">
-					<i class="fa fa-plus"></i> 新建
-				</button>
+<!--			 	<button id="add" class="btn btn-custom waves-effect w-xs waves-light" onclick="add()">-->
+<!--					<i class="fa fa-plus"></i> 新建-->
+<!--				</button>-->
 			<% } %>
 			 <% if(shiro.hasPermission("business:chuku:lingliao:businessChuKuLingLiao:edit") ){ %>
 			    <button id="edit" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="edit()">
@@ -74,15 +74,20 @@ layout("/include/_container.html", {title:"列表", parent:"材料出库单"}){
 	            	<i class="fa fa-remove"></i> 删除
 	        	</button>
 			<% } %>
+			<% if(shiro.hasPermission("business:chuku:lingliao:businessChuKuLingLiao:u8in") ){ %>
+			<button id="u8in" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="u8in()">
+				<i class="fa "></i> 传入ERP
+			</button>
+			<% } %>
 			 <% if(shiro.hasPermission("business:chuku:lingliao:businessChuKuLingLiao:import") ){ %>
-				<button id="import"  class="btn btn-white waves-effect w-xs waves-light" >
-					<i class="fa fa-upload"></i> 导入
-				</button>
+<!--				<button id="import"  class="btn btn-white waves-effect w-xs waves-light" >-->
+<!--					<i class="fa fa-upload"></i> 导入-->
+<!--				</button>-->
 			<% } %>
 			 <% if(shiro.hasPermission("business:chuku:lingliao:businessChuKuLingLiao:export") ){ %>
-	        	<button id="export" class="btn btn-white waves-effect w-xs waves-light">
-					<i class="fa fa-download"></i> 导出
-				</button>
+<!--	        	<button id="export" class="btn btn-white waves-effect w-xs waves-light">-->
+<!--					<i class="fa fa-download"></i> 导出-->
+<!--				</button>-->
 			 <% } %>
 		    </div>
 		

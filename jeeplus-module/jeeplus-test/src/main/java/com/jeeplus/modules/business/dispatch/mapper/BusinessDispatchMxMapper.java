@@ -3,12 +3,15 @@
  */
 package com.jeeplus.modules.business.dispatch.mapper;
 
+import com.jeeplus.modules.business.dispatch.entity.BusinessDispatch;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 import com.jeeplus.core.persistence.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import com.jeeplus.modules.business.dispatch.entity.BusinessDispatchMx;
+
+import java.util.List;
 
 /**
  * 发货明细MAPPER接口
@@ -20,4 +23,6 @@ import com.jeeplus.modules.business.dispatch.entity.BusinessDispatchMx;
 public interface BusinessDispatchMxMapper extends BaseMapper<BusinessDispatchMx> {
     @Select("select 1 from business_dispatch_mx where id = #{id}")
     Integer hasById(@Param("id") String id);
+
+    void batchInsert(List<BusinessDispatchMx> list);
 }

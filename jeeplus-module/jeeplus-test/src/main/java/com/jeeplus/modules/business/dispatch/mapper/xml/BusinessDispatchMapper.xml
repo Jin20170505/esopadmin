@@ -89,7 +89,56 @@
 			</otherwise>
 		</choose>
 	</select>
-	
+	<insert id="batchInsert" parameterType="java.util.List">
+		NSERT INTO business_dispatch(
+		id,
+		create_by,
+		create_date,
+		update_by,
+		update_date,
+		remarks,
+		del_flag,
+		code,
+		opcode,
+		u8code,
+		dept,
+		customer,
+		status,
+		u8status,
+		printstatus,
+		fahuo_date
+		) VALUES
+		<foreach collection="list" separator="," item="item">
+			(
+			#{item.id},
+			#{item.createBy.id},
+			#{item.createDate},
+			#{item.updateBy.id},
+			#{item.updateDate},
+			#{item.remarks},
+			#{item.delFlag},
+			#{item.code},
+			#{item.opcode},
+			#{item.u8code},
+			#{item.dept.id},
+			#{item.customer.id},
+			#{item.status},
+			#{item.u8status},
+			'未打印',
+			#{item.fahuodate}
+			)
+		</foreach>
+		on duplicate key update
+		id = values(id),
+		update_date= VALUES(update_date),
+		code=VALUES(code),
+		fahuo_date=VALUES(fahuo_date),
+		u8code = values(u8code),
+		dept=VALUES(dept),
+		opcode = values(opcode),
+		customer=VALUES(customer),
+		u8status=VALUES(u8status)
+	</insert>
 	<insert id="insert">
 		INSERT INTO business_dispatch(
 			id,

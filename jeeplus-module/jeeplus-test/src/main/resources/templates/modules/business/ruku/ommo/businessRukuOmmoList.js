@@ -136,7 +136,7 @@ $(document).ready(function() {
 
 	  $('#businessRukuOmmoTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
-            $('#remove').prop('disabled', ! $('#businessRukuOmmoTable').bootstrapTable('getSelections').length);
+            $('#remove,#u8in').prop('disabled', ! $('#businessRukuOmmoTable').bootstrapTable('getSelections').length);
             $('#edit').prop('disabled', $('#businessRukuOmmoTable').bootstrapTable('getSelections').length!=1);
         });
 
@@ -208,6 +208,25 @@ $(document).ready(function() {
         });
     }
 
+    function getCodeSelections() {
+    return $.map($("#businessRukuOmmoTable").bootstrapTable('getSelections'), function (row) {
+    return row.code
+});
+}
+    function u8in(){
+    var rids = getIdSelections();
+    var codes = getCodeSelections();
+    var index =jp.loading();
+    jp.post("${ctx}/business/ruku/ommo/businessRukuOmmo/u8in",{"rids":rids+"","codes":codes+""},function (data){
+    if(data.success){
+    refresh();
+    jp.toastr_success(data.msg);
+}else{
+    jp.alert(data.msg);
+}
+    jp.close(index);
+});
+}
   //删除
   function del(ids){
      if(!ids){

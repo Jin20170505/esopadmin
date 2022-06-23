@@ -84,7 +84,76 @@
 			</otherwise>
 		</choose>
 	</select>
-	
+	<insert id="batchInsert" parameterType="java.util.List">
+		INSERT INTO business_dispatch_mx(
+		id,
+		create_by,
+		create_date,
+		update_by,
+		update_date,
+		remarks,
+		del_flag,
+		pid,
+		no,
+		ck_id,
+		hw_id,
+		cinvcode,
+		cinvname,
+		cinvstd,
+		batchno,
+		scdate,
+		num,
+		unit,
+		cordercode,
+		irowno,
+		customer,
+		dept
+		) VALUES
+		<foreach collection="list" separator="," item="item">
+			(
+			#{item.id},
+			#{item.createBy.id},
+			#{item.createDate},
+			#{item.updateBy.id},
+			#{item.updateDate},
+			#{item.remarks},
+			#{item.delFlag},
+			#{item.p.id},
+			#{item.no},
+			#{item.ck.id},
+			#{item.hw.id},
+			#{item.cinvcode},
+			#{item.cinvname},
+			#{item.cinvstd},
+			#{item.batchno},
+			#{item.scdate},
+			#{item.num},
+			#{item.unit},
+			#{item.cordercode},
+			#{item.irowno},
+			#{item.customer.id},
+			#{item.dept.id}
+			)
+		</foreach>
+		on duplicate key update
+		id = values(id),
+		update_date= VALUES(update_date),
+		no=VALUES(no),
+		ck_id=VALUES(ck_id),
+		hw_id = values(hw_id),
+		pid=VALUES(pid),
+		cinvcode=VALUES(cinvcode),
+		cinvname=VALUES(cinvname),
+		cinvstd=VALUES(cinvstd),
+		batchno=VALUES(batchno),
+		scdate=VALUES(scdate),
+		num=VALUES(num),
+		unit=VALUES(unit),
+		customer=VALUES(customer),
+		dept=VALUES(dept),
+		cordercode=VALUES(cordercode),
+		irowno=VALUES(irowno)
+	</insert>
 	<insert id="insert">
 		INSERT INTO business_dispatch_mx(
 			id,

@@ -237,4 +237,40 @@ public class BusinessRuKuProductService extends CrudService<BusinessRuKuProductM
 		}
 	}
 
+
+	@Transactional(readOnly = false)
+	public void u8ruku(String rid) throws Exception {
+		BusinessRuKuProduct product = get(rid);
+		BusinessRuKuProductMx mx = product.getBusinessRuKuProductMxList().get(0);
+		User user = UserUtils.get(product.getCreateBy().getId());
+		YT_Rd10 rd10 = new YT_Rd10();
+		rd10.setcBusType("成品入库");
+		rd10.setcSource("生产订单");
+		rd10.setcCode(product.getCode());
+		rd10.setcMaker(user.getName());
+		rd10.setcRdcode("13");
+		String ckcode = cangKuMapper.getCodeById(product.getCangku().getId());
+		rd10.setcWhCode(ckcode);
+		String hwcode = huoWeiMapper.getCodeById(mx.getHuowei().getId());
+		rd10.setcDepCode(user.getOffice().getCode());
+		rd10.setdDate(DateUtils.getDate());
+		rd10.setRemarks(product.getRemarks());
+		List<YT_Rds10> rd10s = Lists.newArrayList();
+		YT_Rds10 r = new YT_Rds10();
+		r.setcInvCode(mx.getCinvcode());
+		r.setiQuantity(mx.getNum()+"");
+		r.setcPosition(hwcode);
+		r.setIrowno("1");
+		r.setBatch(product.getBatchno());
+		r.setCbMemo(product.getBgcode());
+		r.setdMadeDate(DateUtils.getDate());
+		r.setCmocode(product.getSccode());
+		r.setImoseq(mx.getLinecode());
+		rd10s.add(r);
+		rd10.setRd10s(rd10s);
+		U8WebServiceResult rs = U8Post.Rd10Post(rd10, U8Url.URL);
+		if("1".equals(rs.getCount())){
+			throw new RuntimeException(rs.getMessage());
+		}
+	}
 }

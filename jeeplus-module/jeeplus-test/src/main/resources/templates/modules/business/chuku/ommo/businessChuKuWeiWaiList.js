@@ -76,6 +76,7 @@ $(document).ready(function() {
                sortable: true,
                sortName: 'code'
                ,formatter:function(value, row , index){
+                   console.log(row);
                    return "<a  href='#' onclick='view(\""+row.id+"\")'>"+value+"</a>";
                }
 
@@ -155,7 +156,7 @@ $(document).ready(function() {
 
 	  $('#businessChuKuWeiWaiTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
-            $('#remove').prop('disabled', ! $('#businessChuKuWeiWaiTable').bootstrapTable('getSelections').length);
+            $('#remove,#u8in').prop('disabled', ! $('#businessChuKuWeiWaiTable').bootstrapTable('getSelections').length);
             $('#edit').prop('disabled', $('#businessChuKuWeiWaiTable').bootstrapTable('getSelections').length!=1);
         });
 
@@ -232,6 +233,25 @@ $(document).ready(function() {
         });
     }
 
+    function getCodeSelections() {
+    return $.map($("#businessChuKuWeiWaiTable").bootstrapTable('getSelections'), function (row) {
+    return row.code
+});
+}
+    function u8in(){
+    var rids = getIdSelections();
+    var codes = getCodeSelections();
+    var index =jp.loading();
+    jp.post("${ctx}/business/chuku/ommo/businessChuKuWeiWai/u8in",{"rids":rids+"","codes":codes+""},function (data){
+    if(data.success){
+    refresh();
+    jp.toastr_success(data.msg);
+}else{
+    jp.alert(data.msg);
+}
+    jp.close(index);
+});
+}
   //删除
   function del(ids){
      if(!ids){

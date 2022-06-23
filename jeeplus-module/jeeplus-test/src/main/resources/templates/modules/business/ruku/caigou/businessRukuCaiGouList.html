@@ -57,6 +57,11 @@ layout("/include/_container.html", {title:"列表", parent:"采购入库"}){
 	            	<i class="fa fa-remove"></i> 删除
 	        	</button>
 			<% } %>
+		<% if(shiro.hasPermission("business:ruku:caigou:businessRukuCaiGou:u8in") ){ %>
+		<button id="u8in" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="u8in()">
+			<i class="fa"></i> 传入ERP
+		</button>
+		<% } %>
 			 <% if(shiro.hasPermission("business:ruku:caigou:businessRukuCaiGou:import") ){ %>
 <!--				<button id="import"  class="btn btn-white waves-effect w-xs waves-light" >-->
 <!--					<i class="fa fa-upload"></i> 导入-->

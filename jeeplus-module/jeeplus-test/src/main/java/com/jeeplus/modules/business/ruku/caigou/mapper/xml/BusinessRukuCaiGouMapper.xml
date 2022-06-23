@@ -15,14 +15,18 @@
 		a.arrival_date AS "arrivaldate",
 		a.ck AS "ck.id",
 		a.hw AS "hw.id",
+		a.vendor AS "vendor.id",
+		vendor.code AS "vendor.code",
 		a.u8code AS "u8code",
 		ck.name AS "ck.name",
-		hw.name AS "hw.name"
+		hw.name AS "hw.name",
+		vendor.name AS "vendor.name"
 	</sql>
 	
 	<sql id="businessRukuCaiGouJoins">
 		LEFT JOIN base_cangku ck ON ck.id = a.ck
 		LEFT JOIN base_huowei hw ON hw.id = a.hw
+		LEFT JOIN base_vendor vendor ON vendor.id = a.vendor
 	</sql>
 	
     
@@ -92,6 +96,7 @@
 			arrival_date,
 			ck,
 			hw,
+			vendor,
 			u8code
 		) VALUES (
 			#{id},
@@ -106,6 +111,7 @@
 			#{arrivaldate},
 			#{ck.id},
 			#{hw.id},
+			#{vendor.id},
 			#{u8code}
 		)
 	</insert>

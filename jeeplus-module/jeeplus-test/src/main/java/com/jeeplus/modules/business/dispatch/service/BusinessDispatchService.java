@@ -129,6 +129,7 @@ public class BusinessDispatchService extends CrudService<BusinessDispatchMapper,
 	@Transactional(readOnly = false)
     public void sychu8(List<U8Dispatch> data) {
 		List<BusinessDispatch> list = Lists.newArrayList();
+		List<BusinessDispatchMx> mxlist = Lists.newArrayList();
 		data.forEach(d->{
 			BusinessDispatch dispatch = getBusinessDispatch(d.getMid(),list);
 			if(dispatch==null){
@@ -141,6 +142,7 @@ public class BusinessDispatchService extends CrudService<BusinessDispatchMapper,
 				dispatch.setDept(new Office(d.getCdepcode()));
 				dispatch.setCustomer(new BaseCustomer(d.getcCusCode()));
 				dispatch.setFahuodate(d.getFahuoDate());
+				list.add(dispatch);
 			}
 			BusinessDispatchMx mx = new BusinessDispatchMx();
 			String ckid = cangKuMapper.getIdByCode(d.getcWhCode());
@@ -161,23 +163,40 @@ public class BusinessDispatchService extends CrudService<BusinessDispatchMapper,
 			mx.setCinvstd(d.getcInvStd());
 			mx.setNum(d.getIquantity());
 			mx.setUnit(d.getcComUnitName());
-			dispatch.getBusinessDispatchMxList().add(mx);
-			list.add(dispatch);
+			mxlist.add(mx);
 		});
-		saveU8Data(list);
+		saveU8Data(list,mxlist);
 	}
 	@Transactional(readOnly = false)
-	public void saveU8Data(List<BusinessDispatch> list){
-		list.forEach(d->{
-			if(null == mapper.hasById(d.getId())){
-				mapper.insert(d);
-			}
-			d.getBusinessDispatchMxList().forEach(e->{
-				if(null==businessDispatchMxMapper.hasById(e.getId())){
-					businessDispatchMxMapper.insert(e);
+	public void saveU8Data(List<BusinessDispatch> mains,List<BusinessDispatchMx> details){
+		if(!mains.isEmpty()){
+			int i = 0;
+			int j = 0;
+			int mlen = mains.size();
+			while (i<mlen){
+				j = i;
+				i = i+300;
+				if(i>=mlen){
+					mapper.batchInsert(mains.subList(j,mlen));
+				}else {
+					mapper.batchInsert(mains.subList(j,i));
 				}
-			});
-		});
+			}
+		}
+		if(!details.isEmpty()){
+			int i = 0;
+			int j = 0;
+			int mlen = details.size();
+			while (i<mlen){
+				j = i;
+				i = i+300;
+				if(i>=mlen){
+					businessDispatchMxMapper.batchInsert(details.subList(j,mlen));
+				}else {
+					businessDispatchMxMapper.batchInsert(details.subList(j,i));
+				}
+			}
+		}
 	}
 
 	public BusinessDispatch getBusinessDispatch(String mid, List<BusinessDispatch> list){

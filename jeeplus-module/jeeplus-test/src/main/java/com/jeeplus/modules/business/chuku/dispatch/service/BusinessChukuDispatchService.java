@@ -168,7 +168,33 @@ public class BusinessChukuDispatchService extends CrudService<BusinessChukuDispa
 			e.printStackTrace();
 			throw new RuntimeException("数据传U8出错，原因："+e.getMessage());
 		}
-
-
     }
+
+    public void u8in(String rid) throws Exception {
+		BusinessChukuDispatch main = get(rid);
+		BusinessChukuDispatchMx ckmx = main.getBusinessChukuDispatchMxList().get(0);
+		User user  = UserUtils.get(main.getCreateBy().getId());
+		if(user==null){
+			user = new User();
+		}
+		String code = cangKuMapper.getCodeById(ckmx.getCk().getId());
+		// U8 销售出库 接口
+		U8WebXiaoShouBean xiaoShouBean = new U8WebXiaoShouBean();
+		xiaoShouBean.setCode(main.getCode()).setcWhCode(code);
+		xiaoShouBean.setcRdCode("23").setcSTCode("01").setBredvouch("0").setcMemo("");
+		xiaoShouBean.setdDate(DateUtils.formatDate(main.getFahuoDate())).setcCusCode(main.getCustomer().getId());
+		xiaoShouBean.setcDepCode(main.getDept().getId()).setcMaker(user.getNo()).setcPersonCode(user.getName());
+
+		main.getBusinessChukuDispatchMxList().forEach(d->{
+			U8WebXiaoShouMxBean mx = new U8WebXiaoShouMxBean();
+			mx.setcBatch(d.getBatchno()).setdMadeDate(d.getScdate()).setcInvCode(d.getCinvcode()).setiQuantity(d.getNum().toString()).setcPosition(d.getHw().getId())
+					.setIrowno(d.getNo()+"").setiDLsID(d.getFhid()).setcDLCode(main.getDispatchcode());
+			System.out.println(mx);
+			xiaoShouBean.getDetails().add(mx);
+		});
+		U8WebServiceResult rs = U8XiaoShouChuKuWebService.xiaoshouchuku(xiaoShouBean);
+		if("1".equals(rs.getCount())){
+			throw new RuntimeException(rs.getMessage());
+		}
+	}
 }

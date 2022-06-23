@@ -132,11 +132,6 @@ public class BusinessRukuOmmoService extends CrudService<BusinessRukuOmmoMapper,
 		main.setVendor(vouch.getVendor());
 		main.setDdate(DateUtils.formatDate(vouch.getDdate()));
 		main.setCk(new BaseCangKu(ckid));
-//		String code = "";
-//		synchronized (this){
-//			code = "WWRKD"+ DateUtils.getDate("yyyyMMddHHmmss")+ RandomUtil.nextInt(100,999);
-//		}
-//		main.setCode(code);
 		main.setU8code(main.getCode());
 		JSONObject json = JSONObject.fromObject(mxJson);
 		JSONArray array = json.getJSONArray("list");
@@ -196,6 +191,42 @@ public class BusinessRukuOmmoService extends CrudService<BusinessRukuOmmoMapper,
 		}catch (Exception e){
 			e.printStackTrace();
 			throw new RuntimeException("数据传U8出错，原因："+e.getMessage());
+		}
+	}
+
+	public void u8in(String rid) throws Exception {
+		BusinessRukuOmmo main = get(rid);
+		User user = UserUtils.get(main.getCreateBy().getId());
+		YT_Rd01 rd01 = new YT_Rd01();
+		rd01.setCode(main.getCode());
+		rd01.setcBusType("委外订单");
+		rd01.setcSource("来料检验单");
+		rd01.setcWhCode(main.getCk().getCode());
+		rd01.setdDate(main.getDdate());
+		rd01.setcRdCode("11");
+		rd01.setcDepCode(user.getOffice().getCode());
+		rd01.setcPersonCode("");
+		rd01.setcPTCode("01");
+		rd01.setcVenCode(main.getVendor().getCode());
+		rd01.setcMaker("demo");
+		rd01.setDnmaketim(DateUtils.getDate());
+		List<YT_Rds01> rd01s = new ArrayList<>();
+		main.getBusinessRukuOmmoMxList().forEach(d->{
+			YT_Rds01 rds01 = new YT_Rds01();
+			rds01.setIrowno(d.getNo()+"");
+			rds01.setcInvCode(d.getCinvcode());
+			rds01.setiArrsId(d.getWdhid());
+			rds01.setcBatch(d.getBatchno());
+			rds01.setcPosition(d.getHw());
+			rds01.setdMadeDate(d.getScdate());
+			rds01.setcARVCode(main.getWdcode());
+			rds01.setiQuantity(d.getRukunum()+"");
+			rd01s.add(rds01);
+		});
+		rd01.setRd01s(rd01s);
+		U8WebServiceResult rs = U8Post.Rd01Post(rd01, U8Url.URL);
+		if("1".equals(rs.getCount())){
+			throw new RuntimeException(rs.getMessage());
 		}
 	}
 }

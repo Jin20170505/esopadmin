@@ -178,4 +178,37 @@ public class BusinessChuKuLingLiaoService extends CrudService<BusinessChuKuLingL
 			throw new RuntimeException("数据传U8出错，原因："+e.getMessage());
 		}
 	}
+
+
+	public void u8in(String rid) throws Exception {
+		BusinessChuKuLingLiao lingLiao = get(rid);
+		String ckcdoe = cangKuMapper.getCodeById(lingLiao.getCk().getId());
+		YT_Rd11 rd11 = new YT_Rd11();
+		rd11.setcBusType("领料");
+		rd11.setcSource("生产订单");
+		rd11.setcWhCode(ckcdoe);
+		rd11.setcRdcode("21");
+		rd11.setdDate(DateUtils.getDate());
+		rd11.setcCode(lingLiao.getCode());
+		rd11.setcMemo(lingLiao.getRemarks());
+		User user= UserUtils.get(lingLiao.getCreateBy().getId());
+		rd11.setcMaker(user.getName());
+		rd11.setcDepCode(user.getOffice().getCode());
+		List<YT_Rds11> rd11s = new ArrayList<>();
+		lingLiao.getBusinessChuKuLingLiaoMxList().forEach(d->{
+			YT_Rds11 r = new YT_Rds11();
+			r.setcInvCode(d.getCinvcode());
+			r.setiQuantity(d.getCknum()+"");
+			r.setCmocode(lingLiao.getSccode());
+			r.setImoseq(lingLiao.getSclinecode());
+			r.setInvcode(lingLiao.getCinvcode());
+			r.setIopseq(d.getNo()+"");
+			rd11s.add(r);
+		});
+		rd11.setRd11s(rd11s);
+		U8WebServiceResult rs = U8Post.Rd11Post(rd11, U8Url.URL);
+		if("1".equals(rs.getCount())){
+			throw new RuntimeException(rs.getMessage());
+		}
+	}
 }

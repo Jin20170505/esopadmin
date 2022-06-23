@@ -20,6 +20,8 @@
 		a.u8code AS "u8code",
 		dept.name AS "dept.name",
 		vendor.name AS "vendor.name",
+		vendor.code AS "vendor.code",
+		ck.code AS "ck.code",
 		ck.name AS "ck.name"
 	</sql>
 	

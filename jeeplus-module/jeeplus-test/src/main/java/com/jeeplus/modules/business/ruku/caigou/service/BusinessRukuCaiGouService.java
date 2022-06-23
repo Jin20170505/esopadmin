@@ -127,7 +127,6 @@ public class BusinessRukuCaiGouService extends CrudService<BusinessRukuCaiGouMap
 		businessRukuCaiGou.setArrivaldate(DateUtils.formatDate(vouch.getArriveDate()));
 		businessRukuCaiGou.setHw(new BaseHuoWei(hwid));
 		businessRukuCaiGou.setCk(new BaseCangKu(ckid));
-		// businessRukuCaiGou.setCode("CGRKD"+DateUtils.getDate("yyyyMMddHHmmss"));
 		businessRukuCaiGou.setU8code(businessRukuCaiGou.getCode());
 		JSONObject json = JSONObject.fromObject(mxJson);
 		JSONArray array = json.getJSONArray("list");
@@ -192,6 +191,42 @@ public class BusinessRukuCaiGouService extends CrudService<BusinessRukuCaiGouMap
 		}
 	}
 
+	public void u8in(String rid) throws Exception {
+		BusinessRukuCaiGou businessRukuCaiGou = get(rid);
+		User user = UserUtils.get(businessRukuCaiGou.getCreateBy().getId());
+		String ckcode = cangKuMapper.getCodeById(businessRukuCaiGou.getCk().getId());
+		YT_Rd01 rd01 = new YT_Rd01();
+		rd01.setCode(businessRukuCaiGou.getCode());
+		rd01.setcBusType("普通采购");
+		rd01.setcSource("来料检验单");
+		rd01.setcWhCode(ckcode);
+		rd01.setdDate(businessRukuCaiGou.getArrivaldate());
+		rd01.setcRdCode("11");
+		rd01.setcDepCode(user.getOffice().getCode());
+		rd01.setcPersonCode("");
+		rd01.setcPTCode("01");
+		rd01.setcVenCode(businessRukuCaiGou.getVendor().getCode());
+		rd01.setcMaker(user.getName());
+		rd01.setDnmaketim(DateUtils.getDate());
+		List<YT_Rds01> rd01s = new ArrayList<>();
+		businessRukuCaiGou.getBusinessRukuCaigouMxList().forEach(d->{
+			YT_Rds01 rds01 = new YT_Rds01();
+			rds01.setIrowno(d.getNo()+"");
+			rds01.setcInvCode(d.getCinvcode());
+			rds01.setiArrsId(d.getCghid());
+			rds01.setcBatch(d.getBatchno());
+			rds01.setcPosition(businessRukuCaiGou.getHw().getId());
+			rds01.setdMadeDate(d.getScdate());
+			rds01.setcARVCode(businessRukuCaiGou.getArrivalcode());
+			rds01.setiQuantity(d.getNum()+"");
+			rd01s.add(rds01);
+		});
+		rd01.setRd01s(rd01s);
+		U8WebServiceResult rs = U8Post.Rd01Post(rd01, U8Url.URL);
+		if("1".equals(rs.getCount())){
+			throw new RuntimeException(rs.getMessage());
+		}
+	}
 
 	public Double getRukuNum(String cghid){
 		return businessRukuCaigouMxMapper.sumRukuNumByCghid(cghid);

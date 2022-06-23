@@ -10,10 +10,15 @@ import com.jeeplus.modules.u8data.morder.entity.U8Moallocate;
 import com.jeeplus.modules.u8data.morder.entity.U8Morder;
 import com.jeeplus.modules.u8data.morder.service.U8MoallocateService;
 import com.jeeplus.modules.u8data.morder.service.U8MorderService;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,9 +38,20 @@ public class ApiU8ShengchanController {
     @Autowired
     private BusinessShengChanDingdanMxService businessShengChanDingdanMxService;
     @RequestMapping("add")
-    public U8ApiResult add(String mid,String mxids,String bomids){
+    public U8ApiResult add(HttpServletRequest request){
         U8ApiResult result = new U8ApiResult();
+        String jsonStr = getPostBody(request);
+        if(StringUtils.isEmpty(jsonStr)||!jsonStr.contains("{")){
+            result.setCode("0");
+            result.setSuccess(false);
+            result.setMsg("缺少必要参数,[生产订单ID，生产订单明细ID，生产子件ID]");
+            return result;
+        }
         try {
+            jsonStr = jsonStr.substring(jsonStr.indexOf("{"));
+            JSONObject json = JSONObject.fromObject(jsonStr);
+            String mid =json.optString("mid");
+            String mxids=json.optString("mxids"),bomids  = json.optString("bomids");
             U8Morder order = new U8Morder();
             if(StringUtils.isNotEmpty(mid)){
                 order.setMoId(mid);
@@ -111,9 +127,20 @@ public class ApiU8ShengchanController {
         return json;
     }
     @RequestMapping("editcheck")
-    public U8ApiResult editcheck(String mid,String mxids,String bomids){
+    public U8ApiResult editcheck(HttpServletRequest request){
         U8ApiResult result = new U8ApiResult();
+        String jsonStr = getPostBody(request);
+        if(StringUtils.isEmpty(jsonStr)||!jsonStr.contains("{")){
+            result.setCode("0");
+            result.setSuccess(false);
+            result.setMsg("缺少必要参数,[生产订单ID，生产订单明细ID，生产子件ID]");
+            return result;
+        }
         try {
+            jsonStr = jsonStr.substring(jsonStr.indexOf("{"));
+            JSONObject json = JSONObject.fromObject(jsonStr);
+            String mid =json.optString("mid");
+            String mxids=json.optString("mxids"),bomids  = json.optString("bomids");
             if(StringUtils.isNotEmpty(mid)){
                 businessShengChanDingDanService.editCheckMid(mid);
             }else if(StringUtils.isNotEmpty(mxids)){
@@ -137,9 +164,20 @@ public class ApiU8ShengchanController {
         return result;
     }
     @RequestMapping("edit")
-    public U8ApiResult edit(String mid,String mxids,String bomids){
+    public U8ApiResult edit(HttpServletRequest request){
         U8ApiResult result = new U8ApiResult();
+        String jsonStr = getPostBody(request);
+        if(StringUtils.isEmpty(jsonStr)||!jsonStr.contains("{")){
+            result.setCode("0");
+            result.setSuccess(false);
+            result.setMsg("缺少必要参数,[生产订单ID，生产订单明细ID，生产子件ID]");
+            return result;
+        }
         try {
+            jsonStr = jsonStr.substring(jsonStr.indexOf("{"));
+            JSONObject json = JSONObject.fromObject(jsonStr);
+            String mid =json.optString("mid");
+            String mxids=json.optString("mxids"),bomids  = json.optString("bomids");
             U8Morder order = new U8Morder();
             if(StringUtils.isNotEmpty(mid)){
                 order.setMoId(mid);
@@ -197,10 +235,21 @@ public class ApiU8ShengchanController {
         return result;
     }
     @RequestMapping("delete")
-    public U8ApiResult delete(String mid,String mxids,String bomids){
+    public U8ApiResult delete(HttpServletRequest request){
         U8ApiResult result = new U8ApiResult();
+        String jsonStr = getPostBody(request);
+        if(StringUtils.isEmpty(jsonStr)||!jsonStr.contains("{")){
+            result.setCode("0");
+            result.setSuccess(false);
+            result.setMsg("缺少必要参数,[生产订单ID，生产订单明细ID，生产子件ID]");
+            return result;
+        }
         String rs = "";
         try {
+            jsonStr = jsonStr.substring(jsonStr.indexOf("{"));
+            JSONObject json = JSONObject.fromObject(jsonStr);
+            String mid =json.optString("mid");
+            String mxids=json.optString("mxids"),bomids  = json.optString("bomids");
             if(StringUtils.isNotEmpty(mid)){
                rs = businessShengChanDingDanService.deleteCheckMid(mid);
             }else if(StringUtils.isNotEmpty(mxids)){
@@ -230,16 +279,53 @@ public class ApiU8ShengchanController {
         return result;
     }
 
+    public static String getPostBody(HttpServletRequest request){
+        try {
+            request.setCharacterEncoding("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        StringBuilder sb = new StringBuilder();
+        String line = "";
+        BufferedReader reader = null;
+        try{
+            reader = request.getReader();
+            while (null!=(line = reader.readLine())){
+                sb.append(line);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }finally {
+            if(reader!=null){
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return sb.toString();
+    }
     /**
      * 订单关闭
-     * @param mid 主表ID
-     * @param mxids 明细ID
      * @return
      */
     @RequestMapping("close")
-    public U8ApiResult close(String mid,String mxids){
+    public U8ApiResult close(HttpServletRequest request){
         U8ApiResult result = new U8ApiResult();
+        String jsonStr = getPostBody(request);
+        if(StringUtils.isEmpty(jsonStr)||!jsonStr.contains("{")){
+            result.setCode("0");
+            result.setSuccess(false);
+            result.setMsg("缺少必要参数,[生产订单ID，生产订单明细ID]");
+            return result;
+        }
         try{
+            jsonStr = jsonStr.substring(jsonStr.indexOf("{"));
+            JSONObject json = JSONObject.fromObject(jsonStr);
+            String mid =json.optString("mid");
+            String mxids=json.optString("mxids");
             if(StringUtils.isNotEmpty(mid)){
                 businessShengChanDingDanService.closeMid(mid);
             }else if(StringUtils.isNotEmpty(mxids)){
@@ -247,7 +333,7 @@ public class ApiU8ShengchanController {
             }else {
                 result.setCode("0");
                 result.setSuccess(false);
-                result.setMsg("缺少必要参数,[生产订单ID，生产订单明细ID，生产子件ID]");
+                result.setMsg("缺少必要参数,[生产订单ID，生产订单明细ID]");
                 return result;
             }
             result.setCode("1");
@@ -263,4 +349,5 @@ public class ApiU8ShengchanController {
         return result;
 
     }
+
 }

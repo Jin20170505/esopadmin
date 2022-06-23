@@ -8,6 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.RoundingMode;
 import java.net.URLDecoder;
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -247,7 +248,34 @@ public class BusinessRuKuProductController extends BaseController {
 		j.setMsg("删除产成品入库成功");
 		return j;
 	}
-	
+
+	@RequestMapping("u8ruku")
+	@ResponseBody
+	public AjaxJson u8ruku(String rids,String codes){
+		AjaxJson json = new AjaxJson();
+		List<String> ids = Arrays.asList(rids.split(","));
+		String[] codearr = codes.split(",");
+		StringBuilder sb = new StringBuilder();
+		int i =0;
+		for (String id:ids){
+			try{
+				businessRuKuProductService.u8ruku(id);
+			}catch (Exception e){
+				e.printStackTrace();
+				sb.append(codearr[i]).append(":").append(e.getMessage()).append("\n");
+			}
+			i++;
+		}
+		if(sb.length()>0){
+			json.setMsg("同步未成功单号及原因："+sb.toString());
+			json.setSuccess(false);
+		}else {
+			json.setMsg("同步成功");
+			json.setSuccess(true);
+		}
+		return json;
+	}
+
 	/**
 	 * 导出excel文件
 	 */

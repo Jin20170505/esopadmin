@@ -119,7 +119,6 @@ public class BusinessFaLiaoService extends CrudService<BusinessFaLiaoMapper, Bus
 	@Transactional(readOnly = false)
 	public void faliao(String userid,String fromck,String tock,String mxJson){
 		BusinessFaLiao businessFaLiao = new BusinessFaLiao();
-		// businessFaLiao.setCode("FLD"+ DateUtils.getDate("yyyyMMddHHmmss"));
 		User user = UserUtils.get(userid);
 		businessFaLiao.setCreateBy(user);
 		businessFaLiao.setFromck(new BaseCangKu(fromck));
@@ -148,7 +147,6 @@ public class BusinessFaLiaoService extends CrudService<BusinessFaLiaoMapper, Bus
 		try {
 			String ockcdoe = cangKuMapper.getCodeById(fromck);
 			String tckcode = cangKuMapper.getCodeById(tock);
-			//TODO 调拨单
 			YT_Tran tr = new YT_Tran();
 			tr.setcTVCode(businessFaLiao.getCode());
 			tr.setdTVDate(DateUtils.getDate());
@@ -175,6 +173,35 @@ public class BusinessFaLiaoService extends CrudService<BusinessFaLiaoMapper, Bus
 		}catch (Exception e){
 			e.printStackTrace();
 			throw new RuntimeException("数据传U8出错，原因："+e.getMessage());
+		}
+	}
+
+	public void u8in(String rid) throws Exception {
+		BusinessFaLiao businessFaLiao = get(rid);
+		String ockcdoe = cangKuMapper.getCodeById(businessFaLiao.getFromck().getId());
+		String tckcode = cangKuMapper.getCodeById(businessFaLiao.getTock().getId());
+		YT_Tran tr = new YT_Tran();
+		tr.setcTVCode(businessFaLiao.getCode());
+		tr.setdTVDate(DateUtils.getDate());
+		tr.setcOWhCode(ockcdoe);
+		tr.setcIWhCode(tckcode);
+		tr.setcIRdCode("15");
+		tr.setcORdCode("25");
+		List<YT_Trans> trans = Lists.newArrayList();
+		businessFaLiao.getBusinessFaLiaoMxList().forEach(d->{
+			YT_Trans t = new YT_Trans();
+			t.setcInvCode(d.getCinvcode());
+			t.setiTVQuantity(d.getNum()+"");
+			t.setIrowno(d.getNo()+"");
+			t.setdMadeDate(d.getScdate());
+			t.setcTVBatch(d.getBatchno());
+			t.setCoutposcode(d.getHuowei().getId());
+			trans.add(t);
+		});
+		tr.setTrans(trans);
+		U8WebServiceResult rs = U8Post.TranPost(tr, U8Url.URL);
+		if("1".equals(rs.getCount())){
+			throw new RuntimeException(rs.getMessage());
 		}
 	}
 }

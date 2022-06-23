@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jeeplus.common.utils.DateUtils;
+import com.jeeplus.modules.base.cangku.entity.BaseCangKu;
 import com.jeeplus.modules.base.cangku.mapper.BaseCangKuMapper;
 import com.jeeplus.modules.base.vendor.entity.BaseVendor;
 import com.jeeplus.modules.business.ommo.bom.entity.BussinessOmMoDetailOnly;
@@ -132,6 +133,7 @@ public class BusinessChuKuWeiWaiService extends CrudService<BusinessChuKuWeiWaiM
 		businessChuKuWeiWai.setCinvname(info.getCinvname());
 		businessChuKuWeiWai.setCinvstd(info.getCinvstd());
 		businessChuKuWeiWai.setNum(info.getNum());
+		businessChuKuWeiWai.setCk(new BaseCangKu(ckid));
 		businessChuKuWeiWai.setUnit(info.getUnit());
 		businessChuKuWeiWai.setVendor(new BaseVendor(info.getVendorid()));
 		Object obj = JSONObject.parse(mxJson);
@@ -186,6 +188,38 @@ public class BusinessChuKuWeiWaiService extends CrudService<BusinessChuKuWeiWaiM
 		}catch (Exception e){
 			e.printStackTrace();
 			throw new RuntimeException("数据传U8出错，原因："+e.getMessage());
+		}
+	}
+
+	public void u8in(String rid) throws Exception {
+		BusinessChuKuWeiWai businessChuKuWeiWai = get(rid);
+		String ck = cangKuMapper.getCodeById(businessChuKuWeiWai.getCk().getId());
+		User user = UserUtils.get(businessChuKuWeiWai.getCreateBy().getId());
+		YT_Rd11 rd11 = new YT_Rd11();
+		rd11.setcBusType("委外发料");
+		rd11.setcSource("委外订单");
+		rd11.setcWhCode(ck);
+		rd11.setcRdcode("21");
+		rd11.setdDate(DateUtils.getDate());
+		rd11.setcCode(businessChuKuWeiWai.getCode());
+		rd11.setcMemo("");
+		rd11.setcMaker(user.getName());
+		rd11.setcDepCode(user.getOffice().getCode());
+		List<YT_Rds11> rd11s = new ArrayList<>();
+		businessChuKuWeiWai.getBusinessChuKuWeiWaiMxList().forEach(d->{
+			YT_Rds11 r = new YT_Rds11();
+			r.setcInvCode(d.getCinvcode());
+			r.setiQuantity(d.getRemarks());
+			r.setCmocode(businessChuKuWeiWai.getMocode());
+			r.setImoseq(businessChuKuWeiWai.getMono()+"");
+			r.setInvcode(d.getCinvcode());
+			r.setIopseq(d.getBomid()); // 委外订单子件ID
+			rd11s.add(r);
+		});
+		rd11.setRd11s(rd11s);
+		U8WebServiceResult rs = U8Post.Rd11Post(rd11, U8Url.URL);
+		if("1".equals(rs.getCount())){
+			throw new RuntimeException(rs.getMessage());
 		}
 	}
 }

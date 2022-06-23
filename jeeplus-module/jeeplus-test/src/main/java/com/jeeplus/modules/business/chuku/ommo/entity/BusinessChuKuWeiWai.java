@@ -3,6 +3,7 @@
  */
 package com.jeeplus.modules.business.chuku.ommo.entity;
 
+import com.jeeplus.modules.base.cangku.entity.BaseCangKu;
 import com.jeeplus.modules.base.vendor.entity.BaseVendor;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -36,6 +37,7 @@ public class BusinessChuKuWeiWai extends DataEntity<BusinessChuKuWeiWai> {
 	private Date endStartdate;		// 结束 计划下达日期
 	private Date beginArrivedate;		// 开始 计划到货日期
 	private Date endArrivedate;		// 结束 计划到货日期
+	private BaseCangKu ck;
 	private List<BusinessChuKuWeiWaiMx> businessChuKuWeiWaiMxList = Lists.newArrayList();		// 子表列表
 	
 	public BusinessChuKuWeiWai() {
@@ -203,5 +205,17 @@ public class BusinessChuKuWeiWai extends DataEntity<BusinessChuKuWeiWai> {
 
 	public void setBusinessChuKuWeiWaiMxList(List<BusinessChuKuWeiWaiMx> businessChuKuWeiWaiMxList) {
 		this.businessChuKuWeiWaiMxList = businessChuKuWeiWaiMxList;
+	}
+
+	public BaseCangKu getCk() {
+		if(ck==null){
+			ck = new BaseCangKu();
+		}
+		return ck;
+	}
+
+	public BusinessChuKuWeiWai setCk(BaseCangKu ck) {
+		this.ck = ck;
+		return this;
 	}
 }

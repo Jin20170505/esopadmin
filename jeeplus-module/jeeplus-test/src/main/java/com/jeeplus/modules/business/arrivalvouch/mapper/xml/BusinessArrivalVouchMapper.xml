@@ -134,7 +134,6 @@
 		code=VALUES(code),
 		arrive_date=VALUES(arrive_date),
 		u8code = values(u8code),
-		dept=VALUES(dept),
 		vendor=VALUES(vendor),
 		dept=VALUES(dept)
 	</insert>
