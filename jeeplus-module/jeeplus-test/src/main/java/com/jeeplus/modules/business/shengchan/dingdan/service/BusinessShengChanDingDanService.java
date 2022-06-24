@@ -746,4 +746,29 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 		});
     }
 
+	/**
+	 * 订单关闭
+	 * @param ids
+	 */
+	@Transactional(readOnly = false)
+	public void closeorder(String ids) {
+		Arrays.asList(ids.split(",")).forEach(mxid->{
+			mapper.closeMxByMxid(mxid);
+		});
+	}
+	/**
+	 * 订单恢复
+	 * @param ids
+	 */
+	@Transactional(readOnly = false)
+	public void recover(String ids) {
+		Arrays.asList(ids.split(",")).forEach(mxid->{
+			mapper.recoverByMxid(mxid);
+		});
+	}
+	@Transactional(readOnly = false)
+	public void recoverMid(String mid) {
+		mapper.recoverByMid(mid);
+		mapper.recoverMxByMid(mid);
+	}
 }

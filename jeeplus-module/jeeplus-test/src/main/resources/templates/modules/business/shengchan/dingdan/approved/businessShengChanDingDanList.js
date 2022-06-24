@@ -122,7 +122,7 @@ $(document).ready(function() {
 
 	  $('#businessShengChanDingDanTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
-            $('#remove,#shenhe,#fanshen').prop('disabled', ! $('#businessShengChanDingDanTable').bootstrapTable('getSelections').length);
+            $('#remove,#shenhe,#fanshen,#closeorder').prop('disabled', ! $('#businessShengChanDingDanTable').bootstrapTable('getSelections').length);
             $('#edit,#jihua').prop('disabled', $('#businessShengChanDingDanTable').bootstrapTable('getSelections').length!=1);
         });
 
@@ -219,7 +219,21 @@ $(document).ready(function() {
             return row.id
         });
     }
-
+function closeorder(){
+  var ids = getIdSelections();
+  jp.confirm('确认要关闭该生产订单吗？', function(){
+  var index =jp.loading();
+  jp.get("${ctx}/business/shengchan/dingdan/businessShengChanDingDan/closeorder?mids=" + ids, function(data){
+  if(data.success){
+  refresh();
+  jp.toastr_success(data.msg);
+}else{
+  jp.toastr_error(data.msg);
+}
+  jp.close(index);
+})
+})
+}
   //删除
   function del(ids){
      if(!ids){

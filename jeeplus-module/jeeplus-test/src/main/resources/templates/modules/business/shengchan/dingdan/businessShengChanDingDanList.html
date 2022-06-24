@@ -76,6 +76,11 @@ layout("/include/_container.html", {title:"列表", parent:"生产订单"}){
 			审核
 		</button>
 		<% } %>
+		<% if(shiro.hasPermission("business:shengchan:dingdan:businessShengChanDingDan:close") ){ %>
+		<button id="closeorder" class="btn btn-custom waves-effect w-xs waves-light" disabled onclick="closeorder()">
+			关闭订单
+		</button>
+		<% } %>
 		    </div>
 		
 	<!-- 表格 -->

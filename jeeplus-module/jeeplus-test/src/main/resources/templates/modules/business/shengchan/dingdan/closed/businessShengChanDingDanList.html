@@ -43,16 +43,11 @@ layout("/include/_container.html", {title:"列表", parent:"生产订单"}){
 
 	<!-- 工具栏 -->
 	<div id="toolbar">
-        <% if(shiro.hasPermission("business:shengchan:dingdan:businessShengChanDingDan:close") ){ %>
-        <button id="closeorder" class="btn btn-custom waves-effect w-xs waves-light" disabled onclick="closeorder()">
-            关闭订单
+        <% if(shiro.hasPermission("business:shengchan:dingdan:businessShengChanDingDan:recover") ){ %>
+        <button id="recover" class="btn btn-custom waves-effect w-xs waves-light" disabled onclick="recover()">
+            恢复订单
         </button>
         <% } %>
-		<% if(shiro.hasPermission("business:shengchan:dingdan:businessShengChanDingDan:shenhe") ){ %>
-		<button id="fanshen" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="fanshen()">
-			反审
-		</button>
-		<% } %>
 		    </div>
 		
 	<!-- 表格 -->

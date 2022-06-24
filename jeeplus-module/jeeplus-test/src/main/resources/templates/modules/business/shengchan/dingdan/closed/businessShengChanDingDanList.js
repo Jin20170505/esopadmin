@@ -60,7 +60,7 @@ $(document).ready(function() {
                	if(params.sort && params.order){
                     searchParam.orderBy = params.sort+ " "+  params.order;
 				}
-               	searchParam.status = '未审核';
+                   searchParam.status = '关闭';
 			    return searchParam;
                },
                onShowSearch: function () {
@@ -115,37 +115,6 @@ $(document).ready(function() {
             sortable: true,
             sortName: 'enddate'
             }
-			,{
-			   field: 'operate',
-			   title: '操作',
-			   align: 'center',
-			   class: 'text-nowrap',
-			   events: {
-				   'click .view': function (e, value, row, index) {
-					   view(row.id);
-				   },
-				   'click .edit': function (e, value, row, index) {
-					   edit(row.id)
-				   },
-				   'click .del': function (e, value, row, index) {
-					   del(row.id);
-
-				   }
-			   },
-			   formatter:  function operateFormatter(value, row, index) {
-				   return [
-					<% if(shiro.hasPermission("business:shengchan:dingdan:businessShengChanDingDan:view")){ %>
-					   '<a class="view btn btn-icon waves-effect waves-light btn-custom btn-xs m-r-5"> <i class="fa fa-search"></i></a>',
-				   <% } %>
-				   <% if(shiro.hasPermission("business:shengchan:dingdan:businessShengChanDingDan:edit")){ %>
-					   '<a class="edit btn btn-icon waves-effect waves-light btn-success btn-xs m-r-5"> <i class="fa fa-pencil"></i></a>',
-				   <% } %>
-				   <% if(shiro.hasPermission("business:shengchan:dingdan:businessShengChanDingDan:del")){ %>
-					   '<a class="del btn btn-icon waves-effect waves-light btn-danger btn-xs"> <i class="fa fa-trash-o"></a>'
-				   <% } %>
-				   ].join('');
-			   }
-		   }
 		     ]
 		
 		});
@@ -153,7 +122,7 @@ $(document).ready(function() {
 
 	  $('#businessShengChanDingDanTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
-            $('#remove,#shenhe,#fanshen,#closeorder').prop('disabled', ! $('#businessShengChanDingDanTable').bootstrapTable('getSelections').length);
+            $('#remove,#shenhe,#fanshen').prop('disabled', ! $('#businessShengChanDingDanTable').bootstrapTable('getSelections').length);
             $('#edit,#jihua').prop('disabled', $('#businessShengChanDingDanTable').bootstrapTable('getSelections').length!=1);
         });
 
@@ -212,11 +181,17 @@ $(document).ready(function() {
 
 		
 	});
-	function closeorder(){
+	//获取选中行
+  function getIdSelections() {
+        return $.map($("#businessShengChanDingDanTable").bootstrapTable('getSelections'), function (row) {
+            return row.id
+        });
+    }
+  function recover(){
   var ids = getIdSelections();
-  jp.confirm('确认要关闭该生产订单吗？', function(){
+  jp.confirm('确认要恢复该生产订单吗？', function(){
   var index =jp.loading();
-  jp.get("${ctx}/business/shengchan/dingdan/businessShengChanDingDan/closeorder?mids=" + ids, function(data){
+  jp.get("${ctx}/business/shengchan/dingdan/businessShengChanDingDan/recover?mids=" + ids, function(data){
   if(data.success){
   refresh();
   jp.toastr_success(data.msg);
@@ -227,45 +202,6 @@ $(document).ready(function() {
 })
 })
 }
-    // 审核
-    function shenhe(){
-        var ids = getIdSelections();
-        jp.confirm('确认要审核该生产订单记录吗？', function(){
-            var index =jp.loading();
-            jp.get("${ctx}/business/shengchan/dingdan/businessShengChanDingDan/shenhe?ids=" + ids, function(data){
-                    if(data.success){
-                        refresh();
-                        jp.toastr_success(data.msg);
-                    }else{
-                        jp.toastr_error(data.msg);
-                    }
-                    jp.close(index);
-            })
-        })
-    }
-    // 反审
-    function fanshen(){
-        var ids = getIdSelections();
-        jp.confirm('确认要反审该生产订单记录吗？', function(){
-            var index =jp.loading();
-            jp.get("${ctx}/business/shengchan/dingdan/businessShengChanDingDan/fanshen?ids=" + ids, function(data){
-                    if(data.success){
-                        refresh();
-                        jp.toastr_success(data.msg);
-                    }else{
-                        jp.toastr_error(data.msg);
-                    }
-                    jp.close(index);
-            })
-        })
-    }
-	//获取选中行
-  function getIdSelections() {
-        return $.map($("#businessShengChanDingDanTable").bootstrapTable('getSelections'), function (row) {
-            return row.id
-        });
-    }
-
   //删除
   function del(ids){
      if(!ids){

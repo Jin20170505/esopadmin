@@ -110,6 +110,9 @@
           ,{
             field: 'ischaidan',
             title: '是否拆单'
+          },{
+            field: 'status',
+            title: '订单状态'
           }
             , {
                 field: 'p.code',
@@ -165,7 +168,7 @@
 
     $('#table').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
-            $('#remove,#jihua').prop('disabled', ! $('#table').bootstrapTable('getSelections').length);
+            $('#remove,#jihua,#closeorder,#recover').prop('disabled', ! $('#table').bootstrapTable('getSelections').length);
             $('#chaidan,#print,#handler,#bomsearch').prop('disabled', $('#table').bootstrapTable('getSelections').length!=1);
         });
 
@@ -210,6 +213,37 @@ function bomsearch(){
   jp.openViewDialog('生产齐套查看', "${ctx}/business/shengchan/dingdan/businessShengChanDingDan/gotobomsearch?rid="+rid,'80%', '70%');
 }
 
+  function closeorder(){
+  var ids = getIdSelections();
+  jp.confirm('确认要关闭该生产订单吗？', function(){
+  var index =jp.loading();
+  jp.get("${ctx}/business/shengchan/dingdan/businessShengChanDingDan/closeorder?ids=" + ids, function(data){
+  if(data.success){
+  refresh();
+  jp.toastr_success(data.msg);
+}else{
+  jp.toastr_error(data.msg);
+}
+  jp.close(index);
+})
+})
+}
+
+  function recover(){
+  var ids = getIdSelections();
+  jp.confirm('确认要恢复该生产订单吗？', function(){
+  var index =jp.loading();
+  jp.get("${ctx}/business/shengchan/dingdan/businessShengChanDingDan/recover?ids=" + ids, function(data){
+  if(data.success){
+  refresh();
+  jp.toastr_success(data.msg);
+}else{
+  jp.toastr_error(data.msg);
+}
+  jp.close(index);
+})
+})
+}
     // 生成计划工单
   function jihua(){
     var rid = getIdSelections();

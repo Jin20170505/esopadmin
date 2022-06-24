@@ -168,6 +168,11 @@ public class BusinessShengChanDingDanController extends BaseController {
 		model.addAttribute("businessShengChanDingDan", businessShengChanDingDan);
 		return "modules/business/shengchan/dingdan/approved/businessShengChanDingDanList";
 	}
+	@RequestMapping(value = "closedlist")
+	public String closedlist(BusinessShengChanDingDan businessShengChanDingDan,Model model) {
+		model.addAttribute("businessShengChanDingDan", businessShengChanDingDan);
+		return "modules/business/shengchan/dingdan/closed/businessShengChanDingDanList";
+	}
 	@RequestMapping("goToList")
 	public String goToList(){
 		return "modules/business/shengchan/dingdan/list/list";
@@ -412,6 +417,49 @@ public class BusinessShengChanDingDanController extends BaseController {
 		AjaxJson json = new AjaxJson();
 		try {
 			businessShengChanDingDanService.fanshen(ids);
+			json.setSuccess(true);
+			json.setMsg("操作成功");
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setSuccess(false);
+			json.setMsg("操作失败");
+		}
+		return json;
+	}
+
+	@ResponseBody
+	@RequestMapping("closeorder")
+	public AjaxJson closeorder(String mids,String ids){
+		AjaxJson json = new AjaxJson();
+		try {
+			if(StringUtils.isNotEmpty(mids)){
+				Arrays.asList(mids.split(",")).forEach(mid->{
+					businessShengChanDingDanService.closeMid(mid);
+				});
+			}else {
+				businessShengChanDingDanService.closeorder(ids);
+			}
+			json.setSuccess(true);
+			json.setMsg("操作成功");
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setSuccess(false);
+			json.setMsg("操作失败");
+		}
+		return json;
+	}
+	@ResponseBody
+	@RequestMapping("recover")
+	public AjaxJson recover(String mids,String ids){
+		AjaxJson json = new AjaxJson();
+		try {
+			if(StringUtils.isNotEmpty(mids)){
+				Arrays.asList(mids.split(",")).forEach(mid->{
+					businessShengChanDingDanService.recoverMid(mid);
+				});
+			}else {
+				businessShengChanDingDanService.recover(ids);
+			}
 			json.setSuccess(true);
 			json.setMsg("操作成功");
 		}catch (Exception e){

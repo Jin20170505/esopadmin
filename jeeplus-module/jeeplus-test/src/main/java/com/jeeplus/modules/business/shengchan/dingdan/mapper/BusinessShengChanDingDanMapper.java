@@ -35,4 +35,13 @@ public interface BusinessShengChanDingDanMapper extends BaseMapper<BusinessSheng
     @Update("update business_shengchan_dingdan_mingxi set status = '关闭' where id = #{mxid}")
     void closeMxByMxid(@Param("mxid") String mxid);
 
+    @Update("update business_shengchan_dingdan_mingxi set status = '开立' where id = #{mxid}")
+    void recoverByMxid(@Param("mxid") String mxid);
+
+    @Update("update business_shengchan_dingdan_mingxi set status = '开立' where pid = #{mid}")
+    void recoverMxByMid(@Param("mid") String mid);
+
+    @Update("update business_shengchan_dingdan set status = '未审核' where id = #{mid}")
+    void recoverByMid(@Param("mid") String mid);
+
 }
