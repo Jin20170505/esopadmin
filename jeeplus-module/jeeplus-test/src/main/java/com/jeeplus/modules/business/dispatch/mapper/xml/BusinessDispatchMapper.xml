@@ -90,7 +90,7 @@
 		</choose>
 	</select>
 	<insert id="batchInsert" parameterType="java.util.List">
-		NSERT INTO business_dispatch(
+		INSERT INTO business_dispatch(
 		id,
 		create_by,
 		create_date,

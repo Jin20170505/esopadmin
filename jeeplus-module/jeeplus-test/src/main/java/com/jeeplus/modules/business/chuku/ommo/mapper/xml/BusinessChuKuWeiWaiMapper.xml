@@ -22,6 +22,7 @@
 		a.startdate AS "startdate",
 		a.arrivedate AS "arrivedate",
 		a.cangku AS "ck.id",
+		ck.name AS "ck.name",
 		a.moid AS "moid",
 		a.mohid AS "mohid",
 		vendor.name AS "vendor.name"
@@ -127,7 +128,7 @@
 			moid,
 			mohid
 		) VALUES (
-			#{id},#{ck.id}
+			#{id},#{ck.id},
 			#{createBy.id},
 			#{createDate},
 			#{updateBy.id},
