@@ -483,7 +483,7 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 		if(boms!=null){
 			boms.forEach(d->{
 				Double sum = businessJiHuaGongDanService.getSumnumByScYid(d.getId());
-				if((d.getNum()-sum) >0){
+				if((d.getNum()-sum) >0 ||(d.getNum()-sum)<0){
 					String lastid = jiHuaGongDanBomMapper.getIdByCreateDate(d.getId());
 					Double fnum = jiHuaGongDanBomMapper.getSumnumByScYidCid(d.getId(),lastid);
 					if(fnum==null){

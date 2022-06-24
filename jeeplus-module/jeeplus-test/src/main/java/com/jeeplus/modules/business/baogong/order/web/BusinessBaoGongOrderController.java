@@ -114,12 +114,12 @@ public class BusinessBaoGongOrderController extends BaseController {
 	 */
 	@RequestMapping("lingliaodealwith")
 	@ResponseBody
-	public AjaxJson lingliaodealwith(String ids){
+	public AjaxJson lingliaodealwith(String rid){
 		AjaxJson json = new AjaxJson();
 		try{
-			String schid = businessBaoGongOrderService.getSchidByOrderid(ids);
+			String schid = businessBaoGongOrderService.getSchidByOrderid(rid);
 			List<U8Moallocate> moallocates = u8MoallocateService.findBomIdAndSyNum(schid);
-			String rs = businessBaoGongOrderService.lingliaodealwith(ids,schid,moallocates);
+			String rs = businessBaoGongOrderService.lingliaodealwith(rid,schid,moallocates);
 			if(StringUtils.isNotEmpty(rs)){
 				json.setSuccess(false);
 				json.setMsg(rs);

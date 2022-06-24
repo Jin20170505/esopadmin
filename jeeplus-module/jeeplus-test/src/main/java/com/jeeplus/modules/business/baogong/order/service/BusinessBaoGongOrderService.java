@@ -25,6 +25,7 @@ import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDanBom;
 import com.jeeplus.modules.business.jihuadingdan.mapper.BusinessJiHuaGongDanBomMapper;
 import com.jeeplus.modules.business.jihuadingdan.mapper.BusinessJiHuaGongDanMapper;
 import com.jeeplus.modules.business.ruku.product.mapper.BusinessRuKuProductMapper;
+import com.jeeplus.modules.business.shengchan.bom.entity.BusinessShengChanBom;
 import com.jeeplus.modules.business.shengchan.bom.mapper.BusinessShengChanBomMapper;
 import com.jeeplus.modules.business.shengchan.dingdan.mapper.BusinessShengChanDingDanMingXiMapper;
 import com.jeeplus.modules.u8data.morder.entity.U8Moallocate;
@@ -398,7 +399,6 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		if(moallocates==null || moallocates.isEmpty()){
 			return "对应ERP生产明细无子件，请确认下";
 		}
-		String planid = mapper.getPlanidByOrderid(bgid);
 		List<String> bomids = businessShengChanBomMapper.findBomIds(schid);
 		List<String> delboms = Lists.newArrayList();
 		if(bomids==null||bomids.isEmpty()){
@@ -427,8 +427,23 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 			});
 			return "";
 		}
-		// 尾差处理 只有已拆完的才可以处理，在拆单的时候，已经处理。此不可处理
-		// businessShengChanDingDanService.weichaCheck(schid);
+		BusinessShengChanBom bom = new BusinessShengChanBom();
+		bom.setSchid(schid);
+		// 尾差处理
+		List<BusinessShengChanBom> boms = businessShengChanBomMapper.findList(bom);
+		if(boms!=null){
+			boms.forEach(d->{
+				Double sum = businessJiHuaGongDanBomMapper.getSumnumByScYid(d.getId());
+				if((d.getNum()-sum) >0 ||(d.getNum()-sum)<0){
+					String lastid = businessJiHuaGongDanBomMapper.getIdByCreateDate(d.getId());
+					Double fnum = businessJiHuaGongDanBomMapper.getSumnumByScYidCid(d.getId(),lastid);
+					if(fnum==null){
+						fnum = 0.0;
+					}
+					businessJiHuaGongDanBomMapper.updateWeiCha(lastid,d.getNum()-fnum);
+				}
+			});
+		}
 		return "";
 	}
 }
