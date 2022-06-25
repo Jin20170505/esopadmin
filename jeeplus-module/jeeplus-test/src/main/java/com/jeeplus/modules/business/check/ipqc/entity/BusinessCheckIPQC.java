@@ -26,6 +26,12 @@ public class BusinessCheckIPQC extends DataEntity<BusinessCheckIPQC> {
 	private String username;		// 工号
 	private String cinvcode; // 存货编码
 	private String cinvname;	// 存货名称
+	private String bgid; // 报工ID
+	private String bgcode; // 报工单号
+	private String bghid; // 报工行ID
+	private String siteid; // 工序ID
+	private String sitename; // 工序名
+	private Double bzhglv; // 标准合格率
 	private String checkname;		// 质检人
 	private Date checkdate;		// 质检日期
 	private Double checknum;		// 检验数量
@@ -193,6 +199,60 @@ public class BusinessCheckIPQC extends DataEntity<BusinessCheckIPQC> {
 
 	public BusinessCheckIPQC setHglv(Double hglv) {
 		this.hglv = hglv;
+		return this;
+	}
+
+	public String getBgid() {
+		return bgid;
+	}
+
+	public BusinessCheckIPQC setBgid(String bgid) {
+		this.bgid = bgid;
+		return this;
+	}
+
+	public String getBgcode() {
+		return bgcode;
+	}
+
+	public BusinessCheckIPQC setBgcode(String bgcode) {
+		this.bgcode = bgcode;
+		return this;
+	}
+
+	public String getBghid() {
+		return bghid;
+	}
+
+	public BusinessCheckIPQC setBghid(String bghid) {
+		this.bghid = bghid;
+		return this;
+	}
+
+	public String getSiteid() {
+		return siteid;
+	}
+
+	public BusinessCheckIPQC setSiteid(String siteid) {
+		this.siteid = siteid;
+		return this;
+	}
+
+	public String getSitename() {
+		return sitename;
+	}
+
+	public BusinessCheckIPQC setSitename(String sitename) {
+		this.sitename = sitename;
+		return this;
+	}
+
+	public Double getBzhglv() {
+		return bzhglv;
+	}
+
+	public BusinessCheckIPQC setBzhglv(Double bzhglv) {
+		this.bzhglv = bzhglv;
 		return this;
 	}
 }

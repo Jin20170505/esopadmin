@@ -106,6 +106,18 @@ $(document).ready(function() {
 		        sortName: 'linecode'
 		       
 		    }
+            ,{
+                field: 'bgcode',
+                title: '报工单号',
+                sortable: true,
+                sortName: 'bgcode'
+            }
+            ,{
+                field: 'sitename',
+                title: '工序名称',
+                sortable: true,
+                sortName: 'sitename'
+            }
 			,{
 		        field: 'username',
 		        title: '工号',
@@ -165,15 +177,23 @@ $(document).ready(function() {
 		        title: '不良品数量',
 		        sortable: true,
 		        sortName: 'badnum'
-		       
 		    }
             ,{
-            field: 'hglv',
-            title: '合格率'
-            ,formatter:function(value, row , index){
-            return ((value-0).toFixed(4) * 100).toFixed(2) +"%";
-            }
-            }
+                field: 'hglv',
+                title: '合格率'
+                ,formatter:function(value, row , index){
+                    return ((value-0).toFixed(4) * 100).toFixed(2) +"%";
+                }
+            },{
+                field: 'bzhglv',
+                title: '标准合格率'
+                ,formatter:function(value, row , index){
+                    if(!value){
+                        return '-';
+                    }
+                    return ((value-0).toFixed(4) * 100).toFixed(2) +"%";
+                }
+                }
 			,{
 		        field: 'remarks',
 		        title: '备注信息',

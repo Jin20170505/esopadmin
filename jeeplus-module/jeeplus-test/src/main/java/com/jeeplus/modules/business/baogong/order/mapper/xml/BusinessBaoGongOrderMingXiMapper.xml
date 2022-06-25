@@ -11,6 +11,7 @@
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
 		a.no AS "no",
+		a.siteid AS "siteid",
 		a.site AS "site",
 		a.opname AS "opname",
 		a.opcode AS "opcode",
@@ -24,7 +25,9 @@
 	<sql id="businessBaoGongOrderMingXiJoins">
 	</sql>
 	
-    
+    <select id="findBaoGongItemHgLv" resultType="com.jeeplus.modules.api.bean.baogong.BaoGongItem">
+		select a.id AS bghid,a.siteid as siteid,a.site as site,b.hegelv as hglv from business_baogong_order_mingxi a left join base_site_hegelv b on a.siteid = b.siteid  where a.pid = #{bgid}
+	</select>
 	<select id="get" resultType="BusinessBaoGongOrderMingXi" >
 		SELECT 
 			<include refid="businessBaoGongOrderMingXiColumns"/>
@@ -87,7 +90,7 @@
 			remarks,
 			del_flag,
 			no,routeid,gtime,gprice,daynum,
-			site,
+			site,siteid,
 			opname,
 			opcode,
 			num,
@@ -104,7 +107,7 @@
 			#{remarks},
 			#{delFlag},
 			#{no},#{routeid},#{gtime},#{gprice},#{daynum},
-			#{site},
+			#{site},#{siteid},
 			#{opname},
 			#{opcode},
 			#{num},

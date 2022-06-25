@@ -10,6 +10,7 @@
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
+		a.siteid AS "siteid",
 		a.sitecode AS "sitecode",
 		a.sitename AS "sitename",
 		a.workshop AS "workshop",
@@ -38,25 +39,13 @@
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
 			<if test="sitecode != null and sitecode != ''">
-				AND a.sitecode LIKE
-				    <if test="_databaseId == 'postgre'">'%'||#{sitecode}||'%'</if>
-					<if test="_databaseId == 'oracle'">'%'||#{sitecode}||'%'</if>
-					<if test="_databaseId == 'mssql'">'%'+#{sitecode}+'%'</if>
-					<if test="_databaseId == 'mysql'">concat('%',#{sitecode},'%')</if>
+				AND a.sitecode LIKE concat('%',#{sitecode},'%')
 			</if>
 			<if test="sitename != null and sitename != ''">
-				AND a.sitename LIKE
-				    <if test="_databaseId == 'postgre'">'%'||#{sitename}||'%'</if>
-					<if test="_databaseId == 'oracle'">'%'||#{sitename}||'%'</if>
-					<if test="_databaseId == 'mssql'">'%'+#{sitename}+'%'</if>
-					<if test="_databaseId == 'mysql'">concat('%',#{sitename},'%')</if>
+				AND a.sitename LIKE concat('%',#{sitename},'%')
 			</if>
 			<if test="workshop != null and workshop != ''">
-				AND a.workshop LIKE
-				    <if test="_databaseId == 'postgre'">'%'||#{workshop}||'%'</if>
-					<if test="_databaseId == 'oracle'">'%'||#{workshop}||'%'</if>
-					<if test="_databaseId == 'mssql'">'%'+#{workshop}+'%'</if>
-					<if test="_databaseId == 'mysql'">concat('%',#{workshop},'%')</if>
+				AND a.workshop LIKE concat('%',#{workshop},'%')
 			</if>
 		</where>
 		<choose>
@@ -97,6 +86,7 @@
 			update_date,
 			remarks,
 			del_flag,
+			siteid,
 			sitecode,
 			sitename,
 			workshop,
@@ -109,6 +99,7 @@
 			#{updateDate},
 			#{remarks},
 			#{delFlag},
+		    #{siteid},
 			#{sitecode},
 			#{sitename},
 			#{workshop},
@@ -121,6 +112,7 @@
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
 			remarks = #{remarks},
+		    siteid = #{siteid},
 			sitecode = #{sitecode},
 			sitename = #{sitename},
 			workshop = #{workshop},

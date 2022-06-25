@@ -32,10 +32,13 @@ public class ApiZhiJianController {
 
     @RequestMapping("do")
     public AjaxJson doZhiJian(String sccode,String scline,String userid,String userno,String username,
+                              String bgid,String bgcode,String bghid,String siteid,String sitename,Double hglv,
                               String remarks,String cinvcode,String cinvname,Double jynum,Double hgnum,Double bhgnum,Double blnum){
         AjaxJson json = new AjaxJson();
         try{
-            businessCheckIPQCService.zhijian(sccode, scline, userid, userno, username, remarks,cinvcode,cinvname, jynum, hgnum, bhgnum, blnum);
+            businessCheckIPQCService.zhijian(sccode, scline, userid, userno, username,
+                    bgid,bgcode,bghid,siteid,sitename,hglv,
+                    remarks,cinvcode,cinvname, jynum, hgnum, bhgnum, blnum);
             json.setSuccess(true);
             json.setMsg("检验成功。");
         }catch (Exception e){

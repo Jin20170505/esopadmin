@@ -247,6 +247,8 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		bean.setBatchno(order.getBatchno()).setBgcode(order.getBgcode()).setUnit(order.getUnit()).setBgid(order.getId())
 				.setCinvcode(order.getCinvcode()).setCinvname(order.getCinvname()).setCinvstd(order.getCinvstd()).setSccode(order.getOrdercode())
 				.setScline(order.getOrderline());
+		List<BaoGongItem> items = businessBaoGongOrderMingXiMapper.findBaoGongItemHgLv(order.getId());
+		bean.setBaoGongItems(items);
 		return bean;
 	}
 

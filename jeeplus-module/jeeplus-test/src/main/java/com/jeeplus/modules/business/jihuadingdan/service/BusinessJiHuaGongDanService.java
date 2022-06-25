@@ -180,7 +180,7 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 			BusinessBaoGongOrderMingXi xi = new BusinessBaoGongOrderMingXi();
 			xi.setRouteid(mx.getRouteid()).setDaynum(mx.getDaynum()).setGprice(mx.getGprice()).setGtime(mx.getGtime());
 			xi.setClassgroup(mx.getClassgroup().getName());
-			xi.setNo(mx.getNo());xi.setNum(mx.getNum());xi.setSite(mx.getSite().getName());
+			xi.setNo(mx.getNo());xi.setNum(mx.getNum());xi.setSite(mx.getSite().getName());xi.setSiteid(mx.getSite().getId());
 			xi.setComplete("0");xi.setOpcode(mx.getUserno());xi.setOpname(mx.getUsername());
 			xi.setId("");xi.setDelFlag("0");
 			order.getBusinessBaoGongOrderMingXiList().add(xi);

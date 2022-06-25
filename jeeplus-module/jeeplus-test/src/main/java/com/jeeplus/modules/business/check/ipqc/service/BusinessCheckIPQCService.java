@@ -76,9 +76,11 @@ public class BusinessCheckIPQCService extends CrudService<BusinessCheckIPQCMappe
 	}
 
 	@Transactional(readOnly = false)
-	public void zhijian(String sccode,String scline,String userid,String userno,String username,String remarks,
-						String cinvcode,String cinvname,Double jynum,Double hgnum,Double bhgnum,Double blnum){
+	public void zhijian(String sccode,String scline,String userid,String userno,String username,
+						String bgid,String bgcode,String bghid,String siteid,String sitename,Double hglv,
+						String remarks,String cinvcode,String cinvname,Double jynum,Double hgnum,Double bhgnum,Double blnum){
 		BusinessCheckIPQC ipqc = new BusinessCheckIPQC();
+		ipqc.setBgid(bgid).setBzhglv(hglv).setBgcode(bgcode).setBghid(bghid).setSiteid(siteid).setSitename(sitename);
 		ipqc.setBadnum(blnum);
 		ipqc.setChecknum(jynum);
 		ipqc.setHegenum(hgnum);

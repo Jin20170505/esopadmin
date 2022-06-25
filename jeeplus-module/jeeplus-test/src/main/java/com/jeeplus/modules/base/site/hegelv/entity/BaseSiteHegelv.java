@@ -15,6 +15,7 @@ import com.jeeplus.common.utils.excel.annotation.ExcelField;
 public class BaseSiteHegelv extends DataEntity<BaseSiteHegelv> {
 	
 	private static final long serialVersionUID = 1L;
+	private String siteid;
 	private String sitecode;		// 工序编码
 	private String sitename;		// 工序名称
 	private String workshop;		// 工作中心
@@ -64,5 +65,13 @@ public class BaseSiteHegelv extends DataEntity<BaseSiteHegelv> {
 	public void setHegelv(Double hegelv) {
 		this.hegelv = hegelv;
 	}
-	
+
+	public String getSiteid() {
+		return siteid;
+	}
+
+	public BaseSiteHegelv setSiteid(String siteid) {
+		this.siteid = siteid;
+		return this;
+	}
 }

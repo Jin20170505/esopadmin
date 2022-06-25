@@ -29,7 +29,8 @@ layout("/include/_dialog.html"){
 
         function siteCall(items,tagid){
 		    var item = items[0];
-		    $("#sitecode").val(item.id);
+            $("#siteid").val(item.id);
+		    $("#sitecode").val(item.code);
 		    $('#sitename').val(item.name);
         }
 	</script>
@@ -40,8 +41,9 @@ layout("/include/_dialog.html"){
             <tr>
                 <td class="width-15 active"><label class="pull-right"><font color="red">*</font>工序编码：</label></td>
                 <td class="width-35">
-                    <input name="sitecode" id="sitecode" type="hidden" value="${baseSiteHegelv.sitecode!}"    class="form-control required"/>
-                    <#gridselect callback="siteCall" url="${ctx}/base/site/baseSite/data" id="site" name="site.id" value="" labelName="site.id" labelValue="${baseSiteHegelv.sitecode!}"
+                    <input name="siteid" id="siteid" type="hidden" value="${baseSiteHegelv.siteid!}"    class="form-control "/>
+                    <input name="sitecode" id="sitecode" type="hidden" value="${baseSiteHegelv.sitecode!}"    class="form-control"/>
+                    <#gridselect callback="siteCall" url="${ctx}/base/site/baseSite/data" id="site" name="site.id" value="" labelName="site.code" labelValue="${baseSiteHegelv.sitecode!}"
                     title="选择工序" class="form-control  required" fieldLabels="编码|名称" fieldKeys="id|name" searchLabels="编码|名称" searchKeys="id|name" />
             </td>
                 <td class="width-15 active"><label class="pull-right"><font color="red">*</font>工序名称：</label></td>

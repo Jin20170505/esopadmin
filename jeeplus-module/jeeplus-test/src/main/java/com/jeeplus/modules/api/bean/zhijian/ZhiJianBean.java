@@ -1,5 +1,10 @@
 package com.jeeplus.modules.api.bean.zhijian;
 
+import com.jeeplus.modules.api.bean.baogong.BaoGongItem;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 质检Bean
  */
@@ -14,6 +19,7 @@ public class ZhiJianBean {
     private String cinvname;
     private String cinvstd;
     private String unit;
+    private List<BaoGongItem> baoGongItems = new ArrayList<>();
 
     public String getBgid() {
         return bgid;
@@ -25,6 +31,9 @@ public class ZhiJianBean {
     }
 
     public String getBatchno() {
+        if(batchno==null){
+            batchno = "";
+        }
         return batchno;
     }
 
@@ -102,6 +111,15 @@ public class ZhiJianBean {
 
     public ZhiJianBean setUnit(String unit) {
         this.unit = unit;
+        return this;
+    }
+
+    public List<BaoGongItem> getBaoGongItems() {
+        return baoGongItems;
+    }
+
+    public ZhiJianBean setBaoGongItems(List<BaoGongItem> baoGongItems) {
+        this.baoGongItems = baoGongItems;
         return this;
     }
 }

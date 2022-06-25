@@ -20,6 +20,7 @@ public class BusinessBaoGongOrderMingXi extends DataEntity<BusinessBaoGongOrderM
 	private String gprice; // 工价
 	private String daynum;// 日产量
 	private Integer no;		// 序号
+	private String siteid; // 工序ID
 	private String site;		// 工作站
 	private String opname;		// 操作人
 	private String opcode;		// 员工编号
@@ -166,6 +167,15 @@ public class BusinessBaoGongOrderMingXi extends DataEntity<BusinessBaoGongOrderM
 
 	public BusinessBaoGongOrderMingXi setDaynum(String daynum) {
 		this.daynum = daynum;
+		return this;
+	}
+
+	public String getSiteid() {
+		return siteid;
+	}
+
+	public BusinessBaoGongOrderMingXi setSiteid(String siteid) {
+		this.siteid = siteid;
 		return this;
 	}
 }
