@@ -5,6 +5,7 @@ import com.jeeplus.core.persistence.DataEntity;
 import java.util.Date;
 
 public class U8Inventory extends DataEntity<U8Inventory> {
+    private Date dModifyDate;
     private String cInvAddCode; // 存货代码
     private String cInvCCode; // 存货大类编码
     private String cInvCName; // 存货大类名称
@@ -21,7 +22,7 @@ public class U8Inventory extends DataEntity<U8Inventory> {
     private Date dSDate;  // 启用日期
     private Date dEDate; // 停用日期
     private String kezhong; // 克重/单重
-
+    private Date now;
     public String getcInvAddCode() {
         return cInvAddCode;
     }
@@ -163,6 +164,24 @@ public class U8Inventory extends DataEntity<U8Inventory> {
 
     public U8Inventory setKezhong(String kezhong) {
         this.kezhong = kezhong;
+        return this;
+    }
+
+    public Date getdModifyDate() {
+        return dModifyDate;
+    }
+
+    public U8Inventory setdModifyDate(Date dModifyDate) {
+        this.dModifyDate = dModifyDate;
+        return this;
+    }
+
+    public Date getNow() {
+        return now;
+    }
+
+    public U8Inventory setNow(Date now) {
+        this.now = now;
         return this;
     }
 }

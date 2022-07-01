@@ -56,4 +56,7 @@ public interface BusinessShengChanDingDanMingXiMapper extends BaseMapper<Busines
 
 	@Select("select status from business_shengchan_dingdan_mingxi where id = #{schid}")
 	String getStatus(@Param("schid") String schid);
+
+	@Select("select ischaidan from business_shengchan_dingdan_mingxi where id = #{schid}")
+	String getChaidanStatus(@Param("schid") String schid);
 }

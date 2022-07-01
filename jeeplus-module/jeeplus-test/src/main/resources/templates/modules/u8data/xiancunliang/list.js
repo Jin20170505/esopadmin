@@ -47,11 +47,13 @@
         url: "${ctx}/u8data/U8InvPostionSum/data",
         queryParams: function (params) {
             var searchParam = $("#searchForm").serializeJSON();
+            var ckcode = $("#ckId").val();
             searchParam.pageNo = params.limit === undefined ? "1" : params.offset / params.limit + 1;
             searchParam.pageSize = params.limit === undefined ? -1 : params.limit;
             if (params.sort && params.order) {
                 searchParam.orderBy = params.sort + " " + params.order;
             }
+            searchParam.cwhcode = ckcode;
             return searchParam;
         },
         onShowSearch: function () {

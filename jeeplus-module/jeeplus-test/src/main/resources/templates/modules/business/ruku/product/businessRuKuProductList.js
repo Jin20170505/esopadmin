@@ -241,8 +241,12 @@ $(document).ready(function() {
     var rid = getIdSelections();
     jp.openSaveDialog('打印客户标签', "${ctx}/business/ruku/product/businessRuKuProduct/goToPrintcustomer?rid="+rid,'90%', '90%');
     }
-
-
+    /***
+    * 补录入库
+    */
+    function blruku(){
+        jp.openSaveDialog('补录入库', "${ctx}/business/ruku/product/businessRuKuProduct/goToRuKuBuChong",'90%', '90%');
+    }
     function printbq(){
     var rid = getIdSelections();
     top.layer.open({

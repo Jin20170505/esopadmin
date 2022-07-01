@@ -65,8 +65,8 @@ public class BusinessRuKuProductService extends CrudService<BusinessRuKuProductM
 		if(StringUtils.isEmpty(maxcode)){
 			code = "CPRK" +ymd + "00001";
 		}else {
-			code = maxcode.substring(0,10);
-			int c =  Integer.valueOf(maxcode.substring(10));
+			code = maxcode.substring(0,12);
+			int c =  Integer.valueOf(maxcode.substring(12));
 			c = c+1;
 			if(c<10){
 				code = code +"0000"+c;
@@ -82,6 +82,30 @@ public class BusinessRuKuProductService extends CrudService<BusinessRuKuProductM
 		}
 		return code;
 	}
+	public String getBuLuCurrentCode(String ymd){
+		String maxcode  = mapper.getBLMaxCode(ymd);
+		String code = "";
+		if(StringUtils.isEmpty(maxcode)){
+			code = "BLRK" +ymd + "00001";
+		}else {
+			code = maxcode.substring(0,12);
+			int c =  Integer.valueOf(maxcode.substring(12));
+			c = c+1;
+			if(c<10){
+				code = code +"0000"+c;
+			}else if(10<=c && c<100){
+				code = code +"000"+c;
+			}else if(100<=c && c<1000) {
+				code = code +"00"+c;
+			}else if(1000<=c && c<10000){
+				code = code +"0"+c;
+			}else {
+				code = code+c;
+			}
+		}
+		return code;
+	}
+
 	@Transactional(readOnly = false)
 	public synchronized void save(BusinessRuKuProduct businessRuKuProduct) {
 		if(StringUtils.isEmpty(businessRuKuProduct.getCode())){
@@ -272,5 +296,56 @@ public class BusinessRuKuProductService extends CrudService<BusinessRuKuProductM
 		if("1".equals(rs.getCount())){
 			throw new RuntimeException(rs.getMessage());
 		}
+	}
+	@Transactional(readOnly = false)
+	public void buchong(String bgid,String batchno,Double rukunum,String ckid,String hw,String remarks){
+		BusinessBaoGongOrder order  = businessBaoGongOrderService.getMain(bgid);
+		if(order==null){
+			throw new RuntimeException("报工单不存在啦");
+		}
+		Double donerukunum = businessRuKuProductMapper.getRuKuNumByBgid(order.getId());
+		if(donerukunum==null){
+			donerukunum = 0.0;
+		}
+		Double sumrknum =rukunum +donerukunum;
+		if(order.getNum()<sumrknum){
+			throw new RuntimeException("入库数量大于报工工单数量,无法入库。");
+		}
+		String lastBgHid = businessBaoGongOrderMingXiMapper.lastestGxHId(order.getId());
+		// 最后一道工序 报工数量
+		Double donebgnum = businessBaoGongRecordService.getDoneSumNum(order.getId(),lastBgHid);
+		if(donebgnum<sumrknum){
+			throw new RuntimeException("此报工单入库数量大于最后一道报工数量,无法入库。");
+		}
+		BusinessRuKuProduct product = new BusinessRuKuProduct();
+		BusinessRuKuProductMx mx = new BusinessRuKuProductMx();
+		product.setDept(new Office(order.getDept()));
+		product.setBatchno(batchno);
+		product.setBgcode(order.getBgcode());
+		product.setBgid(order.getId());
+		product.setCode(getBuLuCurrentCode(DateUtils.getDate("yyyyMMdd")));
+		product.setCangku(new BaseCangKu(ckid));
+		product.setCinvcode(order.getCinvcode());
+		product.setCinvname(order.getCinvname());
+		product.setCinvstd(order.getCinvstd());
+		product.setNum(rukunum);
+		product.setSych("0");
+		product.setSccode(order.getOrdercode());
+		product.setRemarks(remarks);
+		mx.setP(product);
+		mx.setHuowei(new BaseHuoWei(hw));
+		mx.setLinecode(order.getOrderline());
+		mx.setSchid(order.getOrderlineid());
+		mx.setSchid(order.getOrderlineid());
+		mx.setUnit(order.getUnit());
+		mx.setCinvcode(order.getCinvcode());
+		mx.setCinvname(order.getCinvname());
+		mx.setCinvstd(order.getCinvstd());
+		mx.setNum(rukunum);
+		mx.setSych("1");
+		mx.setRemarks(remarks);
+		mx.setId("");mx.setDelFlag("0");
+		product.getBusinessRuKuProductMxList().add(mx);
+		save(product);
 	}
 }

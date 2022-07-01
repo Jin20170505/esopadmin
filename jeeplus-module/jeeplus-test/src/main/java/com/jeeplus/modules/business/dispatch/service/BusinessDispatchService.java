@@ -98,8 +98,8 @@ public class BusinessDispatchService extends CrudService<BusinessDispatchMapper,
 		if(StringUtils.isEmpty(maxcode)){
 			code = "XSFH" +ymd + "00001";
 		}else {
-			code = maxcode.substring(0,10);
-			int c =  Integer.valueOf(maxcode.substring(10));
+			code = maxcode.substring(0,12);
+			int c =  Integer.valueOf(maxcode.substring(12));
 			c = c+1;
 			if(c<10){
 				code = code +"0000"+c;

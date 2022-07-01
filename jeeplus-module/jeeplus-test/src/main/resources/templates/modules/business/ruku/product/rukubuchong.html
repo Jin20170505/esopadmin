@@ -1,0 +1,116 @@
+<%
+layout("/include/_dialog.html"){
+%>
+<script type="text/javascript">
+
+    $(document).ready(function() {
+    });
+
+    function save() {
+        var isValidate = jp.validateForm('#inputForm');//校验表单
+        if(!isValidate){
+            return false;
+        }else{
+            var index = jp.loading();
+            jp.post("${ctx}/business/ruku/product/businessRuKuProduct/buchong",$('#inputForm').serialize(),function(data){
+                if(data.success){
+                    jp.getParent().refresh();
+                    var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                    parent.layer.close(dialogIndex);
+                    jp.toastr_success(data.msg)
+
+                }else{
+                    jp.error(data.msg);
+                }
+                jp.close(index);
+            })
+        }
+    }
+    function bgCallback(items,tagid){
+        var item = items[0];
+        $("#bgid").val(item.id)
+        $('#cinvcode').val(item.cinvcode);
+        $('#cinvname').val(item.cinvname);
+        $('#unit').val(item.unit);
+        $('#cinvstd').val(item.cinvstd);
+        $('#sccode').val(item.ordercode);
+        $('#scline').val(item.cinvstd);
+    }
+    function ckCallback(items,tagid){
+        var item = items[0];
+        $('#ckid').val(item.id);
+    }
+</script>
+<form id="inputForm"  method="post"  class="form-horizontal p-15">
+    <input type="hidden" name="bgid" id="bgid" />
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <td class="width-15 active"><label class="pull-right"><font color="red">*</font>报工单号：</label></td>
+            <td class="width-35">
+                <#gridselect callback="bgCallback"  url="${ctx}/business/baogong/order/businessBaoGongOrder/data" id="bg" name="bg.id" value="" labelName="bg.bgcode" labelValue=""
+                title="选择报工单" class="form-control required" fieldLabels="生产单号|生产行号|报工单号|存货编码|存货名称|存货规格"
+                fieldKeys="ordercode|orderline|bgcode|cinvcode|cinvname|cinvstd"
+                searchLabels="生产单号|生产行号|报工单号|存货编码|存货名称|存货规格" searchKeys="ordercode|orderline|bgcode|cinvcode|cinvname|cinvstd" />
+            </td>
+            <td class="width-15 active"><label class="pull-right">备注信息：</label></td>
+            <td class="width-35">
+                <input name="remarks" value=""    class="form-control "/>
+            </td>
+        </tr>
+        <tr>
+            <td class="width-15 active"><label class="pull-right"><font color="red">*</font>仓库：</label></td>
+            <td class="width-35">
+                <input name="ckid" value="" id="ckid" readonly type="hidden"/>
+                <#gridselect callback="ckCallback"  url="${ctx}/base/cangku/baseCangKu/data" id="cangku" name="cangku.id" value="" labelName="cangku.name" labelValue=""
+                title="选择仓库" class="form-control required" fieldLabels="编码|名称" fieldKeys="code|name" searchLabels="编码|名称" searchKeys="code|name" />
+            </td>
+            <td class="width-15 active"><label class="pull-right">货位：</label></td>
+            <td class="width-35">
+                <input id="hw" name="hw" value=""    class="form-control "/>
+            </td>
+        </tr>
+        <tr>
+            <td class="width-15 active"><label class="pull-right"><font color="red">*</font>生产订单号：</label></td>
+            <td class="width-35">
+                <input name="sccode" value=""  id="sccode"  class="form-control required"/>
+            </td>
+            <td class="width-15 active"><label class="pull-right"><font color="red">*</font>行号：</label></td>
+            <td class="width-35">
+                <input name="scline" value=""  id="scline"  class="form-control required"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="width-15 active"><label class="pull-right"><font color="red">*</font>存货档案：</label></td>
+            <td class="width-35">
+                <input name="cinvcode" value="" id="cinvcode" readonly  class="form-control "/>
+            </td>
+            <td class="width-15 active"><label class="pull-right">存货名称：</label></td>
+            <td class="width-35">
+                <input name="cinvname" value="" id="cinvname" readonly  class="form-control "/>
+            </td>
+        </tr>
+        <tr>
+            <td class="width-15 active"><label class="pull-right">规格型号：</label></td>
+            <td class="width-35">
+                <input id="cinvstd" readonly name="cinvstd" value=""    class="form-control "/>
+            </td>
+            <td class="width-15 active"><label class="pull-right">生产批号：</label></td>
+            <td class="width-35">
+                <input name="batchno" id="batchno" value=""    class="form-control required"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="width-15 active"><label class="pull-right">补入库数量：</label></td>
+            <td class="width-35">
+                <input name="rukunum" id="rukunum" value=""  type="number"  class="form-control number required"/>
+            </td>
+            <td class="width-15 active"><label class="pull-right">计量单位：</label></td>
+            <td class="width-35">
+                <input name="unit" id="unit" value=""  readonly  class="form-control "/>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+<% } %>

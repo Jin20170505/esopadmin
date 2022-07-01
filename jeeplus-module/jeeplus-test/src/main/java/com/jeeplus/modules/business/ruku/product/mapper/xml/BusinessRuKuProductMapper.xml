@@ -53,6 +53,9 @@
 			<if test="code != null and code != ''">
 				AND a.code like concat('%',#{code},'%')
 			</if>
+			<if test="bgcode != null and bgcode != ''">
+				AND a.bgcode like concat('%',#{bgcode},'%')
+			</if>
 			<if test="sccode != null and sccode != ''">
 				AND a.sccode like concat('%',#{sccode},'%')
 			</if>

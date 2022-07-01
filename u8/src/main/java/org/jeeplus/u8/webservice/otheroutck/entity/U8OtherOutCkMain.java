@@ -4,12 +4,14 @@ import com.google.common.collect.Lists;
 
 import java.util.List;
 
-//
+// 其他出库
 public class U8OtherOutCkMain {
     /// <summary>
     /// 仓库编码
     /// </summary>
     private String cWhCode;
+    // 入库仓库（调拨单使用）
+    private String cRWhCode;
 
     /// <summary>
     /// 出库日期
@@ -22,7 +24,7 @@ public class U8OtherOutCkMain {
     private String cCode;
 
     /// <summary>
-    /// 出库类别编码 = 24
+    /// 出库类别编码 = 24：其他出库   25：调拨出库
     /// </summary>
     private String crdcode;
 
@@ -127,6 +129,15 @@ public class U8OtherOutCkMain {
 
     public U8OtherOutCkMain setDetails(List<U8OtherOutCkMx> details) {
         Details = details;
+        return this;
+    }
+
+    public String getcRWhCode() {
+        return cRWhCode;
+    }
+
+    public U8OtherOutCkMain setcRWhCode(String cRWhcode) {
+        this.cRWhCode = cRWhcode;
         return this;
     }
 

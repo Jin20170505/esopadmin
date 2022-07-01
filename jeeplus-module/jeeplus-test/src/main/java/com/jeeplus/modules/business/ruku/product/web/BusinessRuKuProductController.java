@@ -19,6 +19,7 @@ import javax.validation.ConstraintViolationException;
 
 import com.jeeplus.common.utils.QRCodeUtil;
 import com.jeeplus.modules.business.arrivalvouch.entity.BusinessArrivalVouchMx;
+import com.jeeplus.modules.business.baogong.order.mapper.BusinessBaoGongOrderMapper;
 import com.jeeplus.modules.business.ruku.product.entity.BusinessRuKuProductMx;
 import com.jeeplus.modules.business.ruku.product.entity.ProductTagBean;
 import com.jeeplus.modules.u8data.customercinvcode.service.U8CusInvContraposeService;
@@ -67,6 +68,26 @@ public class BusinessRuKuProductController extends BaseController {
 			entity = new BusinessRuKuProduct();
 		}
 		return entity;
+	}
+
+
+	@RequestMapping("goToRuKuBuChong")
+	public String goToRuKuBuChong(Model model){
+		return "modules/business/ruku/product/rukubuchong";
+	}
+
+	@RequestMapping("buchong")
+	@ResponseBody
+	public AjaxJson buchong(String bgid,String batchno,Double rukunum,String ckid,String hw,String remarks){
+		AjaxJson json = new AjaxJson();
+		try{
+			businessRuKuProductService.buchong(bgid,batchno,rukunum,ckid,hw,remarks);
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setSuccess(false);
+			json.setMsg("补录失败。失败原因："+e.getMessage());
+		}
+		return json;
 	}
 
 	@RequestMapping("goToPrintcustomer")

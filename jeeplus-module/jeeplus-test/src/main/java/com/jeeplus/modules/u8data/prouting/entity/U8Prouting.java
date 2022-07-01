@@ -22,7 +22,8 @@ public class U8Prouting extends DataEntity<U8Prouting> {
     private String cinvcode;
     private String cinvname;
     private String cinvstd;
-
+    private Date modifyTime;
+    private Date nowTime;
     public String getProutingid() {
         return proutingid;
     }
@@ -146,6 +147,24 @@ public class U8Prouting extends DataEntity<U8Prouting> {
 
     public U8Prouting setCinvstd(String cinvstd) {
         this.cinvstd = cinvstd;
+        return this;
+    }
+
+    public Date getModifyTime() {
+        return modifyTime;
+    }
+
+    public U8Prouting setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+        return this;
+    }
+
+    public Date getNowTime() {
+        return nowTime;
+    }
+
+    public U8Prouting setNowTime(Date nowTime) {
+        this.nowTime = nowTime;
         return this;
     }
 }

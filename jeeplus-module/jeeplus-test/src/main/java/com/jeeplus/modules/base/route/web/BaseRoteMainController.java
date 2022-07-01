@@ -5,6 +5,7 @@ package com.jeeplus.modules.base.route.web;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
+import com.jeeplus.common.utils.time.DateUtil;
+import com.jeeplus.modules.base.erp.updatetime.entity.BaseU8UpdateTime;
+import com.jeeplus.modules.base.erp.updatetime.entity.U8SynchType;
+import com.jeeplus.modules.base.erp.updatetime.service.BaseU8UpdateTimeService;
 import com.jeeplus.modules.base.route.entity.BaseRoute;
 import com.jeeplus.modules.u8data.prouting.entity.U8Prouting;
 import com.jeeplus.modules.u8data.prouting.entity.U8ProutingDetail;
@@ -75,25 +80,46 @@ public class BaseRoteMainController extends BaseController {
 	}
 	@Autowired
 	private U8ProutingService u8ProutingService;
-
+	@Autowired
+	private BaseU8UpdateTimeService baseU8UpdateTimeService;
 	@ResponseBody
 	@RequestMapping("sychu8")
 	public AjaxJson sychU8(){
 		AjaxJson json = new AjaxJson();
 		try{
+			BaseU8UpdateTime time = baseU8UpdateTimeService.getByCode(U8SynchType.ROUTE.getCode());
+			Date now = new Date();
+			if(time==null){
+				time = new BaseU8UpdateTime();
+				time.setCode(U8SynchType.ROUTE.getCode());
+				time.setName(U8SynchType.ROUTE.getName());
+				time.setLastTime(DateUtil.addDays(now,-30));
+			}
 			U8Prouting prouting = new U8Prouting();
+			prouting.setNowTime(now).setModifyTime(time.getLastTime());
 			List<U8Prouting> data = u8ProutingService.findList(prouting);
 			if(data==null){
+				time.setLastTime(now);
+				baseU8UpdateTimeService.save(time);
 				json.setMsg("同步成功(u8数据空)");
 				json.setSuccess(true);
 				return json;
 			}
+			List<U8ProutingDetail> details = Lists.newArrayList();
 			U8ProutingDetail detail = new U8ProutingDetail();
-			List<U8ProutingDetail> details = u8ProutingService.findDetailList(detail);
-			if(details==null){
-				details = Lists.newArrayList();
-			}
+			data.forEach(d->{
+				if(StringUtils.isNotEmpty(d.getProutingid())){
+					baseRoteMainService.deleteMx(d.getProutingid());
+					detail.setProutingId(d.getProutingid());
+					List<U8ProutingDetail> ds = u8ProutingService.findDetailList(detail);
+					if(ds!=null){
+						details.addAll(ds);
+					}
+				}
+			});
 			baseRoteMainService.sychU8(data,details);
+			time.setLastTime(now);
+			baseU8UpdateTimeService.save(time);
 			json.setMsg("同步成功");
 			json.setSuccess(true);
 		}catch (Exception e){

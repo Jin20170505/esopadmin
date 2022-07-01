@@ -35,6 +35,9 @@
             <if test="cinvcode != null and cinvcode != '' ">
                 and a.cInvCode = #{cinvcode}
             </if>
+            <if test="cwhcode!=null and cwhcode !=''">
+                and a.cWhCode = #{cwhcode}
+            </if>
         </where>
         order by a.dVDate asc
     </select>

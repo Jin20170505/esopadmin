@@ -21,7 +21,7 @@ public class U8OtherInCkMain {
     private String cCode;
 
     /// <summary>
-    /// 入库类别编码 ="14"
+    /// 入库类别编码 ="14" ：其他入库  15：调拨入库
     /// </summary>
     private String crdcode;
 

@@ -92,8 +92,8 @@ public class BusinessPanDianService extends CrudService<BusinessPanDianMapper, B
 		if(StringUtils.isEmpty(maxcode)){
 			code = "PDD" +ymd + "00001";
 		}else {
-			code = maxcode.substring(0,9);
-			int c =  Integer.valueOf(maxcode.substring(9));
+			code = maxcode.substring(0,11);
+			int c =  Integer.valueOf(maxcode.substring(11));
 			c = c+1;
 			if(c<10){
 				code = code +"0000"+c;
@@ -167,27 +167,6 @@ public class BusinessPanDianService extends CrudService<BusinessPanDianMapper, B
 		});
 		save(main);
 		// TODO U8接口
-		// 其他入库
-		if(inck.size()>0){
-			U8OtherInCkMain m = new U8OtherInCkMain();
-			m.setcDepCode(user.getOffice().getCode()).setcWhCode(ckcode).setcMaker(user.getName()).setcMemo("")
-					.setCrdcode("14").setcCode(main.getCode()).setMesCode(main.getCode()).setdDate(ddate);
-			try{
-				inck.forEach(d->{
-					U8OtherInCkMx x = new U8OtherInCkMx();
-					x.setcBatch(d.getBatchno()).setcPosition(hw).setcInvCode(d.getCinvcode()).
-							setdMadeDate(d.getScdate()).setiQuantity(d.getCha()+"").setiRSRowNO(d.getNo()+"");
-					m.getDetails().add(x);
-				});
-				U8WebServiceResult rs = U8OtherInCkWebService.inck(m);
-				if("1".equals(rs.getCount())){
-					throw new RuntimeException(rs.getMessage());
-				}
-			}catch (Exception e){
-				e.printStackTrace();
-				throw new RuntimeException("数据传U8出错(入库)，原因："+e.getMessage());
-			}
-		}
 		// 其他出库
 		if(outck.size()>0){
 			U8OtherOutCkMain m = new U8OtherOutCkMain();
@@ -209,5 +188,27 @@ public class BusinessPanDianService extends CrudService<BusinessPanDianMapper, B
 				throw new RuntimeException("数据传U8出错(出库)，原因："+e.getMessage());
 			}
 		}
+		// 其他入库
+		if(inck.size()>0){
+			U8OtherInCkMain m = new U8OtherInCkMain();
+			m.setcDepCode(user.getOffice().getCode()).setcWhCode(ckcode).setcMaker(user.getName()).setcMemo("")
+					.setCrdcode("14").setcCode(main.getCode()).setMesCode(main.getCode()).setdDate(ddate);
+			try{
+				inck.forEach(d->{
+					U8OtherInCkMx x = new U8OtherInCkMx();
+					x.setcBatch(d.getBatchno()).setcPosition(hw).setcInvCode(d.getCinvcode()).
+							setdMadeDate(d.getScdate()).setiQuantity(d.getCha()+"").setiRSRowNO(d.getNo()+"");
+					m.getDetails().add(x);
+				});
+				U8WebServiceResult rs = U8OtherInCkWebService.inck(m);
+				if("1".equals(rs.getCount())){
+					throw new RuntimeException(rs.getMessage());
+				}
+			}catch (Exception e){
+				e.printStackTrace();
+				throw new RuntimeException("数据传U8出错(入库)，原因："+e.getMessage());
+			}
+		}
+
 	}
 }

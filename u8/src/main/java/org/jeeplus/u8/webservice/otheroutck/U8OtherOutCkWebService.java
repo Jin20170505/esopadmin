@@ -26,6 +26,7 @@ public final class U8OtherOutCkWebService {
         Map<String,Object> param = new LinkedHashMap<>();
         param.put("cCode",main.getcCode());
         param.put("cWhCode",main.getcWhCode());
+        param.put("cRWhCode",main.getcRWhCode());
         param.put("dDate",main.getdDate());
         param.put("crdcode",main.getCrdcode());
         param.put("cDepCode",main.getcDepCode());

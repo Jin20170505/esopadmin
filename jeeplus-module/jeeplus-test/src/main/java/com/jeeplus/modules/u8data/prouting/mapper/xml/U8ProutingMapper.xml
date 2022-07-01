@@ -15,6 +15,7 @@
         a.versionEffDate as "versionEffDate",
         a.versionEndDate as "versionEndDate",
         a.identCode as "identCode",
+        isnull(a.ModifyTime,a.CreateTime) as "modifyTime",
         a.identDesc as "identDesc"
     </sql>
     <sql id="proutingJoins">
@@ -29,6 +30,9 @@
         <where>
             <if test="status != null and status != ''">
                 and a.status = #{status}
+            </if>
+            <if test="modifyTime!=null">
+                and ((a.ModifyTime between #{modifyTime} and #{nowTime}) or (a.CreateTime between #{modifyTime} and #{nowTime} ) )
             </if>
         </where>
     </select>

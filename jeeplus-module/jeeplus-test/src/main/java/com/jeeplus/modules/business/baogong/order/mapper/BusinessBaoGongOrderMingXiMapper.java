@@ -28,7 +28,7 @@ public interface BusinessBaoGongOrderMingXiMapper extends BaseMapper<BusinessBao
     @Update("update business_baogong_order_mingxi set complete = '0' where id = #{id}")
     void uncompleteBg(@Param("id") String id);
     /** 报工最后一道工序ID */
-    @Select("select id from business_baogong_order_mingxi where pid = #{bgid} and no = (select max(no) from business_baogong_order_mingxi where pid = #{bgid})")
+    @Select("select id from business_baogong_order_mingxi where pid = #{bgid} and no = (select max(no) from business_baogong_order_mingxi where pid = #{bgid}) order by create_date desc limit 1")
     String lastestGxHId(String bgid);
 
     /** 合格率 */

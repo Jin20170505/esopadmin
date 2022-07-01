@@ -58,6 +58,11 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		return businessBaoGongOrder;
 	}
 
+	public BusinessBaoGongOrder getMain(String id) {
+		BusinessBaoGongOrder businessBaoGongOrder = super.get(id);
+		return businessBaoGongOrder;
+	}
+
 	@Autowired
 	private BusinessJiHuaGongDanMapper businessJiHuaGongDanMapper;
 	@Autowired
@@ -134,8 +139,8 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		if(StringUtils.isEmpty(maxcode)){
 			code = "BGD" +ymd + "00001";
 		}else {
-			code = maxcode.substring(0,9);
-			int c =  Integer.valueOf(maxcode.substring(9));
+			code = maxcode.substring(0,11);
+			int c =  Integer.valueOf(maxcode.substring(11));
 			c = c+1;
 			if(c<10){
 				code = code +"0000"+c;
@@ -431,7 +436,11 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		}
 		BusinessShengChanBom bom = new BusinessShengChanBom();
 		bom.setSchid(schid);
-		// 尾差处理
+		// 尾差处理 已拆完
+		String chaidanstatus = businessShengChanDingDanMingXiMapper.getChaidanStatus(schid);
+		if(!"已拆单".equals(chaidanstatus)){
+			return "";
+		}
 		List<BusinessShengChanBom> boms = businessShengChanBomMapper.findList(bom);
 		if(boms!=null){
 			boms.forEach(d->{

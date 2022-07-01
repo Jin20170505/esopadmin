@@ -88,8 +88,8 @@ public class BusinessChuKuLingLiaoService extends CrudService<BusinessChuKuLingL
 		if(StringUtils.isEmpty(maxcode)){
 			code = "LLD" +ymd + "00001";
 		}else {
-			code = maxcode.substring(0,9);
-			int c =  Integer.valueOf(maxcode.substring(9));
+			code = maxcode.substring(0,11);
+			int c =  Integer.valueOf(maxcode.substring(11));
 			c = c+1;
 			if(c<10){
 				code = code +"0000"+c;
@@ -178,7 +178,6 @@ public class BusinessChuKuLingLiaoService extends CrudService<BusinessChuKuLingL
 			throw new RuntimeException("数据传U8出错，原因："+e.getMessage());
 		}
 	}
-
 
 	public void u8in(String rid) throws Exception {
 		BusinessChuKuLingLiao lingLiao = get(rid);

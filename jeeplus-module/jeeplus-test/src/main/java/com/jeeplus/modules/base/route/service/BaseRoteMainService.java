@@ -84,6 +84,11 @@ public class BaseRoteMainService extends CrudService<BaseRoteMainMapper, BaseRot
 		baseRouteMapper.delete(new BaseRoute(baseRoteMain));
 	}
 
+	@Transactional(readOnly = false)
+	public void deleteMx(String mid){
+		baseRouteMapper.delete(new BaseRoute(new BaseRoteMain(mid)));
+	}
+
 	public List<BaseRoteMain> findVersion(String productid){
 		return mapper.findVersion(productid);
 	}

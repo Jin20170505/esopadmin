@@ -28,7 +28,6 @@
 	</sql>
 	
 	<sql id="businessChuKuLingLiaoJoins">
-		
 		LEFT JOIN base_cangku ck ON ck.id = a.cangku
 	</sql>
 	
@@ -51,6 +50,15 @@
 			${dataScope}
 			<if test="code != null and code != ''">
 				AND a.code like concat('%',#{code},'%')
+			</if>
+			<if test="sclinecode != null and sclinecode != ''">
+				AND a.sclinecode = #{sclinecode}
+			</if>
+			<if test="bgcode != null and bgcode != ''">
+				AND a.bgcode like concat('%',#{bgcode},'%')
+			</if>
+			<if test="plancode != null and plancode != ''">
+				AND a.plancode like concat('%',#{plancode},'%')
 			</if>
 			<if test="sccode != null and sccode != ''">
 				AND a.sccode like concat('%',#{sccode},'%')

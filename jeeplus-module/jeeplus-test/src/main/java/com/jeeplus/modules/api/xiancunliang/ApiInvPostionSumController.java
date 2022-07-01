@@ -1,6 +1,7 @@
 package com.jeeplus.modules.api.xiancunliang;
 
 import com.jeeplus.common.json.AjaxJson;
+import com.jeeplus.modules.base.cangku.mapper.BaseCangKuMapper;
 import com.jeeplus.modules.u8data.invpostionsum.entity.U8InvPostionSum;
 import com.jeeplus.modules.u8data.invpostionsum.service.U8InvPostionSumService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,34 @@ public class ApiInvPostionSumController {
             json.put("list",list);
             json.setSuccess(true);
         }catch (Exception e){
+            e.printStackTrace();
+            json.setMsg("查询失败，原因："+e.getMessage());
+            json.setSuccess(false);
+        }
+        return json;
+    }
+
+    @Autowired
+    private BaseCangKuMapper cangKuMapper;
+
+    @RequestMapping("findByCkOrHw")
+    public AjaxJson findByCkOrHw(String ckid,String hw){
+        AjaxJson json = new AjaxJson();
+        try{
+            String whcode = cangKuMapper.getCodeById(ckid);
+            U8InvPostionSum sum = new U8InvPostionSum();
+            sum.setcPosCode(hw);
+            sum.setCwhcode(whcode);
+            List<U8InvPostionSum> list =  u8InvPostionSumService.findList(sum);
+            if(list==null){
+                json.setSuccess(false);
+                json.setMsg("未查询到数据。");
+                return json;
+            }
+            json.put("list",list);
+            json.setSuccess(true);
+        }catch (Exception e){
+            e.printStackTrace();
             e.printStackTrace();
             json.setMsg("查询失败，原因："+e.getMessage());
             json.setSuccess(false);
