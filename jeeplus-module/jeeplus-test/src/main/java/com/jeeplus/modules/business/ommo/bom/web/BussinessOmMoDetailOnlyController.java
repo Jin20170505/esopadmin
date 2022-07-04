@@ -85,7 +85,6 @@ public class BussinessOmMoDetailOnlyController extends BaseController {
 	/**
 	 * 委外用料列表页面
 	 */
-	@RequiresPermissions("business:ommo:bom:bussinessOmMoDetailOnly:list")
 	@RequestMapping(value = {"list", ""})
 	public String list(BussinessOmMoDetailOnly bussinessOmMoDetailOnly, Model model) {
 		model.addAttribute("bussinessOmMoDetailOnly", bussinessOmMoDetailOnly);
@@ -96,7 +95,6 @@ public class BussinessOmMoDetailOnlyController extends BaseController {
 	 * 委外用料列表数据
 	 */
 	@ResponseBody
-	@RequiresPermissions("business:ommo:bom:bussinessOmMoDetailOnly:list")
 	@RequestMapping(value = "data")
 	public Map<String, Object> data(BussinessOmMoDetailOnly bussinessOmMoDetailOnly, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<BussinessOmMoDetailOnly> page = bussinessOmMoDetailOnlyService.findPage(new Page<BussinessOmMoDetailOnly>(request, response), bussinessOmMoDetailOnly); 
@@ -119,7 +117,6 @@ public class BussinessOmMoDetailOnlyController extends BaseController {
 	 * 保存委外用料
 	 */
 	@ResponseBody
-	@RequiresPermissions(value={"business:ommo:bom:bussinessOmMoDetailOnly:add","business:ommo:bom:bussinessOmMoDetailOnly:edit"},logical=Logical.OR)
 	@RequestMapping(value = "save")
 	public AjaxJson save(BussinessOmMoDetailOnly bussinessOmMoDetailOnly, Model model) throws Exception{
 		AjaxJson j = new AjaxJson();
@@ -144,7 +141,6 @@ public class BussinessOmMoDetailOnlyController extends BaseController {
 	 * 批量删除委外用料
 	 */
 	@ResponseBody
-	@RequiresPermissions("business:ommo:bom:bussinessOmMoDetailOnly:del")
 	@RequestMapping(value = "delete")
 	public AjaxJson delete(String ids) {
 		AjaxJson j = new AjaxJson();
@@ -160,7 +156,6 @@ public class BussinessOmMoDetailOnlyController extends BaseController {
 	 * 导出excel文件
 	 */
 	@ResponseBody
-	@RequiresPermissions("business:ommo:bom:bussinessOmMoDetailOnly:export")
     @RequestMapping(value = "export")
     public AjaxJson exportFile(BussinessOmMoDetailOnly bussinessOmMoDetailOnly, HttpServletRequest request, HttpServletResponse response) {
 		AjaxJson j = new AjaxJson();

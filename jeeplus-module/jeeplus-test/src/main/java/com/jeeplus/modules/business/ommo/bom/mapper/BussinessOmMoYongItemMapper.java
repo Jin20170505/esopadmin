@@ -3,6 +3,8 @@
  */
 package com.jeeplus.modules.business.ommo.bom.mapper;
 
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import com.jeeplus.core.persistence.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
@@ -20,4 +22,7 @@ import java.util.List;
 public interface BussinessOmMoYongItemMapper extends BaseMapper<BussinessOmMoYongItem> {
 
     void batchInsert(List<BussinessOmMoYongItem> list);
+
+    @Delete("delete from business_om_moyongliao_item where ommohid = #{omhid}")
+    void deleteByOmHid(@Param("omhid") String omhid);
 }

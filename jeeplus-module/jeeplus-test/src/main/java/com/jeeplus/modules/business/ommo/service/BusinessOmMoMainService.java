@@ -10,6 +10,7 @@ import com.google.common.collect.Lists;
 import com.jeeplus.common.utils.DateUtils;
 import com.jeeplus.modules.base.vendor.entity.BaseVendor;
 import com.jeeplus.modules.business.chuku.ommo.mapper.BusinessChuKuWeiWaiMapper;
+import com.jeeplus.modules.business.ommo.bom.mapper.BussinessOmMoYongItemMapper;
 import com.jeeplus.modules.business.shengchan.dingdan.entity.BusinessShengChanDingDan;
 import com.jeeplus.modules.u8data.ommo.entity.U8OmMoMain;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +61,8 @@ public class BusinessOmMoMainService extends CrudService<BusinessOmMoMainMapper,
 	}
 	@Autowired
 	private BusinessChuKuWeiWaiMapper chuKuWeiWaiMapper;
-
+	@Autowired
+	private BussinessOmMoYongItemMapper bussinessOmMoYongItemMapper;
 	@Transactional(readOnly = false)
 	public synchronized void save(BusinessOmMoMain businessOmMoMain) {
 		if(StringUtils.isEmpty(businessOmMoMain.getCode())){
@@ -88,6 +90,7 @@ public class BusinessOmMoMainService extends CrudService<BusinessOmMoMainMapper,
 					throw new RuntimeException("删除失败，原因：【"+businessOmMoDetail.getNo()+"】的明细有对应的委外发料单");
 				}
 				businessOmMoDetailMapper.delete(businessOmMoDetail);
+				bussinessOmMoYongItemMapper.deleteByOmHid(businessOmMoDetail.getId());
 			}
 		}
 	}
@@ -123,6 +126,11 @@ public class BusinessOmMoMainService extends CrudService<BusinessOmMoMainMapper,
 		}
 		super.delete(businessOmMoMain);
 		businessOmMoDetailMapper.delete(new BusinessOmMoDetail(businessOmMoMain));
+		if(businessOmMoMain.getBusinessOmMoDetailList()!=null){
+			businessOmMoMain.getBusinessOmMoDetailList().forEach(d->{
+				bussinessOmMoYongItemMapper.deleteByOmHid(d.getId());
+			});
+		}
 	}
 
 	@Transactional(readOnly = false)

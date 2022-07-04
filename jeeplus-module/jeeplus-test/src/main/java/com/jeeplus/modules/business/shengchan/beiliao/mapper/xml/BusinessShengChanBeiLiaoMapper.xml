@@ -56,6 +56,15 @@
 			<if test="dept != null and dept.id != null and dept.id != ''">
 				AND a.dept = #{dept.id}
 			</if>
+			<if test="cinvcode != null  and cinvcode != ''">
+				AND a.cinvcode like concat('%',#{cinvcode},'%')
+			</if>
+			<if test="cinvname != null  and cinvname != ''">
+				AND a.cinvname like concat('%',#{cinvname},'%')
+			</if>
+			<if test="cinvstd != null  and cinvstd != ''">
+				AND a.cinvstd like concat('%',#{std},'%')
+			</if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">

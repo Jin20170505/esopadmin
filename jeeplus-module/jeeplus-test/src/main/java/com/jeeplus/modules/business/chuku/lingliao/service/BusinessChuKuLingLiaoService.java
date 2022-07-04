@@ -59,9 +59,11 @@ public class BusinessChuKuLingLiaoService extends CrudService<BusinessChuKuLingL
 	
 	@Transactional(readOnly = false)
 	public synchronized void save(BusinessChuKuLingLiao businessChuKuLingLiao) {
+		boolean flag = false;
 		if(StringUtils.isEmpty(businessChuKuLingLiao.getCode())){
 			String code = getCurrentCode(DateUtils.getDate("yyyyMMdd"));
 			businessChuKuLingLiao.setCode(code);
+			flag = true;
 		}
 		super.save(businessChuKuLingLiao);
 		for (BusinessChuKuLingLiaoMx businessChuKuLingLiaoMx : businessChuKuLingLiao.getBusinessChuKuLingLiaoMxList()){
@@ -79,6 +81,41 @@ public class BusinessChuKuLingLiaoService extends CrudService<BusinessChuKuLingL
 				}
 			}else{
 				businessChuKuLingLiaoMxMapper.delete(businessChuKuLingLiaoMx);
+			}
+		}
+		if(flag && "1".equals(businessChuKuLingLiao.getSych())){
+			String ckcdoe = cangKuMapper.getCodeById(businessChuKuLingLiao.getCk().getId());
+			YT_Rd11 rd11 = new YT_Rd11();
+			rd11.setcBusType("领料");
+			rd11.setcSource("生产订单");
+			rd11.setcWhCode(ckcdoe);
+			rd11.setcRdcode("21");
+			rd11.setdDate(DateUtils.getDate());
+			rd11.setcCode(businessChuKuLingLiao.getCode());
+			rd11.setcMemo(businessChuKuLingLiao.getRemarks());
+			User user= UserUtils.get(businessChuKuLingLiao.getCreateBy().getId());
+			rd11.setcMaker(user.getName());
+			rd11.setcDepCode(user.getOffice().getCode());
+			List<YT_Rds11> rd11s = new ArrayList<>();
+			businessChuKuLingLiao.getBusinessChuKuLingLiaoMxList().forEach(d->{
+				YT_Rds11 r = new YT_Rds11();
+				r.setcInvCode(d.getCinvcode());
+				r.setiQuantity(d.getCknum()+"");
+				r.setCmocode(businessChuKuLingLiao.getSccode());
+				r.setImoseq(businessChuKuLingLiao.getSclinecode());
+				r.setInvcode(businessChuKuLingLiao.getCinvcode());
+				r.setIopseq(d.getNo()+"");
+				rd11s.add(r);
+			});
+			rd11.setRd11s(rd11s);
+			U8WebServiceResult rs = null;
+			try {
+				rs = U8Post.Rd11Post(rd11, U8Url.URL);
+			} catch (Exception e) {
+				throw new RuntimeException(e.getMessage());
+			}
+			if("1".equals(rs.getCount())){
+				throw new RuntimeException(rs.getMessage());
 			}
 		}
 	}

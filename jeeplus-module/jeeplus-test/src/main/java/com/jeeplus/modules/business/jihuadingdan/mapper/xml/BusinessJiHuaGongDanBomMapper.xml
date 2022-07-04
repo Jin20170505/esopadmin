@@ -32,6 +32,13 @@
     <sql id="BusinessJiHuaGongDanBomJoins">
     </sql>
 
+    <select id="findBomsByPlanid" resultType="BusinessJiHuaGongDanBom">
+        SELECT
+        <include refid="BusinessJiHuaGongDanBomColumns"/>
+        FROM business_jihua_gongdan_bom a
+        <include refid="BusinessJiHuaGongDanBomJoins"/>
+        WHERE a.pid = #{planid}
+    </select>
 
     <select id="get" resultType="BusinessJiHuaGongDanBom" >
         SELECT

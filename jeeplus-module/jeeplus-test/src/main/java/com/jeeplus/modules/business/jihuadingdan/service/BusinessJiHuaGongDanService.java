@@ -35,6 +35,10 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 	private BusinessJiHuaGongDanMingXiMapper businessJiHuaGongDanMingXiMapper;
 	@Autowired
 	private BusinessJiHuaGongDanBomMapper businessJiHuaGongDanBomMapper;
+
+	public List<BusinessJiHuaGongDanBom> findBomsByPlanid(String planid){
+		return businessJiHuaGongDanBomMapper.findBomsByPlanid(planid);
+	}
 	public BusinessJiHuaGongDan get(String id) {
 		BusinessJiHuaGongDan businessJiHuaGongDan = super.get(id);
 		businessJiHuaGongDan.setBusinessJiHuaGongDanMingXiList(businessJiHuaGongDanMingXiMapper.findList(new BusinessJiHuaGongDanMingXi(businessJiHuaGongDan)));

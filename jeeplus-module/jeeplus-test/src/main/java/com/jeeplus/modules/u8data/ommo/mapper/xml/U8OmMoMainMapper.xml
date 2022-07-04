@@ -31,6 +31,9 @@
         from YT_API_ERP_view_OM_MOMain a
         <include refid="ommoJoins"/>
         <where>
+            <if test="cCode !=null and cCode !='' ">
+                and a.cCode = #{cCode}
+            </if>
             <if test="start !=null and end != null">
                 and a.dCreateTime between #{start}  and #{end}
             </if>

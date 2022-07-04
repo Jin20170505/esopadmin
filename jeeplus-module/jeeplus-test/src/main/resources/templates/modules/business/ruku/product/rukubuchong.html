@@ -34,11 +34,17 @@ layout("/include/_dialog.html"){
         $('#unit').val(item.unit);
         $('#cinvstd').val(item.cinvstd);
         $('#sccode').val(item.ordercode);
-        $('#scline').val(item.cinvstd);
+        $('#scline').val(item.orderline);
     }
     function ckCallback(items,tagid){
         var item = items[0];
         $('#ckid').val(item.id);
+    }
+
+    function hwCallback(items,tagid){
+        var item = items[0];
+        $('#hw').val(item.id);
+
     }
 </script>
 <form id="inputForm"  method="post"  class="form-horizontal p-15">
@@ -67,17 +73,19 @@ layout("/include/_dialog.html"){
             </td>
             <td class="width-15 active"><label class="pull-right">货位：</label></td>
             <td class="width-35">
-                <input id="hw" name="hw" value=""    class="form-control "/>
+                <input id="hw" name="hw" value="" type="hidden" />
+                <#gridselect callback="hwCallback"  url="${ctx}/base/huowei/baseHuoWei/data" id="huowei" name="huowei.id" value="" labelName="huowei.code" labelValue=""
+                title="选择货位" class="form-control" fieldLabels="编码|名称" fieldKeys="code|name" searchLabels="编码|名称" searchKeys="code|name" />
             </td>
         </tr>
         <tr>
             <td class="width-15 active"><label class="pull-right"><font color="red">*</font>生产订单号：</label></td>
             <td class="width-35">
-                <input name="sccode" value=""  id="sccode"  class="form-control required"/>
+                <input name="sccode" value=""  id="sccode" readonly  class="form-control required"/>
             </td>
             <td class="width-15 active"><label class="pull-right"><font color="red">*</font>行号：</label></td>
             <td class="width-35">
-                <input name="scline" value=""  id="scline"  class="form-control required"/>
+                <input name="scline" value=""  id="scline" readonly class="form-control required"/>
             </td>
         </tr>
         <tr>
@@ -95,13 +103,13 @@ layout("/include/_dialog.html"){
             <td class="width-35">
                 <input id="cinvstd" readonly name="cinvstd" value=""    class="form-control "/>
             </td>
-            <td class="width-15 active"><label class="pull-right">生产批号：</label></td>
+            <td class="width-15 active"><label class="pull-right"><font color="red">*</font>生产批号：</label></td>
             <td class="width-35">
                 <input name="batchno" id="batchno" value=""    class="form-control required"/>
             </td>
         </tr>
         <tr>
-            <td class="width-15 active"><label class="pull-right">补入库数量：</label></td>
+            <td class="width-15 active"><label class="pull-right"><font color="red">*</font>补入库数量：</label></td>
             <td class="width-35">
                 <input name="rukunum" id="rukunum" value=""  type="number"  class="form-control number required"/>
             </td>

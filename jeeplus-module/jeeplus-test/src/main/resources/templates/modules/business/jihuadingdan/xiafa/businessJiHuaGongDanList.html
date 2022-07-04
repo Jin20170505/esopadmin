@@ -101,6 +101,11 @@ layout("/include/_container.html", {title:"列表", parent:"计划工单"}){
 
 	<!-- 工具栏 -->
 	<div id="toolbar">
+		<% if(shiro.hasPermission("business:jihuadingdan:businessJiHuaGongDan:pcedit") ){ %>
+		<button id="edit" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="edit()">
+			修改
+		</button>
+		<% } %>
 		<% if(shiro.hasPermission("business:jihuadingdan:businessJiHuaGongDan:shenhe") ){ %>
 		<button id="chehui" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="chehui()">
 			撤回

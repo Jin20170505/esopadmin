@@ -1,0 +1,277 @@
+<%
+layout("/include/_dialog.html"){
+%>
+<script type="text/javascript">
+
+    $(document).ready(function() {
+    });
+
+    function save() {
+        var isValidate = jp.validateForm('#inputForm');//校验表单
+        if(!isValidate){
+            return false;
+        }else{
+            var index = jp.loading();
+            jp.post("${ctx}/business/chuku/lingliao/businessChuKuLingLiao/save",$('#inputForm').serialize(),function(data){
+                if(data.success){
+                    jp.getParent().refresh();
+                    var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                    parent.layer.close(dialogIndex);
+                    jp.toastr_success(data.msg)
+
+                }else{
+                    jp.toastr_error(data.msg);
+                }
+                jp.close(index);
+            })
+        }
+
+    }
+
+    function addRow(list, idx, tpl, row){
+        $(list).append(Mustache.render(tpl, {
+            idx: idx, delBtn: true, row: row
+        }));
+        $(list+idx).find("select").each(function(){
+            $(this).val($(this).attr("data-value"));
+        });
+        $(list+idx).find("input[type='checkbox'], input[type='radio']").each(function(){
+            var ss = $(this).attr("data-value").split(',');
+            for (var i=0; i<ss.length; i++){
+                if($(this).val() == ss[i]){
+                    $(this).attr("checked","checked");
+                }
+            }
+        });
+        $(list+idx).find(".jp-calendar-picker-input").each(function(){
+            $(this).datetimepicker({
+                format:'Y-m-d'
+            });
+        });
+    }
+    function delRow(obj, prefix){
+        var id = $(prefix+"_id");
+        var delFlag = $(prefix+"_delFlag");
+        if (id.val() == ""){
+            $(obj).parent().parent().remove();
+        }else if(delFlag.val() == "0"){
+            delFlag.val("1");
+            $(obj).html("&divide;").attr("title", "撤销删除");
+            $(obj).parent().parent().addClass("error");
+        }else if(delFlag.val() == "1"){
+            delFlag.val("0");
+            $(obj).html("&times;").attr("title", "删除");
+            $(obj).parent().parent().removeClass("error");
+        }
+    }
+    function bgCallback(items,tagid){
+        var item = items[0];
+        $("#bgid").val(item.id);
+        $('#bgcode').val(item.bgcode);
+        $('#cinvcode').val(item.cinvcode);
+        $('#cinvname').val(item.cinvname);
+        $('#cinvstd').val(item.cinvstd);
+        $('#num').val(item.num);
+        $('#unit').val(item.unit);
+        $('#plancode').val(item.plancode);
+        $('#planid').val(item.planid);
+        $('#sccode').val(item.ordercode);
+        $('#scline').val(item.orderline);
+        findBoms(item.planid)
+    }
+
+    function findBoms(planid){
+        jp.get("${ctx}/business/jihuadingdan/businessJiHuaGongDan/findBomsByPlanid?planid="+planid,function (rs){
+            if(rs.success){
+                var data = rs.body.data;
+                $('#businessChuKuLingLiaoMxList').html("");
+                if(data){
+                    for (var i=0; i<data.length; i++){
+                        data[i].unit = data[i].unitname;
+                        data[i].cknum = data[i].num;
+                        addRow('#businessChuKuLingLiaoMxList', businessChuKuLingLiaoMxRowIdx, businessChuKuLingLiaoMxTpl, data[i]);
+                        businessChuKuLingLiaoMxRowIdx = businessChuKuLingLiaoMxRowIdx + 1;
+                    }
+                }
+            }
+        });
+    }
+</script>
+<form id="inputForm"  method="post"  class="form-horizontal p-15">
+    <input type="hidden" name="id" value="${businessChuKuLingLiao.id!}"/>
+    <input type="hidden" name="bgid" id="bgid" value="${businessChuKuLingLiao.bgid!}">
+    <input type="hidden" name="planid" id="planid" value="${businessChuKuLingLiao.planid!}">
+    <input type="hidden" name="bgcode" id="bgcode" value="${businessChuKuLingLiao.bgcode!}">
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <td class="width-15 active"><label class="pull-right">单号：</label></td>
+            <td class="width-35">
+                <input name="code" value="${businessChuKuLingLiao.code!}"   readonly placeholder="系统自动生成"    class="form-control "/>
+            </td>
+            <td class="width-15 active"><label class="pull-right"><font color="red">*</font>报工单号：</label></td>
+            <td class="width-35">
+                <#gridselect callback="bgCallback"  url="${ctx}/business/baogong/order/businessBaoGongOrder/data" id="bg" name="bg.id" value="" labelName="bg.bgcode" labelValue="${businessChuKuLingLiao.bgcode!}"
+                title="选择报工单" class="form-control required" fieldLabels="生产单号|生产行号|计划工单号|报工单号|存货编码|存货名称|存货规格"
+                fieldKeys="ordercode|orderline|plancode|bgcode|cinvcode|cinvname|cinvstd"
+                searchLabels="生产单号|生产行号|报工单号|存货编码|存货名称|存货规格" searchKeys="ordercode|orderline|bgcode|cinvcode|cinvname|cinvstd" />
+            </td>
+        </tr>
+        <tr>
+            <td class="width-15 active"><label class="pull-right"><font color="red">*</font>生产订单号：</label></td>
+            <td class="width-35">
+                <input name="sccode" id="sccode" value="${businessChuKuLingLiao.sccode!}"  readonly  class="form-control required"/>
+            </td>
+            <td class="width-15 active"><label class="pull-right">生产行号：</label></td>
+            <td class="width-35">
+                <input name="sclinecode" id="scline" value="${businessChuKuLingLiao.sclinecode!}"  readonly  class="form-control "/>
+            </td>
+        </tr>
+        <tr>
+            <td class="width-15 active"><label class="pull-right">存货编码：</label></td>
+            <td class="width-35">
+                <input name="cinvcode" id="cinvcode" value="${businessChuKuLingLiao.cinvcode!}"  readonly  class="form-control"/>
+            </td>
+            <td class="width-15 active"><label class="pull-right">存货名称：</label></td>
+            <td class="width-35">
+                <input name="cinvname" id="cinvname" value="${businessChuKuLingLiao.cinvname!}"   readonly class="form-control"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="width-15 active"><label class="pull-right">规格型号：</label></td>
+            <td class="width-35">
+                <input name="cinvstd" id="cinvstd" value="${businessChuKuLingLiao.cinvstd!}"  readonly  class="form-control"/>
+            </td>
+            <td class="width-15 active"><label class="pull-right">数量：</label></td>
+            <td class="width-35">
+                <input name="num" id="num" value="${businessChuKuLingLiao.num!}"  readonly  class="form-control isFloatGtZero"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="width-15 active"><label class="pull-right">单位：</label></td>
+            <td class="width-35">
+                <input name="unit" id="unit" value="${businessChuKuLingLiao.unit!}"  readonly  class="form-control "/>
+            </td>
+            <td class="width-15 active"><label class="pull-right">计划单号：</label></td>
+            <td class="width-35">
+                <input name="plancode" id="plancode" value="${businessChuKuLingLiao.plancode!}" readonly   class="form-control "/>
+            </td>
+        </tr>
+        <tr>
+            <td class="width-15 active"><label class="pull-right"><font color="red">*</font>仓库：</label></td>
+            <td class="width-35">
+                <#gridselect url="${ctx}/base/cangku/baseCangKu/data" id="ck" name="ck.id" value="${businessChuKuLingLiao.ck.id!}" labelName="ck.name" labelValue="${businessChuKuLingLiao.ck.name!}"
+                title="选择仓库" class="form-control required" fieldLabels="编码|名称|工厂" fieldKeys="code|name|factory.name" searchLabels="编码|名称" searchKeys="code|name" />
+            </td>
+            <td class="width-15 active"><label class="pull-right">备注信息：</label></td>
+            <td class="width-35">
+                <textarea name="remarks" rows="4"    class="form-control ">${businessChuKuLingLiao.remarks!}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <td  class="active"><label class="pull-right">是否同步到U8:</label></td>
+            <td><#radiobuttons path="sych" value="${businessChuKuLingLiao.sych!}" items="${fn.getDictList('yes_no')}" itemLabel="label" itemValue="value"  class="required "/>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="card card-tabs">
+        <div class="card-heading  pb-0">
+            <ul class="nav nav-pills float-left" role="tablist">
+                <li class="nav-item">
+                    <a data-toggle="tab" class="nav-link show active" role="tab" href="#tab-1" aria-expanded="true">材料出库单明细：</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <div class="tab-content">
+                <div id="tab-1" class="tab-pane fade active show">
+                    <a class="btn btn-white btn-sm m-b-5" onclick="addRow('#businessChuKuLingLiaoMxList', businessChuKuLingLiaoMxRowIdx, businessChuKuLingLiaoMxTpl);businessChuKuLingLiaoMxRowIdx = businessChuKuLingLiaoMxRowIdx + 1;" title="新增"><i class="fa fa-plus"></i> 新增</a>
+                    <table class="table table-striped table-bordered table-condensed">
+                        <thead>
+                        <tr>
+                            <th class="hide"></th>
+                            <th><font color="red">*</font>行号</th>
+                            <th><font color="red">*</font>存货编码</th>
+                            <th>存货名称</th>
+                            <th><font color="red">*</font>出库数量</th>
+                            <th>货位</th>
+                            <th>单位</th>
+                            <th>备注信息</th>
+                            <th width="10">&nbsp;</th>
+                        </tr>
+                        </thead>
+                        <tbody id="businessChuKuLingLiaoMxList">
+                        </tbody>
+                    </table>
+                    <script type="text/template" id="businessChuKuLingLiaoMxTpl">//<!--
+				<tr id="businessChuKuLingLiaoMxList{{idx}}">
+					<td class="hide">
+						<input id="businessChuKuLingLiaoMxList{{idx}}_id" name="businessChuKuLingLiaoMxList[{{idx}}].id" type="hidden" value=""/>
+						<input id="businessChuKuLingLiaoMxList{{idx}}_jhbomid" name="businessChuKuLingLiaoMxList[{{idx}}].jhbomid" type="hidden" value="{{row.id}}"/>
+						<input id="businessChuKuLingLiaoMxList{{idx}}_scbomid" name="businessChuKuLingLiaoMxList[{{idx}}].scbomid" type="hidden" value="{{row.scyid}}"/>
+						<input id="businessChuKuLingLiaoMxList{{idx}}_delFlag" name="businessChuKuLingLiaoMxList[{{idx}}].delFlag" type="hidden" value="0"/>
+					</td>
+
+					<td>
+						<input id="businessChuKuLingLiaoMxList{{idx}}_no" name="businessChuKuLingLiaoMxList[{{idx}}].no" type="text" value="{{row.no}}"    class="form-control required"/>
+					</td>
+
+
+					<td>
+						<input id="businessChuKuLingLiaoMxList{{idx}}_cinvcode" type="hidden" name="businessChuKuLingLiaoMxList[{{idx}}].cinvcode" type="text" value="{{row.cinvcode}}"    class="form-control"/>
+						<#gridselect callback="cinvCallBack" url="${ctx}/business/product/archive/businessProduct/data" id="businessChuKuLingLiaoMxList{{idx}}_cinv" name="businessChuKuLingLiaoMxList{{idx}}.cinv.id" value="{{row.cinv.id}}" labelName="businessShengChanDingDanMingXiList[{{idx}}].cinv.code" labelValue="{{row.cinvcode}}"
+							 title="选择存货编码" class="form-control  required" fieldLabels="编号|名称|规格|单位" fieldKeys="code|name|specification|unit" searchLabels="编号|名称" searchKeys="code|name" />
+					</td>
+
+
+					<td>
+						<input id="businessChuKuLingLiaoMxList{{idx}}_cinvname" readonly name="businessChuKuLingLiaoMxList[{{idx}}].cinvname" type="text" value="{{row.cinvname}}"    class="form-control"/>
+					</td>
+
+					<td>
+						<input id="businessChuKuLingLiaoMxList{{idx}}_cknum" name="businessChuKuLingLiaoMxList[{{idx}}].cknum" type="text" value="{{row.cknum}}"    class="form-control required"/>
+					</td>
+
+
+					<td>
+						<#gridselect url="${ctx}/base/huowei/baseHuoWei/data" id="businessChuKuLingLiaoMxList{{idx}}_huowei" name="businessChuKuLingLiaoMxList[{{idx}}].huowei.id" value="{{row.huowei.id}}" labelName="businessChuKuLingLiaoMxList{{idx}}.huowei.name" labelValue="{{row.huowei.name}}"
+							 title="选择货位" class="form-control " fieldLabels="编码|名称|仓库" fieldKeys="code|name|ck.name" searchLabels="编码|名称" searchKeys="code|name" />
+					</td>
+
+					<td>
+						<input id="businessChuKuLingLiaoMxList{{idx}}_unit" readonly name="businessChuKuLingLiaoMxList[{{idx}}].unit" type="text" value="{{row.unit}}"    class="form-control"/>
+					</td>
+
+
+					<td>
+						<input id="businessChuKuLingLiaoMxList{{idx}}_remarks" name="businessChuKuLingLiaoMxList[{{idx}}].remarks" type="text" value="{{row.remarks}}"    class="form-control "/>
+					</td>
+
+					<td class="text-center" width="10">
+						{{#delBtn}}<span class="close" onclick="delRow(this, '#businessChuKuLingLiaoMxList{{idx}}')" title="删除">&times;</span>{{/delBtn}}
+					</td>
+				</tr>//-->
+                    </script>
+                    <script type="text/javascript">
+                        function cinvCallBack(items,tagid){
+                            var item = items[0];
+                            var idpre = tagid.split('_')[0];
+                            $('#'+idpre+'_cinvname').val(item.name);
+                            $('#'+idpre+'_unit').val(item.unit);
+                        }
+                        var businessChuKuLingLiaoMxRowIdx = 0, businessChuKuLingLiaoMxTpl = $("#businessChuKuLingLiaoMxTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
+                        $(document).ready(function() {
+                            var data = ${fn.toJson(businessChuKuLingLiao.businessChuKuLingLiaoMxList)};
+                            for (var i=0; i<data.length; i++){
+                                addRow('#businessChuKuLingLiaoMxList', businessChuKuLingLiaoMxRowIdx, businessChuKuLingLiaoMxTpl, data[i]);
+                                businessChuKuLingLiaoMxRowIdx = businessChuKuLingLiaoMxRowIdx + 1;
+                            }
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<% } %>

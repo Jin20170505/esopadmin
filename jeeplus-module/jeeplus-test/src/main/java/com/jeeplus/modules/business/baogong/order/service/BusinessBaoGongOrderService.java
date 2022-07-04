@@ -375,7 +375,9 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		double sum = 0.0;
 		if(schids!=null){
 			for (String schid:schids){
-				sum += mapper.getNoDoneNumBySchid(schid);
+				Double num = mapper.getNoDoneNumBySchid(schid);
+				num=num==null?0.0:num;
+				sum += num;
 			}
 		}
 		return sum;

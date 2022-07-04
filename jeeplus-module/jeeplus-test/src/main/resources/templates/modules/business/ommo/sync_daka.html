@@ -20,7 +20,14 @@ layout("/include/_dialog.html"){
             var index = jp.loading();
             var start = $('#checkinTime').val();
             var end  = $('#schCheckinTime').val();
-            jp.post("${ctx}/business/ommo/businessOmMoMain/sychu8",{"start":start+" 00:00:00","end":end+" 23:59:59"},function(data){
+            var code = $("#code").val();
+            if (code==''){
+                if(start=='' || end ==''){
+                    jp.warning("请选择同步时间")
+                    return false;
+                }
+            }
+            jp.post("${ctx}/business/ommo/businessOmMoMain/sychu8",{"start":start+" 00:00:00","end":end+" 23:59:59","code":code},function(data){
                 if(data.success){
                     jp.getParent().refresh();
                     var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
@@ -40,10 +47,16 @@ layout("/include/_dialog.html"){
     <table class="table table-bordered">
         <tbody>
         <tr>
+            <td class="width-15 active"><label class="pull-right">单号：</label></td>
+            <td class="width-35">
+                <input name="code" id="code" class="form-control"/>
+            </td>
+        </tr>
+        <tr>
             <td class="width-15 active"><label class="pull-right">开始日期：</label></td>
             <td class="width-35">
                 <div class="input-group">
-                    <input readonly="" id="checkinTime"  name="checkinTime"  placeholder="请选择日期" class="form-control  required "   value="">
+                    <input readonly="" id="checkinTime"  name="checkinTime"  placeholder="请选择日期" class="form-control  "   value="">
                     <div class="input-group-append">
                         <span class="input-group-text btn-custom border text-white"><i class="ti-calendar"></i></span>
                     </div>
@@ -52,7 +65,7 @@ layout("/include/_dialog.html"){
             <td class="width-15 active"><label class="pull-right">结束日期：</label></td>
             <td class="width-35">
                 <div class="input-group">
-                    <input readonly="" id="schCheckinTime"  name="schCheckinTime"  placeholder="请选择日期" class="form-control  required "   value="">
+                    <input readonly="" id="schCheckinTime"  name="schCheckinTime"  placeholder="请选择日期" class="form-control "   value="">
                     <div class="input-group-append">
                         <span class="input-group-text btn-custom border text-white"><i class="ti-calendar"></i></span>
                     </div>

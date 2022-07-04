@@ -77,6 +77,15 @@ public class BusinessJiHuaGongDanController extends BaseController {
 	}
 
 	@ResponseBody
+	@RequestMapping("findBomsByPlanid")
+	public AjaxJson findBomsByPlanid(String planid){
+		AjaxJson json = new AjaxJson();
+		json.setSuccess(true);
+		json.put("data",businessJiHuaGongDanService.findBomsByPlanid(planid));
+		return json;
+	}
+
+	@ResponseBody
 	@RequestMapping("xiafa")
 	public AjaxJson xiafa(String ids){
 		AjaxJson json = new AjaxJson();

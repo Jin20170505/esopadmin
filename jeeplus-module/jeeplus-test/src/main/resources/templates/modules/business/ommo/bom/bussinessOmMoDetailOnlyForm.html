@@ -118,7 +118,7 @@ layout("/include/_dialog.html"){
 					<tr>
 						<th class="hide"></th>
 						<th><font color="red">*</font>行号</th>
-						<th><font color="red">*</font>仓库</th>
+						<th>仓库</th>
 						<th>货位</th>
 						<th><font color="red">*</font>存货编码</th>
 						<th>存货名称</th>
@@ -147,7 +147,7 @@ layout("/include/_dialog.html"){
 					
 					<td>
 						<#gridselect url="${ctx}/base/cangku/baseCangKu/data" id="bussinessOmMoYongItemList{{idx}}_ck" name="bussinessOmMoYongItemList[{{idx}}].ck.id" value="{{row.ck.id}}" labelName="bussinessOmMoYongItemList{{idx}}.ck.name" labelValue="{{row.ck.name}}"
-							 title="选择仓库" class="form-control  required" fieldLabels="编码|名称" fieldKeys="code|name" searchLabels="编码|名称" searchKeys="code|name" />
+							 title="选择仓库" class="form-control " fieldLabels="编码|名称" fieldKeys="code|name" searchLabels="编码|名称" searchKeys="code|name" />
 					</td>
 					
 					

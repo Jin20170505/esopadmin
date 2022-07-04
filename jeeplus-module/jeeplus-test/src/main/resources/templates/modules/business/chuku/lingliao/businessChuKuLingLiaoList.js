@@ -1,7 +1,6 @@
 <script>
 $(document).ready(function() {
 	$('#businessChuKuLingLiaoTable').bootstrapTable({
-		 
 		  //请求方法
                method: 'post',
                //类型json
@@ -76,21 +75,11 @@ $(document).ready(function() {
 		        sortable: true,
 		        sortName: 'code'
 		        ,formatter:function(value, row , index){
-		        	  <% if(shiro.hasPermission("business:chuku:lingliao:businessChuKuLingLiao:edit") ){ %>
-					   if(!value){
-						  return "<a  href='#' onclick='edit(\""+row.id+"\")'>-</a>";
-					   }else{
-						  return "<a  href='#' onclick='edit(\""+row.id+"\")'>"+value+"</a>";
-						}
-                     <% }else if(shiro.hasPermission("business:chuku:lingliao:businessChuKuLingLiao:view")){ %>
-					   if(!value){
-						  return "<a  href='#' onclick='view(\""+row.id+"\")'>-</a>";
-                       }else{
-                          return "<a  href='#' onclick='view(\""+row.id+"\")'>"+value+"</a>";
-                       }
-                     <% }else{ %>
-					      return value;
-					 <% } %>
+                   if(!value){
+                       return "<a  href='#' onclick='view(\""+row.id+"\")'>-</a>";
+                   }else{
+                       return "<a  href='#' onclick='view(\""+row.id+"\")'>"+value+"</a>";
+                   }
 		         }
 		       
 		    }
@@ -386,7 +375,6 @@ function getCodeSelections() {
 								<th>工单数量</th>
 								<th>出库数量</th>
 								<th>货位</th>
-								<th>现存量</th>
 								<th>备注信息</th>
 							</tr>
 						</thead>
@@ -417,9 +405,6 @@ function getCodeSelections() {
 					</td>
 					<td>
 						{{row.huowei.name}}
-					</td>
-					<td>
-						{{row.xcnum}}
 					</td>
 					<td>
 						{{row.remarks}}

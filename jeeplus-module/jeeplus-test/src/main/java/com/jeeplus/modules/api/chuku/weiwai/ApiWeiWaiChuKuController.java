@@ -4,10 +4,14 @@ import com.jeeplus.common.json.AjaxJson;
 import com.jeeplus.modules.business.chuku.ommo.service.BusinessChuKuWeiWaiService;
 import com.jeeplus.modules.business.ommo.bom.entity.BussinessOmMoDetailOnly;
 import com.jeeplus.modules.business.ommo.bom.service.BussinessOmMoDetailOnlyService;
+import com.jeeplus.modules.u8infacerecord.service.U8InfaceRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 委外材料出库
+ */
 @RestController
 @RequestMapping("api/chuku/weiwai/")
 public class ApiWeiWaiChuKuController {

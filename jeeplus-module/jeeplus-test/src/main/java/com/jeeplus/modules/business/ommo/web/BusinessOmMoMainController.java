@@ -15,6 +15,7 @@ import javax.validation.ConstraintViolationException;
 import com.jeeplus.common.utils.QRCodeUtil;
 import com.jeeplus.modules.business.baogong.order.entity.BusinessBaoGongOrder;
 import com.jeeplus.modules.business.ommo.bom.entity.BussinessOmMoDetailOnly;
+import com.jeeplus.modules.business.ommo.bom.mapper.BussinessOmMoYongItemMapper;
 import com.jeeplus.modules.business.ommo.bom.service.BussinessOmMoDetailOnlyService;
 import com.jeeplus.modules.business.ommo.entity.BusinessOmMoDetail;
 import com.jeeplus.modules.business.ruku.product.entity.BusinessRuKuProduct;
@@ -205,12 +206,17 @@ public class BusinessOmMoMainController extends BaseController {
 	@Autowired
 	private BussinessOmMoDetailOnlyService bussinessOmMoDetailOnlyService;
 
+	@Autowired
+	private BussinessOmMoYongItemMapper bussinessOmMoYongItemMapper;
 	@ResponseBody
 	@RequestMapping("sychu8")
-	public AjaxJson sychU8(String start,String end){
+	public AjaxJson sychU8(String start,String end,String code){
 		AjaxJson json = new AjaxJson();
 		try{
 			U8OmMoMain main = new U8OmMoMain();
+			if(StringUtils.isNotEmpty(code)){
+				main.setcCode(code);
+			}
 			if(StringUtils.isNotEmpty(start)&&StringUtils.isNotEmpty(end)){
 				main.setStart(DateUtils.parseDate(start)).setEnd(DateUtils.parseDate(end));
 			}
@@ -221,6 +227,9 @@ public class BusinessOmMoMainController extends BaseController {
 				return json;
 			}
 			List<String> whids =businessOmMoMainService.sychu8(data);
+			whids.forEach(whid ->{
+				bussinessOmMoYongItemMapper.deleteByOmHid(whid);
+			});
 			List<U8MOMaterials> bomdata = u8MOMaterialsService.findByWid(whids);
 			bussinessOmMoDetailOnlyService.sychU8(bomdata);
 			json.setSuccess(true);

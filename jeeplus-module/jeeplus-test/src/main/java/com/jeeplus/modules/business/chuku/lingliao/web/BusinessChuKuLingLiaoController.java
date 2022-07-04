@@ -91,14 +91,14 @@ public class BusinessChuKuLingLiaoController extends BaseController {
 	public String form(@PathVariable String mode, BusinessChuKuLingLiao businessChuKuLingLiao, Model model) {
 		model.addAttribute("mode", mode);
 		model.addAttribute("businessChuKuLingLiao", businessChuKuLingLiao);
-		return "modules/business/chuku/lingliao/businessChuKuLingLiaoForm";
+		return "modules/business/chuku/lingliao/cailiaochuku";
 	}
 
 	/**
 	 * 保存材料出库单
 	 */
 	@ResponseBody
-	@RequiresPermissions(value={"business:chuku:lingliao:businessChuKuLingLiao:add","business:chuku:lingliao:businessChuKuLingLiao:edit"},logical=Logical.OR)
+	@RequiresPermissions(value={"business:chuku:lingliao:businessChuKuLingLiao:add","business:chuku:lingliao:businessChuKuLingLiao:edit","business:chuku:lingliao:businessChuKuLingLiao:pcadd"},logical=Logical.OR)
 	@RequestMapping(value = "save")
 	public AjaxJson save(BusinessChuKuLingLiao businessChuKuLingLiao, Model model) throws Exception{
 		AjaxJson j = new AjaxJson();

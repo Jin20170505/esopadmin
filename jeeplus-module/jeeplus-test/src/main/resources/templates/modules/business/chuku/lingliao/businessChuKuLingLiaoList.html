@@ -71,15 +71,15 @@ layout("/include/_container.html", {title:"列表", parent:"材料出库单"}){
 
 	<!-- 工具栏 -->
 	<div id="toolbar">
-			 <% if(shiro.hasPermission("business:chuku:lingliao:businessChuKuLingLiao:add") ){ %>
-<!--			 	<button id="add" class="btn btn-custom waves-effect w-xs waves-light" onclick="add()">-->
-<!--					<i class="fa fa-plus"></i> 新建-->
-<!--				</button>-->
+			 <% if(shiro.hasPermission("business:chuku:lingliao:businessChuKuLingLiao:pcadd") ){ %>
+			 	<button id="add" class="btn btn-custom waves-effect w-xs waves-light" onclick="add()">
+					<i class="fa fa-plus"></i> PC材料出库
+				</button>
 			<% } %>
 			 <% if(shiro.hasPermission("business:chuku:lingliao:businessChuKuLingLiao:edit") ){ %>
-			    <button id="edit" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="edit()">
-	            	<i class="fa fa-edit"></i> 修改
-	        	</button>
+<!--			    <button id="edit" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="edit()">-->
+<!--	            	<i class="fa fa-edit"></i> 修改-->
+<!--	        	</button>-->
 			<% } %>
 			 <% if(shiro.hasPermission("business:chuku:lingliao:businessChuKuLingLiao:del") ){ %>
 				<button id="remove" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="del()">

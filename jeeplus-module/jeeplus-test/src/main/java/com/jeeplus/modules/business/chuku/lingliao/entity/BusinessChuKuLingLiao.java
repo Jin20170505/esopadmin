@@ -31,7 +31,7 @@ public class BusinessChuKuLingLiao extends DataEntity<BusinessChuKuLingLiao> {
 	private String plancode; // 计划单号
 	private String bgid;		// 报工ID
 	private String bgcode;		// 报工单号
-	private String sych;		// 是否同步
+	private String sych="1";		// 是否同步
 	private List<BusinessChuKuLingLiaoMx> businessChuKuLingLiaoMxList = Lists.newArrayList();		// 子表列表
 	
 	public BusinessChuKuLingLiao() {

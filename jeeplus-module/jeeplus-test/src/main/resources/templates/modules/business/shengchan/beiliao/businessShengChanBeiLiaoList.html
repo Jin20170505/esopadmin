@@ -36,6 +36,18 @@ layout("/include/_container.html", {title:"列表", parent:"生产备料"}){
 				<#treeselect id="dept" name="dept.id"  labelName="dept.name"
 					title="部门" url="/sys/office/treeData?type=2" class="form-control" allowClear="true" notAllowSelectParent="true"/>
 			</div>
+			<div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="生产单号：">存货编码：</label>
+				<input name="cinvcode"  maxlength="64"  class=" form-control"/>
+			</div>
+			<div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="生产单号：">存货名称：</label>
+				<input name="cinvname"  maxlength="64"  class=" form-control"/>
+			</div>
+			<div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="生产单号：">规格型号：</label>
+				<input name="std"  maxlength="64"  class=" form-control"/>
+			</div>
 		    <div class="form-group m-b-10 m-r-10">
                 <a  id="search" class="btn  btn-custom waves-effect waves-light m-l-10 btn-md btn-rounded"><i class="fa fa-search"></i> 查询</a>
                 <a  id="reset" class="btn  btn-custom waves-effect waves-light m-l-10 btn-md btn-rounded" ><i class="fa fa-refresh"></i> 重置</a>

@@ -29,4 +29,5 @@ public interface BusinessJiHuaGongDanBomMapper extends BaseMapper<BusinessJiHuaG
     @Delete("delete from business_jihua_gongdan_bom where scyid = #{scyid}")
     void deleteBomByScyid(@Param("scyid") String scyid);
 
+    List<BusinessJiHuaGongDanBom> findBomsByPlanid(@Param("planid") String planid);
 }
