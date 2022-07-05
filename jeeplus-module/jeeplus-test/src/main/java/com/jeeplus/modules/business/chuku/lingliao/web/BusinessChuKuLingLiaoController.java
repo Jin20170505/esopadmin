@@ -90,6 +90,7 @@ public class BusinessChuKuLingLiaoController extends BaseController {
 	@RequestMapping(value = "form/{mode}")
 	public String form(@PathVariable String mode, BusinessChuKuLingLiao businessChuKuLingLiao, Model model) {
 		model.addAttribute("mode", mode);
+		businessChuKuLingLiao.setSych("1");
 		model.addAttribute("businessChuKuLingLiao", businessChuKuLingLiao);
 		return "modules/business/chuku/lingliao/cailiaochuku";
 	}
