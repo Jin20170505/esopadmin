@@ -27,6 +27,7 @@ import com.jeeplus.modules.business.jihuadingdan.mapper.BusinessJiHuaGongDanMapp
 import com.jeeplus.modules.business.ruku.product.mapper.BusinessRuKuProductMapper;
 import com.jeeplus.modules.business.shengchan.bom.entity.BusinessShengChanBom;
 import com.jeeplus.modules.business.shengchan.bom.mapper.BusinessShengChanBomMapper;
+import com.jeeplus.modules.business.shengchan.dingdan.entity.BusinessShengChanDingDanMingXi;
 import com.jeeplus.modules.business.shengchan.dingdan.mapper.BusinessShengChanDingDanMingXiMapper;
 import com.jeeplus.modules.u8data.morder.entity.U8Moallocate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -319,6 +320,7 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		}
 		order.getBusinessBaoGongOrderMingXiList().forEach(m->{
 			BaoGongItem item = new BaoGongItem();
+			item.setUsercode(m.getOpcode());
 			item.setBghid(m.getId()).setSite(m.getSite()).setDbnum(m.getNum());
 			bean.getBaoGongItems().add(item);
 		});
@@ -365,6 +367,10 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		mapper.restOrderMx(rid);
 	}
 
+	@Transactional(readOnly = false)
+	public void editremarks(String rid,String remarks){
+		mapper.updateRemarks(rid, remarks);
+	}
 	/**
 	 * 根据产品编码 查询 未做数量（最后一道工序未报工数量）
 	 * @param cinvcode 产品存货编码
@@ -387,7 +393,9 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 	public String getSchidByOrderid(String id){
 		return mapper.getSchidByOrderid(id);
 	}
-
+	public String getPlanidByOrderid(String id){
+		return mapper.getPlanidByOrderid(id);
+	}
 	@Autowired
 	private BusinessShengChanBomMapper businessShengChanBomMapper;
 	/**
@@ -459,4 +467,49 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		}
 		return "";
 	}
+	// 待领数量 = 报工单数量 * 剩余子件数量/未领料工单数量
+	@Transactional(readOnly = false)
+	public void dealwith(String bgid,String schid,String planid,List<U8Moallocate> moallocates){
+		Integer i = businessChuKuLingLiaoMapper.isDoneLingLiao(bgid);
+		if(i!=null&&i==1){
+			throw new RuntimeException("该报工单已领料，不可操作");
+		}
+		if(moallocates==null || moallocates.isEmpty()){
+			throw new RuntimeException("对应ERP生产明细无子件，请确认下");
+		}
+		// 工单数量
+		BusinessShengChanDingDanMingXi mingXi = businessShengChanDingDanMingXiMapper.get(schid);
+		Double gdnum = mingXi.getNum();
+		// 已出工单料数量
+		Double donenum = businessChuKuLingLiaoMapper.getDoneSumNum(mingXi.getP().getCode(),mingXi.getNo().toString());
+		// 未出料工单数量
+		if(donenum>=gdnum){
+			throw new RuntimeException("已领料工单数已满。（领料的工单数大于或等于订单数），请核实U8");
+		}
+		Double nonum = gdnum - donenum;
+		// 本报工单数量
+		Double num = mapper.getNum(bgid);
+		Double rate = 1.0;
+		if(num>=nonum){
+			rate = 1.0;
+		}else {
+			rate = num/nonum;
+		}
+		final Double r = rate;
+		List<BusinessJiHuaGongDanBom> businessJiHuaGongDanBomList  = Lists.newArrayList();
+		moallocates.stream().filter(d->0<d.getNum()).forEach(d->{
+			BusinessJiHuaGongDanBom b = new BusinessJiHuaGongDanBom();
+			b.setP(new BusinessJiHuaGongDan(planid));
+			b.preInsert();
+			b.setScyid(d.getAllocateId()).setCinvcode(d.getInvcode()).setCinvname(d.getCinvname()).setCinvstd(d.getCinvstd()).setNo(Integer.valueOf(d.getSortseq()))
+					.setAuxbaseqtyn(d.getAuxBaseQtyN()).setBaseqtyd(d.getBaseQtyD()).setNum(d.getNum()*r)
+					.setDonenum(0.00).setBaseqtyn(d.getBaseQtyN()).setUnitcode(d.getcComUnitCode()).setHw(d.getHw())
+					.setUnitname(d.getcComUnitName()).setRemarks(d.getRemark());
+			businessJiHuaGongDanBomList.add(b);
+		});
+		businessJiHuaGongDanBomMapper.deleteBomByPlanid(planid);
+		businessJiHuaGongDanBomList.forEach(d->businessJiHuaGongDanBomMapper.insert(d));
+	}
+
+
 }

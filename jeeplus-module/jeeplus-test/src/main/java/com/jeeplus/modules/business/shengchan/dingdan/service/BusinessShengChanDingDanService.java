@@ -11,6 +11,7 @@ import com.jeeplus.modules.api.bean.beiliao.BeiLiaoBean;
 import com.jeeplus.modules.api.bean.beiliao.BeiLiaoItem;
 import com.jeeplus.modules.base.route.entity.BaseRoteMain;
 import com.jeeplus.modules.base.route.entity.BaseRoute;
+import com.jeeplus.modules.base.route.mapper.BaseRoteMainMapper;
 import com.jeeplus.modules.base.route.service.BaseRoteMainService;
 import com.jeeplus.modules.business.chuku.lingliao.mapper.BusinessChuKuLingLiaoMapper;
 import com.jeeplus.modules.business.chuku.lingliao.mapper.BusinessChuKuLingLiaoMxMapper;
@@ -163,11 +164,18 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 		page.setList(list);
 		return page;
 	}
-
 	public Page<BusinessShengChanDingDanMingXi> findPage(Page<BusinessShengChanDingDanMingXi> page,
 														 BusinessShengChanDingDanMingXi businessShengChanDingDanMingXi){
+		dataRuleFilter(businessShengChanDingDanMingXi);
 		businessShengChanDingDanMingXi.setPage(page);
-		page.setList(businessShengChanDingDanMingXiMapper.findShengChanDingDanMingXi(businessShengChanDingDanMingXi));
+		List<BusinessShengChanDingDanMingXi> list =
+				businessShengChanDingDanMingXiMapper.findShengChanDingDanMingXi(businessShengChanDingDanMingXi);
+		if(list!=null){
+			list.forEach(d->{
+				d.setWcdnum(businessJiHuaGongDanService.getGdNum(d.getId()));
+			});
+		}
+		page.setList(list);
 		return page;
 	}
 	public String getCurrentCode(String ymd){
@@ -240,10 +248,23 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 		}
 		businessShengChanDingDanMingXiMapper.delete(new BusinessShengChanDingDanMingXi(businessShengChanDingDan));
 	}
+	@Autowired
+	private BaseRoteMainMapper roteMainMapper;
 	@Transactional(readOnly = false)
 	public void shenhe(String ids){
-		//TODO 是否可以审核 开立
 		Arrays.asList(ids.split(",")).forEach(id->{
+			// TODO 检查存货对应的工艺路线是否维护了工时
+			List<String> codes = businessShengChanDingDanMingXiMapper.findCinvcodeByScid(id);
+			if(codes!=null){
+				codes.forEach(code->{
+					String routid = roteMainMapper.getRouteid(code);
+					Integer i = roteMainMapper.hasNoGTime(routid);
+					if(i!=null&&i==1){
+						throw new RuntimeException("存货编码["+code+"]对应的工艺路线未维护工时，请维护并同步后，再操作");
+					}
+				});
+			}
+
 			businessShengChanDingDanMingXiMapper.shenhe(id);
 			mapper.updateStatus(id,"已审核");
 		});
@@ -614,6 +635,7 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 			BusinessProduct product = new BusinessProduct();
 			product.setCode(d.getCinvcode());
 			mingXi.setCinv(product);
+			mingXi.setCuscinvcode(d.getCuscinvname()).setCuscinvname(d.getCuscinvname());
 			mingXi.setSocode(d.getSoCode()).setSoseq(d.getSoSeq());
 			mingXi.setCinvname(d.getCinvname());
 			mingXi.setStd(d.getCinvstd());
@@ -627,6 +649,7 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 			mingXi.setEnddate(enddate);
 			mingXi.setType(d.getMoClass());
 			mingXi.setP(dingDan);
+			mingXi.setCuscinvcode(d.getCuscinvcode()).setCuscinvname(d.getCuscinvname());
 			mingXi.preInsert();
 			mingXi.setId(d.getModid());
 			mingXi.setCreateDate(d.getCreateTime());

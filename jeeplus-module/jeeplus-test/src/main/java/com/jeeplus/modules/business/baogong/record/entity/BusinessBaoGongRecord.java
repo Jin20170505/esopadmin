@@ -26,6 +26,7 @@ public class BusinessBaoGongRecord extends DataEntity<BusinessBaoGongRecord> {
 	private String lineid;	// 生产订单行ID
 	private String orderline;		// 生产订单行号
 	private String bghid;	// 报工行ID
+	private String routeid; // 工艺路线行ID
 	private String site;		// 工序名称
 	private String username;		// 姓名
 	private Double gdnum;		// 工单数量
@@ -36,6 +37,7 @@ public class BusinessBaoGongRecord extends DataEntity<BusinessBaoGongRecord> {
 	private Double bhgnum;		// 不合格数量
 	private Double hgnum;		// 合格数量
 	private Double hglv;	// 合格率
+	private String batchno; // 预批号
 	private String cinvcode;	// 存货编码
 	private String cinvname;	// 存货名称
 	private String cinvstd;		// 规格型号
@@ -291,6 +293,24 @@ public class BusinessBaoGongRecord extends DataEntity<BusinessBaoGongRecord> {
 
 	public BusinessBaoGongRecord setHglv(Double hglv) {
 		this.hglv = hglv;
+		return this;
+	}
+
+	public String getRouteid() {
+		return routeid;
+	}
+
+	public BusinessBaoGongRecord setRouteid(String routeid) {
+		this.routeid = routeid;
+		return this;
+	}
+
+	public String getBatchno() {
+		return batchno;
+	}
+
+	public BusinessBaoGongRecord setBatchno(String batchno) {
+		this.batchno = batchno;
 		return this;
 	}
 }

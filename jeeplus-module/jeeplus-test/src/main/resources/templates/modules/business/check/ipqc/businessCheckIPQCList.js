@@ -58,6 +58,16 @@ $(document).ready(function() {
                	if(params.sort && params.order){
                     searchParam.orderBy = params.sort+ " "+  params.order;
                  }
+                   var deptId = $('#deptId').val();
+                   searchParam.dept = deptId;
+                   var startdate = $('#beginCheckdate').val();
+                   var enddate = $('#endCheckdate').val();
+                   if(startdate && enddate){
+                       searchParam.beginCheckdate = startdate+" 00:00:00";
+                       searchParam.endCheckdate = enddate + " 23:59:59";
+                   }
+                   }
+               }
                  return searchParam;
                },
                onShowSearch: function () {

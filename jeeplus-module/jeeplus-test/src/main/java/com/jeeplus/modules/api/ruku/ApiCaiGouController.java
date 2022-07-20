@@ -27,6 +27,8 @@ public class ApiCaiGouController {
     public AjaxJson getMxDetail(String cgid,String cinvcode,String batchno,String scdate,Double num){
         AjaxJson json = new AjaxJson();
         try{
+            cinvcode = cinvcode.trim();
+            batchno = batchno.trim();
             List<BusinessArrivalVouchMx> mxList = arrivalVouchService.findMxByCinvcodeAndBatchno(cgid,cinvcode,batchno,scdate);
             if(mxList==null){
                 json.setMsg("此存货不在该采购单中。");

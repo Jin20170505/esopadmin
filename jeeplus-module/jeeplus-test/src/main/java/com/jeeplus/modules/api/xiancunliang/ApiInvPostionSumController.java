@@ -21,6 +21,7 @@ public class ApiInvPostionSumController {
     public AjaxJson find(String cinvcode){
         AjaxJson json = new AjaxJson();
         try{
+            cinvcode = cinvcode.trim();
             U8InvPostionSum sum = new U8InvPostionSum();
             sum.setCinvcode(cinvcode);
             List<U8InvPostionSum> list =  u8InvPostionSumService.findList(sum);

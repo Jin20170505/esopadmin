@@ -1,0 +1,118 @@
+<%
+layout("/include/_container.html", {title:"列表", parent:"委外拆单"}){
+%>
+
+<div class="row">
+	<div class="col-sm-3 col-md-2 p-r-5">
+		<div class="white-box" style="height: 794px;">
+			<div>
+				<div style="width: calc(100% - 50px);float: left">
+					<div class="input-group">
+					<span class="input-group-prepend">
+						<button type="button" class="btn btn-sm waves-effect waves-light btn-custom"><i class="fa fa-search"></i></button>
+					</span>
+						<input type="text" class="form-control input-sm" id="search_q" placeholder="查找...">
+					</div>
+				</div>
+			</div>
+			<div id="businessProductTypeOnlyReadjsTree"></div>
+		</div>
+	</div>
+	<div class="col-sm-9 col-md-10" style="padding-left: 0px">
+    <!-- 搜索框-->
+    <div id="search-collapse" class="white-box collapse m-b-5">
+        <a class="jp-ti-close close" onclick="$('#search-collapse').fadeToggle()">
+            <i class="fa fa-times"></i>
+        </a>
+        <form id="searchForm" class="form-inline">
+			 <div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="单号：">单号：</label>
+				<input name="code"  maxlength="64"  class=" form-control"/>
+			</div>
+			 <div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="委外单号：">委外单号：</label>
+				<input name="wwcode"  maxlength="64"  class=" form-control"/>
+			</div>
+			 <div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="委外行号：">委外行号：</label>
+				<input name="wwline"   class=" form-control"/>
+			</div>
+			 <div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="计划下达日期：">计划下达日期：</label>
+				<div class="input-daterange input-group" id="startdate">
+                    <input type="text" class="form-control" id="beginStartdate" name="beginStartdate">
+                    <span class="input-group-text btn-custom border text-white">to</span>
+                    <input type="text" class="form-control" id="endStartdate" name="endStartdate">
+                </div>
+			</div>
+			 <div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="预计到货日期：">预计到货日期：</label>
+				<div class="input-daterange input-group" id="arrivedate">
+                    <input type="text" class="form-control" id="beginArrivedate" name="beginArrivedate">
+                    <span class="input-group-text btn-custom border text-white">to</span>
+                    <input type="text" class="form-control" id="endArrivedate" name="endArrivedate">
+                </div>
+			</div>
+			 <div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="存货编码：">存货编码：</label>
+				<input name="cinvcode"  maxlength="64"  class=" form-control"/>
+			</div>
+			 <div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="存货名称：">存货名称：</label>
+				<input name="cinvname"  maxlength="512"  class=" form-control"/>
+			</div>
+			 <div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="规格型号：">规格型号：</label>
+				<input name="cinvstd"  maxlength="64"  class=" form-control"/>
+			</div>
+			<div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="生产单号：">是否打印：</label>
+				<input name="printstatus" id="isprint"  maxlength="64"  class=" form-control"/>
+			</div>
+		    <div class="form-group m-b-10 m-r-10">
+                <a  id="search" class="btn  btn-custom waves-effect waves-light m-l-10 btn-md btn-rounded"><i class="fa fa-search"></i> 查询</a>
+                <a  id="reset" class="btn  btn-custom waves-effect waves-light m-l-10 btn-md btn-rounded" ><i class="fa fa-refresh"></i> 重置</a>
+            </div>
+        </form>
+    </div>
+
+	<div class="white-box">
+
+	<!-- 工具栏 -->
+	<div id="toolbar">
+			<button id="print" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="printbl()">
+				<i class="fa fa-print"></i> 打印
+			</button>
+			 <% if(shiro.hasPermission("business:ommo:chaidan:businessOmmoChaiDan:add") ){ %>
+<!--			 	<button id="add" class="btn btn-custom waves-effect w-xs waves-light" onclick="add()">-->
+<!--					<i class="fa fa-plus"></i> 新建-->
+<!--				</button>-->
+			<% } %>
+			 <% if(shiro.hasPermission("business:ommo:chaidan:businessOmmoChaiDan:edit") ){ %>
+<!--			    <button id="edit" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="edit()">-->
+<!--	            	<i class="fa fa-edit"></i> 修改-->
+<!--	        	</button>-->
+			<% } %>
+			 <% if(shiro.hasPermission("business:ommo:chaidan:businessOmmoChaiDan:del") ){ %>
+				<button id="remove" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="del()">
+	            	<i class="fa fa-remove"></i> 删除
+	        	</button>
+			<% } %>
+			 <% if(shiro.hasPermission("business:ommo:chaidan:businessOmmoChaiDan:import") ){ %>
+<!--				<button id="import"  class="btn btn-white waves-effect w-xs waves-light" >-->
+<!--					<i class="fa fa-upload"></i> 导入-->
+<!--				</button>-->
+			<% } %>
+			 <% if(shiro.hasPermission("business:ommo:chaidan:businessOmmoChaiDan:export") ){ %>
+<!--	        	<button id="export" class="btn btn-white waves-effect w-xs waves-light">-->
+<!--					<i class="fa fa-download"></i> 导出-->
+<!--				</button>-->
+			 <% } %>
+		    </div>
+		
+	<!-- 表格 -->
+	<table id="businessOmmoChaiDanTable" class="table-bordered"   data-toolbar="#toolbar"></table>
+	</div>
+	</div>
+	<% include("businessOmmoChaiDanList.js"){} %>
+	<% } %>

@@ -92,11 +92,13 @@ public class BusinessBaoGongRecordService extends CrudService<BusinessBaoGongRec
 			throw new RuntimeException("报工数量超出工单数量");
 		}
 		BusinessBaoGongRecord record = new BusinessBaoGongRecord();
+		record.setBatchno(order.getBatchno());
 		record.setDouser(dou);
 		record.setBgdate(new Date());
 		record.setBgcode(order.getBgcode());
 		record.setBgid(bgid);
 		record.setBghid(bghid);
+		record.setRouteid(mingXi.getRouteid());
 		fgnum = fgnum==null?0.0:fgnum;
 		gfnum = gfnum==null?0.0:gfnum;
 		lfnum = lfnum==null?0.0:lfnum;

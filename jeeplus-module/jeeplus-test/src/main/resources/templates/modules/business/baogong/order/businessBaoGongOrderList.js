@@ -1,6 +1,5 @@
 <script>
-
-    $(document).ready(function() {
+$(document).ready(function() {
     var to = false;
     $('#search_q').keyup(function () {
     if(to) { clearTimeout(to); }
@@ -195,6 +194,10 @@ $(document).ready(function() {
 		        sortName: 'num'
 		       
 		    }
+           ,{
+               field: 'batchno',
+               title: '预批号'
+           }
 			,{
 		        field: 'startdate',
 		        title: '开始日期',
@@ -208,7 +211,12 @@ $(document).ready(function() {
 		        sortable: true,
 		        sortName: 'enddate'
 		       
-		    }
+		    },{
+               field: 'remarks',
+               title: '备注',
+               sortable: true,
+               sortName: 'remarks'
+           }
 
 		     ]
 		
@@ -217,8 +225,8 @@ $(document).ready(function() {
 
 	  $('#businessBaoGongOrderTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
-            $('#remove').prop('disabled', ! $('#businessBaoGongOrderTable').bootstrapTable('getSelections').length);
-            $('#edit,#print,#baogongchongzhi,#lingliaodealwith').prop('disabled', $('#businessBaoGongOrderTable').bootstrapTable('getSelections').length!=1);
+            $('#remove,#lxprint').prop('disabled', ! $('#businessBaoGongOrderTable').bootstrapTable('getSelections').length);
+            $('#edit,#print,#baogongchongzhi,#lingliaodealwith,#editremark').prop('disabled', $('#businessBaoGongOrderTable').bootstrapTable('getSelections').length!=1);
         });
 
 	 $("#import").click(function(){//显示导入面板
@@ -300,6 +308,28 @@ function baogongchongzhi(){
         })
     })
 }
+
+function editremark(){
+    var rid = getIdSelections();
+    jp.prompt("请填写备注",function(txt){
+        if(!txt){
+            jp.warning("请填写备注");
+            return false;
+        }
+        var index =jp.loading();
+        jp.post("${ctx}/business/baogong/order/businessBaoGongOrder/editremarks",{'rid':rid[0],'remarks':txt},function(rs){
+            jp.close(index);
+            if(rs.success){
+                jp.success(rs.msg);
+                refresh();
+            }else{
+                jp.error(rs.msg);
+            }
+        })
+    })
+}
+
+
     // 生成报工单
     function shengchengbaogongdan(){
     top.layer.open({
@@ -338,6 +368,12 @@ function baogongchongzhi(){
         var rid = getIdSelections();
         jp.windowOpen('${ctx}/business/baogong/order/businessBaoGongOrder/goToPrint?rid='+rid,"报工单--打印",window.screen.height,window.screen.width);
     }
+    // 打印报工单
+    function lxprintbgd(){
+        var rid = getIdSelections();
+        jp.windowOpen('${ctx}/business/baogong/order/businessBaoGongOrder/goToPlPrint?rids='+rid,"报工单--批量打印",window.screen.height,window.screen.width);
+    }
+
 	//获取选中行
   function getIdSelections() {
         return $.map($("#businessBaoGongOrderTable").bootstrapTable('getSelections'), function (row) {
@@ -369,7 +405,7 @@ function baogongchongzhi(){
             rid = getIdSelections();
         }
         var index =jp.loading();
-        jp.get("${ctx}/business/baogong/order/businessBaoGongOrder/lingliaodealwith?rid=" + rid, function(data){
+        jp.get("${ctx}/business/baogong/order/businessBaoGongOrder/dealwith?rid=" + rid, function(data){
             if(data.success){
                 refresh();
                 jp.toastr_success(data.msg);

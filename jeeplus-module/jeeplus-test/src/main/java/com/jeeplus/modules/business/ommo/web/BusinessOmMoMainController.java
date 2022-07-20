@@ -94,6 +94,38 @@ public class BusinessOmMoMainController extends BaseController {
 			}
 		}
 	}
+
+	@ResponseBody
+	@RequestMapping("chaidan")
+	public AjaxJson chaidan(String rid,Double num){
+		AjaxJson json = new AjaxJson();
+		try{
+			businessOmMoMainService.chaidan(rid, num);
+			json.setMsg("拆单成功");
+			json.setSuccess(true);
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setSuccess(false);
+			json.setMsg("拆单失败，原因:"+e.getMessage());
+		}
+		return json;
+	}
+
+	@ResponseBody
+	@RequestMapping("handlerchaidan")
+	public AjaxJson handlerchaidan(String rid,Double gdnum,Double nonum,Double num){
+		AjaxJson json = new AjaxJson();
+		try{
+			businessOmMoMainService.handlerchaidan(rid, gdnum,nonum,num);
+			json.setMsg("拆单成功");
+			json.setSuccess(true);
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setSuccess(false);
+			json.setMsg("拆单失败，原因:"+e.getMessage());
+		}
+		return json;
+	}
 	/**
 	 * 委外订单列表页面
 	 */

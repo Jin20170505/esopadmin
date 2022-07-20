@@ -3,6 +3,7 @@
  */
 package com.jeeplus.modules.base.huowei.entity;
 
+import com.jeeplus.common.utils.StringUtils;
 import com.jeeplus.modules.base.cangku.entity.BaseCangKu;
 import javax.validation.constraints.NotNull;
 
@@ -32,6 +33,9 @@ public class BaseHuoWei extends DataEntity<BaseHuoWei> {
 
 	@ExcelField(title="货位编码", align=2, sort=7)
 	public String getCode() {
+		if(StringUtils.isEmpty(code)){
+			code = "";
+		}
 		return code;
 	}
 
@@ -41,6 +45,9 @@ public class BaseHuoWei extends DataEntity<BaseHuoWei> {
 	
 	@ExcelField(title="货位名称", align=2, sort=8)
 	public String getName() {
+		if(StringUtils.isEmpty(name)){
+			name = "";
+		}
 		return name;
 	}
 

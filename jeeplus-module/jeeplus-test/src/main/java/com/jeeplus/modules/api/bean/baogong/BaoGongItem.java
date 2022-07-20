@@ -8,6 +8,7 @@ public class BaoGongItem {
     private String siteid; // 工序ID
     private String site; // 工序
     private Double dbnum; // 待报数量
+    private String usercode; // 工号
     private Double hglv; // 合格率
     public String getBghid() {
         return bghid;
@@ -42,6 +43,18 @@ public class BaoGongItem {
 
     public BaoGongItem setDbnum(Double dbnum) {
         this.dbnum = dbnum;
+        return this;
+    }
+
+    public String getUsercode() {
+        if(usercode==null){
+            usercode = "";
+        }
+        return usercode;
+    }
+
+    public BaoGongItem setUsercode(String usercode) {
+        this.usercode = usercode;
         return this;
     }
 

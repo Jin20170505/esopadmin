@@ -14,6 +14,7 @@ public class U8Moallocate extends DataEntity<U8Moallocate> {
     private String cinvstd;
     private Double qty; // 数量
     private Double issqty; // 已领数量
+    private Double num;
     private Double baseQtyN; // 基本用量-分子
     private Double baseQtyD; // 基本用量-分母
     private Double changeRate; // 换算率
@@ -23,6 +24,16 @@ public class U8Moallocate extends DataEntity<U8Moallocate> {
     private String cComUnitName; // 单位名称
     private String hw;
     private String remark;
+
+    public Double getNum() {
+        num = getQty()-getIssqty();
+        return num;
+    }
+
+    public U8Moallocate setNum(Double num) {
+        this.num = num;
+        return this;
+    }
 
     public String getAllocateId() {
         return allocateId;

@@ -26,6 +26,8 @@ public class ApiOmmoController {
     public AjaxJson getMxDetail(String wdid,String cinvcode,String batchno,String scdate, Double num){
         AjaxJson json = new AjaxJson();
         try{
+            cinvcode = cinvcode.trim();
+            batchno = batchno.trim();
             BusinessOmmoArrivalvouchMx mx = businessOmmoArrivalVouchService.getMxByPidAndCinvcode(wdid,cinvcode,batchno,scdate);
             if(mx==null){
                 json.setMsg("该存货不属于此委外订单。");

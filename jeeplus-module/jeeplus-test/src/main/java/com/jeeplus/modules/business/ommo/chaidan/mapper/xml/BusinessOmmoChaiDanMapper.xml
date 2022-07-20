@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.business.ommo.chaidan.mapper.BusinessOmmoChaiDanMapper">
+    
+	<sql id="businessOmmoChaiDanColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.code AS "code",
+		a.wwcode AS "wwcode",
+		a.wwline AS "wwline",
+		a.vendor as "vendor",
+		a.ddrq as "ddrq",
+		a.startdate AS "startdate",
+		a.arrivedate AS "arrivedate",
+		a.cinvcode AS "cinvcode",
+		a.cinvname AS "cinvname",
+		a.cinvstd AS "cinvstd",
+		a.num AS "num",
+		a.unit AS "unit",
+		a.memo AS "memo",
+		vendor.name as "vendorname",
+		a.printstatus as "printstatus",
+		a.wwid AS "wwid",
+		a.wwhid AS "wwhid"
+	</sql>
+	
+	<sql id="businessOmmoChaiDanJoins">
+		LEFT JOIN base_vendor vendor ON vendor.id = a.vendor
+	</sql>
+	
+    
+	<select id="get" resultType="BusinessOmmoChaiDan" >
+		SELECT 
+			<include refid="businessOmmoChaiDanColumns"/>
+		FROM business_ommo_chaidan a
+		<include refid="businessOmmoChaiDanJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BusinessOmmoChaiDan" >
+		SELECT 
+			<include refid="businessOmmoChaiDanColumns"/>
+		FROM business_ommo_chaidan a
+		<include refid="businessOmmoChaiDanJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="code != null and code != ''">
+				AND a.code LIKE  concat('%',#{code},'%')
+			</if>
+			<if test="wwcode != null and wwcode != ''">
+				AND a.wwcode LIKE concat('%',#{wwcode},'%')
+			</if>
+			<if test="wwline != null and wwline != ''">
+				AND a.wwline = #{wwline}
+			</if>
+			<if test="printstatus != null and printstatus != ''">
+				AND a.printstatus = #{printstatus}
+			</if>
+			<if test="beginStartdate != null and endStartdate != null ">
+				AND a.startdate BETWEEN #{beginStartdate} AND #{endStartdate}
+			</if>
+			<if test="beginArrivedate != null and endArrivedate != null ">
+				AND a.arrivedate BETWEEN #{beginArrivedate} AND #{endArrivedate}
+			</if>
+			<if test="cinvcode != null and cinvcode != ''">
+				AND a.cinvcode LIKE concat('%',#{cinvcode},'%')
+			</if>
+			<if test="cinvname != null and cinvname != ''">
+				AND a.cinvname LIKE concat('%',#{cinvname},'%')
+			</if>
+			<if test="cinvstd != null and cinvstd != ''">
+				AND a.cinvstd LIKE concat('%',#{cinvstd},'%')
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.code DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BusinessOmmoChaiDan" >
+		SELECT 
+			<include refid="businessOmmoChaiDanColumns"/>
+		FROM business_ommo_chaidan a
+		<include refid="businessOmmoChaiDanJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO business_ommo_chaidan(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			code,
+			wwcode,
+			wwline,
+			vendor,
+		    ddrq,
+			startdate,
+			arrivedate,
+			cinvcode,
+			cinvname,
+			cinvstd,
+			num,
+			unit,
+			memo,printstatus,
+			wwid,
+			wwhid
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{code},
+			#{wwcode},
+			#{wwline},
+		    #{vendor},
+		    #{ddrq},
+			#{startdate},
+			#{arrivedate},
+			#{cinvcode},
+			#{cinvname},
+			#{cinvstd},
+			#{num},
+			#{unit},
+			#{memo},'未打印',
+			#{wwid},
+			#{wwhid}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE business_ommo_chaidan SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			code = #{code},
+			wwcode = #{wwcode},
+			wwline = #{wwline},
+			startdate = #{startdate},
+			arrivedate = #{arrivedate},
+			cinvcode = #{cinvcode},
+			cinvname = #{cinvname},
+			cinvstd = #{cinvstd},
+			num = #{num},
+			unit = #{unit},
+			memo = #{memo},
+			wwid = #{wwid},
+			wwhid = #{wwhid}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM business_ommo_chaidan
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE business_ommo_chaidan SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="BusinessOmmoChaiDan" statementType="STATEMENT">
+		select * FROM business_ommo_chaidan  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

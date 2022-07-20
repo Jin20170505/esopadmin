@@ -4,6 +4,7 @@
 package com.jeeplus.modules.business.ommo.mapper;
 
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 import com.jeeplus.core.persistence.BaseMapper;
@@ -25,4 +26,8 @@ public interface BusinessOmMoDetailMapper extends BaseMapper<BusinessOmMoDetail>
 
     @Update("update business_om_modetail set printstatus = '已打印' where id = #{id}")
     void print(@Param("id") String id);
+    @Update("update business_om_modetail set ischaidan = #{chaidanstatus} where id = #{id}")
+    void chaidan(@Param("id") String id,@Param("chaidanstatus") String chaidanstatus);
+    @Select("select ischaidan from business_om_modetail where id = #{id}")
+    String getChaidanstatus(String id);
 }

@@ -199,6 +199,9 @@ public class BusinessBaoGongOrder extends DataEntity<BusinessBaoGongOrder> {
 	}
 
 	public String getBatchno() {
+		if(batchno==null){
+			batchno = "";
+		}
 		return batchno;
 	}
 

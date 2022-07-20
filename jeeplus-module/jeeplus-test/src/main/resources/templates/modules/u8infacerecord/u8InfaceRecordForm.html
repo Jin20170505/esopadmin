@@ -1,0 +1,58 @@
+<%
+layout("/include/_dialog.html"){
+%>
+	<script type="text/javascript">
+
+		$(document).ready(function() {
+					});
+
+		function save() {
+            var isValidate = jp.validateForm('#inputForm');//校验表单
+            if(!isValidate){
+                return false;
+			}else{
+                var index = jp.loading();
+                jp.post("${ctx}/u8infacerecord/u8InfaceRecord/save",$('#inputForm').serialize(),function(data){
+                    if(data.success){
+                        jp.getParent().refresh();
+                        var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                        parent.layer.close(dialogIndex);
+                        jp.toastr_success(data.msg)
+
+                    }else{
+                        jp.toastr_error(data.msg);
+                    }
+                    jp.close(index);
+                })
+			}
+
+        }
+	</script>
+<form id="inputForm"  method="post"  class="form-horizontal p-15">
+    <input type="hidden" name="id" value="${u8InfaceRecord.id!}"/>
+    <table class="table table-bordered">
+       <tbody>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">接口名：</label></td>
+                <td class="width-35">
+                    <input name="title" value="${u8InfaceRecord.title!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">接口地址：</label></td>
+                <td class="width-35">
+                    <input name="url" value="${u8InfaceRecord.url!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">参数：</label></td>
+                <td class="width-35">
+                    <textarea name="params" rows="4"    class="form-control ">${u8InfaceRecord.params!}</textarea>
+            </td>
+                <td class="width-15 active"><label class="pull-right">结果：</label></td>
+                <td class="width-35">
+                    <textarea name="result" rows="4"    class="form-control ">${u8InfaceRecord.result!}</textarea>
+            </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<% } %>

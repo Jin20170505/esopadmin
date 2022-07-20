@@ -12,6 +12,8 @@
 		a.del_flag AS "delFlag",
 		a.moid AS "mo.id",
 		b.code as "mo.code",
+		b.ddate as "mo.ddate",
+		b.vendor AS "mo.vendorname",
 		a.startdate AS "startdate",
 		a.arrivedate AS "arrivedate",
 		a.no AS "no",
@@ -21,6 +23,7 @@
 		a.num AS "num",
 		a.unit AS "unit",
 		a.printstatus AS "printstatus",
+		a.ischaidan as "ischaidan",
 		a.memo AS "memo"
 	</sql>
 	
@@ -60,8 +63,8 @@
 			<if test="cinvstd != null  and cinvstd != ''">
 				AND a.cinvstd like concat('%',#{cinvstd},'%')
 			</if>
-			<if test="printstatus != null and printstatus != ''">
-				AND a.printstatus = #{printstatus}
+			<if test="ischaidan != null and ischaidan != ''">
+				AND a.ischaidan = #{ischaidan}
 			</if>
 		</where>
 		<choose>
@@ -69,7 +72,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY b.code asc, a.no ASC
+				ORDER BY b.code desc, a.no ASC
 			</otherwise>
 		</choose>
 	</select>
@@ -95,7 +98,7 @@
 	<insert id="batchInsert" parameterType="java.util.List">
 		INSERT INTO business_om_modetail(
 			id,
-			printstatus,
+			printstatus,ischaidan,
 			create_by,
 			create_date,
 			update_by,
@@ -115,7 +118,7 @@
 		) VALUES
 		<foreach collection="list" separator="," item="item">
 			(
-			#{item.id},'未打印',
+			#{item.id},'未打印','未拆单',
 			#{item.createBy.id},
 			#{item.createDate},
 			#{item.updateBy.id},
@@ -149,7 +152,7 @@
 	<insert id="insert">
 		INSERT INTO business_om_modetail(
 			id,
-			printstatus,
+			printstatus,ischaidan,
 			create_by,
 			create_date,
 			update_by,
@@ -167,7 +170,7 @@
 			unit,
 			memo
 		) VALUES (
-			#{id},'未打印',
+			#{id},'未打印','未拆单',
 			#{createBy.id},
 			#{createDate},
 			#{updateBy.id},

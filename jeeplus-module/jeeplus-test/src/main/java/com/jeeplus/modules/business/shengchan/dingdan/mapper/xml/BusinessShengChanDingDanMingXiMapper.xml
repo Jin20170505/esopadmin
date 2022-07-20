@@ -19,6 +19,8 @@
 		a.no AS "no",
 		a.cinv_code AS "cinv.code",
 		a.cinv_name AS "cinvname",
+		a.cuscinvcode AS "cuscinvcode",
+		a.cuscinvname AS "cuscinvname",
 		a.std AS "std",
 		a.unit AS "unit",
 		a.num AS "num",
@@ -104,6 +106,7 @@
 
 	<select id="findShengChanDingDanMingXi" resultType="BusinessShengChanDingDanMingXi">
 		select a.id as "id",a.batchno as "batchno",a.no AS "no",a.cinv_code AS "cinv.code",a.cinv_name AS "cinvname",a.std AS "std",
+		a.cuscinvcode AS "cuscinvcode",a.cuscinvname AS "cuscinvname",
 		       a.unit AS "unit",a.num AS "num",a.donenum as "donenum",a.start_date AS "startdate",a.ischaidan as "ischaidan",
 			   a.end_date AS "enddate",p.code as "p.code",a.dept AS "dept.id",dept.name AS "dept.name",a.status as "status"
 		FROM business_shengchan_dingdan_mingxi a
@@ -126,6 +129,12 @@
 			</if>
 			<if test="cinvname != null  and cinvname != ''">
 				AND a.cinv_name like concat('%',#{cinvname},'%')
+			</if>
+			<if test="cuscinvname != null  and cuscinvname != ''">
+				AND a.cuscinvname like concat('%',#{cuscinvname},'%')
+			</if>
+			<if test="cuscinvcode != null  and cuscinvcode != ''">
+				AND a.cuscinvcode like concat('%',#{cuscinvcode},'%')
 			</if>
 			<if test="std != null  and std != ''">
 				AND a.std like concat('%',#{std},'%')
@@ -214,6 +223,8 @@
 			no,
 			cinv_code,
 			cinv_name,
+			cuscinvcode,
+			cuscinvname,
 			std,
 			unit,
 			num,donenum,batchno,
@@ -233,6 +244,8 @@
 			#{no},
 			#{cinv.code},
 			#{cinvname},
+			#{cuscinvcode},
+			#{cuscinvname},
 			#{std},
 			#{unit},
 			#{num},0,#{batchno},
@@ -243,13 +256,15 @@
 		on duplicate key update
 		 id = values(id),
 		 update_date= VALUES(update_date),
-			cinv_code = values(cinv_code),
-			cinv_name = values(cinv_name),
-		 no=VALUES(no),
-			batchno=VALUES(batchno),
-			start_date=VALUES(start_date),
-			end_date=VALUES(end_date),
-			std=VALUES(std),
+		cinv_code = values(cinv_code),
+		cinv_name = values(cinv_name),
+		cuscinvcode = values(cuscinvcode),
+		cuscinvname =values(cuscinvname),
+		no=VALUES(no),
+		batchno=VALUES(batchno),
+		start_date=VALUES(start_date),
+		end_date=VALUES(end_date),
+		std=VALUES(std),
 		 num=VALUES(num),
 		 unit=VALUES(unit),
 		dept = values(dept)

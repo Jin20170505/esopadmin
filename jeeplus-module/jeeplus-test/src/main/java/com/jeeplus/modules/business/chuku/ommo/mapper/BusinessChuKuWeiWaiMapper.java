@@ -26,4 +26,7 @@ public interface BusinessChuKuWeiWaiMapper extends BaseMapper<BusinessChuKuWeiWa
 
     @Select("select 1 from business_chuku_weiwai  where moid = #{wwid} limit 1")
     Integer hasByWwid(@Param("wwid") String wwid);
+
+    @Select("select 1 from business_chuku_weiwai  where cdid = #{cdid} limit 1")
+    Integer hasByChaidanid(@Param("cdid") String cdid);
 }

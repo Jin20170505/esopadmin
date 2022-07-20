@@ -1,0 +1,64 @@
+<%
+layout("/include/_dialog.html"){
+%>
+	<script type="text/javascript">
+
+		$(document).ready(function() {
+				        $('#lastTime').datetimepicker({
+				 format:'Y-m-d H:i'
+		    });
+		});
+
+		function save() {
+            var isValidate = jp.validateForm('#inputForm');//校验表单
+            if(!isValidate){
+                return false;
+			}else{
+                var index = jp.loading();
+                jp.post("${ctx}/base/erp/updatetime/baseU8UpdateTime/save",$('#inputForm').serialize(),function(data){
+                    if(data.success){
+                        jp.getParent().refresh();
+                        var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                        parent.layer.close(dialogIndex);
+                        jp.toastr_success(data.msg)
+
+                    }else{
+                        jp.toastr_error(data.msg);
+                    }
+                    jp.close(index);
+                })
+			}
+
+        }
+	</script>
+<form id="inputForm"  method="post"  class="form-horizontal p-15">
+    <input type="hidden" name="id" value="${baseU8UpdateTime.id!}"/>
+    <table class="table table-bordered">
+       <tbody>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">业务编码：</label></td>
+                <td class="width-35">
+                    <input name="code" value="${baseU8UpdateTime.code!}"    class="form-control "/>
+            </td>
+                <td class="width-15 active"><label class="pull-right">业务名称：</label></td>
+                <td class="width-35">
+                    <input name="name" value="${baseU8UpdateTime.name!}"    class="form-control "/>
+            </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">更新最新时间：</label></td>
+                <td class="width-35">
+                    <div class="input-group">
+                        <input readonly="" id="lastTime"  name="lastTime"  placeholder="请选择日期" class="form-control   "   value="${fn.formatDate(baseU8UpdateTime.lastTime!, 'yyyy-MM-dd HH:mm:ss')}">
+                        <div class="input-group-append">
+                            <span class="input-group-text btn-custom border text-white"><i class="ti-calendar"></i></span>
+                        </div>
+                    </div>
+            </td>
+                <td class="width-15 active"></td>
+                <td class="width-35" ></td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<% } %>

@@ -17,6 +17,8 @@
         a.MoLotCode as "moLotCode",
         a.invcode as "cinvcode",
         a.cInvName as "cinvname",
+        a.cCusInvCode as "cuscinvcode",
+        a.cCusInvName as "cuscinvname",
         a.cinvstd as "cinvstd",
         a.cComUnitCode as "cComUnitCode",
         a.cComUnitName as "cComUnitName",

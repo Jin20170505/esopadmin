@@ -52,9 +52,9 @@ layout("/include/_dialog.html"){
 					<td class="width-35">
 						<input name="name" value="${businessProduct.name!}"    class="form-control required"/>
 					</td>
-					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>规格型号：</label></td>
+					<td class="width-15 active"><label class="pull-right">规格型号：</label></td>
 					<td class="width-35">
-						<input name="specification" value="${businessProduct.specification!}"    class="form-control required"/>
+						<input name="specification" value="${businessProduct.specification!}"    class="form-control"/>
 					</td>
 				</tr>
 				<tr>
@@ -63,6 +63,12 @@ layout("/include/_dialog.html"){
 						<input name="unit" id="unit" value="${businessProduct.unit!}"  type="hidden"  class="form-control "/>
 						<#gridselect callback="unitCallBack" url="${ctx}/base/unit/baseUnit/data" id="unit" name="u.id" value="" labelName="u.name" labelValue="${businessProduct.unit!}"
 						title="选择单位" class="form-control  required" fieldLabels="编号|名称|备注" fieldKeys="id|name|remarks" searchLabels="名称" searchKeys="name" />
+					</td>
+				</tr>
+				<tr>
+					<td class="width-15 active"><label class="pull-right">日产量：</label></td>
+					<td class="width-35">
+						<input name="daynum" value="${businessProduct.daynum!}" type="number"   class="form-control"/>
 					</td>
 					<td class="width-15 active"><label class="pull-right">备注信息：</label></td>
 					<td class="width-35">

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.business.ommo.chaidan.mapper.BusinessOmmoChaiDanMxMapper">
+    
+	<sql id="businessOmmoChaiDanMxColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.pid AS "main.id",
+		a.wwid AS "wwid",
+		a.wwhid AS "wwhid",
+		a.wwbomid AS "wwbomid",
+		a.no AS "no",
+		a.cinvcode AS "cinvcode",
+		a.cinvname AS "cinvname",
+		a.cinvstd AS "cinvstd",
+		a.batchno AS "batchno",
+		a.num AS "num",
+		a.unit AS "unit",
+		a.ck AS "ck.id",
+		a.hw AS "hw.id",
+		a.requireddate AS "requireddate",
+		ck.name AS "ck.name",
+		hw.code AS "hw.code",
+		hw.name AS "hw.name"
+	</sql>
+	
+	<sql id="businessOmmoChaiDanMxJoins">
+		LEFT JOIN base_cangku ck ON ck.id = a.ck
+		LEFT JOIN base_huowei hw ON hw.id = a.hw
+	</sql>
+	
+    
+	<select id="get" resultType="BusinessOmmoChaiDanMx" >
+		SELECT 
+			<include refid="businessOmmoChaiDanMxColumns"/>
+		FROM business_ommo_chaidan_mx a
+		<include refid="businessOmmoChaiDanMxJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BusinessOmmoChaiDanMx" >
+		SELECT 
+			<include refid="businessOmmoChaiDanMxColumns"/>
+		FROM business_ommo_chaidan_mx a
+		<include refid="businessOmmoChaiDanMxJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="main != null and main.id != null and main.id != ''">
+				AND a.pid = #{main.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.no ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BusinessOmmoChaiDanMx" >
+		SELECT 
+			<include refid="businessOmmoChaiDanMxColumns"/>
+		FROM business_ommo_chaidan_mx a
+		<include refid="businessOmmoChaiDanMxJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO business_ommo_chaidan_mx(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			pid,
+			wwid,
+			wwhid,
+			wwbomid,
+			no,
+			cinvcode,
+			cinvname,
+			cinvstd,
+			batchno,
+			num,
+			unit,
+			ck,
+			hw,
+			requireddate
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{main.id},
+			#{wwid},
+			#{wwhid},
+			#{wwbomid},
+			#{no},
+			#{cinvcode},
+			#{cinvname},
+			#{cinvstd},
+			#{batchno},
+			#{num},
+			#{unit},
+			#{ck.id},
+			#{hw.id},
+			#{requireddate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE business_ommo_chaidan_mx SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			pid = #{main.id},
+			wwid = #{wwid},
+			wwhid = #{wwhid},
+			wwbomid = #{wwbomid},
+			no = #{no},
+			cinvcode = #{cinvcode},
+			cinvname = #{cinvname},
+			cinvstd = #{cinvstd},
+			batchno = #{batchno},
+			num = #{num},
+			unit = #{unit},
+			ck = #{ck.id},
+			hw = #{hw.id},
+			requireddate = #{requireddate}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM business_ommo_chaidan_mx
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE pid = #{main.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE business_ommo_chaidan_mx SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE pid = #{main.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="BusinessOmmoChaiDanMx" statementType="STATEMENT">
+		select * FROM business_ommo_chaidan_mx  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

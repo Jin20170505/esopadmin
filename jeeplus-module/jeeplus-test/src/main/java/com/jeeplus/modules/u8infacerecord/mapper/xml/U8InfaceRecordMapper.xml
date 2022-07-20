@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.u8infacerecord.mapper.U8InfaceRecordMapper">
+    
+	<sql id="u8InfaceRecordColumns">
+		a.id AS "id",
+		a.create_date AS "createDate",
+		a.del_flag AS "delFlag",
+		a.title AS "title",
+		a.url AS "url",
+		a.params AS "params",
+		a.result AS "result"
+	</sql>
+	
+	<sql id="u8InfaceRecordJoins">
+		
+	</sql>
+	
+    
+	<select id="get" resultType="U8InfaceRecord" >
+		SELECT 
+			<include refid="u8InfaceRecordColumns"/>
+		FROM u8_inface_record a
+		<include refid="u8InfaceRecordJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="U8InfaceRecord" >
+		SELECT 
+			<include refid="u8InfaceRecordColumns"/>
+		FROM u8_inface_record a
+		<include refid="u8InfaceRecordJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="title != null and title != ''">
+				AND a.title LIKE
+				    <if test="_databaseId == 'postgre'">'%'||#{title}||'%'</if>
+					<if test="_databaseId == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="_databaseId == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="_databaseId == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			<if test="params != null and params != ''">
+				AND a.params LIKE
+				    <if test="_databaseId == 'postgre'">'%'||#{params}||'%'</if>
+					<if test="_databaseId == 'oracle'">'%'||#{params}||'%'</if>
+					<if test="_databaseId == 'mssql'">'%'+#{params}+'%'</if>
+					<if test="_databaseId == 'mysql'">concat('%',#{params},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="U8InfaceRecord" >
+		SELECT 
+			<include refid="u8InfaceRecordColumns"/>
+		FROM u8_inface_record a
+		<include refid="u8InfaceRecordJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO u8_inface_record(
+			id,
+			create_date,
+			del_flag,
+			title,
+			url,
+			params,
+			result
+		) VALUES (
+			#{id},
+			#{createDate},
+			#{delFlag},
+			#{title},
+			#{url},
+			#{params},
+			#{result}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE u8_inface_record SET 	
+			title = #{title},
+			url = #{url},
+			params = #{params},
+			result = #{result}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM u8_inface_record
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE u8_inface_record SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="U8InfaceRecord" statementType="STATEMENT">
+		select * FROM u8_inface_record  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

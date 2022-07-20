@@ -30,4 +30,8 @@ public interface BaseRoteMainMapper extends BaseMapper<BaseRoteMain> {
     Integer hasById(@Param("id") String id);
 
     void batchInsert(List<BaseRoteMain> list);
+    @Select("select id from base_route_main where product_id = (select id from business_product where code = #{cinvcode} limit 1) and enable = '0' order by version desc limit 1")
+    String getRouteid(String cinvcode);
+    @Select("select 1 from base_route where pid = #{pid} and (gtime is null or gtime='')")
+    Integer hasNoGTime(@Param("pid") String pid);
 }

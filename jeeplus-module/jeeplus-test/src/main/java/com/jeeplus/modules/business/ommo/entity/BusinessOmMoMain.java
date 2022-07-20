@@ -21,6 +21,7 @@ public class BusinessOmMoMain extends DataEntity<BusinessOmMoMain> {
 	
 	private static final long serialVersionUID = 1L;
 	private String code;		// 订单编号
+	private String vendorname; // 供应商名称
 	private BaseVendor vendor;		// 供应商
 	private Date dcreatedate;		// 制单日期
 	private Date ddate;		// 订单日期
@@ -61,7 +62,16 @@ public class BusinessOmMoMain extends DataEntity<BusinessOmMoMain> {
 	public void setVendor(BaseVendor vendor) {
 		this.vendor = vendor;
 	}
-	
+
+	public String getVendorname() {
+		return vendorname;
+	}
+
+	public BusinessOmMoMain setVendorname(String vendorname) {
+		this.vendorname = vendorname;
+		return this;
+	}
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@NotNull(message="制单日期不能为空")
 	@ExcelField(title="制单日期", align=2, sort=9)

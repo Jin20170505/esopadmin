@@ -407,7 +407,7 @@ public class BusinessShengChanDingDanController extends BaseController {
 		}catch (Exception e){
 			e.printStackTrace();
 			json.setSuccess(false);
-			json.setMsg("操作失败");
+			json.setMsg("操作失败,原因："+e.getMessage());
 		}
 		return json;
 	}
@@ -448,6 +448,7 @@ public class BusinessShengChanDingDanController extends BaseController {
 		}
 		return json;
 	}
+	// 恢复
 	@ResponseBody
 	@RequestMapping("recover")
 	public AjaxJson recover(String mids,String ids){

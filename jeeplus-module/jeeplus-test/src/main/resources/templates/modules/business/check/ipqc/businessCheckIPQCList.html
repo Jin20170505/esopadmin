@@ -31,6 +31,11 @@ layout("/include/_container.html", {title:"列表", parent:"IPQC检验"}){
 				<label class="m-r-10" title="生产订单号：">生产订单号：</label>
 				<input name="sccode"  maxlength="64"  class=" form-control"/>
 			</div>
+			<div class="form-group m-b-10 m-r-10">
+				<label class="m-r-10" title="生产部门：">生产部门：</label>
+				<#treeselect id="dept" name="dept.id"  labelName="dept.name"
+				title="部门" url="/sys/office/treeData?type=2" class="form-control" allowClear="true" notAllowSelectParent="true"/>
+			</div>
 			 <div class="form-group m-b-10 m-r-10">
 				<label class="m-r-10" title="质检日期：">质检日期：</label>
 				<div class="input-daterange input-group" id="checkdate">
@@ -39,7 +44,6 @@ layout("/include/_container.html", {title:"列表", parent:"IPQC检验"}){
                     <input type="text" class="form-control" id="endCheckdate" name="endCheckdate">
                 </div>
 			</div>
-
 			<div class="form-group m-b-10 m-r-10">
 				<label class="m-r-10" title="：">质检人：</label>
 				<input name="checkname"  maxlength="64"  class=" form-control"/>

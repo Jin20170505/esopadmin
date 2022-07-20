@@ -9,6 +9,8 @@
 		a.update_by AS "updateBy.id",
 		a.update_date AS "updateDate",
 		a.del_flag AS "delFlag",
+		a.dept AS "dept",
+		a.deptname AS "deptName",
 		a.code AS "code",
 		a.bgcode as "bgcode",
 		a.sitename as "sitename",
@@ -66,6 +68,9 @@
 			<if test="cinvname != null  and cinvname != ''">
 				AND a.cinvname like concat('%',#{cinvname},'%')
 			</if>
+			<if test="dept != null and dept != ''">
+				AND a.dept = #{dept}
+			</if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
@@ -114,6 +119,8 @@
 			hege_num,
 			nohege_num,
 			bad_num,
+			dept,
+			deptname,
 			remarks
 		) VALUES (
 			#{id},#{cinvcode},#{cinvname},
@@ -132,6 +139,8 @@
 			#{hegenum},
 			#{nohegenum},
 			#{badnum},
+			#{dept},
+			#{deptName},
 			#{remarks}
 		)
 	</insert>
@@ -144,7 +153,7 @@
 			sccode = #{sccode},
 			linecode = #{linecode},
 			usercode = #{username},
-			cinvcode ={cinvcode},
+			cinvcode =#{cinvcode},
 			cinvname = #{cinvname},
 			checkname = #{checkname},
 			check_date = #{checkdate},

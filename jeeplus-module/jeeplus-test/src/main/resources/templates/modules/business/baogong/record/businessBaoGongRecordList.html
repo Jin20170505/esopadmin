@@ -84,6 +84,9 @@ layout("/include/_container.html", {title:"列表", parent:"员工报工"}){
 <!--					<i class="fa fa-plus"></i> 报工-->
 <!--				</button>-->
 			<% } %>
+		<button id="print" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="printbq()">
+			<i class="fa fa-print"></i> 打印标签
+		</button>
 			 <% if(shiro.hasPermission("business:baogong:record:businessBaoGongRecord:edit") ){ %>
 			    <button id="edit" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="bgedit()">
 	            	<i class="fa fa-edit"></i> 修改
@@ -114,6 +117,23 @@ layout("/include/_container.html", {title:"列表", parent:"员工报工"}){
 	<!-- 表格 -->
 	<table id="businessBaoGongRecordTable" class="table-bordered"   data-toolbar="#toolbar"></table>
 	</div>
+<div id="baonumform" class="form-horizontal p-15" style="display: none;">
+	<table class="table table-bordered">
+		<tbody>
+		<tr>
+			<td class="width-15 active"><label class="pull-right">包装数(一包多少)：</label></td>
+			<td class="width-35">
+				<input name="num" id="num" value="" type="number"   class="form-control "/>
+			</td>
+		</tr>
 
+		<tr>
+			<td class="width-15 active"><label class="pull-right">纸张数量：</label></td>
+			<td class="width-35">
+				<input name="znum" id="znum" type="number" value="1"    class="form-control "/>
+			</td>
+		</tr>
+	</table>
+</div>
 	<% include("businessBaoGongRecordList.js"){} %>
 	<% } %>

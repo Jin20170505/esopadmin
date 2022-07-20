@@ -116,17 +116,21 @@ layout("/include/_container.html", {title:"列表", parent:"报工单"}){
 <!--	            	<i class="fa fa-edit"></i> 修改-->
 <!--	        	</button>-->
 			<% } %>
-
-				<% if(shiro.hasPermission("business:jihuadingdan:businessJiHuaGongDan:shengchengbaogongdan") ){ %>
-<!--				<button id="shengchengbaogongdan" class="btn btn-white waves-effect w-xs waves-light"  onclick="shengchengbaogongdan()">-->
-<!--					生成报工单-->
-<!--				</button>-->
-				<% } %>
+		<% if(shiro.hasPermission("business:baogong:order:businessBaoGongOrder:print") ){ %>
+		<button id="editremark" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="editremark()">
+			<i class="fa fa-edit"></i> 修改备注
+		</button>
+		<% } %>
 			<% if(shiro.hasPermission("business:baogong:order:businessBaoGongOrder:print") ){ %>
 				<button id="print" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="printbgd()">
 					<i class="fa fa-print"></i> 打印报工单
 				</button>
 			<% } %>
+		<% if(shiro.hasPermission("business:baogong:order:businessBaoGongOrder:print") ){ %>
+		<button id="lxprint" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="lxprintbgd()">
+			<i class="fa fa-print"></i> 连续打印报工单
+		</button>
+		<% } %>
 
 			<% if(shiro.hasPermission("business:baogong:order:businessBaoGongOrder:del") ){ %>
 				<button id="remove" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="del()">
@@ -140,7 +144,7 @@ layout("/include/_container.html", {title:"列表", parent:"报工单"}){
 			<% } %>
 			 <% if(shiro.hasPermission("business:baogong:order:businessBaoGongOrder:dealwithlingliao") ){ %>
 				<button id="lingliaodealwith"  class="btn btn-white waves-effect w-xs waves-light" onclick="lingliaodealwith();">
-					<i class="fa fa-adjust"></i> 材料出库领用数量不足处理
+					<i class="fa fa-adjust"></i> 材料出库处理
 				</button>
 			<% } %>
 			 <% if(shiro.hasPermission("business:baogong:order:businessBaoGongOrder:export") ){ %>

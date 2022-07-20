@@ -31,7 +31,23 @@
 		LEFT JOIN base_huowei hw ON hw.id = a.hw
 	</sql>
 	
-    
+
+	<select id="findYongLiaoItemsByWwhid" resultType="BussinessOmMoYongItem">
+		select a.id AS "id",
+			   a.no AS "no",
+			   a.ck AS "ck.id",
+			   a.hw AS "hw.id",
+			   a.cinvcode AS "cinvcode",
+			   a.cinvname AS "cinvname",
+			   a.cinvstd AS "cinvstd",
+			   a.batchno AS "batchno",
+			   a.num AS "num",
+			   a.unit AS "unit",
+			   a.requireddate AS "requireddate"
+		FROM business_om_moyongliao_item a
+		where a.ommohid = #{wwhid}
+	</select>
+
 	<select id="get" resultType="BussinessOmMoYongItem" >
 		SELECT 
 			<include refid="bussinessOmMoYongItemColumns"/>

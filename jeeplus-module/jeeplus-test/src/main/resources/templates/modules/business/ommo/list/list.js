@@ -14,7 +14,7 @@
   "animation": 0,
   "themes": {"icons": true, "stripes": false},
   'data' : {
-  "url" : "${ctx}/business/baogong/order/businessBaoGongOrder/treeData",
+  "url" : "${ctx}/business/shengchan/dingdan/businessShengChanDingDan/treeData",
   "dataType" : "json"
 }
 },
@@ -36,10 +36,10 @@
   var opt = {
   silent: true,
   query:{
-  'printstatus':node.text
+  'ischaidan':node.text
 }
 };
-  $("#printstatus").val(node.text);
+  $("#ischaidan").val(node.text);
   $('#table').bootstrapTable('refresh',opt);
 }).on('loaded.jstree', function() {
   $("#businessProductTypeOnlyReadjsTree").jstree('open_all');
@@ -108,8 +108,8 @@
 
         }
           ,{
-            field: 'printstatus',
-            title: '是否打印'
+            field: 'ischaidan',
+            title: '拆单状态'
           }
             , {
                 field: 'mo.code',
@@ -139,6 +139,14 @@
               field: 'num',
               title: '数量'
               }
+          ,{
+            field: 'donenum',
+            title: '已拆数量'
+          }
+          ,{
+            field: 'nonum',
+            title: '未拆数量'
+          }
             ,{
                 field: 'unit',
                 title: '单位'
@@ -148,14 +156,12 @@
             title: '计划下达日期',
             sortable: true,
             sortName: 'startdate'
-
           }
           ,{
             field: 'arrivedate',
             title: '计划到货日期',
             sortable: true,
             sortName: 'arrivedate'
-
           },{
             field: 'memo',
             title: '备注'
@@ -168,7 +174,7 @@
     $('#table').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
             $('#remove,#jihua').prop('disabled', ! $('#table').bootstrapTable('getSelections').length);
-            $('#print').prop('disabled', $('#table').bootstrapTable('getSelections').length!=1);
+            $('#chaidan,#print,#handler').prop('disabled', $('#table').bootstrapTable('getSelections').length!=1);
         });
 
     $("#search").click("click", function() {// 绑定查询按扭
@@ -205,7 +211,88 @@
   var rid = getIdSelections();
     jp.windowOpen('${ctx}/business/ommo/businessOmMoMain/goToPrint?rid='+rid,"委外订单--打印",window.screen.width*0.9,window.screen.height);
 }
+  // 拆单
+  function chaidan(){
+  var rid = getIdSelections();
+  top.layer.open({
+  type: 1,
+  area: ['500px', '200px'],
+  title:"输入每单的数量",
+  auto:true,
+  maxmin: true, //开启最大化最小化按钮
+  content: $('#scddform').html(),
+  btn: ['确定', '关闭'],
+  yes: function(index, layero){
+  var num = $(layero).find("#num").val();
+  if(!num){
+  jp.warning("请输入数量");
+  return false;
+}
+  doChaidan(rid,num);
+  top.layer.close(index);
+},
+  cancel: function(index){
+  top.layer.close(index);
+}
+});
+}
+  function doChaidan(rid,num){
+  var index  =  jp.loading('生成中...');
+  jp.get('${ctx}/business/ommo/businessOmMoMain/chaidan?rid='+rid+'&num='+num,function (rs){
+  if(rs.success){
+  jp.toastr_success(rs.msg);
+  refresh();
+}else{
+  jp.toastr_error(rs.msg);
+}
+  jp.close(index);
+});
+}
+  // 手工拆单
+  function handler(){
+  var rows = getRowSelections();
+  var row = rows[0];
+  var gdnum = row.num;
+  var nonum = row.nonum;
+  top.layer.open({
+  type: 1,
+  area: ['500px', '300px'],
+  title:"输入拆单数量",
+  auto:true,
+  maxmin: true, //开启最大化最小化按钮
+  content: $('#handlerform').html(),
+  btn: ['确定', '关闭'],
+  yes: function(index, layero){
+  var num = $(layero).find("#handnum").val();
+  if(!num){
+  jp.warning("请输入数量");
+  return false;
+}
+  doHandler(row.id,gdnum,nonum,num);
+  top.layer.close(index);
+},
+  cancel: function(index){
+  top.layer.close(index);
+},
+  success: function(layero, index){
+  $(layero).find("#gdnum").val(gdnum);
+  $(layero).find("#nonum").val(nonum);
+}
+});
 
+}
+  function doHandler(rid,gdnum,nonum,num){
+  var index  =  jp.loading('处理中...');
+  jp.post('${ctx}/business/ommo/businessOmMoMain/handlerchaidan',{'rid':rid,'gdnum':gdnum,'nonum':nonum,'num':num},function(rs){
+  if(rs.success){
+  jp.toastr_success(rs.msg);
+  refresh();
+}else{
+  jp.toastr_error(rs.msg);
+}
+  jp.close(index);
+});
+}
     //刷新列表
   function refresh() {
       $('#table').bootstrapTable('refresh');

@@ -25,6 +25,7 @@
 		ck.name AS "ck.name",
 		a.moid AS "moid",
 		a.mohid AS "mohid",
+		a.cdid as "cdid",
 		vendor.name AS "vendor.name"
 	</sql>
 	
@@ -126,7 +127,8 @@
 			startdate,
 			arrivedate,
 			moid,
-			mohid
+			mohid,
+			cdid
 		) VALUES (
 			#{id},#{ck.id},
 			#{createBy.id},
@@ -147,7 +149,8 @@
 			#{startdate},
 			#{arrivedate},
 			#{moid},
-			#{mohid}
+			#{mohid},
+			#{cdid}
 		)
 	</insert>
 	

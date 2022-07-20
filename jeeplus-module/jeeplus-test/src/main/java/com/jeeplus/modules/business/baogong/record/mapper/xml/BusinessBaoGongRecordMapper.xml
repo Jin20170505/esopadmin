@@ -24,10 +24,12 @@
 		a.gdnum AS "gdnum",
 		a.doingnum AS "doingnum",
 		a.lfnum AS "lfnum",
+		a.batchno as "batchno",
 		a.gfnum AS "gfnum",
 		a.fgnum AS "fgnum",
 		a.bhgnum AS "bhgnum",
 		a.hgnum AS "hgnum",
+		a.unit as "unit",
 		douser.name AS "douser.name",
 		a.remarks AS "remarks"
 	</sql>
@@ -131,7 +133,7 @@
 			bgcode,bgid,
 			ordercode,planid,
 			orderline,lineid,
-			site,bghid,
+			site,bghid,routeid,
 			username,
 			gdnum,
 			doingnum,
@@ -140,7 +142,7 @@
 			fgnum,
 			bhgnum,
 			hgnum,unit,cinvcode,cinvname,cinvstd,
-			remarks
+			remarks,batchno
 		) VALUES (
 			#{id},#{douser.id},
 			#{createBy.id},
@@ -152,7 +154,7 @@
 			#{bgcode},#{bgid},
 			#{ordercode},#{planid},
 			#{orderline},#{lineid},
-			#{site},#{bghid},
+			#{site},#{bghid},#{routeid},
 			#{username},
 			#{gdnum},
 			#{doingnum},
@@ -161,7 +163,7 @@
 			#{fgnum},
 			#{bhgnum},
 			#{hgnum},#{unit},#{cinvcode},#{cinvname},#{cinvstd},
-			#{remarks}
+			#{remarks},#{batchno}
 		)
 	</insert>
 	

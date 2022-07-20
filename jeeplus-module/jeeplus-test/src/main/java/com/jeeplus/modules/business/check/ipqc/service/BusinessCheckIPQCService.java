@@ -8,6 +8,8 @@ import java.util.List;
 
 import com.jeeplus.common.utils.DateUtils;
 import com.jeeplus.common.utils.StringUtils;
+import com.jeeplus.modules.business.baogong.order.entity.BusinessBaoGongOrder;
+import com.jeeplus.modules.business.baogong.order.mapper.BusinessBaoGongOrderMapper;
 import com.jeeplus.modules.business.check.ipqc.entity.BusinessCheckIPQCFile;
 import com.jeeplus.modules.business.check.ipqc.mapper.BusinessCheckIPQCFileMapper;
 import com.jeeplus.modules.business.jihuadingdan.entity.BusinessJiHuaGongDanBom;
@@ -74,13 +76,20 @@ public class BusinessCheckIPQCService extends CrudService<BusinessCheckIPQCMappe
 		super.delete(businessCheckIPQC);
 		fileMapper.delete(new BusinessCheckIPQCFile(businessCheckIPQC));
 	}
-
+	@Autowired
+	private BusinessBaoGongOrderMapper businessBaoGongOrderMapper;
 	@Transactional(readOnly = false)
 	public void zhijian(String sccode,String scline,String userid,String userno,String username,
 						String bgid,String bgcode,String bghid,String siteid,String sitename,Double hglv,
 						String remarks,String cinvcode,String cinvname,Double jynum,Double hgnum,Double bhgnum,Double blnum){
 		BusinessCheckIPQC ipqc = new BusinessCheckIPQC();
 		ipqc.setBgid(bgid).setBzhglv(hglv).setBgcode(bgcode).setBghid(bghid).setSiteid(siteid).setSitename(sitename);
+		BusinessBaoGongOrder order = businessBaoGongOrderMapper.get(bghid);
+		if(order==null){
+			throw new RuntimeException("报工单不存在");
+		}
+		ipqc.setDept(order.getDept());
+		ipqc.setDeptName(order.getDeptName());
 		ipqc.setBadnum(blnum);
 		ipqc.setChecknum(jynum);
 		ipqc.setHegenum(hgnum);

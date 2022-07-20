@@ -16,7 +16,7 @@ import java.util.Date;
  * @author Jin
  * @version 2022-05-28
  */
-public class BusinessOmMoDetail extends DataEntity<BusinessOmMoDetail> {
+public class  BusinessOmMoDetail extends DataEntity<BusinessOmMoDetail> {
 	
 	private static final long serialVersionUID = 1L;
 	private BusinessOmMoMain mo;		// 父ID 父类
@@ -29,8 +29,11 @@ public class BusinessOmMoDetail extends DataEntity<BusinessOmMoDetail> {
 	private Double num;		// 数量
 	private String unit;		// 单位
 	private String memo;		// 备注
+	private Double donenum; // 已拆数量
+	private Double nonum;	// 未拆数量
 	private String printstatus;		// 打印状态
-	
+	private String ischaidan; // 是否拆单
+
 	public BusinessOmMoDetail() {
 		super();
 	}
@@ -91,6 +94,9 @@ public class BusinessOmMoDetail extends DataEntity<BusinessOmMoDetail> {
 	@NotNull(message="数量不能为空")
 	@ExcelField(title="数量", align=2, sort=12)
 	public Double getNum() {
+		if(num==null){
+			num = 0.0;
+		}
 		return num;
 	}
 
@@ -145,4 +151,30 @@ public class BusinessOmMoDetail extends DataEntity<BusinessOmMoDetail> {
 		this.arrivedate = arrivedate;
 	}
 
+	public String getIschaidan() {
+		return ischaidan;
+	}
+
+	public BusinessOmMoDetail setIschaidan(String ischaidan) {
+		this.ischaidan = ischaidan;
+		return this;
+	}
+
+	public Double getDonenum() {
+		return donenum;
+	}
+
+	public BusinessOmMoDetail setDonenum(Double donenum) {
+		this.donenum = donenum;
+		return this;
+	}
+
+	public Double getNonum() {
+		return nonum;
+	}
+
+	public BusinessOmMoDetail setNonum(Double nonum) {
+		this.nonum = nonum;
+		return this;
+	}
 }

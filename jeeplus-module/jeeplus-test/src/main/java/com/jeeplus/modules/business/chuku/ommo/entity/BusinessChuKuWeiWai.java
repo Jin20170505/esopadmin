@@ -33,6 +33,8 @@ public class BusinessChuKuWeiWai extends DataEntity<BusinessChuKuWeiWai> {
 	private Date arrivedate;		// 计划到货日期
 	private String moid;		// 订单主ID
 	private String mohid;		// 订单行ID
+	private String cdid; // 拆单ID
+
 	private Date beginStartdate;		// 开始 计划下达日期
 	private Date endStartdate;		// 结束 计划下达日期
 	private Date beginArrivedate;		// 开始 计划到货日期
@@ -205,6 +207,15 @@ public class BusinessChuKuWeiWai extends DataEntity<BusinessChuKuWeiWai> {
 
 	public void setBusinessChuKuWeiWaiMxList(List<BusinessChuKuWeiWaiMx> businessChuKuWeiWaiMxList) {
 		this.businessChuKuWeiWaiMxList = businessChuKuWeiWaiMxList;
+	}
+
+	public String getCdid() {
+		return cdid;
+	}
+
+	public BusinessChuKuWeiWai setCdid(String cdid) {
+		this.cdid = cdid;
+		return this;
 	}
 
 	public BaseCangKu getCk() {

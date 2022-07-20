@@ -143,7 +143,7 @@ public class BusinessPanDianService extends CrudService<BusinessPanDianMapper, B
 			BusinessPanDianMx mx = new BusinessPanDianMx();
 			mx.setId("");mx.setDelFlag("0");
 			mx.setNo(j.optInt("no"));
-			mx.setCinvcode(j.optString("cinvcode"));
+			mx.setCinvcode(j.optString("cinvcode").trim());
 			mx.setCinvname(j.optString("cinvname"));
 			mx.setCinvstd(j.optString("cinvstd"));
 			mx.setNum(j.optDouble("num",0.0));
@@ -152,7 +152,7 @@ public class BusinessPanDianService extends CrudService<BusinessPanDianMapper, B
 			mx.setCha(mx.getPannum()- mx.getNum());
 			mx.setUnit(j.optString("unit"));
 			mx.setScdate(j.optString("scdate",""));
-			mx.setBatchno(j.optString("batchno",""));
+			mx.setBatchno(j.optString("batchno","").trim());
 			main.getBusinessPanDianMxList().add(mx);
 			if(mx.getPannum().toString().equals(mx.getNum().toString())){
 

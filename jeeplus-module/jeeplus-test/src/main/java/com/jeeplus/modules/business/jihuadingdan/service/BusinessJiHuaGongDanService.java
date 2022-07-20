@@ -133,6 +133,9 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 			sumGdNum = 0.0;
 		}
 		Double scNum = shengChanDingDanMingXiMapper.getScNum(scddlineid);
+		if(scNum==null){
+			scNum=0.0;
+		}
 		return scNum-sumGdNum;
 	}
 
@@ -144,7 +147,8 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 	@Transactional(readOnly = false)
 	public void chehui(String id){
 		if(businessBaoGongOrderService.hasScOrderFromPlan(id)){
-			throw new RuntimeException("撤回失败，原因：该计划工单有对应的报工单存在。");
+			String code= mapper.getCodeById(id);
+			throw new RuntimeException("撤回失败，原因：该计划工单["+code+"]有对应的报工单存在。");
 		}
 		mapper.updateSatus(id,"未下发");
 	}
@@ -155,11 +159,12 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 	public synchronized void shengchengbaogongdan(String id,String yaocode){
 		boolean flag = businessBaoGongOrderService.hasScOrderFromPlan(id);
 		if(flag){
-			throw new RuntimeException("该计划工单已生成报工单。请勿多次生成.");
+			String code= mapper.getCodeById(id);
+			throw new RuntimeException("该计划工单【"+code+"】已生成报工单。请勿多次生成.");
 		}
 		BusinessJiHuaGongDan jiHuaGongDan = get(id);
 		if("未下发".equals(jiHuaGongDan.getStatus())){
-			throw new RuntimeException("该计划工单的状态：未下发.不可生成。请审核后再操作");
+			throw new RuntimeException("该计划工单["+jiHuaGongDan.getCode()+"]的状态：未下发.不可生成。请审核后再操作");
 		}
 		BusinessBaoGongOrder order = new BusinessBaoGongOrder();
 		order.setYaocode(yaocode);
@@ -184,6 +189,7 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 			BusinessBaoGongOrderMingXi xi = new BusinessBaoGongOrderMingXi();
 			xi.setRouteid(mx.getRouteid()).setDaynum(mx.getDaynum()).setGprice(mx.getGprice()).setGtime(mx.getGtime());
 			xi.setClassgroup(mx.getClassgroup().getName());
+			xi.setRouteid(mx.getRouteid());
 			xi.setNo(mx.getNo());xi.setNum(mx.getNum());xi.setSite(mx.getSite().getName());xi.setSiteid(mx.getSite().getId());
 			xi.setComplete("0");xi.setOpcode(mx.getUserno());xi.setOpname(mx.getUsername());
 			xi.setId("");xi.setDelFlag("0");
@@ -192,7 +198,9 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 		mapper.updateisshengcheng(id,"已生成");
 		String code="";
 		code = businessBaoGongOrderService.getCurrentCode(DateUtils.getDate("yyyyMMdd"));
+		String yymmdd = DateUtils.getDate("yyMMdd");
 		order.setBgcode(code);
+		order.setBatchno(yymmdd+"001");
 		StringBuffer sb = new StringBuffer("{");
 		sb.append("\"batchno\":\"").append(order.getBatchno()).append("\",");
 		sb.append("\"sccode\":\"").append(order.getOrdercode()).append("\",");

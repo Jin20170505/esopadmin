@@ -58,6 +58,12 @@ $(document).ready(function() {
                	if(params.sort && params.order){
                     searchParam.orderBy = params.sort+ " "+  params.order;
                  }
+                   var startdate = $('#beginBgdate').val();
+                   var enddate = $('#endBgdate').val();
+                   if(startdate && enddate){
+                       searchParam.beginBgdate = startdate+" 00:00:00";
+                       searchParam.endBgdate = enddate + " 23:59:59";
+                   }
                  return searchParam;
                },
                onShowSearch: function () {
@@ -123,11 +129,13 @@ $(document).ready(function() {
 		       
 		    }
                    ,{
+                       field: 'batchno',
+                       title: '预批号'
+                   },{
                        field: 'cinvcode',
                        title: '存货编码',
                        sortable: true,
                        sortName: 'cinvcode'
-
                    }
                    ,{
                        field: 'cinvname',
@@ -206,7 +214,7 @@ $(document).ready(function() {
 	  $('#businessBaoGongRecordTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
             $('#remove').prop('disabled', ! $('#businessBaoGongRecordTable').bootstrapTable('getSelections').length);
-            $('#edit').prop('disabled', $('#businessBaoGongRecordTable').bootstrapTable('getSelections').length!=1);
+            $('#edit,#print').prop('disabled', $('#businessBaoGongRecordTable').bootstrapTable('getSelections').length!=1);
         });
 
 	 $("#import").click(function(){//显示导入面板
@@ -276,11 +284,54 @@ $(document).ready(function() {
             return row.id
         });
     }
+    function getRowSelections() {
+    return $.map($("#businessBaoGongRecordTable").bootstrapTable('getSelections'), function (row) {
+        return row
+    });
+    }
     function bgedit(id){
         if(!id){
         id = getIdSelections();
     }
     jp.openSaveDialog('编辑报工修改', "${ctx}/business/baogong/change/businessBaoGongChange/form/edit?recordid="+id,'800px', '500px');
+}
+    function printbq(){
+    var rid = getIdSelections();
+    var rows = getRowSelections();
+    var row = rows[0];
+    if(!row.batchno){
+        jp.warning('无预批号不可打印')
+        return false;
+    }
+    var hgnum = row.hgnum;
+    top.layer.open({
+    type: 1,
+    area: ['500px', '200px'],
+    title:"标签打印",
+    auto:true,
+    maxmin: true, //开启最大化最小化按钮
+    content: $('#baonumform').html(),
+    btn: ['确定', '关闭'],
+    yes: function(index, layero){
+    var num = $(layero).find("#num").val();
+    var znum = $(layero).find("#znum").val();
+    if(!num && !znum){
+    jp.warning("请输入数量或纸张数量");
+    return false;
+}
+    doPrint(rid,num,znum);
+    top.layer.close(index);
+},
+    cancel: function(index){
+    top.layer.close(index);
+},
+    success: function(layero, index){
+    $(layero).find("#num").val(hgnum);
+}
+});
+}
+    function doPrint(rid,num,hdnum){
+    jp.windowOpen('${ctx}/business/baogong/record/businessBaoGongRecord/goToTagPrint?rid='+rid+'&num='+num+"&znum="+hdnum,"产品标签--打印",1200,1200);
 }
   //删除
   function del(ids){

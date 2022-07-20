@@ -25,4 +25,6 @@ public interface BussinessOmMoYongItemMapper extends BaseMapper<BussinessOmMoYon
 
     @Delete("delete from business_om_moyongliao_item where ommohid = #{omhid}")
     void deleteByOmHid(@Param("omhid") String omhid);
+
+    List<BussinessOmMoYongItem> findYongLiaoItemsByWwhid(@Param("wwhid") String wwhid);
 }

@@ -11,6 +11,7 @@
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
 		a.no AS "no",
+		a.routeid as "routeid",
 		a.siteid AS "siteid",
 		a.site AS "site",
 		a.opname AS "opname",

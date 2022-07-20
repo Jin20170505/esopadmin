@@ -119,6 +119,13 @@ $(document).ready(function() {
 		        sortName: 'unit'
 		       
 		    }
+            ,{
+            field: 'daynum',
+            title: '日产量',
+            sortable: true,
+            sortName: 'daynum'
+
+            }
 			,{
 		        field: 'remarks',
 		        title: '备注信息',

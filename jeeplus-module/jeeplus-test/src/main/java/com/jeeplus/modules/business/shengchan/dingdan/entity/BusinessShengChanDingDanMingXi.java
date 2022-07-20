@@ -28,6 +28,8 @@ public class BusinessShengChanDingDanMingXi extends DataEntity<BusinessShengChan
 	private BusinessProduct cinv;		// 存货编码
 	private String cinvname;		// 存货名称
 	private String std;		// 存货规格型号
+	private String cuscinvcode; // 客户存货编码
+	private String cuscinvname; // 客户存货名称
 	private String unit;		// 单位
 	private Double num;		// 数量
 	private String startdate;		// 开工日期
@@ -37,7 +39,7 @@ public class BusinessShengChanDingDanMingXi extends DataEntity<BusinessShengChan
 	private Double donenum; // 已拆单数量
 	private String status; // 锁定 开立 完成
 	private String ischaidan; // 是否拆单
-
+	private Double wcdnum; // 未拆单数量
 	public String getSocode() {
 		return socode;
 	}
@@ -215,6 +217,33 @@ public class BusinessShengChanDingDanMingXi extends DataEntity<BusinessShengChan
 
 	public BusinessShengChanDingDanMingXi setStatus(String status) {
 		this.status = status;
+		return this;
+	}
+
+	public Double getWcdnum() {
+		return wcdnum;
+	}
+
+	public BusinessShengChanDingDanMingXi setWcdnum(Double wcdnum) {
+		this.wcdnum = wcdnum;
+		return this;
+	}
+
+	public String getCuscinvcode() {
+		return cuscinvcode;
+	}
+
+	public BusinessShengChanDingDanMingXi setCuscinvcode(String cuscinvcode) {
+		this.cuscinvcode = cuscinvcode;
+		return this;
+	}
+
+	public String getCuscinvname() {
+		return cuscinvname;
+	}
+
+	public BusinessShengChanDingDanMingXi setCuscinvname(String cuscinvname) {
+		this.cuscinvname = cuscinvname;
 		return this;
 	}
 }

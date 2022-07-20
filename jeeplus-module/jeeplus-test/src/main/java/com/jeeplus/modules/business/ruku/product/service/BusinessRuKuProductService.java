@@ -192,7 +192,11 @@ public class BusinessRuKuProductService extends CrudService<BusinessRuKuProductM
 		BusinessRuKuProduct product = new BusinessRuKuProduct();
 		BusinessRuKuProductMx mx = new BusinessRuKuProductMx();
 		product.setDept(new Office(order.getDept()));
-		product.setBatchno(getBatchno(DateUtils.getDate("yyMMdd")));
+		if(StringUtils.isNotEmpty(order.getBatchno())){
+			product.setBatchno(order.getBatchno());
+		}else {
+			product.setBatchno(getBatchno(DateUtils.getDate("yyMMdd")));
+		}
 		product.setBgcode(order.getBgcode());
 		product.setBgid(order.getId());
 		product.setCangku(new BaseCangKu(ckid));

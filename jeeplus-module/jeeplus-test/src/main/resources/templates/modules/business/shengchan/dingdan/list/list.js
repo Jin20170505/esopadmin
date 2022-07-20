@@ -140,10 +140,21 @@
               ,{
               field: 'std',
               title: '规格型号'
-              }
+              },{
+            field: 'cuscinvcode',
+            title: '客户存货编号'
+          }
+          ,{
+            field: 'cuscinvname',
+            title: '客户存货名称'
+          }
+          ,{
+            field: 'num',
+            title: '数量'
+          }
               ,{
-              field: 'num',
-              title: '数量'
+              field: 'wcdnum',
+              title: '未拆数量'
               }
             ,{
                 field: 'unit',

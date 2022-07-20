@@ -29,4 +29,6 @@ public interface BusinessChuKuLingLiaoMapper extends BaseMapper<BusinessChuKuLin
 
     @Select("select 1 from business_chuku_lingliao where sccode = #{sccode} and  sclinecode = #{line} limit 1")
     Integer hasBySccodeAndLine(@Param("sccode") String sccode,@Param("line") String line);
+    @Select("select sum(num) from business_chuku_lingliao where sccode = #{sccode} and  sclinecode = #{line}")
+    Double getDoneSumNum(@Param("sccode") String sccode,@Param("line") String line);
 }

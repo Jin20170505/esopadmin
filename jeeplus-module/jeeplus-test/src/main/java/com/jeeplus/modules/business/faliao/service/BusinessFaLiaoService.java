@@ -132,11 +132,11 @@ public class BusinessFaLiaoService extends CrudService<BusinessFaLiaoMapper, Bus
 			mx.setPid(businessFaLiao);
 			mx.setNum(o.optDouble("num"));
 			mx.setNo(o.optInt("no"));
-			mx.setCinvcode(o.optString("cinvcode"));
+			mx.setCinvcode(o.optString("cinvcode").trim());
 			mx.setCinvname(o.optString("cinvname"));
 			mx.setCinvstd(o.optString("cinvstd"));
 			mx.setUnit(o.optString("unit"));
-			mx.setBatchno(o.optString("batchno"));
+			mx.setBatchno(o.optString("batchno").trim());
 			mx.setScdate(o.optString("scdate"));
 			mx.setHuowei(new BaseHuoWei(o.optString("hwid")));
 			mx.setId("");mx.setDelFlag("0");

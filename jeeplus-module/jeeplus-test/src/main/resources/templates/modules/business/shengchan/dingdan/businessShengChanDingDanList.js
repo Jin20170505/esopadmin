@@ -237,7 +237,7 @@ $(document).ready(function() {
                         refresh();
                         jp.toastr_success(data.msg);
                     }else{
-                        jp.toastr_error(data.msg);
+                        jp.alert(data.msg);
                     }
                     jp.close(index);
             })

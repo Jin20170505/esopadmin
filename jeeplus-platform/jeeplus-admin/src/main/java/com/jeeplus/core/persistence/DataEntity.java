@@ -74,6 +74,9 @@ public abstract class DataEntity<T> extends BaseEntity<T> {
 	
 	@Length(min=0, max=255)
 	public String getRemarks() {
+		if(remarks==null){
+			remarks="";
+		}
 		return remarks;
 	}
 

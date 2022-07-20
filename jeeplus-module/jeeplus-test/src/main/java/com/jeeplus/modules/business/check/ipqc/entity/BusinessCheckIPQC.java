@@ -29,6 +29,8 @@ public class BusinessCheckIPQC extends DataEntity<BusinessCheckIPQC> {
 	private String bgid; // 报工ID
 	private String bgcode; // 报工单号
 	private String bghid; // 报工行ID
+	private String dept;		// 生产部门ID
+	private String deptName;	// 生产部门名称
 	private String siteid; // 工序ID
 	private String sitename; // 工序名
 	private Double bzhglv; // 标准合格率
@@ -253,6 +255,24 @@ public class BusinessCheckIPQC extends DataEntity<BusinessCheckIPQC> {
 
 	public BusinessCheckIPQC setBzhglv(Double bzhglv) {
 		this.bzhglv = bzhglv;
+		return this;
+	}
+
+	public String getDept() {
+		return dept;
+	}
+
+	public BusinessCheckIPQC setDept(String dept) {
+		this.dept = dept;
+		return this;
+	}
+
+	public String getDeptName() {
+		return deptName;
+	}
+
+	public BusinessCheckIPQC setDeptName(String deptName) {
+		this.deptName = deptName;
 		return this;
 	}
 }

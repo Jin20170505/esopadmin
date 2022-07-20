@@ -3,13 +3,19 @@
  */
 package com.jeeplus.modules.business.baogong.record.web;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
+import com.jeeplus.common.utils.QRCodeUtil;
+import com.jeeplus.modules.business.ruku.product.entity.BusinessRuKuProduct;
+import com.jeeplus.modules.business.ruku.product.entity.BusinessRuKuProductMx;
+import com.jeeplus.modules.business.ruku.product.entity.ProductTagBean;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +72,45 @@ public class BusinessBaoGongRecordController extends BaseController {
 		model.addAttribute("businessBaoGongRecord", businessBaoGongRecord);
 		return "modules/business/baogong/record/businessBaoGongRecordList";
 	}
-	
+	@RequestMapping("goToTagPrint")
+	public String goToTagPrint(String rid,Integer znum,Double num,Model model){
+		List<ProductTagBean> tagBeans = Lists.newArrayList();
+		BusinessBaoGongRecord bean = businessBaoGongRecordService.get(rid);
+		for (int i=0;i<znum;i++){
+			ProductTagBean tagBean = new ProductTagBean();
+			tagBean.setBatchno(bean.getBatchno()).setCinvstd(bean.getCinvstd())
+					.setNum(num+"").setUnit(bean.getUnit()).setId(bean.getId())
+					.setDate(DateUtils.getDate("YYYY-MM-dd"));
+			tagBean.setCinvcode(bean.getCinvcode()).setCinvname(bean.getCinvname());
+			tagBeans.add(tagBean);
+		}
+		model.addAttribute("beans", tagBeans);
+		return "modules/business/baogong/record/tagprint";
+	}
+
+	@RequestMapping("/qr")
+	public void getQrImage(String rid,String num, HttpServletResponse response) throws IOException {
+		response.reset();
+		response.setContentType("image/jpg");
+		ServletOutputStream out = null;
+		try{
+			BusinessBaoGongRecord bean = businessBaoGongRecordService.get(rid);
+			ProductTagBean tagBean = new ProductTagBean();
+			tagBean.setBatchno(bean.getBatchno()).setCinvstd(bean.getCinvstd())
+					.setNum(num+"").setUnit(bean.getUnit()).setId(bean.getId())
+					.setDate(DateUtils.getDate("YYYY-MM-dd"));
+			String qr = "'cinvcode':'"+tagBean.getCinvcode()+"','cinvcodename':'"+tagBean.getCinvname()+"','batchno':'"+tagBean.getBatchno()+"','date':'"+tagBean.getDate()+"','num':'"+tagBean.getNum()+"','unit':'"+tagBean.getUnit()+"'";
+			out = response.getOutputStream();
+			QRCodeUtil.encode(qr,out);
+			out.flush();
+		}catch (Exception e){
+			e.printStackTrace();
+		}finally {
+			if(out!=null){
+				out.close();
+			}
+		}
+	}
 		/**
 	 * 员工报工列表数据
 	 */

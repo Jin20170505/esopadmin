@@ -138,10 +138,10 @@ public class BusinessRukuCaiGouService extends CrudService<BusinessRukuCaiGouMap
 			BusinessRukuCaigouMx mx  = new BusinessRukuCaigouMx();
 			mx.setDelFlag("0");
 			mx.setId("");
-			mx.setCinvcode(j.optString("cinvcode"));
+			mx.setCinvcode(j.optString("cinvcode").trim());
 			mx.setCinvname(j.optString("cinvname"));
 			mx.setCinvstd(j.optString("cinvstd"));
-			mx.setBatchno(j.optString("batchno"));
+			mx.setBatchno(j.optString("batchno").trim());
 			mx.setNum(num);
 			mx.setNo(no);
 			mx.setScdate(j.optString("scdate"));

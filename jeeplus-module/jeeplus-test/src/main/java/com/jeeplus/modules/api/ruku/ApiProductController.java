@@ -3,6 +3,7 @@ package com.jeeplus.modules.api.ruku;
 import com.jeeplus.common.json.AjaxJson;
 import com.jeeplus.modules.business.baogong.order.service.BusinessBaoGongOrderService;
 import com.jeeplus.modules.business.baogong.record.service.BusinessBaoGongRecordService;
+import com.jeeplus.modules.business.check.ipqc.mapper.BusinessCheckIPQCMapper;
 import com.jeeplus.modules.business.ruku.product.service.BusinessRuKuProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,8 @@ public class ApiProductController {
     private BusinessBaoGongOrderService businessBaoGongOrderService;
     @Autowired
     private BusinessRuKuProductService businessRuKuProductService;
+    @Autowired
+    private BusinessCheckIPQCMapper businessCheckIPQCMapper;
     /**
      * 扫报工二维码 查询产品入库信息
      * @param bgcode 报工单号

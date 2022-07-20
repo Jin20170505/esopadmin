@@ -128,14 +128,14 @@ public class BusinessHuoWeiChangeService extends CrudService<BusinessHuoWeiChang
 			BusinessHuoWeiChangeMx mx = new BusinessHuoWeiChangeMx();
 			mx.setId("");mx.setDelFlag("0");
 			mx.setNo(j.optInt("no"));
-			mx.setCinvcode(j.optString("cinvcode"));
+			mx.setCinvcode(j.optString("cinvcode").trim());
 			mx.setCinvname(j.optString("cinvname"));
 			mx.setCinvstd(j.optString("cinvstd"));
 			mx.setNum(j.optDouble("num",0.0));
 			mx.setUnit(j.optString("unit"));
 			mx.setHwafter(j.optString("ahw"));
 			mx.setHwbefore(j.optString("bhw"));
-			mx.setBatchno(j.optString("batchno"));
+			mx.setBatchno(j.optString("batchno").trim());
 			mx.setScdate(j.optString("scdate"));
 			change.getBusinessHuoWeiChangeMxList().add(mx);
 		});

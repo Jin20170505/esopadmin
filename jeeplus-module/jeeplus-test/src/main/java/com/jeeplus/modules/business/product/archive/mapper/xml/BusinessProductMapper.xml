@@ -23,10 +23,9 @@
 	</sql>
 	
 	<sql id="businessProductJoins">
-			LEFT JOIN business_product_type b ON b.id = a.type_id
+		LEFT JOIN business_product_type b ON b.id = a.type_id
 	</sql>
-	
-    
+
 	<select id="get" resultType="BusinessProduct" >
 		SELECT 
 			<include refid="businessProductColumns"/>
@@ -148,7 +147,7 @@
 			code,cinvaddcode,
 			name,
 			specification,
-			unit,sccall,
+			unit,sccall,daynum,
 			remarks
 		) VALUES (
 			#{createBy.id},
@@ -161,7 +160,7 @@
 			#{code},#{cinvaddcode},
 			#{name},
 			#{specification},
-			#{unit},#{sccall},
+			#{unit},#{sccall},#{daynum},
 			#{remarks}
 		)
 
@@ -176,6 +175,7 @@
 			name = #{name},
 			specification = #{specification},
 			unit = #{unit},
+			daynum = #{daynum},
 			sccall = #{sccall},
 			remarks = #{remarks}
 		WHERE id = #{id}

@@ -75,27 +75,27 @@ layout("/include/_dialog.html"){
             <tr>
                 <td class="width-15 active"><label class="pull-right"><font color="red">*</font>单号：</label></td>
                 <td class="width-35">
-                    <input name="code" value="${businessCheckIPQC.code!}"    class="form-control required"/>
+                    <input name="code" value="${businessCheckIPQC.code!}"  readonly  class="form-control required"/>
             </td>
                 <td class="width-15 active"><label class="pull-right"><font color="red">*</font>生产订单号：</label></td>
                 <td class="width-35">
-                    <input name="sccode" value="${businessCheckIPQC.sccode!}"    class="form-control required"/>
+                    <input name="sccode" value="${businessCheckIPQC.sccode!}"   readonly class="form-control required"/>
             </td>
             </tr>
             <tr>
                 <td class="width-15 active"><label class="pull-right"><font color="red">*</font>行号：</label></td>
                 <td class="width-35">
-                    <input name="linecode" value="${businessCheckIPQC.linecode!}"    class="form-control required"/>
+                    <input name="linecode" value="${businessCheckIPQC.linecode!}"  readonly  class="form-control required"/>
             </td>
                 <td class="width-15 active"><label class="pull-right"><font color="red">*</font>工号：</label></td>
                 <td class="width-35">
-                    <input name="username" value="${businessCheckIPQC.username!}"    class="form-control required"/>
+                    <input name="username" value="${businessCheckIPQC.username!}" readonly   class="form-control required"/>
             </td>
             </tr>
             <tr>
                 <td class="width-15 active"><label class="pull-right"><font color="red">*</font>质检人：</label></td>
                 <td class="width-35">
-                    <input name="checkname" value="${businessCheckIPQC.checkname!}"    class="form-control required"/>
+                    <input name="checkname" value="${businessCheckIPQC.checkname!}"  readonly  class="form-control required"/>
             </td>
                 <td class="width-15 active"><label class="pull-right"><font color="red">*</font>质检日期：</label></td>
                 <td class="width-35">
@@ -114,7 +114,7 @@ layout("/include/_dialog.html"){
             </td>
                 <td class="width-15 active"><label class="pull-right"><font color="red">*</font>合格数量：</label></td>
                 <td class="width-35">
-                    <input name="hegenum" value="${businessCheckIPQC.hegenum!}"    class="form-control required isFloatGteZero"/>
+                    <input name="hegenum" value="${businessCheckIPQC.hegenum!}"   class="form-control required isFloatGteZero"/>
             </td>
             </tr>
             <tr>

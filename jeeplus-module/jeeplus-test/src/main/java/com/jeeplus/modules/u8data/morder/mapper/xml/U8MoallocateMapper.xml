@@ -41,6 +41,9 @@
 
     <!-- 根据生产订单明细ID查询 子件ID和剩余量 -->
     <select id="findBomIdAndSyNum" resultType="U8Moallocate">
-        select a.AllocateId as "allocateId",a.IssQty as "issQty",a.qty as "qty" from YT_API_ERP_view_mom_moallocate a where a.MoDId = #{moDId}
+        select
+        <include refid="oallocateColumns"/>
+        from YT_API_ERP_view_mom_moallocate a
+        where a.MoDId = #{moDId}
     </select>
 </mapper>

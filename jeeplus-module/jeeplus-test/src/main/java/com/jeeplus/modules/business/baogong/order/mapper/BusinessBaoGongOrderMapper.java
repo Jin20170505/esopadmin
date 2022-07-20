@@ -29,6 +29,9 @@ public interface BusinessBaoGongOrderMapper extends BaseMapper<BusinessBaoGongOr
     @Select("select qrcode from business_baogao_order where id=#{id}")
     String getQrCodeById(@Param("id") String id);
 
+    @Select("select num from business_baogao_order where id=#{id}")
+    Double getNum(@Param("id") String id);
+
     @Update("update business_baogao_order set complate = '1' where id = #{id}")
     void completeBg(@Param("id") String id);
     @Update("update business_baogao_order set complate = '0' where id = #{id}")
@@ -62,4 +65,6 @@ public interface BusinessBaoGongOrderMapper extends BaseMapper<BusinessBaoGongOr
 
     @Select("select id from business_baogao_order where planid = #{planid}")
     List<String> findBgidByPlanid(@Param("planid") String planid);
+    @Update("update business_baogao_order set  remarks = #{remarks} where id = #{rid}")
+    void updateRemarks(@Param("rid") String rid,@Param("remarks") String remarks);
 }

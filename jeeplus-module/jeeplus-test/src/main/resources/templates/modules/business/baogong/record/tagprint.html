@@ -1,0 +1,105 @@
+<!
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>标签打印</title>
+
+    <style type="text/css">
+        @media print {
+            #print{
+                display: none;
+            }
+
+            .page-break{
+                page-break-before: always;
+            }
+        }
+        #print{
+            width: 100px;
+            background-color: red;
+            color: #0a0a0a;
+        }
+        .qrcode{
+            display: block;
+            width: 90px;
+            height: 90px;
+        }
+        .table-bordered{
+            border: 1px solid #000000;
+            border-collapse: collapse;
+        }
+        tr,td,th{
+            border: 1px solid #000000;
+        }
+        .table-bordered th{
+            text-align: center;
+            vertical-align: middle;
+            font-size: 12px;
+            height: 25px;
+        }
+        .table-bordered td{
+            text-align: center;
+            vertical-align: middle;
+            font-size: 12px;
+        }
+        /** 1cm = 32px   7*5 = 224 * 160*/
+    </style>
+</head>
+<body>
+<a id="print" class="btn btn-custom waves-effect w-xs waves-light" onclick="window.print();">
+    <i class="fa fa-print"></i> 打印
+</a>
+<div class="white-box" id="tabs">
+
+</div>
+<script type="text/javascript">
+    var data = ${fn.toJson(beans)};
+    var htm = '';
+    var len = data.length;
+    for (var i=0; i<len; i++){
+        var bean = data[i];
+        htm += `<div style="padding: 2px">
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <th colspan="2" width="150px">QiLianShan 存货条码</th>
+            <th colspan="2" rowspan="2" width="120px">
+            <img class="qrcode" src="${ctx}/business/baogong/record/businessBaoGongRecord/qr?rid=`+bean.id+`&num=`+bean.num+`&cinvcode=`+bean.cinvcode+`&cinvname=`+bean.cinvname+`"/></th>
+        </tr>
+        <tr>
+            <th style="min-width: 50px;">存货编码</th>
+            <td>`+bean.cinvcode+`</td>
+        </tr>
+        <tr>
+            <th style="height: 40px;">存货名称</th>
+            <td colspan="3" style="vertical-align: top;text-align: left;font-size: 5px;height: 40px">`+bean.cinvname+`</td>
+        </tr>
+        <tr>
+            <th>批次号</th>
+            <td>`+bean.batchno+`</td>
+            <th colspan="2">数量</th>
+        </tr>
+        <tr>
+            <th>生产日期</th>
+            <td>`+bean.date+`</td>
+            <td style="width: 30px">`+bean.num+`</td>
+            <td style="width: 20px;">`+bean.unit+`</td>
+        </tr>
+        </tbody>
+    </table>
+</div>`;
+        if(i==(len-1)){
+
+        }else {
+            htm +=`<div class="page-break"></div>`;
+        }
+
+    }
+    document.getElementById('tabs').innerHTML = htm;
+</script>
+
+</body>
+</html>

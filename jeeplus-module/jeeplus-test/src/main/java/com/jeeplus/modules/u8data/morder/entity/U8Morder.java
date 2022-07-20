@@ -22,6 +22,8 @@ public class U8Morder extends DataEntity<U8Morder> {
     private String moLotCode; // 生产批号
     private String cinvcode; // 存货名称
     private String cinvname; // 存货名称
+    private String cuscinvcode; // 客户存货名称
+    private String cuscinvname; // 客户存货名称
     private String cinvstd; // 规格型号
     private String moClass; // 订单类型
     private String cComUnitCode; // 计量单位编码
@@ -247,6 +249,24 @@ public class U8Morder extends DataEntity<U8Morder> {
 
     public U8Morder setMoLotCode(String moLotCode) {
         this.moLotCode = moLotCode;
+        return this;
+    }
+
+    public String getCuscinvcode() {
+        return cuscinvcode;
+    }
+
+    public U8Morder setCuscinvcode(String cuscinvcode) {
+        this.cuscinvcode = cuscinvcode;
+        return this;
+    }
+
+    public String getCuscinvname() {
+        return cuscinvname;
+    }
+
+    public U8Morder setCuscinvname(String cuscinvname) {
+        this.cuscinvname = cuscinvname;
         return this;
     }
 }

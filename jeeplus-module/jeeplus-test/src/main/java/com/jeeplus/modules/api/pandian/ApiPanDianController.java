@@ -22,6 +22,7 @@ public class ApiPanDianController {
         AjaxJson json = new AjaxJson();
         try {
             U8InvPostionSum sum = new U8InvPostionSum();
+            cinvcode = cinvcode.trim();
             sum.setCinvcode(cinvcode);
             sum.setcPosCode(hwcode);
             List<U8InvPostionSum> list =  u8InvPostionSumService.findList(sum);

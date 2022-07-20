@@ -6,6 +6,7 @@ package com.jeeplus.modules.business.baogong.order.web;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -80,12 +81,37 @@ public class BusinessBaoGongOrderController extends BaseController {
 		}
 		return json;
 	}
-
+	@RequestMapping("editremarks")
+	@ResponseBody
+	public AjaxJson editremarks(String rid,String remarks){
+		AjaxJson json = new AjaxJson();
+		try{
+			businessBaoGongOrderService.editremarks(rid, remarks);
+			json.setSuccess(true);
+			json.setMsg("修改成功");
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setSuccess(false);
+			json.setMsg("修改失败");
+		}
+		return json;
+	}
 	@RequestMapping("goToPrint")
 	public String goToPrint(String rid,Model model){
 		BusinessBaoGongOrder order = businessBaoGongOrderService.get(rid);
 		model.addAttribute("order",order);
 		return "modules/business/baogong/order/printbaogongdan";
+	}
+
+	@RequestMapping("goToPlPrint")
+	public String goToPlPrint(String rids,Model model){
+		List<BusinessBaoGongOrder> list = Lists.newArrayList();
+		Arrays.asList(rids.split(",")).forEach(id->{
+			list.add(businessBaoGongOrderService.get(id));
+		});
+		model.addAttribute("list",list);
+		model.addAttribute("rids",rids);
+		return "modules/business/baogong/order/plprintbaogongdan";
 	}
 	@RequestMapping("/img/{rid}")
 	public void getImage(@PathVariable("rid") String rid, HttpServletResponse response) throws IOException {
@@ -109,7 +135,7 @@ public class BusinessBaoGongOrderController extends BaseController {
 	private U8MoallocateService u8MoallocateService;
 	/**
 	 * 领料用量不足 处理
-	 * @param ids 报工ID
+	 * @param rid 报工ID
 	 * @return
 	 */
 	@RequestMapping("lingliaodealwith")
@@ -135,6 +161,24 @@ public class BusinessBaoGongOrderController extends BaseController {
 		return json;
 	}
 
+	@ResponseBody
+	@RequestMapping("dealwith")
+	public AjaxJson dealwith(String rid){
+		AjaxJson json = new AjaxJson();
+		try{
+			String schid = businessBaoGongOrderService.getSchidByOrderid(rid);
+			String planid = businessBaoGongOrderService.getPlanidByOrderid(rid);
+			List<U8Moallocate> moallocates = u8MoallocateService.findBomIdAndSyNum(schid);
+			businessBaoGongOrderService.dealwith(rid,schid,planid,moallocates);
+			json.setSuccess(true);
+			json.setMsg("处理成功");
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setSuccess(false);
+			json.setMsg("处理失败，原因："+e.getMessage());
+		}
+		return json;
+	}
 	/**
 	 * 报工单列表页面
 	 */

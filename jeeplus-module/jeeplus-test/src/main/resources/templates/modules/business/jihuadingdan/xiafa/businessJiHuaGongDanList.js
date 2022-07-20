@@ -225,8 +225,8 @@ $(document).ready(function() {
 
 	  $('#businessJiHuaGongDanTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
-            $('#remove').prop('disabled', ! $('#businessJiHuaGongDanTable').bootstrapTable('getSelections').length);
-            $('#edit,#xiafa,#chehui,#shengchengbaogongdan').prop('disabled', $('#businessJiHuaGongDanTable').bootstrapTable('getSelections').length!=1);
+            $('#remove,#chehui,#shengchengbaogongdan').prop('disabled', ! $('#businessJiHuaGongDanTable').bootstrapTable('getSelections').length);
+            $('#edit,#xiafa').prop('disabled', $('#businessJiHuaGongDanTable').bootstrapTable('getSelections').length!=1);
         });
 
 	 $("#import").click(function(){//显示导入面板
@@ -325,7 +325,7 @@ function chehui(){
 // 生成报工单
 function shengchengbaogongdan(){
     var rows = getRowSelections();
-    var ids = rows[0].id;
+    var ids = getIdSelections();
     var deptid  = rows[0].dept.id;
     var deptname = rows[0].dept.name;
 	 jp.confirm('确认要生成报工单吗？', function(){

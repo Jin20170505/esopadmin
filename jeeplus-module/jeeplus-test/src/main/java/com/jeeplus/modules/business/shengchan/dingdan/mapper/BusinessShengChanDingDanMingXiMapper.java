@@ -32,6 +32,8 @@ public interface BusinessShengChanDingDanMingXiMapper extends BaseMapper<Busines
 	@Update("update business_shengchan_dingdan_mingxi set status = '开立' where pid = #{pid} and status = '锁定'")
 	void shenhe(@Param("pid") String pid);
 
+	@Select("select distinct cinv_code from business_shengchan_dingdan_mingxi where pid = #{scid}")
+	List<String> findCinvcodeByScid(@Param("scid") String scid);
 	@Update("update business_shengchan_dingdan_mingxi set status = '锁定' where pid = #{pid} and status = '开立'")
 	void fanshen(@Param("pid") String pid);
 
