@@ -66,8 +66,7 @@ $(document).ready(function() {
                        searchParam.beginCheckdate = startdate+" 00:00:00";
                        searchParam.endCheckdate = enddate + " 23:59:59";
                    }
-                   }
-               }
+
                  return searchParam;
                },
                onShowSearch: function () {
