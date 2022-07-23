@@ -237,7 +237,7 @@ public class BusinessChuKuWeiWaiService extends CrudService<BusinessChuKuWeiWaiM
 		businessChuKuWeiWai.setCdid(cdid);
 		businessChuKuWeiWai.setArrivedate(info.getArrivedate());
 		businessChuKuWeiWai.setStartdate(info.getStartdate());
-		businessChuKuWeiWai.setMocode(info.getCode());
+		businessChuKuWeiWai.setMocode(info.getWwcode());
 		businessChuKuWeiWai.setMono(info.getWwline());
 		businessChuKuWeiWai.setCreateBy(user);
 		businessChuKuWeiWai.setCinvcode(info.getCinvcode());
@@ -285,7 +285,7 @@ public class BusinessChuKuWeiWaiService extends CrudService<BusinessChuKuWeiWaiM
 				YT_Rds11 r = new YT_Rds11();
 				r.setcInvCode(d.getCinvcode());
 				r.setiQuantity(d.getRemarks());
-				r.setCmocode(info.getCode());
+				r.setCmocode(info.getWwcode());
 				r.setImoseq(info.getWwline()+"");
 				r.setInvcode(d.getCinvcode());
 				r.setIopseq(d.getBomid()); // 委外订单子件ID

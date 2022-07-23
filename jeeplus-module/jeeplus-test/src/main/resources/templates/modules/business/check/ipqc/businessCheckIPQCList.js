@@ -75,8 +75,13 @@ $(document).ready(function() {
                },
                columns: [{
 		        checkbox: true
-		       
-		    }
+		    },{
+                   field: 'checkdate',
+                   title: '质检日期',
+                   sortable: true,
+                   sortName: 'checkdate'
+
+               }
 			,{
 		        field: 'code',
 		        title: '单号',
@@ -121,12 +126,12 @@ $(document).ready(function() {
                 sortable: true,
                 sortName: 'bgcode'
             }
-            ,{
-                field: 'sitename',
-                title: '工序名称',
-                sortable: true,
-                sortName: 'sitename'
-            }
+            // ,{
+            //     field: 'sitename',
+            //     title: '工序名称',
+            //     sortable: true,
+            //     sortName: 'sitename'
+            // }
 			,{
 		        field: 'username',
 		        title: '工号',
@@ -153,13 +158,7 @@ $(document).ready(function() {
     sortName: 'cinvname'
 
     }
-			,{
-		        field: 'checkdate',
-		        title: '质检日期',
-		        sortable: true,
-		        sortName: 'checkdate'
-		       
-		    }
+
 			,{
 		        field: 'checknum',
 		        title: '检验数量',

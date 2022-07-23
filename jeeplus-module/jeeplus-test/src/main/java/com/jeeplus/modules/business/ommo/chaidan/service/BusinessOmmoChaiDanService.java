@@ -6,6 +6,7 @@ package com.jeeplus.modules.business.ommo.chaidan.service;
 import java.util.List;
 
 import com.jeeplus.common.utils.DateUtils;
+import com.jeeplus.modules.business.chuku.ommo.mapper.BusinessChuKuWeiWaiMapper;
 import com.jeeplus.modules.business.ommo.mapper.BusinessOmMoDetailMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -98,9 +99,15 @@ public class BusinessOmmoChaiDanService extends CrudService<BusinessOmmoChaiDanM
 	}
 	@Autowired
 	private BusinessOmMoDetailMapper businessOmMoDetailMapper;
+	@Autowired
+	private BusinessChuKuWeiWaiMapper businessChuKuWeiWaiMapper;
 
 	@Transactional(readOnly = false)
 	public void delete(BusinessOmmoChaiDan businessOmmoChaiDan) {
+		Integer i = businessChuKuWeiWaiMapper.hasByChaidanid(businessOmmoChaiDan.getId());
+		if(i!=null){
+			throw new RuntimeException("删除失败，单号["+businessOmmoChaiDan.getCode()+"]有对应的出库单");
+		}
 		super.delete(businessOmmoChaiDan);
 		businessOmmoChaiDanMxMapper.delete(new BusinessOmmoChaiDanMx(businessOmmoChaiDan));
 		businessOmMoDetailMapper.chaidan(businessOmmoChaiDan.getWwhid(),"未拆完");
