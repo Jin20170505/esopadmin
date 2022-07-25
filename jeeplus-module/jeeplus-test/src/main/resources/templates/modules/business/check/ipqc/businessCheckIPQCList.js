@@ -23,7 +23,7 @@ $(document).ready(function() {
                //显示 内容列下拉框
     	       showColumns: true,
     	       //显示到处按钮
-    	       showExport: false,
+    	       showExport: true,
     	       //显示切换分页按钮
     	       showPaginationSwitch: false,
     	       //最低显示2行
@@ -45,7 +45,7 @@ $(document).ready(function() {
                //每页的记录行数(*)
                pageSize: 10,  
                //可供选择的每页的行数(*)
-               pageList: [10, 25, 50, 100],
+               pageList: [10, 25, 50, 100,200,500,1000,2000,'ALL'],
                //这个接口需要处理bootstrap table传递的固定参数,并返回特定格式的json数据  
                url: "${ctx}/business/check/ipqc/businessCheckIPQC/data",
                //默认值为 'limit',传给服务端的参数为：limit, offset, search, sort, order Else

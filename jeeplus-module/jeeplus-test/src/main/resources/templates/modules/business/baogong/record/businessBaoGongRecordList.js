@@ -45,7 +45,7 @@ $(document).ready(function() {
                //每页的记录行数(*)
                pageSize: 50,
                //可供选择的每页的行数(*)
-               pageList: [50, 100,150, 200,300,500],
+               pageList: [50, 100,150, 200,300,500,1000,2000,'ALL'],
                //这个接口需要处理bootstrap table传递的固定参数,并返回特定格式的json数据  
                url: "${ctx}/business/baogong/record/businessBaoGongRecord/data",
                //默认值为 'limit',传给服务端的参数为：limit, offset, search, sort, order Else

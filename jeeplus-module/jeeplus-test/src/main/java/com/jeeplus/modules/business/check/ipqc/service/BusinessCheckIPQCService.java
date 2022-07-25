@@ -84,7 +84,7 @@ public class BusinessCheckIPQCService extends CrudService<BusinessCheckIPQCMappe
 						String remarks,String cinvcode,String cinvname,Double jynum,Double hgnum,Double bhgnum,Double blnum){
 		BusinessCheckIPQC ipqc = new BusinessCheckIPQC();
 		ipqc.setBgid(bgid).setBzhglv(hglv).setBgcode(bgcode).setBghid(bghid).setSiteid(siteid).setSitename(sitename);
-		BusinessBaoGongOrder order = businessBaoGongOrderMapper.get(bghid);
+		BusinessBaoGongOrder order = businessBaoGongOrderMapper.get(bgid);
 		if(order==null){
 			throw new RuntimeException("报工单不存在");
 		}

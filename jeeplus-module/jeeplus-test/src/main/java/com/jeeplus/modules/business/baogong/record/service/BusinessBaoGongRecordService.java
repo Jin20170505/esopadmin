@@ -14,6 +14,7 @@ import com.jeeplus.modules.business.baogong.order.mapper.BusinessBaoGongOrderMin
 import com.jeeplus.modules.business.baogong.order.service.BusinessBaoGongOrderService;
 import com.jeeplus.modules.sys.entity.User;
 import com.jeeplus.modules.sys.mapper.UserMapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -90,6 +91,13 @@ public class BusinessBaoGongRecordService extends CrudService<BusinessBaoGongRec
 		double sum = donenum + hgnum;
 		if(sum>order.getNum()){
 			throw new RuntimeException("报工数量超出工单数量");
+		}
+		String pregxid = businessBaoGongOrderMingXiMapper.getPreHid(bgid,bghid,mingXi.getNo());
+		if(StringUtils.isNotEmpty(pregxid)){
+			double prenum = getDoneSumNum(bgid,pregxid);
+			if(prenum<sum){
+				throw new RuntimeException("本道工序报工数量超出上道工序已报工数量，当前本道工序可报数量："+(prenum - donenum));
+			}
 		}
 		BusinessBaoGongRecord record = new BusinessBaoGongRecord();
 		record.setBatchno(order.getBatchno());

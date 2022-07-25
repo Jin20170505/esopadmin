@@ -67,4 +67,5 @@ public interface BusinessBaoGongOrderMapper extends BaseMapper<BusinessBaoGongOr
     List<String> findBgidByPlanid(@Param("planid") String planid);
     @Update("update business_baogao_order set  remarks = #{remarks} where id = #{rid}")
     void updateRemarks(@Param("rid") String rid,@Param("remarks") String remarks);
+
 }

@@ -29,8 +29,11 @@ public interface BusinessBaoGongOrderMingXiMapper extends BaseMapper<BusinessBao
     void uncompleteBg(@Param("id") String id);
     /** 报工最后一道工序ID */
     @Select("select id from business_baogong_order_mingxi where pid = #{bgid} and no = (select max(no) from business_baogong_order_mingxi where pid = #{bgid}) order by create_date desc limit 1")
-    String lastestGxHId(String bgid);
+    String lastestGxHId(@Param("bgid") String bgid);
 
+    /** 获取本次报工工序的上一道工序 */
+    @Select("select id from business_baogong_order_mingxi where pid = #{bgid} and id !=#{bghid} and no < #{no} order by no asc limit 1")
+    String getPreHid(@Param("bgid")String bgid,@Param("bghid") String bghid,@Param("no") Integer no);
     /** 合格率 */
     List<BaoGongItem> findBaoGongItemHgLv(@Param("bgid") String bgid);
 }
