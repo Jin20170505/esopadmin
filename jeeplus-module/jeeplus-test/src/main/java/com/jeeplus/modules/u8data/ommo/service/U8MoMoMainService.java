@@ -17,4 +17,5 @@ public class U8MoMoMainService extends CrudService<U8OmMoMainMapper, U8OmMoMain>
     public List<U8OmMoMain> findList(U8OmMoMain u8OmMoMain){
         return mapper.findList(u8OmMoMain);
     }
+
 }

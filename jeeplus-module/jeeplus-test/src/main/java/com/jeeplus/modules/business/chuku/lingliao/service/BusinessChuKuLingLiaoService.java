@@ -13,6 +13,7 @@ import com.jeeplus.modules.base.cangku.mapper.BaseCangKuMapper;
 import com.jeeplus.modules.base.huowei.entity.BaseHuoWei;
 import com.jeeplus.modules.sys.entity.User;
 import com.jeeplus.modules.sys.utils.UserUtils;
+import com.jeeplus.modules.u8data.morder.service.U8MorderService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.jeeplus.u8.webservice.U8Post;
@@ -58,7 +59,16 @@ public class BusinessChuKuLingLiaoService extends CrudService<BusinessChuKuLingL
 	}
 	
 	@Transactional(readOnly = false)
-	public synchronized void save(BusinessChuKuLingLiao businessChuKuLingLiao) {
+	public synchronized void save(BusinessChuKuLingLiao businessChuKuLingLiao,Double scnum) {
+		// TODO 校验出库工单数量 是否超出 生产订单数量
+		Double donenum = mapper.getDoneSumNum(businessChuKuLingLiao.getSccode(),businessChuKuLingLiao.getSclinecode());
+		if(donenum ==null){
+			donenum = 0.0;
+		}
+		donenum = donenum + businessChuKuLingLiao.getNum();
+		if(donenum>scnum){
+			throw new RuntimeException("领料数量大于生产订单数量,请删除报工单、计划工单重新下计划。");
+		}
 		boolean flag = false;
 		if(StringUtils.isEmpty(businessChuKuLingLiao.getCode())){
 			String code = getCurrentCode(DateUtils.getDate("yyyyMMdd"));
@@ -152,7 +162,16 @@ public class BusinessChuKuLingLiaoService extends CrudService<BusinessChuKuLingL
 	@Transactional(readOnly = false)
 	public void lingliao(String bgid,String bgcode,String sccode,String scline,String plancode,String planid,
 						 String cinvcode,String cinvname,String cinvstd,String unit,Double num,
-						 String ckid,String remarks,String userid, String mxJson){
+						 String ckid,String remarks,String userid, String mxJson,Double scnum){
+		// TODO 校验出库工单数量 是否超出 生产订单数量
+		Double donenum = mapper.getDoneSumNum(sccode,scline);
+		if(donenum ==null){
+			donenum = 0.0;
+		}
+		donenum = donenum + num;
+		if(donenum>scnum){
+			throw new RuntimeException("领料数量大于生产订单数量,请删除报工单、计划工单重新下计划。");
+		}
 		BusinessChuKuLingLiao lingLiao = new BusinessChuKuLingLiao();
 		lingLiao.setPlancode(plancode).setPlanid(planid).setBgcode(bgcode);
 		lingLiao.setBgid(bgid);lingLiao.setSccode(sccode);lingLiao.setSclinecode(scline).setCinvcode(cinvcode);
@@ -180,7 +199,7 @@ public class BusinessChuKuLingLiaoService extends CrudService<BusinessChuKuLingL
 			mx.setId("");mx.setDelFlag("0");
 			lingLiao.getBusinessChuKuLingLiaoMxList().add(mx);
 		});
-		save(lingLiao);
+		saveU8(lingLiao);
 		try {
 			String ckcdoe = cangKuMapper.getCodeById(ckid);
 			//TODO 向U8抛数据 （材料出库）
@@ -216,7 +235,33 @@ public class BusinessChuKuLingLiaoService extends CrudService<BusinessChuKuLingL
 			throw new RuntimeException("数据传U8出错，原因："+e.getMessage());
 		}
 	}
-
+	@Transactional(readOnly = false)
+	public synchronized void saveU8(BusinessChuKuLingLiao businessChuKuLingLiao) {
+		boolean flag = false;
+		if(StringUtils.isEmpty(businessChuKuLingLiao.getCode())){
+			String code = getCurrentCode(DateUtils.getDate("yyyyMMdd"));
+			businessChuKuLingLiao.setCode(code);
+			flag = true;
+		}
+		super.save(businessChuKuLingLiao);
+		for (BusinessChuKuLingLiaoMx businessChuKuLingLiaoMx : businessChuKuLingLiao.getBusinessChuKuLingLiaoMxList()){
+			if (businessChuKuLingLiaoMx.getId() == null){
+				continue;
+			}
+			if (BusinessChuKuLingLiaoMx.DEL_FLAG_NORMAL.equals(businessChuKuLingLiaoMx.getDelFlag())){
+				if (StringUtils.isBlank(businessChuKuLingLiaoMx.getId())){
+					businessChuKuLingLiaoMx.setP(businessChuKuLingLiao);
+					businessChuKuLingLiaoMx.preInsert();
+					businessChuKuLingLiaoMxMapper.insert(businessChuKuLingLiaoMx);
+				}else{
+					businessChuKuLingLiaoMx.preUpdate();
+					businessChuKuLingLiaoMxMapper.update(businessChuKuLingLiaoMx);
+				}
+			}else{
+				businessChuKuLingLiaoMxMapper.delete(businessChuKuLingLiaoMx);
+			}
+		}
+	}
 	public void u8in(String rid) throws Exception {
 		BusinessChuKuLingLiao lingLiao = get(rid);
 		String ckcdoe = cangKuMapper.getCodeById(lingLiao.getCk().getId());

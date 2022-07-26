@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
+import com.jeeplus.modules.u8data.morder.service.U8MorderService;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,6 +95,8 @@ public class BusinessChuKuLingLiaoController extends BaseController {
 		model.addAttribute("businessChuKuLingLiao", businessChuKuLingLiao);
 		return "modules/business/chuku/lingliao/cailiaochuku";
 	}
+	@Autowired
+	private U8MorderService u8MorderService;
 
 	/**
 	 * 保存材料出库单
@@ -112,8 +115,10 @@ public class BusinessChuKuLingLiaoController extends BaseController {
 			j.setMsg(errMsg);
 			return j;
 		}
+		Double scnum = u8MorderService.getSumNum(businessChuKuLingLiao.getSccode(),businessChuKuLingLiao.getSclinecode());
+
 		//新增或编辑表单保存
-		businessChuKuLingLiaoService.save(businessChuKuLingLiao);//保存
+		businessChuKuLingLiaoService.save(businessChuKuLingLiao,scnum);//保存
 		j.setSuccess(true);
 		j.setMsg("保存材料出库单成功");
 		return j;

@@ -482,6 +482,9 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		Double gdnum = mingXi.getNum();
 		// 已出工单料数量
 		Double donenum = businessChuKuLingLiaoMapper.getDoneSumNum(mingXi.getP().getCode(),mingXi.getNo().toString());
+		if(donenum==null){
+			donenum = 0.0;
+		}
 		// 未出料工单数量
 		if(donenum>=gdnum){
 			throw new RuntimeException("已领料工单数已满。（领料的工单数大于或等于订单数），请核实U8");

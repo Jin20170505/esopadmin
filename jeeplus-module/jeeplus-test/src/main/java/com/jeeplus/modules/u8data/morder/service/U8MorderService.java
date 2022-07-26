@@ -22,4 +22,13 @@ public class U8MorderService extends CrudService<U8MorderMapper, U8Morder> {
         return mapper.getMainInfo(moId);
     }
 
+
+    public Double getSumNum(String sccode,String scline){
+        return mapper.getSumNum(sccode, scline);
+    }
+
+    public Double getRkNum(String sccode,String scline){
+        return mapper.getRkNum(sccode, scline);
+    }
+
 }

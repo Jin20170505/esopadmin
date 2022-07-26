@@ -4,6 +4,7 @@ import com.jeeplus.common.json.AjaxJson;
 import com.jeeplus.modules.api.bean.chuku.LingLiaoBean;
 import com.jeeplus.modules.business.baogong.order.service.BusinessBaoGongOrderService;
 import com.jeeplus.modules.business.chuku.lingliao.service.BusinessChuKuLingLiaoService;
+import com.jeeplus.modules.u8data.morder.service.U8MorderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,14 +36,17 @@ public class ApiLingLiaoChuKuController {
         return json;
     }
 
+    @Autowired
+    private U8MorderService u8MorderService;
     @RequestMapping("do")
     public AjaxJson lingliaochuku(String bgid,String bgcode,String sccode,String scline,String plancode,String planid,
                                   String cinvcode,String cinvname,String cinvstd,String unit,Double num,
                                   String ckid,String remarks,String userid, String mxJson){
         AjaxJson json = new AjaxJson();
         try{
+           Double scnum = u8MorderService.getSumNum(sccode,scline);
             businessChuKuLingLiaoService.lingliao(bgid,bgcode,sccode,scline,plancode, planid,
-                    cinvcode,cinvname,cinvstd,unit,num,ckid,remarks, userid,mxJson);
+                    cinvcode,cinvname,cinvstd,unit,num,ckid,remarks, userid,mxJson,scnum);
             json.setSuccess(true);
             json.setMsg("材料出库成功。");
         }catch (Exception e){
