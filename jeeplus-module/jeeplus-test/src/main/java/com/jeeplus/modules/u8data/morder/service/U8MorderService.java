@@ -31,4 +31,12 @@ public class U8MorderService extends CrudService<U8MorderMapper, U8Morder> {
         return mapper.getRkNum(sccode, scline);
     }
 
+
+    public String getOrderStatus(String schid){
+        return mapper.getOrderStatus(schid);
+    }
+
+    public String getOrderStatusByCodeAndNo(String sccode,String scline){
+        return mapper.getOrderStatusByCodeAndNo(sccode,scline);
+    }
 }

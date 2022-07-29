@@ -1,10 +1,12 @@
 package com.jeeplus.modules.api.ruku;
 
 import com.jeeplus.common.json.AjaxJson;
+import com.jeeplus.modules.api.bean.ruku.ProductRuKuBean;
 import com.jeeplus.modules.business.baogong.order.service.BusinessBaoGongOrderService;
 import com.jeeplus.modules.business.baogong.record.service.BusinessBaoGongRecordService;
 import com.jeeplus.modules.business.check.ipqc.mapper.BusinessCheckIPQCMapper;
 import com.jeeplus.modules.business.ruku.product.service.BusinessRuKuProductService;
+import com.jeeplus.modules.u8data.morder.service.U8MorderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +24,8 @@ public class ApiProductController {
     private BusinessRuKuProductService businessRuKuProductService;
     @Autowired
     private BusinessCheckIPQCMapper businessCheckIPQCMapper;
+    @Autowired
+    private U8MorderService u8MorderService;
     /**
      * 扫报工二维码 查询产品入库信息
      * @param bgcode 报工单号
@@ -31,7 +35,14 @@ public class ApiProductController {
     public AjaxJson getProductRuKuInfo(String bgcode){
         AjaxJson json = new AjaxJson();
         try {
-            json.put("info",businessBaoGongOrderService.getRuKuInfo(bgcode));
+            ProductRuKuBean bean = businessBaoGongOrderService.getRuKuInfo(bgcode);
+            String status = u8MorderService.getOrderStatusByCodeAndNo(bean.getSccode(),bean.getScline());
+            if(!"3".equals(status)){
+                json.setMsg("本单在ERP系统不是【审核】状态，不可操作");
+                json.setSuccess(false);
+                return json;
+            }
+            json.put("info",bean);
             json.setSuccess(true);
             json.setMsg("查询成功");
         }catch (Exception e){

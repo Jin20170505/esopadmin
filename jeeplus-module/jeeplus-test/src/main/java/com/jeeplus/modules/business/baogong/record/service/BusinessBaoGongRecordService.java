@@ -92,13 +92,13 @@ public class BusinessBaoGongRecordService extends CrudService<BusinessBaoGongRec
 		if(sum>order.getNum()){
 			throw new RuntimeException("报工数量超出工单数量");
 		}
-		String pregxid = businessBaoGongOrderMingXiMapper.getPreHid(bgid,bghid,mingXi.getNo());
-		if(StringUtils.isNotEmpty(pregxid)){
-			double prenum = getDoneSumNum(bgid,pregxid);
-			if(prenum<sum){
-				throw new RuntimeException("本道工序报工数量超出上道工序已报工数量，当前本道工序可报数量："+(prenum - donenum));
-			}
-		}
+//		String pregxid = businessBaoGongOrderMingXiMapper.getPreHid(bgid,bghid,mingXi.getNo());
+//		if(StringUtils.isNotEmpty(pregxid)){
+//			double prenum = getDoneSumNum(bgid,pregxid);
+//			if(prenum<sum){
+//				throw new RuntimeException("本道工序报工数量超出上道工序已报工数量，当前本道工序可报数量："+(prenum - donenum));
+//			}
+//		}
 		BusinessBaoGongRecord record = new BusinessBaoGongRecord();
 		record.setBatchno(order.getBatchno());
 		record.setDouser(dou);

@@ -44,6 +44,12 @@ public class ApiLingLiaoChuKuController {
                                   String ckid,String remarks,String userid, String mxJson){
         AjaxJson json = new AjaxJson();
         try{
+            String status = u8MorderService.getOrderStatusByCodeAndNo(sccode,scline);
+            if(!"3".equals(status)){
+                json.setMsg("本单在ERP系统不是【审核】状态，不可操作");
+                json.setSuccess(false);
+                return json;
+            }
            Double scnum = u8MorderService.getSumNum(sccode,scline);
             businessChuKuLingLiaoService.lingliao(bgid,bgcode,sccode,scline,plancode, planid,
                     cinvcode,cinvname,cinvstd,unit,num,ckid,remarks, userid,mxJson,scnum);

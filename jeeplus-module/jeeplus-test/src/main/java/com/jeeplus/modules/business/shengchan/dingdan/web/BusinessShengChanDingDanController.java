@@ -307,6 +307,12 @@ public class BusinessShengChanDingDanController extends BaseController {
 	public AjaxJson chaidan(String rid,Double num){
 		AjaxJson json = new AjaxJson();
 		try {
+			String status = u8MorderService.getOrderStatus(rid);
+			if(!"3".equals(status)){
+				json.setMsg("本单在ERP系统不是【审核】状态，不可操作");
+				json.setSuccess(false);
+				return json;
+			}
 			businessShengChanDingDanService.chaidan(rid,num);
 			businessShengChanDingDanService.weichaCheck(rid);
 			json.setMsg("生成成功");
@@ -324,6 +330,15 @@ public class BusinessShengChanDingDanController extends BaseController {
 		AjaxJson json = new AjaxJson();
 		StringBuffer sb  = new StringBuffer();
 		try {
+			List<String> ridss = Arrays.asList(rids.split(","));
+			for(String rid :ridss){
+				String status = u8MorderService.getOrderStatus(rid);
+				if(!"3".equals(status)){
+					json.setMsg("本单在ERP系统不是【审核】状态，不可操作");
+					json.setSuccess(false);
+					return json;
+				}
+			}
 			Arrays.asList(rids.split(",")).forEach(rid->{
 				String rs =businessShengChanDingDanService.doPlan(rid);
 				if(rs.length()>1){
@@ -359,6 +374,12 @@ public class BusinessShengChanDingDanController extends BaseController {
 	public AjaxJson handlePlan(String rid,Double gdnum,Double nonum,Double num){
 		AjaxJson json = new AjaxJson();
 		try {
+			String status = u8MorderService.getOrderStatus(rid);
+			if(!"3".equals(status)){
+				json.setMsg("本单在ERP系统不是【审核】状态，不可操作.");
+				json.setSuccess(false);
+				return json;
+			}
 			businessShengChanDingDanService.handlerPlan(rid,gdnum,nonum,num);
 			if(nonum<=num){
 				businessShengChanDingDanService.weichaCheck(rid);

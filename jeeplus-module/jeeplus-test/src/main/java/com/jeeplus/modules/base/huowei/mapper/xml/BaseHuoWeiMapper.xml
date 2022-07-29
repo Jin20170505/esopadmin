@@ -104,7 +104,7 @@
 			max_v,
 			max_w
 		) VALUES (
-			#{id},
+			#{code},
 			#{createBy.id},
 			#{createDate},
 			#{updateBy.id},

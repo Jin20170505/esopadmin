@@ -1,8 +1,10 @@
 package com.jeeplus.modules.api.baogong;
 
 import com.jeeplus.common.json.AjaxJson;
+import com.jeeplus.modules.api.bean.baogong.BaoGongBean;
 import com.jeeplus.modules.business.baogong.order.service.BusinessBaoGongOrderService;
 import com.jeeplus.modules.business.baogong.record.service.BusinessBaoGongRecordService;
+import com.jeeplus.modules.u8data.morder.service.U8MorderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,7 +16,8 @@ public class ApiBaoGongController {
     private BusinessBaoGongOrderService businessBaoGongOrderService;
     @Autowired
     private BusinessBaoGongRecordService businessBaoGongRecordService;
-
+    @Autowired
+    private U8MorderService u8MorderService;
     /**
      * 扫报工二维码 查询报工信息
      * @param bgcode 报工单号
@@ -24,7 +27,14 @@ public class ApiBaoGongController {
     public AjaxJson getBaoGongInfo(String bgcode){
         AjaxJson json = new AjaxJson();
         try {
-            json.put("info",businessBaoGongOrderService.getBaoGongInfo(bgcode));
+            BaoGongBean bean = businessBaoGongOrderService.getBaoGongInfo(bgcode);
+            String status = u8MorderService.getOrderStatusByCodeAndNo(bean.getSccode(),bean.getScline());
+            if(!"3".equals(status)){
+                json.setMsg("本单在ERP系统不是【已审核】状态，不可操作");
+                json.setSuccess(false);
+                return json;
+            }
+            json.put("info",bean);
             json.setSuccess(true);
             json.setMsg("查询成功");
         }catch (Exception e){
