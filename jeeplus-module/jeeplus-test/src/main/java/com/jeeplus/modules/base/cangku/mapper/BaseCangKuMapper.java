@@ -26,4 +26,6 @@ public interface BaseCangKuMapper extends BaseMapper<BaseCangKu> {
 	String getCodeById(@Param("id") String id);
 	@Select("select id from base_cangku where code = #{code}")
     String getIdByCode(@Param("code") String code);
+
+	void batchInsert(List<BaseCangKu> list);
 }

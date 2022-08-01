@@ -52,6 +52,11 @@ layout("/include/_container.html", {title:"列表", parent:"仓库"}){
 
 	<!-- 工具栏 -->
 	<div id="toolbar">
+			<% if(shiro.hasPermission("base:cangku:baseCangKu:sychu8") ){ %>
+				<button  class="btn btn-custom waves-effect w-xs waves-light" onclick="sychu8()">
+					<i class="fa fa-plus"></i> ERP同步
+				</button>
+			<% } %>
 			 <% if(shiro.hasPermission("base:cangku:baseCangKu:add") ){ %>
 			 	<button id="add" class="btn btn-custom waves-effect w-xs waves-light" onclick="add()">
 					<i class="fa fa-plus"></i> 新建
@@ -68,14 +73,14 @@ layout("/include/_container.html", {title:"列表", parent:"仓库"}){
 	        	</button>
 			<% } %>
 			 <% if(shiro.hasPermission("base:cangku:baseCangKu:import") ){ %>
-				<button id="import"  class="btn btn-white waves-effect w-xs waves-light" >
-					<i class="fa fa-upload"></i> 导入
-				</button>
+<!--				<button id="import"  class="btn btn-white waves-effect w-xs waves-light" >-->
+<!--					<i class="fa fa-upload"></i> 导入-->
+<!--				</button>-->
 			<% } %>
 			 <% if(shiro.hasPermission("base:cangku:baseCangKu:export") ){ %>
-	        	<button id="export" class="btn btn-white waves-effect w-xs waves-light">
-					<i class="fa fa-download"></i> 导出
-				</button>
+<!--	        	<button id="export" class="btn btn-white waves-effect w-xs waves-light">-->
+<!--					<i class="fa fa-download"></i> 导出-->
+<!--				</button>-->
 			 <% } %>
 		    </div>
 		

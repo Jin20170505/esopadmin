@@ -35,11 +35,6 @@
         </dependency>
         <dependency>
             <groupId>org.jeeplus</groupId>
-            <artifactId>common-wx</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jeeplus</groupId>
             <artifactId>jeeplus-bpm</artifactId>
             <version>${project.parent.version}</version>
         </dependency>

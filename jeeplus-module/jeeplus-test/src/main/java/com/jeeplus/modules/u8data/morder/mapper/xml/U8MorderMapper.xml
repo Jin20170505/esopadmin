@@ -31,6 +31,14 @@
 
     </sql>
 
+    <select id="findByCreateDate" resultType="U8Morder">
+        select
+        <include refid="orderColumns"/>
+        from YT_API_ERP_view_Morder a
+        <include refid="orderJoins"/>
+        where  a.createDate between #{modifyTime} and #{nowTime}
+    </select>
+
     <select id="getMainInfo" resultType="U8Morder">
         select top(1)
         <include refid="orderColumns"/>

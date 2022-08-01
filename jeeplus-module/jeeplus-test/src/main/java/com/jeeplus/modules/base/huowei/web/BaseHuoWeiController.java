@@ -3,15 +3,14 @@
  */
 package com.jeeplus.modules.base.huowei.web;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
-
+import com.jeeplus.modules.u8data.warehouse.entity.U8Position;
+import com.jeeplus.modules.u8data.warehouse.service.U8PositionService;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -68,7 +66,44 @@ public class BaseHuoWeiController extends BaseController {
 		model.addAttribute("baseHuoWei", baseHuoWei);
 		return "modules/base/huowei/baseHuoWeiList";
 	}
-	
+
+	/**
+	 * 货位标签打印
+	 * @param rids
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("gotoprint")
+	public String gotoprint(String rids,Model model){
+		model.addAttribute("beans",baseHuoWeiService.findPrintInfo(rids));
+		return "modules/base/huowei/huoweiprint";
+	}
+
+	@Autowired
+	private U8PositionService u8PositionService;
+
+	@ResponseBody
+	@RequestMapping("sychu8")
+	public AjaxJson sychU8(){
+		AjaxJson json = new AjaxJson();
+		try{
+			U8Position position = new U8Position();
+			List<U8Position> data = u8PositionService.findList(position);
+			if(data==null){
+				json.setMsg("同步成功(ERP货位数据空)");
+				json.setSuccess(true);
+				return json;
+			}
+			baseHuoWeiService.sychU8(data);
+			json.setMsg("同步成功");
+			json.setSuccess(true);
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setSuccess(false);
+			json.setMsg("同步失败,原因："+e.getMessage());
+		}
+		return json;
+	}
 		/**
 	 * 货位列表数据
 	 */

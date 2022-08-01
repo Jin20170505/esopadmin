@@ -1,6 +1,7 @@
 package com.jeeplus.modules.u8data.warehouse.entity;
 
 import com.jeeplus.core.persistence.DataEntity;
+import com.jeeplus.modules.u8data.prouting.entity.U8Prouting;
 
 import java.util.Date;
 
@@ -20,6 +21,8 @@ public class U8WareHouse extends DataEntity<U8WareHouse> {
     private String iFrequency;//  	盘点周期 ,
     private String cFrequency;//  	盘点周期单位
 
+    private Date modifyTime;
+    private Date nowTime;
     public Date getdModifyDate() {
         return dModifyDate;
     }
@@ -116,6 +119,23 @@ public class U8WareHouse extends DataEntity<U8WareHouse> {
 
     public U8WareHouse setcFrequency(String cFrequency) {
         this.cFrequency = cFrequency;
+        return this;
+    }
+    public Date getModifyTime() {
+        return modifyTime;
+    }
+
+    public U8WareHouse setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+        return this;
+    }
+
+    public Date getNowTime() {
+        return nowTime;
+    }
+
+    public U8WareHouse setNowTime(Date nowTime) {
+        this.nowTime = nowTime;
         return this;
     }
 }

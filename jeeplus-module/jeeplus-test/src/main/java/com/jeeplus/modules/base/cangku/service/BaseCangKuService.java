@@ -7,7 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Lists;
+import com.jeeplus.common.utils.DateUtils;
 import com.jeeplus.modules.api.bean.ckandhw.CkBean;
+import com.jeeplus.modules.base.route.entity.BaseRoteMain;
+import com.jeeplus.modules.base.route.entity.BaseRoute;
+import com.jeeplus.modules.u8data.warehouse.entity.U8WareHouse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,5 +63,46 @@ public class BaseCangKuService extends CrudService<BaseCangKuMapper, BaseCangKu>
 			ckBeans.add(ckBean);
 		});
 		return ckBeans;
+	}
+
+	@Transactional(readOnly = false)
+	public void sychU8(List<U8WareHouse> list){
+		List<BaseCangKu> data = new ArrayList<>(list.size());
+		list.forEach(w->{
+			BaseCangKu cangKu = new BaseCangKu();
+			cangKu.preInsert();
+			cangKu.setId(w.getcWhCode());
+			cangKu.setName(w.getcWhName());
+			cangKu.setCode(w.getcWhCode());
+			cangKu.setAddress(w.getcWhAddress());
+			cangKu.setUsehw(w.getbWhPos());
+			cangKu.setMaster(w.getcWhPerson());
+			cangKu.setTel(w.getcWhPhone());
+			if(w.getdWhEndDate()==null){
+				cangKu.setIndate(DateUtils.parseDate("2050-12-31 23:59:59"));
+			}else {
+				cangKu.setIndate(w.getdWhEndDate());
+			}
+			data.add(cangKu);
+		});
+		saveU8Data(data);
+	}
+
+	@Transactional(readOnly = false)
+	public void saveU8Data(List<BaseCangKu> data){
+		if(!data.isEmpty()){
+			int i = 0;
+			int j = 0;
+			int mlen = data.size();
+			while (i<mlen){
+				j = i;
+				i = i+300;
+				if(i>=mlen){
+					mapper.batchInsert(data.subList(j,mlen));
+				}else {
+					mapper.batchInsert(data.subList(j,i));
+				}
+			}
+		}
 	}
 }

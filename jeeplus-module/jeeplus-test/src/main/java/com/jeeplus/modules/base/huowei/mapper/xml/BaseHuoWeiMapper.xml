@@ -47,14 +47,10 @@
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
 			<if test="code != null and code != ''">
-				AND a.code = #{code}
+				AND a.code like concat('%',#{code},'%')
 			</if>
 			<if test="name != null and name != ''">
-				AND a.name LIKE
-				    <if test="_databaseId == 'postgre'">'%'||#{name}||'%'</if>
-					<if test="_databaseId == 'oracle'">'%'||#{name}||'%'</if>
-					<if test="_databaseId == 'mssql'">'%'+#{name}+'%'</if>
-					<if test="_databaseId == 'mysql'">concat('%',#{name},'%')</if>
+				AND a.name LIKE concat('%',#{name},'%')
 			</if>
 			<if test="ck != null and ck.id != null and ck.id != ''">
 				AND a.cangku = #{ck.id}
@@ -65,7 +61,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.update_date DESC
+				ORDER BY a.code asc
 			</otherwise>
 		</choose>
 	</select>
@@ -88,7 +84,46 @@
 			</otherwise>
 		</choose>
 	</select>
-	
+	<insert id="batchInsert" parameterType="java.util.List">
+		INSERT INTO base_huowei(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			code,
+			name,
+			cangku,
+			max_v,
+			max_w
+		) VALUES
+		<foreach collection="list" separator="," item="item">
+			(
+			#{item.id},
+			#{item.createBy.id},
+			#{item.createDate},
+			#{item.updateBy.id},
+			#{item.updateDate},
+			#{item.remarks},
+			'0',
+			#{item.code},
+			#{item.name},
+			#{item.ck.id},
+			#{item.maxv},
+			#{item.maxw}
+			)
+		</foreach>
+		on duplicate key update
+		id = values(id),
+		update_date= VALUES(update_date),
+		code=VALUES(code),
+		name=VALUES(name),
+		cangku = values(cangku),
+		max_v = values(max_v),
+		max_w = values(max_w)
+	</insert>
 	<insert id="insert">
 		INSERT INTO base_huowei(
 			id,

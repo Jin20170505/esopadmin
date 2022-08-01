@@ -47,6 +47,11 @@ layout("/include/_container.html", {title:"列表", parent:"货位"}){
 
 	<!-- 工具栏 -->
 	<div id="toolbar">
+			<% if(shiro.hasPermission("base:huowei:baseHuoWei:sychu8") ){ %>
+			<button id="sychu8" class="btn btn-custom waves-effect w-xs waves-light" onclick="sychu8()">
+				<i class="fa fa-refresh"></i> 同步ERP
+			</button>
+			<% } %>
 			 <% if(shiro.hasPermission("base:huowei:baseHuoWei:add") ){ %>
 			 	<button id="add" class="btn btn-custom waves-effect w-xs waves-light" onclick="add()">
 					<i class="fa fa-plus"></i> 新建
@@ -62,15 +67,20 @@ layout("/include/_container.html", {title:"列表", parent:"货位"}){
 	            	<i class="fa fa-remove"></i> 删除
 	        	</button>
 			<% } %>
+			<% if(shiro.hasPermission("base:huowei:baseHuoWei:print") ){ %>
+			<button id="print" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="printHuowei()">
+				<i class="fa fa-print"></i> 打印货位标签
+			</button>
+			<% } %>
 			 <% if(shiro.hasPermission("base:huowei:baseHuoWei:import") ){ %>
-				<button id="import"  class="btn btn-white waves-effect w-xs waves-light" >
-					<i class="fa fa-upload"></i> 导入
-				</button>
+<!--				<button id="import"  class="btn btn-white waves-effect w-xs waves-light" >-->
+<!--					<i class="fa fa-upload"></i> 导入-->
+<!--				</button>-->
 			<% } %>
 			 <% if(shiro.hasPermission("base:huowei:baseHuoWei:export") ){ %>
-	        	<button id="export" class="btn btn-white waves-effect w-xs waves-light">
-					<i class="fa fa-download"></i> 导出
-				</button>
+<!--	        	<button id="export" class="btn btn-white waves-effect w-xs waves-light">-->
+<!--					<i class="fa fa-download"></i> 导出-->
+<!--				</button>-->
 			 <% } %>
 		    </div>
 		

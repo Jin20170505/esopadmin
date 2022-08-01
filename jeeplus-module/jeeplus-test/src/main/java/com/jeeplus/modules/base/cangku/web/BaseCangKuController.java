@@ -3,39 +3,36 @@
  */
 package com.jeeplus.modules.base.cangku.web;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.ConstraintViolationException;
-
-import com.jeeplus.modules.base.cangku.mapper.BaseCangKuMapper;
+import com.google.common.collect.Lists;
+import com.jeeplus.common.json.AjaxJson;
+import com.jeeplus.common.utils.DateUtils;
+import com.jeeplus.common.utils.StringUtils;
+import com.jeeplus.common.utils.excel.ExportExcel;
+import com.jeeplus.common.utils.excel.ImportExcel;
+import com.jeeplus.common.utils.time.DateUtil;
+import com.jeeplus.core.persistence.Page;
+import com.jeeplus.core.web.BaseController;
+import com.jeeplus.modules.base.cangku.entity.BaseCangKu;
+import com.jeeplus.modules.base.cangku.service.BaseCangKuService;
+import com.jeeplus.modules.base.erp.updatetime.entity.BaseU8UpdateTime;
+import com.jeeplus.modules.base.erp.updatetime.entity.U8SynchType;
+import com.jeeplus.modules.base.erp.updatetime.service.BaseU8UpdateTimeService;
+import com.jeeplus.modules.u8data.warehouse.entity.U8WareHouse;
+import com.jeeplus.modules.u8data.warehouse.service.U8WareHouseService;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.common.collect.Lists;
-import com.jeeplus.common.utils.DateUtils;
-import com.jeeplus.common.json.AjaxJson;
-import com.jeeplus.core.persistence.Page;
-import com.jeeplus.core.web.BaseController;
-import com.jeeplus.common.utils.StringUtils;
-import com.jeeplus.common.utils.excel.ExportExcel;
-import com.jeeplus.common.utils.excel.ImportExcel;
-import com.jeeplus.modules.base.cangku.entity.BaseCangKu;
-import com.jeeplus.modules.base.cangku.service.BaseCangKuService;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 仓库档案Controller
@@ -69,7 +66,46 @@ public class BaseCangKuController extends BaseController {
 		model.addAttribute("baseCangKu", baseCangKu);
 		return "modules/base/cangku/baseCangKuList";
 	}
-	
+
+	@Autowired
+	private U8WareHouseService u8WareHouseService;
+	@Autowired
+	private BaseU8UpdateTimeService baseU8UpdateTimeService;
+	@ResponseBody
+	@RequestMapping("sychu8")
+	public AjaxJson sychU8(){
+		AjaxJson json = new AjaxJson();
+		try{
+			BaseU8UpdateTime time = baseU8UpdateTimeService.getByCode(U8SynchType.CANGKU.getCode());
+			Date now = new Date();
+			if(time==null){
+				time = new BaseU8UpdateTime();
+				time.setCode(U8SynchType.CANGKU.getCode());
+				time.setName(U8SynchType.CANGKU.getName());
+				time.setLastTime(DateUtil.addDays(now,-1000));
+			}
+			U8WareHouse house = new U8WareHouse();
+			house.setNowTime(now).setModifyTime(time.getLastTime());
+			List<U8WareHouse> data = u8WareHouseService.findList(house);
+			if(data==null){
+				time.setLastTime(now);
+				baseU8UpdateTimeService.save(time);
+				json.setMsg("同步成功(ERP仓库数据空)");
+				json.setSuccess(true);
+				return json;
+			}
+			baseCangKuService.sychU8(data);
+			time.setLastTime(now);
+			baseU8UpdateTimeService.save(time);
+			json.setMsg("同步成功");
+			json.setSuccess(true);
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setSuccess(false);
+			json.setMsg("同步失败,原因："+e.getMessage());
+		}
+		return json;
+	}
 		/**
 	 * 仓库列表数据
 	 */

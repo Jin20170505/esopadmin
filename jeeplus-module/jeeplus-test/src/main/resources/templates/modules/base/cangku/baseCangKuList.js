@@ -264,7 +264,21 @@ $(document).ready(function() {
             return row.id
         });
     }
-
+    /** 同步ERP */
+    function sychu8(){
+        jp.confirm('确认同步ERP数据吗？', function(){
+		var index =jp.loading();
+		jp.get("${ctx}/base/cangku/baseCangKu/sychu8", function(data){
+				if(data.success){
+					refresh();
+					jp.toastr_success(data.msg);
+				}else{
+					jp.toastr_error(data.msg);
+				}
+				jp.close(index);
+			})
+	 })
+    }
   //删除
   function del(ids){
      if(!ids){

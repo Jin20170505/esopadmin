@@ -3,6 +3,7 @@
  */
 package com.jeeplus.modules.business.product.archive.web;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
+import com.jeeplus.common.utils.time.DateUtil;
+import com.jeeplus.modules.base.erp.updatetime.entity.BaseU8UpdateTime;
+import com.jeeplus.modules.base.erp.updatetime.entity.U8SynchType;
+import com.jeeplus.modules.base.erp.updatetime.service.BaseU8UpdateTimeService;
 import com.jeeplus.modules.u8data.inventory.entity.U8Inventory;
 import com.jeeplus.modules.u8data.inventory.service.U8InventoryService;
 import org.apache.shiro.authz.annotation.Logical;
@@ -61,19 +66,36 @@ public class BusinessProductController extends BaseController {
 	}
 	@Autowired
 	private U8InventoryService u8InventoryService;
+	@Autowired
+	private BaseU8UpdateTimeService baseU8UpdateTimeService;
 	@ResponseBody
 	@RequestMapping("sychu8")
 	public AjaxJson sychU8(){
 		AjaxJson json = new AjaxJson();
 		try{
+			BaseU8UpdateTime time = baseU8UpdateTimeService.getByCode(U8SynchType.CUNHUO.getCode());
+			Date now = new Date();
+			if(time==null){
+				time = new BaseU8UpdateTime();
+				time.setCode(U8SynchType.CUNHUO.getCode());
+				time.setName(U8SynchType.CUNHUO.getName());
+				time.setLastTime(DateUtil.addDays(now,-30));
+			}
 			U8Inventory u8Inventory = new U8Inventory();
+			u8Inventory.setNowTime(now).setModifyTime(time.getLastTime());
 			List<U8Inventory> data = u8InventoryService.findList(u8Inventory);
 			if(data==null){
-				json.setMsg("同步成功(u8数据空)");
+				time.setLastTime(now);
+				baseU8UpdateTimeService.save(time);
+				json.setMsg("同步成功(ERP数据空)");
 				json.setSuccess(true);
 				return json;
 			}
 			businessProductService.sychu8(data);
+			time.setLastTime(now);
+			baseU8UpdateTimeService.save(time);
+			json.setMsg("同步成功");
+			json.setSuccess(true);
 		}catch (Exception e){
 			e.printStackTrace();
 			json.setSuccess(false);

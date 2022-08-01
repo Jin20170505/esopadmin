@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.u8data.dept.mapper.U8DeptMapper">
+    <sql id="deptColumns">
+        a.部门编号 as "code",
+        a.部门名称 as "name",
+        a.部门序号 as "no",
+        a.是否末级 as "sfmj",
+        a.备注 as "memo"
+    </sql>
+    <sql id="deptJoins">
+
+    </sql>
+
+    <select id="findList" resultType="U8Dept">
+        select
+        <include refid="deptColumns"/>
+        from YT_API_ERP_view_Department a
+        <include refid="deptJoins"/>
+    </select>
+</mapper>

@@ -32,6 +32,8 @@ public class U8Morder extends DataEntity<U8Morder> {
     private Double qty; // 生产数量
     private Double qualifiedInQty; // 入库数量
     private String status; // 状态 3为已审核
+    private Date modifyTime;
+    private Date nowTime;
 
     private Date start; // 开始日期
     private Date end; // 结束日期
@@ -267,6 +269,24 @@ public class U8Morder extends DataEntity<U8Morder> {
 
     public U8Morder setCuscinvname(String cuscinvname) {
         this.cuscinvname = cuscinvname;
+        return this;
+    }
+
+    public Date getModifyTime() {
+        return modifyTime;
+    }
+
+    public U8Morder setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+        return this;
+    }
+
+    public Date getNowTime() {
+        return nowTime;
+    }
+
+    public U8Morder setNowTime(Date nowTime) {
+        this.nowTime = nowTime;
         return this;
     }
 }

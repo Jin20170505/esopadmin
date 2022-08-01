@@ -51,14 +51,10 @@
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
 			<if test="code != null and code != ''">
-				AND a.code = #{code}
+				AND a.code like concat('%',#{code},'%')
 			</if>
 			<if test="name != null and name != ''">
-				AND a.name LIKE
-				    <if test="_databaseId == 'postgre'">'%'||#{name}||'%'</if>
-					<if test="_databaseId == 'oracle'">'%'||#{name}||'%'</if>
-					<if test="_databaseId == 'mssql'">'%'+#{name}+'%'</if>
-					<if test="_databaseId == 'mysql'">concat('%',#{name},'%')</if>
+				AND a.name LIKE concat('%',#{name},'%')
 			</if>
 			<if test="dept != null and dept.id != null and dept.id != ''">
 				AND a.dept = #{dept.id}
@@ -95,7 +91,56 @@
 			</otherwise>
 		</choose>
 	</select>
-	
+	<insert id="batchInsert" parameterType="java.util.List">
+		INSERT INTO base_cangku(
+			id,
+		    usehw,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			code,
+			name,
+			dept,
+			factory,
+			tel,
+			master,
+			address,
+			indate
+		) VALUES
+		<foreach collection="list" separator="," item="item">
+			(
+			#{item.id},
+			#{item.usehw},
+			#{item.createBy.id},
+			#{item.createDate},
+			#{item.updateBy.id},
+			#{item.updateDate},
+			#{item.remarks},
+			'0',
+			#{item.code},
+			#{item.name},
+			#{item.dept.id},
+			#{item.factory.id},
+			#{item.tel},
+			#{item.master},
+			#{item.address},
+			#{item.indate}
+			)
+		</foreach>
+		on duplicate key update
+		id = values(id),
+		update_date= VALUES(update_date),
+		code=VALUES(code),
+		name=VALUES(name),
+		usehw = values(usehw),
+		tel = values(tel),
+		master = values(master),
+		address = values(address),
+		indate = values(indate)
+	</insert>
 	<insert id="insert">
 		INSERT INTO base_cangku(
 			id,usehw,

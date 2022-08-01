@@ -20,6 +20,6 @@ public class U8InventoryService extends CrudService<U8InventoryMapper, U8Invento
     }
 
     public List<U8Inventory> findList(U8Inventory inventory){
-        return mapper.findList(new U8Inventory());
+        return mapper.findList(inventory);
     }
 }

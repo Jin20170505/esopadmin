@@ -27,4 +27,9 @@ public interface BaseHuoWeiMapper extends BaseMapper<BaseHuoWei> {
     String getCodeById(@Param("id") String id);
     @Select("select cangku from base_huowei where id = #{hwid}")
     String getckofhw(@Param("hwid") String hwid);
+
+    @Select("select code,name from base_huowei where id = #{id}")
+    BaseHuoWei getInfoById(@Param("id") String id);
+
+    void batchInsert(List<BaseHuoWei> list);
 }

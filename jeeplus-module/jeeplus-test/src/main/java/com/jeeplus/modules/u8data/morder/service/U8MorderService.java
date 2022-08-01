@@ -39,4 +39,8 @@ public class U8MorderService extends CrudService<U8MorderMapper, U8Morder> {
     public String getOrderStatusByCodeAndNo(String sccode,String scline){
         return mapper.getOrderStatusByCodeAndNo(sccode,scline);
     }
+
+    public List<U8Morder> findByCreateDate(U8Morder u8Morder){
+        return mapper.findByCreateDate(u8Morder);
+    }
 }

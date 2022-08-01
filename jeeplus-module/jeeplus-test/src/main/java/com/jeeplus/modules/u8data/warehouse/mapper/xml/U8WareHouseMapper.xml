@@ -23,5 +23,10 @@
         <include refid="houseColumns"/>
         from YT_API_ERP_view_Warehouse a
         <include refid="houseJoins"/>
+        <where>
+            <if test="modifyTime!=null">
+                and (a.dModifyDate between #{modifyTime} and #{nowTime})
+            </if>
+        </where>
     </select>
 </mapper>

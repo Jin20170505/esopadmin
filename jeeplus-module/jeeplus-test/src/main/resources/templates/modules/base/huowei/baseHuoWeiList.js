@@ -158,14 +158,13 @@ $(document).ready(function() {
 
 	  $('#baseHuoWeiTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
-            $('#remove').prop('disabled', ! $('#baseHuoWeiTable').bootstrapTable('getSelections').length);
+            $('#remove,#print').prop('disabled', ! $('#baseHuoWeiTable').bootstrapTable('getSelections').length);
             $('#edit').prop('disabled', $('#baseHuoWeiTable').bootstrapTable('getSelections').length!=1);
         });
 
 	 $("#import").click(function(){//显示导入面板
             $("#search-collapse").hide();
             $("#import-collapse").fadeToggle()
-
       })
 
 	 $("#btnImportExcel").click(function(){//导入Excel
@@ -214,8 +213,6 @@ $(document).ready(function() {
 		  $("#searchForm  .select-item").html("");
 		  refresh();
 		});
-
-		
 	});
 
 	//获取选中行
@@ -224,7 +221,31 @@ $(document).ready(function() {
             return row.id
         });
     }
-
+    function getRowSelections() {
+        return $.map($("#baseHuoWeiTable").bootstrapTable('getSelections'), function (row) {
+            return row
+        });
+    }
+    /** 打印货位  */
+    function printHuowei(){
+       var rids = getIdSelections();
+       jp.openViewDialog('货位打印', "${ctx}/base/huowei/baseHuoWei/gotoprint?rids="+rids,'90%', '90%');
+    }
+    /** 同步ERP */
+    function sychu8(){
+        jp.confirm('确认同步ERP数据吗？', function(){
+		var index =jp.loading();
+		jp.get("${ctx}/base/huowei/baseHuoWei/sychu8", function(data){
+				if(data.success){
+					refresh();
+					jp.toastr_success(data.msg);
+				}else{
+					jp.toastr_error(data.msg);
+				}
+				jp.close(index);
+			})
+	 })
+    }
   //删除
   function del(ids){
      if(!ids){

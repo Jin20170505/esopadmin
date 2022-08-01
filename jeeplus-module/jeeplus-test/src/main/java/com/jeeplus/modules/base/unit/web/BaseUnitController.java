@@ -69,7 +69,7 @@ public class BaseUnitController extends BaseController {
 			U8Unit unit = new U8Unit();
 			List<U8Unit> data = u8UnitService.findList(unit);
 			if(data==null){
-				json.setMsg("同步成功(u8数据空)");
+				json.setMsg("同步成功(ERP数据空)");
 				json.setSuccess(true);
 				return json;
 			}

@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Mapper
 @Repository
 public interface U8MorderMapper extends BaseMapper<U8Morder> {
@@ -24,4 +26,6 @@ public interface U8MorderMapper extends BaseMapper<U8Morder> {
 
     @Select("select status from YT_API_ERP_view_Morder where moCode = #{sccode} and  sortSeq= #{scline}")
     String getOrderStatusByCodeAndNo(@Param("sccode")String sccode,@Param("scline")String scline);
+
+    List<U8Morder> findByCreateDate(U8Morder u8Morder);
 }

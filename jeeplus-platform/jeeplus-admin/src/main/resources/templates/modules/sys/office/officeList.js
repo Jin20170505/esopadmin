@@ -60,7 +60,7 @@ function del(id){
 
 function sychdata() {
     jp.loading('数据同步中');
-	jp.get('${ctx}/sys/office/sychdata',function (rs) {
+	jp.get('${ctx}/u8dept/sychu8',function (rs) {
 		if(rs.success){
 			jp.success("同步成功");
 			refresh();

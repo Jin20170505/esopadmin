@@ -1,0 +1,121 @@
+<%
+layout("/include/_dialog.html"){
+%>
+    <style type="text/css">
+        @media print {
+            #btnprint{
+                display: none;
+            }
+            .page-break{
+                page-break-before: always;
+            }
+        }
+        .line{
+            display: flex;
+        }
+        .huobox{
+            flex: 1;
+        }
+        img{
+            display: block;
+            margin: 0 auto;
+            width: 98%;
+            height: 120px;
+        }
+        .huobox{
+            margin: 15px 10px;
+            border: 1px solid black;
+        }
+        .top,.middel{
+            border-bottom: 1px solid black;
+            font-size: 28px;
+            font-weight: bold;
+            text-align: center;
+            height: 40px;
+            line-height: 40px;
+        }
+        #btnprint{
+            width: 100px;
+            height: 100px;
+            line-height: 100px;
+            border-radius: 50px;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            right: 0;
+            background-color: lightseagreen;
+        }
+    </style>
+<div id="btnprint" onclick="window.print()">打印</div>
+<div id="printbox">
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var data = ${fn.toJson(beans)};
+        var len = data.length;
+        var inx = parseInt(len/4);
+        var htm = '';
+        var cls = '';
+        for(var i=0;i<inx;i++){
+            if(i!=0 && i%3==0){
+                cls = 'page-break';
+            }else {
+                cls = '';
+            }
+            htm +=`<div class="line `+cls+`">
+                    <div class="huobox">
+                        <div class="top">`+data[i*4].name+`</div>
+                        <div class="middel">`+data[i*4].code+`</div>
+                        <div class="bottom">
+                            <img src="${ctx}/qrcode/barcode/`+data[i*4].code+`"/>
+                        </div>
+                    </div>
+                    <div class="huobox">
+                        <div class="top">`+data[i*4+1].name+`</div>
+                        <div class="middel">`+data[i*4+1].code+`</div>
+                        <div class="bottom">
+                            <img src="${ctx}/qrcode/barcode/`+data[i*4+1].code+`"/>
+                        </div>
+                    </div>
+                    <div class="huobox">
+                        <div class="top">`+data[i*4+2].name+`</div>
+                        <div class="middel">`+data[i*4+2].code+`</div>
+                        <div class="bottom">
+                            <img src="${ctx}/qrcode/barcode/`+data[i*4+2].code+`"/>
+                        </div>
+                    </div>
+                    <div class="huobox">
+                        <div class="top">`+data[i*4+3].name+`</div>
+                        <div class="middel">`+data[i*4+3].code+`</div>
+                        <div class="bottom">
+                            <img src="${ctx}/qrcode/barcode/`+data[i*4+3].code+`"/>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        var sy = len - inx*4;
+        if(sy>0){
+            inx = inx*4;
+            htm += '<div class="line">';
+            for(var i=0;i<sy;i++){
+                htm +=`<div class="huobox">
+                        <div class="top">`+data[inx+i].name+`</div>
+                        <div class="middel">`+data[inx+i].code+`</div>
+                        <div class="bottom">
+                            <img src="${ctx}/qrcode/barcode/`+data[inx+i].code+`"/>
+                        </div>
+                    </div>`;
+            }
+            for(var j=sy;j<4;j++){
+                htm += '<div class="huobox"></div>';
+            }
+            htm +='</div>';
+        }
+
+        $('#printbox').html(htm)
+    });
+</script>
+<% } %>

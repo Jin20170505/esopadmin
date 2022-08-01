@@ -11,8 +11,12 @@ import com.jeeplus.common.utils.QRCodeUtil;
 import com.jeeplus.common.utils.StringUtils;
 import com.jeeplus.common.utils.excel.ExportExcel;
 import com.jeeplus.common.utils.excel.ImportExcel;
+import com.jeeplus.common.utils.time.DateUtil;
 import com.jeeplus.core.persistence.Page;
 import com.jeeplus.core.web.BaseController;
+import com.jeeplus.modules.base.erp.updatetime.entity.BaseU8UpdateTime;
+import com.jeeplus.modules.base.erp.updatetime.entity.U8SynchType;
+import com.jeeplus.modules.base.erp.updatetime.service.BaseU8UpdateTimeService;
 import com.jeeplus.modules.business.product.archive.mapper.BusinessProductMapper;
 import com.jeeplus.modules.business.ruku.product.entity.ProductTagBean;
 import com.jeeplus.modules.business.shengchan.beiliao.apply.entity.BusinessShengChanBeiLiaoApply;
@@ -42,10 +46,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 生产订单Controller
@@ -99,6 +100,46 @@ public class BusinessShengChanDingDanController extends BaseController {
 		}
 		return json;
 	}
+
+	@Autowired
+	private BaseU8UpdateTimeService baseU8UpdateTimeService;
+	@ResponseBody
+	@RequestMapping("sychu8new")
+	public AjaxJson sychu8new(){
+		AjaxJson json = new AjaxJson();
+		try{
+			BaseU8UpdateTime time = baseU8UpdateTimeService.getByCode(U8SynchType.ROUTE.getCode());
+			Date now = new Date();
+			if(time==null){
+				time = new BaseU8UpdateTime();
+				time.setCode(U8SynchType.ROUTE.getCode());
+				time.setName(U8SynchType.ROUTE.getName());
+				time.setLastTime(DateUtil.addDays(now,-30));
+			}
+			U8Morder order = new U8Morder();
+			order.setNowTime(now).setModifyTime(time.getLastTime());
+			List<U8Morder> data = u8MorderService.findList(order);
+			if(data==null){
+				time.setLastTime(now);
+				baseU8UpdateTimeService.save(time);
+				json.setMsg("同步成功(ERP数据空)");
+				json.setSuccess(true);
+				return json;
+			}
+			List<String> schids =businessShengChanDingDanService.sychu8(data);
+			schids.forEach(schid->sychU8bom(schid));
+			time.setLastTime(now);
+			baseU8UpdateTimeService.save(time);
+			json.setSuccess(true);
+			json.setMsg("同步成功");
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setSuccess(false);
+			json.setMsg("同步失败,原因："+e.getMessage());
+		}
+		return json;
+	}
+
 	@Autowired
 	private U8MoallocateService u8MoallocateService;
 	@ResponseBody

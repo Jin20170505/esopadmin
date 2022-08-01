@@ -22,7 +22,8 @@ public class U8Inventory extends DataEntity<U8Inventory> {
     private Date dSDate;  // 启用日期
     private Date dEDate; // 停用日期
     private String kezhong; // 克重/单重
-    private Date now;
+    private Date modifyTime;
+    private Date nowTime;
     public String getcInvAddCode() {
         return cInvAddCode;
     }
@@ -176,12 +177,21 @@ public class U8Inventory extends DataEntity<U8Inventory> {
         return this;
     }
 
-    public Date getNow() {
-        return now;
+    public Date getModifyTime() {
+        return modifyTime;
     }
 
-    public U8Inventory setNow(Date now) {
-        this.now = now;
+    public U8Inventory setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+        return this;
+    }
+
+    public Date getNowTime() {
+        return nowTime;
+    }
+
+    public U8Inventory setNowTime(Date nowTime) {
+        this.nowTime = nowTime;
         return this;
     }
 }

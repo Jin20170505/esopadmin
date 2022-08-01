@@ -258,7 +258,7 @@ $(document).ready(function() {
   }
 
 function sychu8(){
-    jp.confirm('确认同步U8数据吗？', function(){
+    jp.confirm('确认同步ERP数据吗？', function(){
 		var index =jp.loading();
 		jp.get("${ctx}/base/route/baseRoteMain/sychu8", function(data){
 				if(data.success){

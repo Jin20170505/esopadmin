@@ -29,6 +29,11 @@
             <include refid="inventoryColumns"/>
         from YT_API_ERP_view_Inventory a
         <include refid="inventoryJoins"/>
+        <where>
+            <if test="modifyTime!=null">
+                and a.dModifyDate between #{modifyTime} and #{nowTime}
+            </if>
+        </where>
     </select>
 
     <select id="findTypes" resultType="com.jeeplus.modules.u8data.inventory.entity.U8InventoryClass">

@@ -3,48 +3,37 @@
  */
 package com.jeeplus.modules.base.route.web;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.ConstraintViolationException;
-
+import com.google.common.collect.Lists;
+import com.jeeplus.common.json.AjaxJson;
+import com.jeeplus.common.utils.DateUtils;
+import com.jeeplus.common.utils.StringUtils;
+import com.jeeplus.common.utils.excel.ExportExcel;
+import com.jeeplus.common.utils.excel.ImportExcel;
 import com.jeeplus.common.utils.time.DateUtil;
+import com.jeeplus.core.persistence.Page;
+import com.jeeplus.core.web.BaseController;
 import com.jeeplus.modules.base.erp.updatetime.entity.BaseU8UpdateTime;
 import com.jeeplus.modules.base.erp.updatetime.entity.U8SynchType;
 import com.jeeplus.modules.base.erp.updatetime.service.BaseU8UpdateTimeService;
-import com.jeeplus.modules.base.route.entity.BaseRoute;
+import com.jeeplus.modules.base.route.entity.BaseRoteMain;
+import com.jeeplus.modules.base.route.service.BaseRoteMainService;
 import com.jeeplus.modules.u8data.prouting.entity.U8Prouting;
 import com.jeeplus.modules.u8data.prouting.entity.U8ProutingDetail;
 import com.jeeplus.modules.u8data.prouting.service.U8ProutingService;
-import com.jeeplus.modules.u8data.unit.entity.U8Unit;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.common.collect.Lists;
-import com.jeeplus.common.utils.DateUtils;
-import com.jeeplus.common.json.AjaxJson;
-import com.jeeplus.core.persistence.Page;
-import com.jeeplus.core.web.BaseController;
-import com.jeeplus.common.utils.StringUtils;
-import com.jeeplus.common.utils.excel.ExportExcel;
-import com.jeeplus.common.utils.excel.ImportExcel;
-import com.jeeplus.modules.base.route.entity.BaseRoteMain;
-import com.jeeplus.modules.base.route.service.BaseRoteMainService;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 工艺路线Controller
@@ -101,7 +90,7 @@ public class BaseRoteMainController extends BaseController {
 			if(data==null){
 				time.setLastTime(now);
 				baseU8UpdateTimeService.save(time);
-				json.setMsg("同步成功(u8数据空)");
+				json.setMsg("同步成功(ERP数据空)");
 				json.setSuccess(true);
 				return json;
 			}
