@@ -48,10 +48,26 @@ layout("/include/_dialog.html"){
             background-color: lightseagreen;
         }
     </style>
-<div id="btnprint" onclick="window.print()">打印</div>
+<div id="btnprint" onclick="windowprint();">打印</div>
 <div id="printbox">
 </div>
 <script type="text/javascript">
+    //在打印之前执行的方法（目的是修改打印页的样式）
+    function onbeforePrint(){   //先获取div的高度，当高度小于800px时，需要设置距离顶部的值，大于800则已经铺满整个A4纸，不用设置
+        var style = document.createElement('style');
+        var mapHeight = $("#printbox").height();
+        var marginTop = "0mm";
+        if(mapHeight < 800){
+            var temp = 800 - parseInt(mapHeight);
+            marginTop = (temp/8).toFixed(2)+"mm";
+        }
+        style.innerHTML = "@page{size: landscape;margin: auto 0mm;margin-top:"+marginTop+"}";
+        window.document.head.appendChild(style);
+    }
+    function windowprint(){
+        onbeforePrint();
+        window.print();
+    }
     $(document).ready(function() {
         var data = ${fn.toJson(beans)};
         var len = data.length;
