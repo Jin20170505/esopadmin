@@ -9,10 +9,14 @@ import com.jeeplus.common.utils.DateUtils;
 import com.jeeplus.common.utils.StringUtils;
 import com.jeeplus.common.utils.excel.ExportExcel;
 import com.jeeplus.common.utils.excel.ImportExcel;
+import com.jeeplus.common.utils.time.DateUtil;
 import com.jeeplus.core.persistence.Page;
 import com.jeeplus.core.web.BaseController;
 import com.jeeplus.modules.base.customer.entity.BaseCustomer;
 import com.jeeplus.modules.base.customer.service.BaseCustomerService;
+import com.jeeplus.modules.base.erp.updatetime.entity.BaseU8UpdateTime;
+import com.jeeplus.modules.base.erp.updatetime.entity.U8SynchType;
+import com.jeeplus.modules.base.erp.updatetime.service.BaseU8UpdateTimeService;
 import com.jeeplus.modules.u8data.customer.entity.U8Customer;
 import com.jeeplus.modules.u8data.customer.service.U8CustomerService;
 import org.apache.shiro.authz.annotation.Logical;
@@ -26,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -53,19 +58,36 @@ public class BaseCustomerController extends BaseController {
 	}
 	@Autowired
 	private U8CustomerService u8CustomerService;
+	@Autowired
+	private BaseU8UpdateTimeService baseU8UpdateTimeService;
 	@ResponseBody
 	@RequestMapping("sychu8")
 	public AjaxJson sychU8(){
 		AjaxJson json = new AjaxJson();
 		try{
 			U8Customer customer = new U8Customer();
+			BaseU8UpdateTime time = baseU8UpdateTimeService.getByCode(U8SynchType.KEHU.getCode());
+			Date now = new Date();
+			if(time==null){
+				time = new BaseU8UpdateTime();
+				time.setCode(U8SynchType.ROUTE.getCode());
+				time.setName(U8SynchType.ROUTE.getName());
+				time.setLastTime(DateUtil.addDays(now,-30));
+				customer.setModifyTime(null);
+			}else {
+				customer.setNowTime(now).setModifyTime(time.getLastTime());
+			}
 			List<U8Customer> data = u8CustomerService.findList(customer);
 			if(data==null){
-				json.setMsg("同步成功(u8数据空)");
+				time.setLastTime(now);
+				baseU8UpdateTimeService.save(time);
+				json.setMsg("同步成功(ERP数据空)");
 				json.setSuccess(true);
 				return json;
 			}
 			baseCustomerService.sychU8(data);
+			time.setLastTime(now);
+			baseU8UpdateTimeService.save(time);
 			json.setMsg("同步成功");
 			json.setSuccess(true);
 		}catch (Exception e){

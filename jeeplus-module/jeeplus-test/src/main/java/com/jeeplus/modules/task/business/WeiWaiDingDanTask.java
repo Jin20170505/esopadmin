@@ -21,6 +21,6 @@ public class WeiWaiDingDanTask extends Task {
         Date now = new Date();
         Date start = DateUtil.addDays(now,-2);
         controller.sychU8(DateUtils.formatDate(start,"yyyy-MM-dd")+" 00:00:00",
-                DateUtils.formatDate(start,"yyyy-MM-dd")+" 23:59:59",null);
+                DateUtils.formatDate(now,"yyyy-MM-dd")+" 23:59:59",null);
     }
 }
