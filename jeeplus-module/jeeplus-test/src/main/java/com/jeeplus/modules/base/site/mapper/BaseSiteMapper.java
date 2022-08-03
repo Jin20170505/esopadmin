@@ -3,6 +3,7 @@
  */
 package com.jeeplus.modules.base.site.mapper;
 
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 import com.jeeplus.core.persistence.BaseMapper;
@@ -21,4 +22,7 @@ public interface BaseSiteMapper extends BaseMapper<BaseSite> {
 
     @Select("select id,name from base_site where del_flag = '0'")
     List<BaseSite> findAllSites();
+
+    @Select("select id from base_site where code = #{code} limit 1")
+    String getIdByCode(@Param("code") String code);
 }

@@ -14,7 +14,8 @@
 		a.sitecode AS "sitecode",
 		a.sitename AS "sitename",
 		a.workshop AS "workshop",
-		a.hegelv AS "hegelv"
+		a.hegelv AS "hegelv",
+		a.minhegelv AS "minhegelv"
 	</sql>
 	
 	<sql id="baseSiteHegelvJoins">
@@ -90,7 +91,8 @@
 			sitecode,
 			sitename,
 			workshop,
-			hegelv
+			hegelv,
+			minhegelv
 		) VALUES (
 			#{id},
 			#{createBy.id},
@@ -103,7 +105,8 @@
 			#{sitecode},
 			#{sitename},
 			#{workshop},
-			#{hegelv}
+			#{hegelv},
+		    #{minhegelv}
 		)
 	</insert>
 	
@@ -116,7 +119,8 @@
 			sitecode = #{sitecode},
 			sitename = #{sitename},
 			workshop = #{workshop},
-			hegelv = #{hegelv}
+			hegelv = #{hegelv},
+			minhegelv = #{minhegelv}
 		WHERE id = #{id}
 	</update>
 	

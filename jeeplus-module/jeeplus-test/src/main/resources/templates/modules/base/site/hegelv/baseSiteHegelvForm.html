@@ -59,7 +59,13 @@ layout("/include/_dialog.html"){
                 <td class="width-15 active"><label class="pull-right"><font color="red">*</font>合格率：</label></td>
                 <td class="width-35">
                     <input name="hegelv" value="${baseSiteHegelv.hegelv!}"    class="form-control required isFloatGteZero"/>
-            </td>
+                </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>下限合格率：</label></td>
+                <td class="width-35">
+                    <input name="minhegelv" value="${baseSiteHegelv.minhegelv!}"    class="form-control required isFloatGteZero"/>
+                </td>
             </tr>
         </tbody>
     </table>

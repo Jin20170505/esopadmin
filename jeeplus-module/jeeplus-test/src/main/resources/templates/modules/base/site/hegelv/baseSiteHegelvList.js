@@ -111,8 +111,14 @@ $(document).ready(function() {
 		        title: '合格率',
 		        sortable: true,
 		        sortName: 'hegelv'
-		       
+
 		    }
+            ,{
+            field: 'minhegelv',
+            title: '下限合格率',
+            sortable: true,
+            sortName: 'minhegelv'
+            }
 			,{
 			   field: 'operate',
 			   title: '操作',

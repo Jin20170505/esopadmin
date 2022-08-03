@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
+import com.jeeplus.modules.base.site.mapper.BaseSiteMapper;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -154,8 +155,9 @@ public class BaseSiteHegelvController extends BaseController {
 
 	/**
 	 * 导入Excel数据
-
 	 */
+	@Autowired
+	private BaseSiteMapper baseSiteMapper;
 	@ResponseBody
 	@RequiresPermissions("base:site:hegelv:baseSiteHegelv:import")
     @RequestMapping(value = "import")
@@ -167,8 +169,17 @@ public class BaseSiteHegelvController extends BaseController {
 			StringBuilder failureMsg = new StringBuilder();
 			ImportExcel ei = new ImportExcel(file, 1, 0);
 			List<BaseSiteHegelv> list = ei.getDataList(BaseSiteHegelv.class);
+			int i =1;
 			for (BaseSiteHegelv baseSiteHegelv : list){
 				try{
+					String siteid  = baseSiteMapper.getIdByCode(baseSiteHegelv.getSitecode());
+					if(StringUtils.isEmpty(siteid)){
+						failureMsg.append("第"+i+"行,工序编码没有对应的工序。\n");
+						failureNum++;
+						i++;
+						continue;
+					}
+					i++;
 					baseSiteHegelvService.save(baseSiteHegelv);
 					successNum++;
 				}catch(ConstraintViolationException ex){
