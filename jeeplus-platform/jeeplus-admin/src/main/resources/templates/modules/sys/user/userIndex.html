@@ -71,6 +71,9 @@ layout("/include/_container.html",{title:"用户管理", parent:"单位组织"})
 					<% if(shiro.hasPermission("sys:user:add")){ %>
 						<button id="add" class="btn btn-custom waves-effect w-xs waves-light"  onclick="jp.openSaveDialog('新建用户', '${ctx}/sys/user/form','800px', '680px')"><i class="fa fa-plus"></i> 新建</button>
 					<% } %>
+					<% if(shiro.hasPermission("sys:user:sychu8")){ %>
+					<button class="btn btn-custom waves-effect w-xs waves-light" onclick="sychdata();" ><i class="fa fa-plus"></i>同步ERP员工</button>
+					<%  } %>
 					<% if(shiro.hasPermission("sys:user:edit")){ %>
 						<button id="edit" class="btn btn-white waves-effect w-xs waves-light" disabled onclick="edit()">
 							<i class="fa fa-edit"></i> 修改

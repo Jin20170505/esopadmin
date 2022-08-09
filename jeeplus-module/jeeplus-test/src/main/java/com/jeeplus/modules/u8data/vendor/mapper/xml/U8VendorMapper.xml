@@ -20,10 +20,5 @@
         <include refid="vendorColumns"/>
         from YT_API_ERP_view_Vendor a
         <include refid="vendorJoins"/>
-        <where>
-            <if test="modifyTime!=null">
-                and a.dModifyDate between #{modifyTime} and #{nowTime}
-            </if>
-        </where>
     </select>
 </mapper>

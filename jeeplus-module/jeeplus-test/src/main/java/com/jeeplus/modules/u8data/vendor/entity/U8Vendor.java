@@ -16,8 +16,6 @@ public class U8Vendor extends DataEntity<U8Vendor> {
     private String cVenPhone;//  		电话 ,
     private String cVenPerson;//		联系人 ,
     private String cMemo;// 			备注
-    private Date modifyTime;
-    private Date nowTime;
 
     public Date getdModifyDate() {
         return dModifyDate;
@@ -88,24 +86,6 @@ public class U8Vendor extends DataEntity<U8Vendor> {
 
     public U8Vendor setcMemo(String cMemo) {
         this.cMemo = cMemo;
-        return this;
-    }
-
-    public Date getModifyTime() {
-        return modifyTime;
-    }
-
-    public U8Vendor setModifyTime(Date modifyTime) {
-        this.modifyTime = modifyTime;
-        return this;
-    }
-
-    public Date getNowTime() {
-        return nowTime;
-    }
-
-    public U8Vendor setNowTime(Date nowTime) {
-        this.nowTime = nowTime;
         return this;
     }
 }

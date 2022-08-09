@@ -20,10 +20,5 @@
         <include refid="customerColumns"/>
         from YT_API_ERP_view_Customer a
         <include refid="customerJoins"/>
-        <where>
-            <if test="modifyTime!=null">
-                and a.dModifyDate between #{modifyTime} and #{nowTime}
-            </if>
-        </where>
     </select>
 </mapper>

@@ -16,8 +16,6 @@ public class U8Customer extends DataEntity<U8Customer> {
     private String cCusPhone;//  		电话
     private String cCusPerson;//  	负责人
     private String cMemo;//			备注
-    private Date modifyTime;
-    private Date nowTime;
 
     public Date getdModifyDate() {
         return dModifyDate;
@@ -88,24 +86,6 @@ public class U8Customer extends DataEntity<U8Customer> {
 
     public U8Customer setcMemo(String cMemo) {
         this.cMemo = cMemo;
-        return this;
-    }
-
-    public Date getModifyTime() {
-        return modifyTime;
-    }
-
-    public U8Customer setModifyTime(Date modifyTime) {
-        this.modifyTime = modifyTime;
-        return this;
-    }
-
-    public Date getNowTime() {
-        return nowTime;
-    }
-
-    public U8Customer setNowTime(Date nowTime) {
-        this.nowTime = nowTime;
         return this;
     }
 }

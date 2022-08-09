@@ -287,4 +287,15 @@
 		  function refresh() {
               $('#table').bootstrapTable('refresh');
           }
+          function sychdata() {
+			jp.loading('数据同步中');
+			jp.get('${ctx}/u8employee/sychdata',function (rs) {
+				if(rs.success){
+					jp.success("同步成功");
+					refresh();
+				}else {
+					jp.error("同步失败")
+				}
+			})
+		}
 	</script>
