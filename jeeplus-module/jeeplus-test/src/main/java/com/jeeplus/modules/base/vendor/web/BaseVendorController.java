@@ -70,8 +70,8 @@ public class BaseVendorController extends BaseController {
 			Date now = new Date();
 			if(time==null){
 				time = new BaseU8UpdateTime();
-				time.setCode(U8SynchType.ROUTE.getCode());
-				time.setName(U8SynchType.ROUTE.getName());
+				time.setCode(U8SynchType.GONGYINGSHANG.getCode());
+				time.setName(U8SynchType.GONGYINGSHANG.getName());
 				time.setLastTime(DateUtil.addDays(now,-30));
 				vendor.setModifyTime(null);
 			}else {

@@ -141,7 +141,7 @@ public class BusinessJiHuaGongDanController extends BaseController {
 	// 生成报工单
 	@ResponseBody
 	@RequestMapping("shengchengbaogongdan")
-	public AjaxJson shengchengbaogongdan(String rids,String yaocode){
+	public synchronized AjaxJson shengchengbaogongdan(String rids,String yaocode){
 		AjaxJson json = new AjaxJson();
 		try {
 			List<String> idArray = Arrays.asList(rids.split(","));

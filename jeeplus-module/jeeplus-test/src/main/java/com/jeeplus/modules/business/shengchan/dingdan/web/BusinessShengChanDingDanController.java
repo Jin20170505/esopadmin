@@ -108,12 +108,12 @@ public class BusinessShengChanDingDanController extends BaseController {
 	public AjaxJson sychu8new(){
 		AjaxJson json = new AjaxJson();
 		try{
-			BaseU8UpdateTime time = baseU8UpdateTimeService.getByCode(U8SynchType.ROUTE.getCode());
+			BaseU8UpdateTime time = baseU8UpdateTimeService.getByCode(U8SynchType.SHENGCHAN.getCode());
 			Date now = new Date();
 			if(time==null){
 				time = new BaseU8UpdateTime();
-				time.setCode(U8SynchType.ROUTE.getCode());
-				time.setName(U8SynchType.ROUTE.getName());
+				time.setCode(U8SynchType.SHENGCHAN.getCode());
+				time.setName(U8SynchType.SHENGCHAN.getName());
 				time.setLastTime(DateUtil.addDays(now,-30));
 			}
 			U8Morder order = new U8Morder();

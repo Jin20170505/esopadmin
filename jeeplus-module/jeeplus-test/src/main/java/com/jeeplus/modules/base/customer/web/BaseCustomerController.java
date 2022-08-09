@@ -70,8 +70,8 @@ public class BaseCustomerController extends BaseController {
 			Date now = new Date();
 			if(time==null){
 				time = new BaseU8UpdateTime();
-				time.setCode(U8SynchType.ROUTE.getCode());
-				time.setName(U8SynchType.ROUTE.getName());
+				time.setCode(U8SynchType.KEHU.getCode());
+				time.setName(U8SynchType.KEHU.getName());
 				time.setLastTime(DateUtil.addDays(now,-30));
 				customer.setModifyTime(null);
 			}else {
