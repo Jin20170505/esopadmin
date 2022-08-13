@@ -156,7 +156,7 @@ public class BusinessJiHuaGongDanService extends CrudService<BusinessJiHuaGongDa
 	@Autowired
 	private BusinessBaoGongOrderService businessBaoGongOrderService;
 	@Transactional(readOnly = false)
-	public void shengchengbaogongdan(String id,String yaocode){
+	public synchronized void shengchengbaogongdan(String id,String yaocode){
 		boolean flag = businessBaoGongOrderService.hasScOrderFromPlan(id);
 		if(flag){
 			String code= mapper.getCodeById(id);

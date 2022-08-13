@@ -28,7 +28,7 @@ public class U8DeptController extends BaseController {
         try {
             U8Dept dept = new U8Dept();
             List<U8Dept> depts = u8DeptService.findList(dept);
-            if(depts==null || depts.isEmpty()){
+            if(depts==null && depts.isEmpty()){
                 json.setMsg("同步成功(ERP部门数据空)");
                 json.setSuccess(true);
                 return json;

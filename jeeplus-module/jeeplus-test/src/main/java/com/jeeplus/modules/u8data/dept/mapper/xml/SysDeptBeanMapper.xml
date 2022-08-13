@@ -51,8 +51,8 @@
             #{item.code},
             #{item.name},
             #{item.sort},
-            #{item.type},
-            #{item.grade},
+            '2',
+            '1',
             #{item.remarks},
             '0',
             '1'

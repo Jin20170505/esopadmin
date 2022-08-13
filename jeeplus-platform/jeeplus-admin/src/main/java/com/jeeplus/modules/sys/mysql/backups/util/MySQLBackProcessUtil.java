@@ -11,7 +11,7 @@ import java.util.List;
 public class MySQLBackProcessUtil {
     public static void main(String[] args) {
         try {
-            backupDB("/usr/local/mysql/bin/mysqldump","127.0.0.1","3306","root","root1234","esop","/Users/jin/esoptest.sql");
+            backupDB("os","","","/usr/local/mysql/bin/mysqldump","127.0.0.1","3306","root","root1234","esop","/Users/jin/esoptest.sql");
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -19,6 +19,9 @@ public class MySQLBackProcessUtil {
 
     /**
      * 数据库备份
+     * @param perform 系统平台
+     * @param driveletter mysqldump 所在的盘符
+     *
      * @param mysqldumppath mysqldump 所在位置
      * @param ip mysql数据库IP
      * @param port mysql 端口
@@ -29,7 +32,7 @@ public class MySQLBackProcessUtil {
      * @throws IOException
      * @throws InterruptedException
      */
-    public static void backupDB(String mysqldumppath,String ip,String port,String username,String pasword,String database,String filepath) throws Exception{
+    public static void backupDB(String perform,String driveletter,String characterset,  String mysqldumppath,String ip,String port,String username,String pasword,String database,String filepath) throws Exception{
         List<String> commands = new ArrayList<>();
         commands.add(mysqldumppath);
         commands.add("-h");
@@ -56,12 +59,13 @@ public class MySQLBackProcessUtil {
         process.waitFor();
         //执行命令的异常信息
         System.out.println("结果："+readCmdResult(process));
-        try {
-            EmailUtil.SendEmail("1958207751@qq.com",null,null,"结果："+readCmdResult(process),new File(filePath),"数据库备份");
-        } catch (MessagingException e) {
-            e.printStackTrace();
-            EmailUtil.SendEmail("1958207751@qq.com",null,null,"结果："+e.getLocalizedMessage(),null,"数据库备份");
-        }
+
+//        try {
+//            EmailUtil.SendEmail("1958207751@qq.com",null,null,"结果："+readCmdResult(process),new File(filePath),"数据库备份");
+//        } catch (MessagingException e) {
+//            e.printStackTrace();
+//            EmailUtil.SendEmail("1958207751@qq.com",null,null,"结果："+e.getLocalizedMessage(),null,"数据库备份");
+//        }
     }
 
     public static String readCmdResult(Process process){

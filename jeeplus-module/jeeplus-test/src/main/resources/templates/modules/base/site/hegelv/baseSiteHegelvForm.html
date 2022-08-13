@@ -1,72 +1,72 @@
 <%
 layout("/include/_dialog.html"){
 %>
-	<script type="text/javascript">
+<script type="text/javascript">
 
-		$(document).ready(function() {
-					});
+    $(document).ready(function() {
+    });
 
-		function save() {
-            var isValidate = jp.validateForm('#inputForm');//校验表单
-            if(!isValidate){
-                return false;
-			}else{
-                var index = jp.loading();
-                jp.post("${ctx}/base/site/hegelv/baseSiteHegelv/save",$('#inputForm').serialize(),function(data){
-                    if(data.success){
-                        jp.getParent().refresh();
-                        var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
-                        parent.layer.close(dialogIndex);
-                        jp.toastr_success(data.msg)
+    function save() {
+        var isValidate = jp.validateForm('#inputForm');//校验表单
+        if(!isValidate){
+            return false;
+        }else{
+            var index = jp.loading();
+            jp.post("${ctx}/base/site/hegelv/baseSiteHegelv/save",$('#inputForm').serialize(),function(data){
+                if(data.success){
+                    jp.getParent().refresh();
+                    var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                    parent.layer.close(dialogIndex);
+                    jp.toastr_success(data.msg)
 
-                    }else{
-                        jp.toastr_error(data.msg);
-                    }
-                    jp.close(index);
-                })
-			}
+                }else{
+                    jp.toastr_error(data.msg);
+                }
+                jp.close(index);
+            })
         }
+    }
 
-        function siteCall(items,tagid){
-		    var item = items[0];
-            $("#siteid").val(item.id);
-		    $("#sitecode").val(item.code);
-		    $('#sitename').val(item.name);
-        }
-	</script>
+    function siteCall(items,tagid){
+        var item = items[0];
+        $("#siteid").val(item.id);
+        $("#sitecode").val(item.code);
+        $('#sitename').val(item.name);
+    }
+</script>
 <form id="inputForm"  method="post"  class="form-horizontal p-15">
     <input type="hidden" name="id" value="${baseSiteHegelv.id!}"/>
     <table class="table table-bordered">
-       <tbody>
-            <tr>
-                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>工序编码：</label></td>
-                <td class="width-35">
-                    <input name="siteid" id="siteid" type="hidden" value="${baseSiteHegelv.siteid!}"    class="form-control "/>
-                    <input name="sitecode" id="sitecode" type="hidden" value="${baseSiteHegelv.sitecode!}"    class="form-control"/>
-                    <#gridselect callback="siteCall" url="${ctx}/base/site/baseSite/data" id="site" name="site.id" value="" labelName="site.code" labelValue="${baseSiteHegelv.sitecode!}"
-                    title="选择工序" class="form-control  required" fieldLabels="编码|名称" fieldKeys="id|name" searchLabels="编码|名称" searchKeys="id|name" />
+        <tbody>
+        <tr>
+            <td class="width-15 active"><label class="pull-right"><font color="red">*</font>工序编码：</label></td>
+            <td class="width-35">
+                <input name="siteid" id="siteid" type="hidden" value="${baseSiteHegelv.siteid!}"    class="form-control "/>
+                <input name="sitecode" id="sitecode" type="hidden" value="${baseSiteHegelv.sitecode!}"    class="form-control"/>
+                <#gridselect callback="siteCall" url="${ctx}/base/site/baseSite/data" id="site" name="site.id" value="" labelName="site.code" labelValue="${baseSiteHegelv.sitecode!}"
+                title="选择工序" class="form-control  required" fieldLabels="编码|名称" fieldKeys="id|name" searchLabels="编码|名称" searchKeys="id|name" />
             </td>
-                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>工序名称：</label></td>
-                <td class="width-35">
-                    <input name="sitename" id="sitename" value="${baseSiteHegelv.sitename!}" readonly="readonly" class="form-control required"/>
+            <td class="width-15 active"><label class="pull-right"><font color="red">*</font>工序名称：</label></td>
+            <td class="width-35">
+                <input name="sitename" id="sitename" value="${baseSiteHegelv.sitename!}" readonly="readonly" class="form-control required"/>
             </td>
-            </tr>
-            <tr>
-                <td class="width-15 active"><label class="pull-right">工作中心：</label></td>
-                <td class="width-35">
-                    <input name="workshop" value="${baseSiteHegelv.workshop!}"    class="form-control "/>
+        </tr>
+        <tr>
+            <td class="width-15 active"><label class="pull-right">工作中心：</label></td>
+            <td class="width-35">
+                <input name="workshop" value="${baseSiteHegelv.workshop!}"    class="form-control "/>
             </td>
-                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>合格率：</label></td>
-                <td class="width-35">
-                    <input name="hegelv" value="${baseSiteHegelv.hegelv!}"    class="form-control required isFloatGteZero"/>
-                </td>
-            </tr>
-            <tr>
-                <td class="width-15 active"><label class="pull-right"><font color="red">*</font>下限合格率：</label></td>
-                <td class="width-35">
-                    <input name="minhegelv" value="${baseSiteHegelv.minhegelv!}"    class="form-control required isFloatGteZero"/>
-                </td>
-            </tr>
+            <td class="width-15 active"><label class="pull-right"><font color="red">*</font>合格率：</label></td>
+            <td class="width-35">
+                <input name="hegelv" value="${baseSiteHegelv.hegelv!}"    class="form-control required isFloatGteZero"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="width-15 active"><label class="pull-right"><font color="red">*</font>下限合格率：</label></td>
+            <td class="width-35">
+                <input name="minhegelv" value="${baseSiteHegelv.minhegelv!}"    class="form-control required isFloatGteZero"/>
+            </td>
+        </tr>
         </tbody>
     </table>
 </form>

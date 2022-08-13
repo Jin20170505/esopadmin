@@ -21,6 +21,7 @@ public class BaseSiteHegelv extends DataEntity<BaseSiteHegelv> {
 	private String workshop;		// 工作中心
 	private Double hegelv;		// 合格率
 	private Double minhegelv;  // 下限合格率
+	
 	public BaseSiteHegelv() {
 		super();
 	}
@@ -28,7 +29,7 @@ public class BaseSiteHegelv extends DataEntity<BaseSiteHegelv> {
 	public BaseSiteHegelv(String id){
 		super(id);
 	}
-	@NotNull(message="工序编码不能为空")
+
 	@ExcelField(title="工序编码", align=2, sort=7)
 	public String getSitecode() {
 		return sitecode;
@@ -65,7 +66,6 @@ public class BaseSiteHegelv extends DataEntity<BaseSiteHegelv> {
 	public void setHegelv(Double hegelv) {
 		this.hegelv = hegelv;
 	}
-	
 	@NotNull(message="下限合格率不能为空")
 	@ExcelField(title="下限合格率", align=2, sort=12)
 	public Double getMinhegelv() {

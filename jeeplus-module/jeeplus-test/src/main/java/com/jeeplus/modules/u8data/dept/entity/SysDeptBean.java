@@ -11,8 +11,6 @@ public class SysDeptBean extends DataEntity<SysDeptBean> {
     private String code;
     private String name;
     private Integer sort;
-    private String type;
-    private String grade;
 
     public String getParentid() {
         return parentid;
@@ -56,24 +54,6 @@ public class SysDeptBean extends DataEntity<SysDeptBean> {
 
     public SysDeptBean setSort(Integer sort) {
         this.sort = sort;
-        return this;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public SysDeptBean setType(String type) {
-        this.type = type;
-        return this;
-    }
-
-    public String getGrade() {
-        return grade;
-    }
-
-    public SysDeptBean setGrade(String grade) {
-        this.grade = grade;
         return this;
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jeeplus.modules.base.site.hegelv.mapper.BaseSiteHegelvMapper">
-    
+
 	<sql id="baseSiteHegelvColumns">
 		a.id AS "id",
 		a.create_by AS "createBy.id",
@@ -17,23 +17,23 @@
 		a.hegelv AS "hegelv",
 		a.minhegelv AS "minhegelv"
 	</sql>
-	
+
 	<sql id="baseSiteHegelvJoins">
-		
+
 	</sql>
-	
-    
+
+
 	<select id="get" resultType="BaseSiteHegelv" >
-		SELECT 
-			<include refid="baseSiteHegelvColumns"/>
+		SELECT
+		<include refid="baseSiteHegelvColumns"/>
 		FROM base_site_hegelv a
 		<include refid="baseSiteHegelvJoins"/>
 		WHERE a.id = #{id}
 	</select>
-	
+
 	<select id="findList" resultType="BaseSiteHegelv" >
-		SELECT 
-			<include refid="baseSiteHegelvColumns"/>
+		SELECT
+		<include refid="baseSiteHegelvColumns"/>
 		FROM base_site_hegelv a
 		<include refid="baseSiteHegelvJoins"/>
 		<where>
@@ -58,16 +58,16 @@
 			</otherwise>
 		</choose>
 	</select>
-	
+
 	<select id="findAllList" resultType="BaseSiteHegelv" >
-		SELECT 
-			<include refid="baseSiteHegelvColumns"/>
+		SELECT
+		<include refid="baseSiteHegelvColumns"/>
 		FROM base_site_hegelv a
 		<include refid="baseSiteHegelvJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
-		</where>		
+		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
 				ORDER BY ${page.orderBy}
@@ -77,7 +77,7 @@
 			</otherwise>
 		</choose>
 	</select>
-	
+
 	<insert id="insert">
 		INSERT INTO base_site_hegelv(
 			id,
@@ -94,54 +94,54 @@
 			hegelv,
 			minhegelv
 		) VALUES (
-			#{id},
-			#{createBy.id},
-			#{createDate},
-			#{updateBy.id},
-			#{updateDate},
-			#{remarks},
-			#{delFlag},
-		    #{siteid},
-			#{sitecode},
-			#{sitename},
-			#{workshop},
-			#{hegelv},
-		    #{minhegelv}
-		)
+					 #{id},
+					 #{createBy.id},
+					 #{createDate},
+					 #{updateBy.id},
+					 #{updateDate},
+					 #{remarks},
+					 #{delFlag},
+					 #{siteid},
+					 #{sitecode},
+					 #{sitename},
+					 #{workshop},
+					 #{hegelv},
+					 #{minhegelv}
+				 )
 	</insert>
-	
+
 	<update id="update">
-		UPDATE base_site_hegelv SET 	
-			update_by = #{updateBy.id},
-			update_date = #{updateDate},
-			remarks = #{remarks},
-		    siteid = #{siteid},
-			sitecode = #{sitecode},
-			sitename = #{sitename},
-			workshop = #{workshop},
-			hegelv = #{hegelv},
-			minhegelv = #{minhegelv}
+		UPDATE base_site_hegelv SET
+									update_by = #{updateBy.id},
+									update_date = #{updateDate},
+									remarks = #{remarks},
+									siteid = #{siteid},
+									sitecode = #{sitecode},
+									sitename = #{sitename},
+									workshop = #{workshop},
+									hegelv = #{hegelv},
+									minhegelv = #{minhegelv}
 		WHERE id = #{id}
 	</update>
-	
-	
+
+
 	<!--物理删除-->
 	<update id="delete">
 		DELETE FROM base_site_hegelv
 		WHERE id = #{id}
 	</update>
-	
+
 	<!--逻辑删除-->
 	<update id="deleteByLogic">
-		UPDATE base_site_hegelv SET 
+		UPDATE base_site_hegelv SET
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
-	
-	
+
+
 	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
 	<select id="findUniqueByProperty" resultType="BaseSiteHegelv" statementType="STATEMENT">
 		select * FROM base_site_hegelv  where ${propertyName} = '${value}'
 	</select>
-	
+
 </mapper>

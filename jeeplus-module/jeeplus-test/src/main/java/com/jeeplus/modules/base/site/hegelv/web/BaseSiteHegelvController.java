@@ -45,7 +45,7 @@ public class BaseSiteHegelvController extends BaseController {
 
 	@Autowired
 	private BaseSiteHegelvService baseSiteHegelvService;
-	
+
 	@ModelAttribute
 	public BaseSiteHegelv get(@RequestParam(required=false) String id) {
 		BaseSiteHegelv entity = null;
@@ -57,7 +57,7 @@ public class BaseSiteHegelvController extends BaseController {
 		}
 		return entity;
 	}
-	
+
 	/**
 	 * 工序合格率列表页面
 	 */
@@ -67,15 +67,15 @@ public class BaseSiteHegelvController extends BaseController {
 		model.addAttribute("baseSiteHegelv", baseSiteHegelv);
 		return "modules/base/site/hegelv/baseSiteHegelvList";
 	}
-	
-		/**
+
+	/**
 	 * 工序合格率列表数据
 	 */
 	@ResponseBody
 	@RequiresPermissions("base:site:hegelv:baseSiteHegelv:list")
 	@RequestMapping(value = "data")
 	public Map<String, Object> data(BaseSiteHegelv baseSiteHegelv, HttpServletRequest request, HttpServletResponse response, Model model) {
-		Page<BaseSiteHegelv> page = baseSiteHegelvService.findPage(new Page<BaseSiteHegelv>(request, response), baseSiteHegelv); 
+		Page<BaseSiteHegelv> page = baseSiteHegelvService.findPage(new Page<BaseSiteHegelv>(request, response), baseSiteHegelv);
 		return getBootstrapData(page);
 	}
 
@@ -116,7 +116,7 @@ public class BaseSiteHegelvController extends BaseController {
 		return j;
 	}
 
-	
+
 	/**
 	 * 批量删除工序合格率
 	 */
@@ -132,26 +132,26 @@ public class BaseSiteHegelvController extends BaseController {
 		j.setMsg("删除工序合格率成功");
 		return j;
 	}
-	
+
 	/**
 	 * 导出excel文件
 	 */
 	@ResponseBody
 	@RequiresPermissions("base:site:hegelv:baseSiteHegelv:export")
-    @RequestMapping(value = "export")
-    public AjaxJson exportFile(BaseSiteHegelv baseSiteHegelv, HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "export")
+	public AjaxJson exportFile(BaseSiteHegelv baseSiteHegelv, HttpServletRequest request, HttpServletResponse response) {
 		AjaxJson j = new AjaxJson();
 		try {
-            String fileName = "工序合格率"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
-            Page<BaseSiteHegelv> page = baseSiteHegelvService.findPage(new Page<BaseSiteHegelv>(request, response, -1), baseSiteHegelv);
-    		new ExportExcel("工序合格率", BaseSiteHegelv.class).setDataList(page.getList()).write(response, fileName).dispose();
-    		return null;
+			String fileName = "工序合格率"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
+			Page<BaseSiteHegelv> page = baseSiteHegelvService.findPage(new Page<BaseSiteHegelv>(request, response, -1), baseSiteHegelv);
+			new ExportExcel("工序合格率", BaseSiteHegelv.class).setDataList(page.getList()).write(response, fileName).dispose();
+			return null;
 		} catch (Exception e) {
 			j.setSuccess(false);
 			j.setMsg("导出工序合格率记录失败！失败信息："+e.getMessage());
 		}
-			return j;
-    }
+		return j;
+	}
 
 	/**
 	 * 导入Excel数据
@@ -160,8 +160,8 @@ public class BaseSiteHegelvController extends BaseController {
 	private BaseSiteMapper baseSiteMapper;
 	@ResponseBody
 	@RequiresPermissions("base:site:hegelv:baseSiteHegelv:import")
-    @RequestMapping(value = "import")
-   	public AjaxJson importFile(@RequestParam("file")MultipartFile file, HttpServletResponse response, HttpServletRequest request) {
+	@RequestMapping(value = "import")
+	public AjaxJson importFile(@RequestParam("file")MultipartFile file, HttpServletResponse response, HttpServletRequest request) {
 		AjaxJson j = new AjaxJson();
 		try {
 			int successNum = 0;
@@ -197,26 +197,26 @@ public class BaseSiteHegelvController extends BaseController {
 			j.setMsg("导入工序合格率失败！失败信息："+e.getMessage());
 		}
 		return j;
-    }
-	
+	}
+
 	/**
 	 * 下载导入工序合格率数据模板
 	 */
 	@ResponseBody
 	@RequiresPermissions("base:site:hegelv:baseSiteHegelv:import")
-    @RequestMapping(value = "import/template")
-     public AjaxJson importFileTemplate(HttpServletResponse response) {
+	@RequestMapping(value = "import/template")
+	public AjaxJson importFileTemplate(HttpServletResponse response) {
 		AjaxJson j = new AjaxJson();
 		try {
-            String fileName = "工序合格率数据导入模板.xlsx";
-    		List<BaseSiteHegelv> list = Lists.newArrayList(); 
-    		new ExportExcel("工序合格率数据", BaseSiteHegelv.class, 1).setDataList(list).write(response, fileName).dispose();
-    		return null;
+			String fileName = "工序合格率数据导入模板.xlsx";
+			List<BaseSiteHegelv> list = Lists.newArrayList();
+			new ExportExcel("工序合格率数据", BaseSiteHegelv.class, 1).setDataList(list).write(response, fileName).dispose();
+			return null;
 		} catch (Exception e) {
 			j.setSuccess(false);
 			j.setMsg( "导入模板下载失败！失败信息："+e.getMessage());
 		}
 		return j;
-    }
+	}
 
 }
