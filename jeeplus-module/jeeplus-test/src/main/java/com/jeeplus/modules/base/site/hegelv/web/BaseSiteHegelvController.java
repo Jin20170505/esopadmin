@@ -179,6 +179,7 @@ public class BaseSiteHegelvController extends BaseController {
 						i++;
 						continue;
 					}
+					baseSiteHegelv.setSiteid(siteid);
 					i++;
 					baseSiteHegelvService.save(baseSiteHegelv);
 					successNum++;

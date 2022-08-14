@@ -110,8 +110,12 @@
     field: 'hegelv',
     title: '合格率',
     sortable: true,
-    sortName: 'hegelv'
-
+    sortName: 'hegelv',
+    formatter:function(value, row , index){
+        if(value){
+            return (value*100) +'%';
+        }
+    }
     }
     ,{
     field: 'minhegelv',
