@@ -180,7 +180,7 @@
     $('#table').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
             $('#remove,#jihua,#closeorder,#recover').prop('disabled', ! $('#table').bootstrapTable('getSelections').length);
-            $('#chaidan,#print,#handler,#bomsearch').prop('disabled', $('#table').bootstrapTable('getSelections').length!=1);
+            $('#chaidan,#print,#handler,#bomsearch,#jixuchaidan').prop('disabled', $('#table').bootstrapTable('getSelections').length!=1);
         });
 
     $("#search").click("click", function() {// 绑定查询按扭
@@ -212,6 +212,33 @@
   return $.map($("#table").bootstrapTable('getSelections'), function (row) {
   return row
 });
+}
+
+/** 继续拆单 */
+function jixuchaidan(){
+  var rows = getRowSelections();
+  var row = rows[0];
+  var ischaidan = row.ischaidan;
+  if(ischaidan!='已拆单'){
+    jp.warning("此状态不可操作");
+    return false;
+  }
+  var wcdnum = row.wcdnum;
+  if(wcdnum<=0){
+    jp.warning("无可拆单数量");
+    return false;
+  }
+  var index = jp.loading();
+
+  jp.get("${ctx}/business/shengchan/dingdan/businessShengChanDingDan/jixuchaidan?rid=" + row.id, function(data){
+    if(data.success){
+      refresh();
+      jp.toastr_success(data.msg);
+    }else{
+      jp.toastr_error(data.msg);
+    }
+    jp.close(index);
+})
 }
 
 function scbl(){

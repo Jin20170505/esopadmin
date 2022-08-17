@@ -124,8 +124,12 @@ $(document).ready(function() {
             title: '日产量',
             sortable: true,
             sortName: 'daynum'
-
-            }
+            },{
+                field: 'cbprice',
+                title: '成本价',
+                sortable: true,
+                sortName: 'cbprice'
+                }
 			,{
 		        field: 'remarks',
 		        title: '备注信息',

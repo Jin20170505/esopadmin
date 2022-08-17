@@ -19,6 +19,7 @@
 		a.kezhong as "kezhong",
 		a.remarks AS "remarks",
 		a.sccall as "sccall",
+		a.cbprice as "cbprice",
 		b.name AS "type.name"
 	</sql>
 	
@@ -100,6 +101,7 @@
 			daynum,
 		    kezhong,
 			sccall,
+		    cbprice,
 			remarks
 		) VALUES
 		<foreach collection="list" separator="," item="item">
@@ -119,6 +121,7 @@
 			 	#{item.daynum},
 			 	#{item.kezhong},
 				'0',
+			 	#{item.cbprice},
 				#{item.remarks}
 			)
 		</foreach>
@@ -133,6 +136,7 @@
 		unit=VALUES(unit),
 		daynum=values(daynum),
 		kezhong = values(kezhong),
+		cbprice = values(cbprice),
 		remarks=VALUES(remarks)
 	</insert>
 	<insert id="insert">
@@ -147,7 +151,7 @@
 			code,cinvaddcode,
 			name,
 			specification,
-			unit,sccall,daynum,
+			unit,sccall,daynum,cbprice,
 			remarks
 		) VALUES (
 			#{createBy.id},
@@ -160,7 +164,7 @@
 			#{code},#{cinvaddcode},
 			#{name},
 			#{specification},
-			#{unit},#{sccall},#{daynum},
+			#{unit},#{sccall},#{daynum},#{cbprice},
 			#{remarks}
 		)
 
@@ -177,6 +181,7 @@
 			unit = #{unit},
 			daynum = #{daynum},
 			sccall = #{sccall},
+		    cbprice = #{cbprice},
 			remarks = #{remarks}
 		WHERE id = #{id}
 	</update>

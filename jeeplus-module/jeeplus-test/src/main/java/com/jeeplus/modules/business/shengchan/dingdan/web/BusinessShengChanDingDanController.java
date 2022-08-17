@@ -70,6 +70,21 @@ public class BusinessShengChanDingDanController extends BaseController {
 		}
 		return entity;
 	}
+	@RequestMapping("jixuchaidan")
+	@ResponseBody
+	public AjaxJson jixuchaidan(String rid){
+		AjaxJson json = new AjaxJson();
+		try{
+			json.setSuccess(true);
+			json.setMsg("操作成功");
+			businessShengChanDingDanService.updateChaidanStatus(rid,"未拆完");
+		}catch (Exception e){
+			e.printStackTrace();
+			json.setSuccess(false);
+			json.setMsg("服务器出错，操作失败");
+		}
+		return json;
+	}
 	@Autowired
 	private U8MorderService u8MorderService;
 	@ResponseBody

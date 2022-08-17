@@ -77,6 +77,11 @@ public class BusinessShengChanDingDanService extends CrudService<BusinessShengCh
 		return businessShengChanDingDanMingXiMapper.get(xmid);
 	}
 
+	@Transactional(readOnly = false)
+	public void updateChaidanStatus(String rid,String status){
+		businessShengChanDingDanMingXiMapper.updateChaidanStatus(rid,status);
+	}
+
 	@Autowired
 	private BusinessShengChanBeiLiaoApplyService businessShengChanBeiLiaoApplyService;
 	public BeiLiaoBean getBeiLiaoInfo(String blid){

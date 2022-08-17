@@ -17,6 +17,7 @@
         a.bPropertyCheck as "bPropertyCheck",
         a.bProxyForeign as "bProxyForeign",
         a.cInvDefine13 as "kezhong",
+        a.cInvDefine2 as "dprice",
         a.dSDate as "dSDate",
         a.dEDate as "dEDate"
     </sql>

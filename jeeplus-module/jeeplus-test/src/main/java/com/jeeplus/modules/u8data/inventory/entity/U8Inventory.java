@@ -22,6 +22,7 @@ public class U8Inventory extends DataEntity<U8Inventory> {
     private Date dSDate;  // 启用日期
     private Date dEDate; // 停用日期
     private String kezhong; // 克重/单重
+    private Double dprice;// 产成品成本单价
     private Date modifyTime;
     private Date nowTime;
     public String getcInvAddCode() {
@@ -165,6 +166,15 @@ public class U8Inventory extends DataEntity<U8Inventory> {
 
     public U8Inventory setKezhong(String kezhong) {
         this.kezhong = kezhong;
+        return this;
+    }
+
+    public Double getDprice() {
+        return dprice;
+    }
+
+    public U8Inventory setDprice(Double dprice) {
+        this.dprice = dprice;
         return this;
     }
 

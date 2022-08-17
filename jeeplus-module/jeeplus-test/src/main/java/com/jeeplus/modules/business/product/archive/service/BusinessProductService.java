@@ -59,6 +59,7 @@ public class BusinessProductService extends CrudService<BusinessProductMapper, B
 				product.setSpecification(d.getcInvStd());
 				product.setDaynum(d.getDaynum());
 				product.setKezhong(d.getKezhong());
+				product.setCbprice(d.getDprice());
 				product.setType(new BusinessProductTypeOnlyRead(d.getcInvCCode()));
 				product.preInsert();
 				product.setId(d.getcInvCode());

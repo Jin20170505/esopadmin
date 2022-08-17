@@ -64,6 +64,10 @@ layout("/include/_dialog.html"){
 						<#gridselect callback="unitCallBack" url="${ctx}/base/unit/baseUnit/data" id="unit" name="u.id" value="" labelName="u.name" labelValue="${businessProduct.unit!}"
 						title="选择单位" class="form-control  required" fieldLabels="编号|名称|备注" fieldKeys="id|name|remarks" searchLabels="名称" searchKeys="name" />
 					</td>
+					<td class="width-15 active"><label class="pull-right">成本单价：</label></td>
+					<td class="width-35">
+						<input name="cbprice" value="${businessProduct.cbprice!}" type="number"   class="form-control"/>
+					</td>
 				</tr>
 				<tr>
 					<td class="width-15 active"><label class="pull-right">日产量：</label></td>
