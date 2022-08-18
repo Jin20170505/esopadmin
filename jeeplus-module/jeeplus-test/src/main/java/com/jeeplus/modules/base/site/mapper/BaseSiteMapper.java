@@ -25,4 +25,6 @@ public interface BaseSiteMapper extends BaseMapper<BaseSite> {
 
     @Select("select id from base_site where code = #{code} limit 1")
     String getIdByCode(@Param("code") String code);
+
+    void batchInsert(List<BaseSite> list);
 }

@@ -6,6 +6,8 @@ package com.jeeplus.modules.base.site.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.jeeplus.modules.base.route.entity.BaseRoteMain;
+import com.jeeplus.modules.base.route.entity.BaseRoute;
 import com.jeeplus.modules.u8data.operation.entity.U8Operation;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,6 +66,23 @@ public class BaseSiteService extends CrudService<BaseSiteMapper, BaseSite> {
 			site.setCode(d.getOpCode());
 			list.add(site);
 		});
-
+		saveU8Data(list);
+	}
+	@Transactional(readOnly = false)
+	public void saveU8Data(List<BaseSite> list){
+		if(!list.isEmpty()){
+			int i = 0;
+			int j = 0;
+			int mlen = list.size();
+			while (i<mlen){
+				j = i;
+				i = i+300;
+				if(i>=mlen){
+					mapper.batchInsert(list.subList(j,mlen));
+				}else {
+					mapper.batchInsert(list.subList(j,i));
+				}
+			}
+		}
 	}
 }
