@@ -13,7 +13,6 @@ import com.jeeplus.modules.base.cangku.mapper.BaseCangKuMapper;
 import com.jeeplus.modules.base.huowei.entity.BaseHuoWei;
 import com.jeeplus.modules.sys.entity.User;
 import com.jeeplus.modules.sys.utils.UserUtils;
-import com.jeeplus.modules.u8data.morder.service.U8MorderService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.jeeplus.u8.webservice.U8Post;

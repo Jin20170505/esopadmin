@@ -58,6 +58,13 @@
             '1'
             )
         </foreach>
+        on duplicate key update
+        id = values(id),
+        parent_id=VALUES(parent_id),
+        parent_ids=VALUES(parent_ids),
+        code = values(code),
+        name=VALUES(name),
+        sort = values(sort)
     </insert>
 
 </mapper>

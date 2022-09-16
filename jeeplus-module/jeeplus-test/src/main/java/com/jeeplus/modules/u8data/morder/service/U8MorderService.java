@@ -43,4 +43,8 @@ public class U8MorderService extends CrudService<U8MorderMapper, U8Morder> {
     public List<U8Morder> findByCreateDate(U8Morder u8Morder){
         return mapper.findByCreateDate(u8Morder);
     }
+
+    public Double getNewGdNumBySchid(String schid){
+        return mapper.getNewGdNumBySchid(schid);
+    }
 }

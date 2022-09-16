@@ -123,7 +123,7 @@ $(document).ready(function() {
 	  $('#businessShengChanDingDanTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
             $('#remove,#shenhe,#fanshen').prop('disabled', ! $('#businessShengChanDingDanTable').bootstrapTable('getSelections').length);
-            $('#edit,#jihua').prop('disabled', $('#businessShengChanDingDanTable').bootstrapTable('getSelections').length!=1);
+            $('#edit,#recover').prop('disabled', $('#businessShengChanDingDanTable').bootstrapTable('getSelections').length!=1);
         });
 
 	 $("#import").click(function(){//显示导入面板

@@ -20,6 +20,7 @@ import com.jeeplus.common.utils.QRCodeUtil;
 import com.jeeplus.modules.sys.utils.FileKit;
 import com.jeeplus.modules.u8data.morder.entity.U8Moallocate;
 import com.jeeplus.modules.u8data.morder.service.U8MoallocateService;
+import com.jeeplus.modules.u8data.morder.service.U8MorderService;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -133,6 +134,8 @@ public class BusinessBaoGongOrderController extends BaseController {
 	}
 	@Autowired
 	private U8MoallocateService u8MoallocateService;
+	@Autowired
+	private U8MorderService u8MorderService;
 	/**
 	 * 领料用量不足 处理
 	 * @param rid 报工ID
@@ -169,7 +172,14 @@ public class BusinessBaoGongOrderController extends BaseController {
 			String schid = businessBaoGongOrderService.getSchidByOrderid(rid);
 			String planid = businessBaoGongOrderService.getPlanidByOrderid(rid);
 			List<U8Moallocate> moallocates = u8MoallocateService.findBomIdAndSyNum(schid);
-			businessBaoGongOrderService.dealwith(rid,schid,planid,moallocates);
+			// U8 工单数量
+			Double num = u8MorderService.getNewGdNumBySchid(schid);
+			if(num==null){
+				json.setSuccess(false);
+				json.setMsg("未获取到U8对应工单到数量。");
+				return json;
+			}
+			businessBaoGongOrderService.dealwith(rid,schid,planid,moallocates,num);
 			json.setSuccess(true);
 			json.setMsg("处理成功");
 		}catch (Exception e){

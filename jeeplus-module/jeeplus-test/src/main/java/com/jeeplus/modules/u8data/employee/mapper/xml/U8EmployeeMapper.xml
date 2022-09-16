@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.u8data.employee.mapper.U8EmployeeMapper">
+    <sql id="deptColumns">
+        a.JobNumber,
+        a.cJobCode,
+        a.cPsn_Num as "code",
+        a.cPsn_Name as "name",
+        a.cDept_num AS "deptid",
+        a.rPersonType,
+        a.rSex as "sex",
+        a.cPsnMobilePhone AS "phone",
+        a.cPsnFPhone as "tel",
+        a.cPsnOPhone,
+        a.cPsnEmail AS "email"
+    </sql>
+    <sql id="deptJoins">
+
+    </sql>
+
+    <select id="findList" resultType="U8Employee">
+        select
+        <include refid="deptColumns"/>
+        from YT_API_ERP_view_hr_hi_person a
+        <include refid="deptJoins"/>
+    </select>
+</mapper>

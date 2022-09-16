@@ -28,4 +28,7 @@ public interface U8MorderMapper extends BaseMapper<U8Morder> {
     String getOrderStatusByCodeAndNo(@Param("sccode")String sccode,@Param("scline")String scline);
 
     List<U8Morder> findByCreateDate(U8Morder u8Morder);
+
+    @Select("select qty from YT_API_ERP_view_Morder where modid = #{schid}")
+    Double getNewGdNumBySchid(@Param("schid") String schid);
 }

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.u8data.employee.mapper.SysEmployeeMapper">
+    <insert id="insert">
+        INSERT INTO sys_user(
+            id,
+            company_id,
+            office_id,
+            login_name,
+            password,
+            no,
+            name,
+            email,
+            phone,
+            mobile,
+            login_flag,
+            photo,
+            del_flag
+        ) VALUES (
+             #{id},
+             #{company.id},
+             #{office.id},
+             #{loginName},
+             #{password},
+             #{no},
+             #{name},
+             #{email},
+             #{phone},
+             #{mobile},
+             #{loginFlag},
+             #{photo},
+             #{delFlag}
+                 )
+    </insert>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO sys_user(
+            id,
+            company_id,
+            office_id,
+            login_name,
+            password,
+            no,
+            name,
+            email,
+            phone,
+            mobile,
+            login_flag,
+            del_flag
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.id},
+            'A',
+            #{item.deptid},
+            #{item.code},
+            #{item.password},
+            #{item.code},
+            #{item.name},
+            #{item.email},
+            #{item.tel},
+            #{item.phone},
+            '1',
+            '0'
+            )
+        </foreach>
+        on duplicate key update
+        id = values(id),
+        login_name=VALUES(login_name),
+        office_id=VALUES(office_id),
+        no = values(no),
+        name=VALUES(name),
+        email = values(email),
+        phone=VALUES(phone),
+        mobile=VALUES(mobile)
+    </insert>
+
+</mapper>

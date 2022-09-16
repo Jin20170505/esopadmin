@@ -469,7 +469,7 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 	}
 	// 待领数量 = 报工单数量 * 剩余子件数量/未领料工单数量
 	@Transactional(readOnly = false)
-	public void dealwith(String bgid,String schid,String planid,List<U8Moallocate> moallocates){
+	public void dealwith(String bgid,String schid,String planid,List<U8Moallocate> moallocates,Double gdnum){
 		Integer i = businessChuKuLingLiaoMapper.isDoneLingLiao(bgid);
 		if(i!=null&&i==1){
 			throw new RuntimeException("该报工单已领料，不可操作");
@@ -479,7 +479,6 @@ public class BusinessBaoGongOrderService extends CrudService<BusinessBaoGongOrde
 		}
 		// 工单数量
 		BusinessShengChanDingDanMingXi mingXi = businessShengChanDingDanMingXiMapper.get(schid);
-		Double gdnum = mingXi.getNum();
 		// 已出工单料数量
 		Double donenum = businessChuKuLingLiaoMapper.getDoneSumNum(mingXi.getP().getCode(),mingXi.getNo().toString());
 		if(donenum==null){
