@@ -214,7 +214,7 @@ $(document).ready(function() {
 	  $('#businessBaoGongRecordTable').on('check.bs.table uncheck.bs.table load-success.bs.table ' +
                 'check-all.bs.table uncheck-all.bs.table', function () {
             $('#remove').prop('disabled', ! $('#businessBaoGongRecordTable').bootstrapTable('getSelections').length);
-            $('#edit,#print').prop('disabled', $('#businessBaoGongRecordTable').bootstrapTable('getSelections').length!=1);
+            $('#edit,#print,#printcustomer').prop('disabled', $('#businessBaoGongRecordTable').bootstrapTable('getSelections').length!=1);
         });
 
 	 $("#import").click(function(){//显示导入面板
@@ -295,6 +295,20 @@ $(document).ready(function() {
     }
     jp.openSaveDialog('编辑报工修改', "${ctx}/business/baogong/change/businessBaoGongChange/form/edit?recordid="+id,'800px', '500px');
 }
+
+
+    /** 打印客户标签 */
+    function printcustomer(){
+        var rid = getIdSelections();
+        var rows = getRowSelections();
+        var row = rows[0];
+        if(!row.batchno){
+            jp.warning('无预批号不可打印')
+            return false;
+        }
+        var hgnum = row.hgnum;
+        jp.openSaveDialog('打印客户标签', "${ctx}/business/baogong/record/businessBaoGongRecord/goToPrintcustomer?rid="+rid,'800px', '500px');
+    }
     function printbq(){
     var rid = getIdSelections();
     var rows = getRowSelections();

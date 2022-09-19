@@ -16,6 +16,7 @@ import com.jeeplus.common.utils.QRCodeUtil;
 import com.jeeplus.modules.business.ruku.product.entity.BusinessRuKuProduct;
 import com.jeeplus.modules.business.ruku.product.entity.BusinessRuKuProductMx;
 import com.jeeplus.modules.business.ruku.product.entity.ProductTagBean;
+import com.jeeplus.modules.u8data.customercinvcode.service.U8CusInvContraposeService;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,16 +73,33 @@ public class BusinessBaoGongRecordController extends BaseController {
 		model.addAttribute("businessBaoGongRecord", businessBaoGongRecord);
 		return "modules/business/baogong/record/businessBaoGongRecordList";
 	}
+	@RequestMapping("goToPrintcustomer")
+	public String goToPrintcustomer(String rid,Model model){
+		BusinessBaoGongRecord bean = businessBaoGongRecordService.get(rid);
+		model.addAttribute("rid",rid);
+		model.addAttribute("cinvcode",bean.getCinvcode());
+		return "modules/business/baogong/record/printcustomer";
+	}
+	@Autowired
+	private U8CusInvContraposeService u8CusInvContraposeService;
 	@RequestMapping("goToTagPrint")
-	public String goToTagPrint(String rid,Integer znum,Double num,Model model){
+	public String goToTagPrint(String rid,String customercinvcode,Integer znum,Double num,Model model){
 		List<ProductTagBean> tagBeans = Lists.newArrayList();
 		BusinessBaoGongRecord bean = businessBaoGongRecordService.get(rid);
+		String customercinvname = "";
+		if(StringUtils.isNotEmpty(customercinvcode)){
+			customercinvname = u8CusInvContraposeService.getCusCinvName(customercinvcode);
+		}
 		for (int i=0;i<znum;i++){
 			ProductTagBean tagBean = new ProductTagBean();
+			if(StringUtils.isNotEmpty(customercinvcode)){
+				tagBean.setCinvcode(customercinvcode).setCinvname(customercinvname);
+			}else {
+				tagBean.setCinvcode(bean.getCinvcode()).setCinvname(bean.getCinvname());
+			}
 			tagBean.setBatchno(bean.getBatchno()).setCinvstd(bean.getCinvstd())
 					.setNum(num+"").setUnit(bean.getUnit()).setId(bean.getId())
 					.setDate(DateUtils.getDate("YYYY-MM-dd"));
-			tagBean.setCinvcode(bean.getCinvcode()).setCinvname(bean.getCinvname());
 			tagBeans.add(tagBean);
 		}
 		model.addAttribute("beans", tagBeans);
@@ -89,14 +107,14 @@ public class BusinessBaoGongRecordController extends BaseController {
 	}
 
 	@RequestMapping("/qr")
-	public void getQrImage(String rid,String num, HttpServletResponse response) throws IOException {
+	public void getQrImage(String rid,String customercinvcode,String num, HttpServletResponse response) throws IOException {
 		response.reset();
 		response.setContentType("image/jpg");
 		ServletOutputStream out = null;
 		try{
 			BusinessBaoGongRecord bean = businessBaoGongRecordService.get(rid);
 			ProductTagBean tagBean = new ProductTagBean();
-			tagBean.setBatchno(bean.getBatchno()).setCinvstd(bean.getCinvstd())
+			tagBean.setCinvcode(bean.getCinvcode()).setCinvname(bean.getCinvname()).setBatchno(bean.getBatchno()).setCinvstd(bean.getCinvstd())
 					.setNum(num+"").setUnit(bean.getUnit()).setId(bean.getId())
 					.setDate(DateUtils.getDate("YYYY-MM-dd"));
 			String qr = "'cinvcode':'"+tagBean.getCinvcode()+"','cinvcodename':'"+tagBean.getCinvname()+"','batchno':'"+tagBean.getBatchno()+"','date':'"+tagBean.getDate()+"','num':'"+tagBean.getNum()+"','unit':'"+tagBean.getUnit()+"'";
