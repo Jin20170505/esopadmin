@@ -110,7 +110,9 @@ public class BusinessBaoGongRecordService extends CrudService<BusinessBaoGongRec
 		fgnum = fgnum==null?0.0:fgnum;
 		gfnum = gfnum==null?0.0:gfnum;
 		lfnum = lfnum==null?0.0:lfnum;
-		record.setBhgnum(fgnum+gfnum+lfnum);
+		// 不合格 = 料废 + 工废 2022/10/31
+		// record.setBhgnum(fgnum+gfnum+lfnum);
+		record.setBhgnum(gfnum+lfnum);
 		record.setUsername(opname);
 		record.setDoingnum(dbnum);
 		record.setCinvcode(order.getCinvcode());
