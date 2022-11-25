@@ -86,14 +86,10 @@ public class BusinessBaoGongRecordController extends BaseController {
 	public String goToTagPrint(String rid,String customercinvcode,Integer znum,Double num,Model model){
 		List<ProductTagBean> tagBeans = Lists.newArrayList();
 		BusinessBaoGongRecord bean = businessBaoGongRecordService.get(rid);
-		String customercinvname = "";
-		if(StringUtils.isNotEmpty(customercinvcode)){
-			customercinvname = u8CusInvContraposeService.getCusCinvName(customercinvcode);
-		}
 		for (int i=0;i<znum;i++){
 			ProductTagBean tagBean = new ProductTagBean();
 			if(StringUtils.isNotEmpty(customercinvcode)){
-				tagBean.setCinvcode(customercinvcode).setCinvname(customercinvname);
+				tagBean.setCinvcode(bean.getCinvcode()).setCinvname(customercinvcode);
 			}else {
 				tagBean.setCinvcode(bean.getCinvcode()).setCinvname(bean.getCinvname());
 			}

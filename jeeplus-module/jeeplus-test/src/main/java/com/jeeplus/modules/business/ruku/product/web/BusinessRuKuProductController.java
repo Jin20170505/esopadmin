@@ -115,17 +115,13 @@ public class BusinessRuKuProductController extends BaseController {
 		BusinessRuKuProductMx mx = bean.getBusinessRuKuProductMxList().get(0);
 		List<ProductTagBean> tagBeans = Lists.newArrayList();
 		double gdnum = bean.getNum();
-		String customercinvname = "";
-		if(StringUtils.isNotEmpty(customercinvcode)){
-			customercinvname = u8CusInvContraposeService.getCusCinvName(customercinvcode);
-		}
 		if(hdnum!=null){
 			ProductTagBean tagBean = new ProductTagBean();
 			tagBean.setBatchno(bean.getBatchno()).setCinvstd(mx.getCinvstd())
 					.setNum(hdnum+"").setUnit(mx.getUnit()).setId(bean.getId())
 					.setDate(DateUtils.getDate("YYYY-MM-dd"));
 			if(StringUtils.isNotEmpty(customercinvcode)){
-				tagBean.setCinvcode(customercinvcode).setCinvname(customercinvname);
+				tagBean.setCinvcode(mx.getCinvcode()).setCinvname(customercinvcode);
 			}else {
 				tagBean.setCinvcode(mx.getCinvcode()).setCinvname(mx.getCinvname());
 			}
@@ -140,7 +136,7 @@ public class BusinessRuKuProductController extends BaseController {
 					.setNum(num+"").setUnit(mx.getUnit()).setId(bean.getId())
 					.setDate(DateUtils.getDate("YYYY-MM-dd"));
 			if(StringUtils.isNotEmpty(customercinvcode)){
-				tagBean.setCinvcode(customercinvcode).setCinvname(customercinvname);
+				tagBean.setCinvcode(mx.getCinvcode()).setCinvname(customercinvcode);
 			}else {
 				tagBean.setCinvcode(mx.getCinvcode()).setCinvname(mx.getCinvname());
 			}
@@ -153,7 +149,7 @@ public class BusinessRuKuProductController extends BaseController {
 					.setNum(gdnum+"").setUnit(mx.getUnit()).setId(bean.getId())
 					.setDate(DateUtils.getDate("YYYY-MM-dd"));
 			if(StringUtils.isNotEmpty(customercinvcode)){
-				tagBean.setCinvcode(customercinvcode).setCinvname(customercinvname);
+				tagBean.setCinvcode(mx.getCinvcode()).setCinvname(customercinvcode);
 			}else {
 				tagBean.setCinvcode(mx.getCinvcode()).setCinvname(mx.getCinvname());
 			}
