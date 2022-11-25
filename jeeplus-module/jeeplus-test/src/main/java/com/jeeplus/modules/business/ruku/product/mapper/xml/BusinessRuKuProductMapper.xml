@@ -23,6 +23,7 @@
 		a.bgcode AS "bgcode",
 		a.sych AS "sych",
 		cangku.name AS "cangku.name",
+		dept.code AS "dept.code"
 		dept.name AS "dept.name"
 	</sql>
 	

@@ -54,7 +54,7 @@ public class ApiProductController {
     }
 
     @RequestMapping("do")
-    public AjaxJson ruku(String bgid,String ckid,String hwid,String remarks,String userid,Double rukunum){
+    public synchronized AjaxJson ruku(String bgid,String ckid,String hwid,String remarks,String userid,Double rukunum){
         AjaxJson json = new AjaxJson();
         try{
             businessRuKuProductService.ruku(bgid, ckid, hwid, remarks, userid, rukunum);

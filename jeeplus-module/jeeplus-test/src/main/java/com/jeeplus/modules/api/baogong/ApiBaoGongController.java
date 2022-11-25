@@ -65,7 +65,12 @@ public class ApiBaoGongController {
     public AjaxJson baogong(String bgid,String bghid,String remarks,String userid,String opname,String douser,Double dbnum,Double flnum,Double fgnum,Double gfnum,Double bhgnum,Double hgnum,String complete){
         AjaxJson json = new AjaxJson();
         try{
-            businessBaoGongRecordService.baogong(bgid,bghid, remarks, userid, opname,douser,dbnum, flnum, fgnum,gfnum, bhgnum, hgnum,complete);
+            String schid = businessBaoGongOrderService.getSchidByOrderid(bghid);
+            Double rate  = u8MorderService.getParentScrapBySchid(schid);
+            if(rate==null){
+                rate = 0.0;
+            }
+            businessBaoGongRecordService.baogong(bgid,bghid, remarks, userid, opname,douser,dbnum, flnum, fgnum,gfnum, bhgnum, hgnum,complete,rate);
             json.setSuccess(true);
             json.setMsg("报工成功。");
         }catch (Exception e){

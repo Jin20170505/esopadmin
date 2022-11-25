@@ -14,7 +14,6 @@ import com.jeeplus.modules.business.baogong.order.mapper.BusinessBaoGongOrderMin
 import com.jeeplus.modules.business.baogong.order.service.BusinessBaoGongOrderService;
 import com.jeeplus.modules.sys.entity.User;
 import com.jeeplus.modules.sys.mapper.UserMapper;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -77,7 +76,9 @@ public class BusinessBaoGongRecordService extends CrudService<BusinessBaoGongRec
 	private UserMapper userMapper;
 	// 报工
 	@Transactional(readOnly = false)
-	public void baogong(String bgid,String bghid,String remarks,String userid,String opname,String douser,Double dbnum,Double lfnum,Double fgnum,Double gfnum,Double bhgnum,Double hgnum,String complete){
+	public void baogong(String bgid,String bghid,String remarks,String userid,String opname,String douser,
+						Double dbnum,Double lfnum,Double fgnum,Double gfnum,Double bhgnum,
+						Double hgnum,String complete,double rate){
 		User dou = userMapper.getByNo(douser);
 		if(dou==null){
 			throw new RuntimeException("实际报工人的工号不存在");
@@ -89,8 +90,14 @@ public class BusinessBaoGongRecordService extends CrudService<BusinessBaoGongRec
 		}
 		double donenum = getDoneSumNum(bgid,bghid);
 		double sum = donenum + hgnum;
-		if(sum>order.getNum()){
+		if((rate<0.000001&&sum>order.getNum())||sum>order.getNum()*1.02){
 			throw new RuntimeException("报工数量超出工单数量");
+		}else {
+			if(sum>=order.getNum()){
+				complete  ="1";
+			}else {
+				complete = "0";
+			}
 		}
 //		String pregxid = businessBaoGongOrderMingXiMapper.getPreHid(bgid,bghid,mingXi.getNo());
 //		if(StringUtils.isNotEmpty(pregxid)){
@@ -131,7 +138,7 @@ public class BusinessBaoGongRecordService extends CrudService<BusinessBaoGongRec
 		record.setPlanid(order.getPlanid());
 		record.setLineid(order.getOrderlineid());
 		record.setUnit(order.getUnit());
-		if("1".equals(complete) && dbnum<=hgnum){
+		if("1".equals(complete)){
 			if(StringUtils.isEmpty(bghid)){
 			}else {
 				baoGongOrderService.completeBg(bghid);

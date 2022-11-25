@@ -31,4 +31,11 @@ public interface U8MorderMapper extends BaseMapper<U8Morder> {
 
     @Select("select qty from YT_API_ERP_view_Morder where modid = #{schid}")
     Double getNewGdNumBySchid(@Param("schid") String schid);
+
+    @Select("select ParentScrap from YT_API_ERP_view_Morder where moCode = #{sccode} and  sortSeq= #{scline}")
+    Double getParentScrapBySccodeAndLine(@Param("sccode") String sccode,@Param("scline") String scline);
+
+    @Select("select ParentScrap from YT_API_ERP_view_Morder where  modid = #{schid}")
+    Double getParentScrapBySchid(@Param("schid") String schid);
+
 }

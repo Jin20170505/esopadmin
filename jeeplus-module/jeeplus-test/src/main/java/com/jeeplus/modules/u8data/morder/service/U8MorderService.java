@@ -47,4 +47,13 @@ public class U8MorderService extends CrudService<U8MorderMapper, U8Morder> {
     public Double getNewGdNumBySchid(String schid){
         return mapper.getNewGdNumBySchid(schid);
     }
+
+
+    public Double getParentScrapBySccodeAndLine(String sccode,String scline){
+        return mapper.getParentScrapBySccodeAndLine(sccode,scline);
+    }
+
+    public Double getParentScrapBySchid(String schid){
+        return mapper.getParentScrapBySchid(schid);
+    }
 }

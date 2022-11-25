@@ -280,7 +280,7 @@ public class BusinessRuKuProductService extends CrudService<BusinessRuKuProductM
 		String ckcode = cangKuMapper.getCodeById(product.getCangku().getId());
 		rd10.setcWhCode(ckcode);
 		String hwcode = huoWeiMapper.getCodeById(mx.getHuowei().getId());
-		rd10.setcDepCode(user.getOffice().getCode());
+		rd10.setcDepCode(product.getDept().getCode());
 		rd10.setdDate(DateUtils.getDate());
 		rd10.setRemarks(product.getRemarks());
 		List<YT_Rds10> rd10s = Lists.newArrayList();
