@@ -23,10 +23,8 @@
             color: #0a0a0a;
         }
         .qrcode{
-            display: block;
-            width: 96px;
-            height: 96px;
-            margin: 2px;
+            width: 120px;
+            height: 120px;
         }
         .table-bordered{
             border: 1px solid #000000;
@@ -45,6 +43,14 @@
             text-align: center;
             vertical-align: middle;
             font-size: 12px;
+        }
+        .line_3 {
+            display: -webkit-box;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            width: 120px;
         }
         /** 1cm = 32px   7*5 = 224 * 160*/
     </style>
@@ -66,8 +72,8 @@
     <table class="table table-bordered">
         <tbody>
         <tr>
-            <th colspan="2" width="150px">QiLianShan 存货条码</th>
-            <th colspan="2" rowspan="2" width="120px">
+            <th colspan="2" width="120px">QiLianShan 存货条码</th>
+            <th colspan="2" rowspan="3" width="150px">
             <img class="qrcode" src="${ctx}/business/baogong/record/businessBaoGongRecord/qr?rid=`+bean.id+`&num=`+bean.num+`&cinvcode=`+bean.cinvcode+`&cinvname=`+bean.cinvname+`"/></th>
         </tr>
         <tr>
@@ -75,8 +81,8 @@
             <td>`+bean.cinvcode+`</td>
         </tr>
         <tr>
-            <th style="height: 40px;">存货名称</th>
-            <td colspan="3" style="vertical-align: top;text-align: left;font-size: 5px;height: 40px">`+bean.cinvname+`</td>
+<!--            <th style="height: 40px;">存货名称</th>-->
+            <td colspan="3" style="vertical-align: top;text-align: left;font-size: 5px;height: 40px;"><div class="line_3" style="text-align: left;">`+bean.cinvname+`</div></td>
         </tr>
         <tr>
             <th>批次号</th>
